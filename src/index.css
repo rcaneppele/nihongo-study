@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+
+  /* Foco visível em todo elemento interativo (acessibilidade). */
+  :focus-visible {
+    @apply outline-none ring-2 ring-indigo ring-offset-2 ring-offset-paper;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-indigo text-paper hover:bg-indigo-soft;
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-transparent text-ink hover:bg-line/40;
+  }
+  .btn-accent {
+    @apply btn bg-hanko text-paper hover:opacity-90;
+  }
+  .card-surface {
+    @apply rounded-2xl border border-line bg-white/60 p-5 shadow-sm;
+  }
+  .field {
+    @apply w-full rounded-lg border border-line bg-white/70 px-3 py-2 text-sm focus:border-indigo;
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium uppercase tracking-wide text-sage;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
