@@ -41,7 +41,7 @@ function Jumbotron() {
         <SettingsMenu />
       </div>
       <NavLink to="/" className="inline-block">
-        <img src="/logo.png" alt="Nihongo Study" className="mx-auto h-32 sm:h-40 md:h-44" />
+        <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Nihongo Study" className="mx-auto h-32 sm:h-40 md:h-44" />
       </NavLink>
       <p className="mt-1 text-sage">Flash cards e treino de hiragana/katakana</p>
     </div>
