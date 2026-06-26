@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <div className="flex min-h-full">
       <Sidebar />
 
-      <div className="flex min-h-full flex-1 flex-col md:pl-60">
+      <div className="flex min-h-full min-w-0 flex-1 flex-col md:pl-60">
         <Jumbotron />
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 lg:px-8 md:pb-16">
@@ -73,7 +73,7 @@ function sidebarLinkClass({ isActive }: { isActive: boolean }) {
 
 function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-paper/95 backdrop-blur md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur md:hidden">
       {NAV.map((item) => (
         <NavLink key={item.to} to={item.to} end={item.end} className={bottomNavLinkClass}>
           <item.icon className="h-5 w-5" />

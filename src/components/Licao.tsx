@@ -23,18 +23,18 @@ export function Ex({
   notes?: string;
 }) {
   return (
-    <div className="rounded-lg border-l-4 border-indigo/40 bg-white/70 px-4 py-3">
-      <p className="font-jp text-lg leading-snug text-ink">{jp}</p>
-      {reading && <p className="mt-0.5 text-sm text-sage">{reading}</p>}
-      <p className="mt-1 text-sm text-ink/80">{pt}</p>
-      {notes && <p className="mt-1 text-xs italic text-sage">{notes}</p>}
+    <div className="min-w-0 rounded-lg border-l-4 border-indigo/40 bg-white/70 px-4 py-3">
+      <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
+      {reading && <p className="mt-0.5 break-words text-sm text-sage">{reading}</p>}
+      <p className="mt-1 break-words text-sm text-ink/80">{pt}</p>
+      {notes && <p className="mt-1 break-words text-xs italic text-sage">{notes}</p>}
     </div>
   );
 }
 
 export function Note({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-lg border border-indigo/20 bg-indigo/5 px-4 py-3 text-sm leading-relaxed text-ink">
+    <div className="min-w-0 rounded-lg border border-indigo/20 bg-indigo/5 px-4 py-3 text-sm leading-relaxed text-ink">
       <span className="font-semibold text-indigo">Nota: </span>
       {children}
     </div>
