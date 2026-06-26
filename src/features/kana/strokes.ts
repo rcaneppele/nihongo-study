@@ -81,7 +81,7 @@ const REFERENCE_N = 32;
 const SHAPE_DIST_THRESHOLD = 0.22;
 const MIN_VECTOR_LENGTH = 0.03;
 
-export const DRAW_PASS_THRESHOLD = 65;
+export const DRAW_PASS_THRESHOLD = 60;
 
 export type ReferenceStrokes = number[][][]; // [traço][ponto][x, y], normalizado em [0,1]
 

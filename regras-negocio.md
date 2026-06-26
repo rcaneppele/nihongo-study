@@ -82,7 +82,37 @@ Cada card carrega `ef` (easiness factor), `interval` (dias), `repetitions`
   (`KanaReferenceFigure`) como feedback — não há animação ainda (ver
   CLAUDE.md, próximas tarefas).
 
-## 3. Dados e sincronização
+## 3. Lições de estudo
+
+### Estrutura
+- Cada lição é definida em `src/licoes/<id>.tsx` e exporta um `meta`
+  (`LicaoMeta`) e um componente React padrão.
+- `LicaoMeta`: `id` (slug único, ex.: `kosoado`), `title` (título em
+  português), `subtitle` (transliteração/kanji), `emoji` e `tags` (array de
+  strings como `['gramática', 'n5']`).
+- O registro central `LICOES` em `src/licoes/index.ts` controla a ordem de
+  exibição na listagem.
+
+### Conteúdo
+- Lições são **estáticas** — não há persistência nem estado no banco de dados.
+  O usuário lê, mas não há progresso rastreado por lição (por ora).
+- Cada lição usa os componentes de `src/components/Licao.tsx`:
+  - `Section` — seção com título e separador.
+  - `Ex` — exemplo com campos `jp`, `reading?`, `pt` e `notes?`.
+  - `Note` — destaque informativo (fundo indigo suave).
+  - `GrammarTable` — tabela com suporte a colunas em fonte japonesa (`jpCols`).
+
+### Rotas
+- `/licoes` → `src/routes/Licoes.tsx` — grade de cards com todas as lições.
+- `/licoes/:id` → `src/routes/Licao.tsx` — renderiza o componente da lição
+  correspondente ao `id`; exibe mensagem de "não encontrada" se o id não existir.
+
+### Como adicionar uma lição
+1. Crie `src/licoes/<id>.tsx` exportando `meta` e o componente default.
+2. Importe e registre no array `LICOES` em `src/licoes/index.ts`.
+3. Não é necessário alterar rotas — o roteamento é dinâmico pelo `id`.
+
+## 4. Dados e sincronização
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
 - **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress` e
@@ -95,7 +125,7 @@ Cada card carrega `ef` (easiness factor), `interval` (dias), `repetitions`
 - **UUID como chave** é obrigatório para a mesclagem funcionar sem colisão.
 - `schemaVersion` no backup permite migração futura na importação.
 
-## 4. Privacidade
+## 5. Privacidade
 
 - Nenhum dado sai do dispositivo automaticamente. Não há telemetria, conta nem
   envio para servidores. A única saída de dados é o arquivo de backup que o

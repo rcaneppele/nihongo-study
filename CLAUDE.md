@@ -6,9 +6,9 @@ implementar mudanças.
 ## O que é
 
 App pessoal de estudo de japonês para um único usuário, uso doméstico, sem fins
-comerciais. Duas funcionalidades centrais: flash cards com repetição espaçada e
+comerciais. Três funcionalidades centrais: flash cards com repetição espaçada,
 treino de hiragana/katakana (modo digitar romaji e modo desenhar com feedback de
-caligrafia).
+caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulário).
 
 ## Princípios de arquitetura (não quebrar sem combinar)
 
@@ -41,6 +41,14 @@ caligrafia).
 - `src/data/kanjivg/kana-strokes.json` — dados de traço (ordem/forma) do
   KanjiVG, gerado por `scripts/build-kana-strokes.mjs`
   (`npm run build:kana-strokes` para regenerar).
+- `src/licoes/index.ts` — registro central das lições (`LICOES`): cada entrada
+  tem `meta` (id, título, subtítulo, emoji, tags) e um `Component` React.
+- `src/licoes/*.tsx` — uma lição por arquivo (ex.: `kosoado.tsx`,
+  `particulas.tsx`, `familia.tsx`). Para adicionar uma lição, crie o arquivo e
+  registre-o em `index.ts`.
+- `src/components/Licao.tsx` — componentes de apresentação reutilizáveis pelas
+  lições: `Section`, `Ex` (exemplo com japonês/leitura/tradução/nota),
+  `Note` e `GrammarTable`.
 - `src/routes/` — uma página por arquivo.
 
 ## Convenções
