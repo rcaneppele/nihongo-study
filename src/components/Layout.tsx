@@ -5,6 +5,7 @@ const NAV = [
   { to: '/', label: 'Início', end: true, icon: IconHome },
   { to: '/flashcards', label: 'Flash cards', end: false, icon: IconCards },
   { to: '/kana', label: 'Kana', end: false, icon: IconKana },
+  { to: '/licoes', label: 'Lições', end: false, icon: IconBook },
 ];
 
 const GEAR_LINKS = [
@@ -43,7 +44,7 @@ function Jumbotron() {
       <NavLink to="/" className="inline-block">
         <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Nihongo Study" className="mx-auto h-32 sm:h-40 md:h-44" />
       </NavLink>
-      <p className="mt-1 text-sage">Flash cards e treino de hiragana/katakana</p>
+      <p className="mt-1 text-sage">Flash cards, kana e tópicos de estudo</p>
     </div>
   );
 }
@@ -172,6 +173,15 @@ function IconKana({ className }: { className?: string }) {
     <span aria-hidden className={`grid place-items-center font-jp text-[0.95rem] leading-none ${className ?? ''}`}>
       あ
     </span>
+  );
+}
+
+function IconBook(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    </svg>
   );
 }
 

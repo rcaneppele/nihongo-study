@@ -3,6 +3,8 @@ import Layout from './components/Layout';
 import Home from './routes/Home';
 import Flashcards from './routes/Flashcards';
 import Kana from './routes/Kana';
+import Licoes from './routes/Licoes';
+import Licao from './routes/Licao';
 import ImportExport from './routes/ImportExport';
 import Settings from './routes/Settings';
 
@@ -13,6 +15,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/flashcards" element={<Flashcards />} />
         <Route path="/kana" element={<Kana />} />
+        <Route path="/licoes" element={<Licoes />} />
+        <Route path="/licoes/:id" element={<Licao />} />
         <Route path="/dados" element={<ImportExport />} />
         <Route path="/config" element={<Settings />} />
       </Routes>

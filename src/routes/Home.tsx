@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/schema';
 import { ALL_KANA } from '../data/kana';
+import { LICOES } from '../licoes';
 
 export default function Home() {
   const totalCards = useLiveQuery(() => db.cards.count(), [], 0);
@@ -24,13 +25,14 @@ export default function Home() {
         <Stat label="Kana praticados" value={`${kanaPracticed}/${ALL_KANA.length}`} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <Action
           to="/flashcards"
           title="Revisar flash cards"
           desc={dueCards > 0 ? `${dueCards} esperando por você` : 'Nada pendente agora'}
         />
         <Action to="/kana" title="Treinar kana" desc="Hiragana e katakana" />
+        <Action to="/licoes" title="Lições" desc={`${LICOES.length} assuntos disponíveis`} />
       </div>
     </div>
   );
