@@ -1,9 +1,9 @@
-import { Section, Ex, Note, GrammarTable } from '../components/Licao';
+import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 
 export const meta = {
   id: 'kosoado',
   title: 'Ko-So-A-Do',
-  subtitle: 'Os demonstrativos japoneses',
+  subtitle: 'Os demonstrativos japoneses (este, esse, aquele, qual)',
   emoji: '👆',
   tags: ['gramática', 'n5'],
 };
@@ -11,168 +11,401 @@ export const meta = {
 export default function KoSoADo() {
   return (
     <div className="space-y-10">
-      <p className="leading-relaxed text-ink">
-        <strong>Ko-So-A-Do</strong> (こそあど) é o sistema de demonstrativos e interrogativos do
-        japonês. O nome vem das sílabas iniciais de cada série: <strong>こ</strong> (ko),{' '}
-        <strong>そ</strong> (so), <strong>あ</strong> (a) e <strong>ど</strong> (do). Cada série
-        indica a distância em relação ao falante e ao ouvinte — e, além disso, pode ser usada em
-        sentido discursivo, referindo-se a algo no contexto da conversa.
-      </p>
+      <Section title="Como ler esta lição">
+        <p className="text-sm leading-relaxed text-ink">
+          As palavras deste tema quase sempre se escrevem em hiragana. Então aqui você verá:
+        </p>
+        <ReadingKey
+          lines={[
+            { text: 'これ', desc: 'hiragana' },
+            { text: 'kore', desc: 'romaji' },
+            { text: 'isto', desc: 'significado' },
+          ]}
+        />
+      </Section>
 
-      <Section title="O sistema de distância">
+      <Section title="O que é o sistema Ko-So-A-Do">
+        <p className="text-sm leading-relaxed text-ink">
+          <strong>Ko-So-A-Do</strong> (<span className="font-jp">こそあど</span>) é o conjunto de
+          palavras que em português seriam "este, esse, aquele, aqui, aí, lá, qual".
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          O nome vem da primeira sílaba de cada grupo: <strong className="font-jp">こ</strong> (
+          <em>ko</em>), <strong className="font-jp">そ</strong> (<em>so</em>),{' '}
+          <strong className="font-jp">あ</strong> (<em>a</em>) e{' '}
+          <strong className="font-jp">ど</strong> (<em>do</em>).
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          A grande sacada é que <strong>cada grupo indica uma distância diferente</strong>. Uma
+          vez que você entende as quatro distâncias, entende o sistema inteiro.
+        </p>
+      </Section>
+
+      <Section title="As quatro distâncias">
         <GrammarTable
-          headers={['Série', 'Referência física', 'Uso típico']}
+          headers={['Grupo', 'Onde está a coisa', 'Ideia em português']}
           jpCols={[0]}
           rows={[
-            ['こ (Ko)', 'Perto do falante', 'este, isto, aqui, desta forma…'],
-            ['そ (So)', 'Perto do ouvinte', 'esse, isso, aí, dessa forma…'],
-            ['あ (A)', 'Longe de ambos', 'aquele, aquilo, lá, daquela forma…'],
-            ['ど (Do)', 'Interrogativo', 'qual, onde, como, de que tipo…'],
+            ['こ (ko)', 'perto de quem fala', 'este / isto / aqui'],
+            ['そ (so)', 'perto de quem ouve', 'esse / isso / aí'],
+            ['あ (a)', 'longe dos dois', 'aquele / aquilo / lá'],
+            ['ど (do)', 'é uma pergunta', 'qual? / onde? / como?'],
           ]}
         />
         <Note>
-          Imagine uma conversa entre A e B. A palavra <strong className="font-jp">これ</strong> é
-          algo que está perto de A; <strong className="font-jp">それ</strong> está perto de B;{' '}
-          <strong className="font-jp">あれ</strong> está longe dos dois. Se só há uma pessoa
-          presente, <strong className="font-jp">それ</strong> e <strong className="font-jp">あれ</strong>{' '}
-          funcionam como "perto-mas-não-ao-alcance" e "bem longe", respectivamente.
+          Imagine uma conversa entre A e B.
+          <ul className="list-disc space-y-1.5 pl-5">
+            <li>
+              <span className="font-jp">これ</span> (<em>kore</em>) é algo perto de{' '}
+              <strong>A</strong> (quem fala).
+            </li>
+            <li>
+              <span className="font-jp">それ</span> (<em>sore</em>) é algo perto de{' '}
+              <strong>B</strong> (quem ouve).
+            </li>
+            <li>
+              <span className="font-jp">あれ</span> (<em>are</em>) é algo longe dos{' '}
+              <strong>dois</strong>.
+            </li>
+          </ul>
+          <p className="mt-2">
+            Se só há uma pessoa, <span className="font-jp">それ</span> vira "perto, mas não na
+            mão" e <span className="font-jp">あれ</span> vira "bem longe".
+          </p>
         </Note>
       </Section>
 
-      <Section title="Tabela geral completa">
+      <Section title="Tabela geral">
+        <p className="text-sm leading-relaxed text-ink">
+          Cada grupo tem uma palavra para cada função (apontar objeto, indicar lugar, etc.). A
+          estrutura se repete: só muda a primeira sílaba.
+        </p>
         <GrammarTable
-          headers={['Série', 'Adjetivo', 'Pronome', 'Lugar', 'Direção (formal)', 'Direção (casual)', 'Tipo', 'Modo']}
+          headers={[
+            'Grupo',
+            'Adjetivo',
+            'Pronome',
+            'Lugar',
+            'Direção (formal)',
+            'Direção (casual)',
+            'Tipo',
+            'Modo',
+          ]}
           jpCols={[0, 1, 2, 3, 4, 5, 6, 7]}
           rows={[
-            ['こ', 'この', 'これ', 'ここ', 'こちら', 'こっち', 'こんな', 'こう'],
-            ['そ', 'その', 'それ', 'そこ', 'そちら', 'そっち', 'そんな', 'そう'],
-            ['あ', 'あの', 'あれ', 'あそこ', 'あちら', 'あっち', 'あんな', 'ああ'],
-            ['ど', 'どの', 'どれ', 'どこ', 'どちら', 'どっち', 'どんな', 'どう'],
+            [
+              'こ',
+              'この (kono)',
+              'これ (kore)',
+              'ここ (koko)',
+              'こちら (kochira)',
+              'こっち (kocchi)',
+              'こんな (konna)',
+              'こう (kou)',
+            ],
+            [
+              'そ',
+              'その (sono)',
+              'それ (sore)',
+              'そこ (soko)',
+              'そちら (sochira)',
+              'そっち (socchi)',
+              'そんな (sonna)',
+              'そう (sou)',
+            ],
+            [
+              'あ',
+              'あの (ano)',
+              'あれ (are)',
+              'あそこ (asoko)',
+              'あちら (achira)',
+              'あっち (acchi)',
+              'あんな (anna)',
+              'ああ (aa)',
+            ],
+            [
+              'ど',
+              'どの (dono)',
+              'どれ (dore)',
+              'どこ (doko)',
+              'どちら (dochira)',
+              'どっち (docchi)',
+              'どんな (donna)',
+              'どう (dou)',
+            ],
           ]}
         />
+        <p className="text-sm leading-relaxed text-ink">Vamos ver cada coluna com calma.</p>
       </Section>
 
-      <Section title="Adjetivos demonstrativos — この・その・あの・どの">
+      <Section title="この・その・あの・どの — vêm antes de um substantivo">
         <p className="text-sm leading-relaxed text-ink">
-          Sempre aparecem <em>antes de um substantivo</em>. Nunca podem ficar sozinhos — se não há
-          substantivo, use o pronome correspondente (これ, それ, etc.).
+          Esta série sempre acompanha um substantivo. Ela nunca fica sozinha.
         </p>
-        <Ex jp="このほんはおもしろいです。" pt="Este livro é interessante." />
-        <Ex jp="そのえいがをみましたか？" pt="Você viu esse filme?" />
-        <Ex jp="あのやまはきれいですね。" pt="Aquela montanha é bonita, não é?" />
-        <Ex jp="どのでんしゃにのりますか？" pt="Em qual trem você vai entrar?" />
+        <Ex
+          jp="このほんはおもしろいです。"
+          romaji="kono hon wa omoshiroi desu."
+          pt="Este livro é interessante."
+          notes={`この gruda no substantivo ほん (livro): "este livro".`}
+        />
+        <Ex
+          jp="そのえいがをみましたか？"
+          romaji="sono eiga o mimashita ka?"
+          pt="Você viu esse filme?"
+          notes={`その + えいが (filme) = "esse filme", que está perto de quem ouve.`}
+        />
+        <Ex
+          jp="あのやまはきれいですね。"
+          romaji="ano yama wa kirei desu ne."
+          pt="Aquela montanha é bonita, não é?"
+          notes="あの + やま (montanha), algo distante dos dois."
+        />
+        <Ex
+          jp="どのでんしゃにのりますか？"
+          romaji="dono densha ni norimasu ka?"
+          pt="Em qual trem você vai entrar?"
+          notes={`どの pergunta "qual", mas precisa de um substantivo (でんしゃ, trem) depois.`}
+        />
         <Note>
-          <strong>Erro comum:</strong> usar この quando a intenção é これ.{' '}
-          <span className="font-jp">「この」</span> precisa de um substantivo depois:{' '}
-          <span className="font-jp">このほん ✓</span> / <span className="font-jp">「これはほんです」✓</span> /{' '}
-          <span className="font-jp line-through">「このはほんです」✗</span>
+          <strong>Regra prática:</strong> <span className="font-jp">この</span> e{' '}
+          <span className="font-jp">これ</span> não são intercambiáveis.{' '}
+          <span className="font-jp">この</span> precisa de um substantivo depois (
+          <span className="font-jp">このほん</span> ✓). <span className="font-jp">これ</span>{' '}
+          fica sozinho (<span className="font-jp">これはほんです</span> ✓). Nunca diga{' '}
+          <span className="font-jp line-through">このはほんです</span> ✗.
         </Note>
       </Section>
 
-      <Section title="Pronomes — これ・それ・あれ・どれ">
+      <Section title="これ・それ・あれ・どれ — ficam sozinhos">
         <p className="text-sm leading-relaxed text-ink">
-          Referem-se a <em>objetos ou conceitos</em> sem precisar nomear o substantivo. Aparecem
-          sozinhos como sujeito ou objeto da frase.
+          Esta série substitui o próprio objeto. Você usa quando não quer (ou não precisa) nomear
+          a coisa.
         </p>
-        <Ex jp="これはなんですか？" pt="O que é isto?" />
-        <Ex jp="それをください。" pt="Me dá isso, por favor." />
-        <Ex jp="あれはわたしのかさです。" pt="Aquilo é meu guarda-chuva." />
-        <Ex jp="どれがあなたのですか？" pt="Qual é o seu?" />
-        <Ex jp="A：これ、たべていい？　B：それはだめ。" pt="A: Posso comer isto? B: Aquilo não pode." notes="A usa これ (perto de A); B usa それ (perto de A, longe de B)" />
+        <Ex
+          jp="これはなんですか？"
+          romaji="kore wa nan desu ka?"
+          pt="O que é isto?"
+          notes="これ aponta um objeto perto de quem fala, sem nomeá-lo."
+        />
+        <Ex
+          jp="それをください。"
+          romaji="sore o kudasai."
+          pt="Me dá isso, por favor."
+          notes={`それ = a coisa perto de quem ouve. をください = "por favor, me dê".`}
+        />
+        <Ex
+          jp="あれはわたしのかさです。"
+          romaji="are wa watashi no kasa desu."
+          pt="Aquilo é meu guarda-chuva."
+          notes="あれ = algo longe dos dois. かさ = guarda-chuva."
+        />
+        <Ex
+          jp="どれがあなたのですか？"
+          romaji="dore ga anata no desu ka?"
+          pt="Qual é o seu?"
+          notes={`どれ pergunta "qual" entre várias coisas.`}
+        />
+        <Ex
+          jp="A：これ、たべていい？　B：それはだめ。"
+          romaji="A: kore, tabete ii? B: sore wa dame."
+          pt="A: Posso comer isto? B: Isso não pode."
+          notes="A usa これ (perto de A). B, ao responder, usa それ, porque a mesma coisa está perto de A e longe de B."
+        />
       </Section>
 
-      <Section title="Lugar — ここ・そこ・あそこ・どこ">
+      <Section title="ここ・そこ・あそこ・どこ — indicam lugar">
         <p className="text-sm leading-relaxed text-ink">
-          Indicam <em>lugares</em>, não objetos. Podem ser sujeito, objeto ou complemento de lugar.
+          Esta série aponta <strong>lugares</strong>, não objetos.
         </p>
-        <Ex jp="ここにすわってください。" pt="Por favor, sente-se aqui." />
-        <Ex jp="そこはあぶないです。" pt="Aí é perigoso." />
-        <Ex jp="あそこにトイレがあります。" pt="O banheiro está lá." />
-        <Ex jp="どこにいきますか？" pt="Para onde você vai?" />
-        <Ex jp="すみません、ゆうびんきょくはどこですか？" pt="Com licença, onde fica o correio?" />
-        <Ex jp="ここからそこまでどのくらいかかりますか？" pt="Quanto tempo leva daqui até lá?" />
+        <Ex jp="ここにすわってください。" romaji="koko ni suwatte kudasai." pt="Por favor, sente-se aqui." />
+        <Ex
+          jp="そこはあぶないです。"
+          romaji="soko wa abunai desu."
+          pt="Aí é perigoso."
+          notes="あぶない = perigoso."
+        />
+        <Ex
+          jp="あそこにトイレがあります。"
+          romaji="asoko ni toire ga arimasu."
+          pt="O banheiro fica lá."
+          notes={`Repare: o grupo あ usa あそこ (e não あこ). É a única forma "irregular" da tabela.`}
+        />
+        <Ex
+          jp="すみません、ゆうびんきょくはどこですか？"
+          romaji="sumimasen, yuubinkyoku wa doko desu ka?"
+          pt="Com licença, onde fica o correio?"
+          notes="どこ = onde. Frase super útil para se virar na rua."
+        />
       </Section>
 
-      <Section title="Direção — こちら・そちら・あちら・どちら (formal)">
+      <Section title="こちら・そちら・あちら・どちら — direção (formal)">
         <p className="text-sm leading-relaxed text-ink">
-          Indicam direção ou lado. São formas <strong>formais</strong> e muito usadas em atendimento
-          ao cliente, lojas, hotéis e situações profissionais. <strong>どちら</strong> também serve
-          como versão educada de "qual dos dois" (escolha entre duas opções).
+          Indicam direção ou lado, de forma educada. Muito usadas por atendentes em lojas, hotéis
+          e empresas.
         </p>
-        <Ex jp="こちらへどうぞ。" pt="Por aqui, por favor." notes="atendente guiando um cliente" />
-        <Ex jp="えきはあちらです。" pt="A estação é por lá." />
-        <Ex jp="どちらがよろしいですか？" pt="Qual dos dois seria de sua preferência?" notes="versão educada de どれがいいですか" />
-        <Ex jp="こちらはたなかさんです。" pt="Este (aqui) é o sr. Tanaka." notes="こちら também apresenta pessoas formalmente" />
+        <Ex
+          jp="こちらへどうぞ。"
+          romaji="kochira e douzo."
+          pt="Por aqui, por favor."
+          notes="Um atendente guiando você. (へ aqui se lê e.)"
+        />
+        <Ex jp="えきはあちらです。" romaji="eki wa achira desu." pt="A estação é por lá." />
+        <Ex
+          jp="どちらがよろしいですか？"
+          romaji="dochira ga yoroshii desu ka?"
+          pt="Qual dos dois o senhor prefere?"
+          notes={`どちら também é a forma educada de "qual entre duas opções".`}
+        />
+        <Ex
+          jp="こちらはたなかさんです。"
+          romaji="kochira wa tanaka-san desu."
+          pt="Este é o sr. Tanaka."
+          notes="こちら também apresenta pessoas de forma educada (visto na lição de apresentação)."
+        />
       </Section>
 
-      <Section title="Direção casual — こっち・そっち・あっち・どっち">
+      <Section title="こっち・そっち・あっち・どっち — direção (casual)">
         <p className="text-sm leading-relaxed text-ink">
-          Versões informais de こちら/そちら/あちら/どちら. Usadas entre amigos, família e em
-          situações cotidianas.
+          São as versões informais das anteriores. Use com amigos e família.
         </p>
-        <Ex jp="こっちにきて！" pt="Vem aqui!" />
-        <Ex jp="あっちにいって。" pt="Vai lá." notes="pode soar rude dependendo do tom" />
-        <Ex jp="どっちがいい？" pt="Qual dos dois você prefere?" />
+        <Ex jp="こっちにきて！" romaji="kocchi ni kite!" pt="Vem aqui!" />
+        <Ex
+          jp="あっちにいって。"
+          romaji="acchi ni itte."
+          pt="Vai lá."
+          notes={`Dependendo do tom, pode soar rude ("vai pra lá").`}
+        />
+        <Ex jp="どっちがいい？" romaji="docchi ga ii?" pt="Qual dos dois você prefere?" />
         <GrammarTable
-          headers={['Formal', 'Casual', 'Diferença de registro']}
+          headers={['Formal', 'Casual', 'Onde cada um cabe']}
           jpCols={[0, 1]}
           rows={[
             ['こちら', 'こっち', 'こちら: lojas, escritórios, apresentações'],
-            ['そちら', 'そっち', 'そっち: conversa diária, amigos'],
+            ['そちら', 'そっち', 'そっち: conversa do dia a dia'],
             ['あちら', 'あっち', 'あっち: pode soar brusco'],
-            ['どちら', 'どっち', 'どちら: escolha educada entre duas opções'],
+            ['どちら', 'どっち', 'どちら: escolha educada entre dois'],
           ]}
         />
       </Section>
 
-      <Section title="Tipo — こんな・そんな・あんな・どんな">
+      <Section title="こんな・そんな・あんな・どんな — tipo de coisa">
         <p className="text-sm leading-relaxed text-ink">
-          Significam "deste/desse/daquele tipo" e qualificam um substantivo, funcionando como
-          adjetivos. Diferente de この/その/あの (que indicam qual objeto específico), こんな/そんな/あんな
-          indicam a <em>natureza ou característica</em> de algo.
+          Significam "deste tipo, desse tipo, daquele tipo, que tipo?". Descrevem a{' '}
+          <strong>natureza</strong> de algo, não apontam um objeto específico.
         </p>
-        <Ex jp="こんなてんきはきらいです。" pt="Não gosto de um tempo assim (como este)." />
-        <Ex jp="そんなことをいわないでください。" pt="Por favor, não diga coisas assim." />
-        <Ex jp="あんなひとにはなりたくない。" pt="Não quero me tornar um pessoa como aquela." />
-        <Ex jp="どんなおんがくがすきですか？" pt="Que tipo de música você gosta?" />
-        <Ex jp="どんなしごとをしていますか？" pt="Que tipo de trabalho você faz?" />
+        <p className="text-sm leading-relaxed text-ink">
+          Compare: <strong className="font-jp">この</strong>
+          <span className="font-jp">ほん</span> = "<strong>este</strong> livro (bem esse aqui)".{' '}
+          <strong className="font-jp">こんな</strong>
+          <span className="font-jp">ほん</span> = "um livro{' '}
+          <strong>assim, deste tipo</strong>".
+        </p>
+        <Ex
+          jp="こんなてんきはきらいです。"
+          romaji="konna tenki wa kirai desu."
+          pt="Não gosto de tempo assim."
+          notes="てんき = clima/tempo. きらい = detestar."
+        />
+        <Ex
+          jp="そんなことをいわないでください。"
+          romaji="sonna koto o iwanaide kudasai."
+          pt="Por favor, não diga coisas desse tipo."
+        />
+        <Ex
+          jp="あんなひとにはなりたくない。"
+          romaji="anna hito ni wa naritakunai."
+          pt="Não quero me tornar uma pessoa como aquela."
+        />
+        <Ex
+          jp="どんなおんがくがすきですか？"
+          romaji="donna ongaku ga suki desu ka?"
+          pt="Que tipo de música você gosta?"
+          notes={`どんな é muito comum em perguntas: "que tipo de...?".`}
+        />
       </Section>
 
-      <Section title="Modo — こう・そう・ああ・どう">
+      <Section title="こう・そう・ああ・どう — modo, maneira">
         <p className="text-sm leading-relaxed text-ink">
-          Indicam <em>modo ou maneira</em>: "assim", "dessa forma", "daquela forma", "como". São
-          formas adverbiais e não modificam substantivos.
+          Significam "assim, dessa forma, daquela forma, como?". Descrevem <strong>como</strong>{' '}
+          algo é feito.
         </p>
-        <Ex jp="こうしてください。" pt="Por favor, faça assim (desta forma)." notes="mostrando como fazer algo" />
-        <Ex jp="そうおもいます。" pt="Acho que sim. / Penso assim." />
-        <Ex jp="ああ、そうですか。" pt="Ah, é mesmo? / Entendi." notes="expressão de compreensão muito comum" />
-        <Ex jp="どうすればいいですか？" pt="O que devo fazer? / Como devo proceder?" />
-        <Ex jp="どうぞ。" pt="Por favor (vá em frente). / Aqui está." notes="どうぞ vem de どう — 'faça como quiser'" />
+        <Ex
+          jp="こうしてください。"
+          romaji="kou shite kudasai."
+          pt="Por favor, faça assim."
+          notes="Dito enquanto se mostra como fazer."
+        />
+        <Ex jp="そうおもいます。" romaji="sou omoimasu." pt="Acho que sim. / Penso assim." />
+        <Ex
+          jp="ああ、そうですか。"
+          romaji="aa, sou desu ka."
+          pt="Ah, é mesmo? / Entendi."
+          notes="Reação muito comum ao receber uma informação nova."
+        />
+        <Ex
+          jp="どうすればいいですか？"
+          romaji="dou sureba ii desu ka?"
+          pt="O que devo fazer? / Como faço?"
+        />
+        <Ex
+          jp="どうぞ。"
+          romaji="douzo."
+          pt="Por favor (pode ir / aqui está)."
+          notes={`Vem de どう ("como você quiser").`}
+        />
         <Note>
-          <strong className="font-jp">そうですか</strong> e <strong className="font-jp">そうですね</strong>{' '}
-          são expressões cotidianas muito importantes. そうですか é resposta de quem recebeu uma
-          informação nova ("Ah, entendi"). そうですね concorda com o que o outro disse ("É isso
-          mesmo / Concordo").
+          Duas expressões importantíssimas do dia a dia:
+          <ul className="list-disc space-y-1.5 pl-5">
+            <li>
+              <strong className="font-jp">そうですか</strong> (<em>sou desu ka</em>) = reação de
+              quem recebe uma novidade ("Ah, entendi").
+            </li>
+            <li>
+              <strong className="font-jp">そうですね</strong> (<em>sou desu ne</em>) =
+              concordância ("É isso mesmo / Pois é").
+            </li>
+          </ul>
         </Note>
       </Section>
 
-      <Section title="Uso discursivo — além da distância física">
+      <Section title="Uso além da distância física">
         <p className="text-sm leading-relaxed text-ink">
-          O sistema こそあど também organiza referências no <em>discurso</em>, não apenas no espaço
-          físico. Esta é uma das partes mais sofisticadas e importantes para avançar no japonês.
+          O Ko-So-A-Do também funciona <strong>dentro da conversa</strong>, não só no espaço. Isto
+          é mais avançado, mas útil de conhecer.
         </p>
         <GrammarTable
-          headers={['Série', 'Uso discursivo', 'Exemplo']}
-          jpCols={[2]}
+          headers={['Grupo', 'Quando usar no discurso', 'Exemplo']}
+          jpCols={[0, 2]}
           rows={[
-            ['こ', 'Algo que o FALANTE vai dizer a seguir (anafórico prospectivo)', 'こういうりゆうできました。（Por esta razão, vim.）'],
-            ['そ', 'Algo que o OUVINTE disse, ou que ambos acabaram de mencionar', 'そのはなしはしっています。（Sei desse assunto.）'],
-            ['あ', 'Algo que AMBOS conhecem mas não foi mencionado recentemente', 'あのじけん、おぼえてる？（Você se lembra daquele incidente?）'],
+            [
+              'こ',
+              <>
+                algo que <strong>você</strong> vai dizer a seguir
+              </>,
+              'こういうりゆうできました。(kou iu riyuu de kimashita.) — Vim por esta razão.',
+            ],
+            [
+              'そ',
+              <>
+                algo que <strong>o outro</strong> disse, ou que os dois já mencionaram
+              </>,
+              'そのはなしはしっています。(sono hanashi wa shitte imasu.) — Sei desse assunto.',
+            ],
+            [
+              'あ',
+              <>
+                algo que <strong>os dois conhecem</strong>, mas não foi citado agora
+              </>,
+              'あのじけん、おぼえてる？(ano jiken, oboeteru?) — Lembra daquele caso?',
+            ],
           ]}
         />
-        <Ex jp="こんなはなしをしてもいいかな。" pt="Posso falar sobre este assunto (que vou mencionar)?" notes="こ refere algo que o falante está prestes a dizer" />
-        <Ex jp="A：きのうのしけんはむずかしかった。B：そうだったね。" pt="A: A prova de ontem foi difícil. B: Foi mesmo, né." notes="B usa そう referindo-se ao que A disse" />
-        <Ex jp="あのえいが、もうみた？" pt="Você já viu aquele filme?" notes="あ indica algo que ambos conhecem (um filme famoso)" />
+        <Ex
+          jp="A：きのうのしけんはむずかしかった。B：そうだったね。"
+          romaji="A: kinou no shiken wa muzukashikatta. B: sou datta ne."
+          pt="A: A prova de ontem foi difícil. B: Foi mesmo, né."
+          notes="B usa そう para se referir ao que A acabou de dizer."
+        />
       </Section>
 
       <Section title="Erros comuns">
@@ -180,10 +413,30 @@ export default function KoSoADo() {
           headers={['Erro', 'Incorreto', 'Correto', 'Por quê']}
           jpCols={[1, 2]}
           rows={[
-            ['Usar この sem substantivo', 'このはなんですか？', 'これはなんですか？', 'この precisa de substantivo; これ fica sozinho'],
-            ['Confundir これ e それ', '（algo perto de B）これをください', '（algo perto de B）それをください', 'Você quer algo que está perto de B, não de você'],
-            ['Usar ここ como direção', 'ここへどうぞ', 'こちらへどうぞ', 'Em contexto formal, こちら é mais natural'],
-            ['Usar どの sem opção clara', 'どのがいい？', 'どれがいい？ / どちらがいい？', 'どの precisa de substantivo; para pronome use どれ/どちら'],
+            [
+              'Usar この sem substantivo',
+              'このはなんですか？',
+              'これはなんですか？',
+              'この precisa de substantivo; これ fica sozinho.',
+            ],
+            [
+              'Confundir これ e それ (objeto perto de B)',
+              'これをください',
+              'それをください',
+              'Se a coisa está perto de quem ouve, use それ.',
+            ],
+            [
+              'Usar ここ em contexto formal',
+              'ここへどうぞ',
+              'こちらへどうぞ',
+              'Ao atender alguém, こちら soa mais educado.',
+            ],
+            [
+              'Usar どの como pronome',
+              'どのがいい？',
+              'どれがいい？ / どちらがいい？',
+              'どの precisa de substantivo; sozinho, use どれ ou どちら.',
+            ],
           ]}
         />
       </Section>
@@ -193,13 +446,13 @@ export default function KoSoADo() {
           headers={['Quero dizer...', 'Use']}
           jpCols={[1]}
           rows={[
-            ['"este livro" (adjetivo + substantivo)', 'このほん'],
-            ['"isto" (pronome, objeto)', 'これ'],
+            ['"este livro" (com substantivo)', 'このほん'],
+            ['"isto" (objeto, sozinho)', 'これ'],
             ['"aqui" (lugar)', 'ここ'],
-            ['"por aqui" (direção, formal)', 'こちら'],
-            ['"por aqui" (direção, casual)', 'こっち'],
-            ['"deste tipo" (qualidade)', 'こんな'],
-            ['"assim, desta forma" (modo)', 'こう'],
+            ['"por aqui" (direção formal)', 'こちら'],
+            ['"por aqui" (direção casual)', 'こっち'],
+            ['"deste tipo"', 'こんな'],
+            ['"assim, desta forma"', 'こう'],
           ]}
         />
       </Section>

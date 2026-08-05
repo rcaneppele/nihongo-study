@@ -13,18 +13,34 @@ export function Section({ title, children }: { title: string; children: ReactNod
 
 export function Ex({
   jp,
+  romaji,
   pt,
   notes,
 }: {
   jp: string;
+  romaji?: string;
   pt: string;
   notes?: string;
 }) {
   return (
     <div className="min-w-0 rounded-lg border-l-4 border-indigo/40 bg-white/70 px-4 py-3">
       <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
+      {romaji && <p className="mt-0.5 break-words text-sm italic text-sage">{romaji}</p>}
       <p className="mt-1 break-words text-sm text-ink/80">{pt}</p>
-      {notes && <p className="mt-1 break-words text-xs italic text-sage">{notes}</p>}
+      {notes && <p className="mt-1 break-words text-xs italic text-sage">→ {notes}</p>}
+    </div>
+  );
+}
+
+export function ReadingKey({ lines }: { lines: { text: string; desc: string }[] }) {
+  return (
+    <div className="w-fit min-w-0 max-w-full rounded-lg border border-line bg-paper/60 px-4 py-3 font-mono text-sm text-ink">
+      {lines.map((l, i) => (
+        <div key={i} className="flex flex-wrap items-baseline gap-x-3">
+          <span>{l.text}</span>
+          <span className="text-xs text-sage">← {l.desc}</span>
+        </div>
+      ))}
     </div>
   );
 }

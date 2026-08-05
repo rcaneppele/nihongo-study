@@ -3,7 +3,7 @@ import { Section, Ex, Note, GrammarTable } from '../components/Licao';
 export const meta = {
   id: 'sufixos',
   title: 'Sufixos de Respeito',
-  subtitle: 'さん、せんせい、せんぱい e outros honoríficos',
+  subtitle: 'さん, せんせい, せんぱい e outros honoríficos',
   emoji: '🎎',
   tags: ['cultura', 'n5'],
 };
@@ -11,83 +11,119 @@ export const meta = {
 export default function Sufixos() {
   return (
     <div className="space-y-10">
-      <p className="leading-relaxed text-ink">
-        Em japonês, chamar alguém apenas pelo nome sem um sufixo honorífico (けいしょう) é
-        considerado muito íntimo ou até rude, dependendo do contexto. Os sufixos transmitem
-        informações sobre o <strong>nível de respeito</strong>, a <strong>relação</strong> e às
-        vezes o <strong>gênero</strong> percebido de quem fala. São adicionados após o nome de
-        família ou o nome próprio — escolha depende da relação e do contexto.
-      </p>
+      <Section title="Como ler esta lição">
+        <p className="text-sm leading-relaxed text-ink">
+          Os sufixos se escrevem em hiragana. Você verá cada um em hiragana e romaji, com exemplos
+          explicados.
+        </p>
+      </Section>
 
-      <Section title="Os principais sufixos — visão geral">
+      <Section title="A ideia central">
+        <p className="text-sm leading-relaxed text-ink">
+          Em japonês, chamar alguém <strong>só pelo nome, sem sufixo</strong>, soa íntimo demais ou
+          até rude, dependendo da situação.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          Por isso, quase sempre se adiciona um sufixo depois do nome. Esse sufixo mostra:
+        </p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>o <strong>nível de respeito</strong>;</li>
+          <li>a <strong>relação</strong> entre as pessoas;</li>
+          <li>às vezes, o <strong>gênero</strong> percebido.</li>
+        </ul>
+        <p className="text-sm leading-relaxed text-ink">
+          O sufixo vem depois do sobrenome ou do nome próprio. Qual escolher depende da relação.
+        </p>
+      </Section>
+
+      <Section title="Visão geral dos principais sufixos">
         <GrammarTable
-          headers={['Sufixo', 'Uso principal', 'Formalidade', 'Exemplo']}
-          jpCols={[0, 3]}
+          headers={['Sufixo', 'Romaji', 'Uso principal', 'Formalidade']}
+          jpCols={[0]}
           rows={[
-            ['〜さん', 'Uso padrão, neutro e educado', '★★★', 'たなかさん'],
-            ['〜くん', 'Para meninos ou subordinados jovens', '★★', 'けんくん'],
-            ['〜ちゃん', 'Carinhoso (crianças, amigos íntimos)', '★', 'さくらちゃん'],
-            ['〜さま', 'Muito formal e respeitoso', '★★★★', 'おきゃくさま'],
-            ['〜せんせい', 'Professor, médico, mestre, político', '★★★★', 'たなかせんせい'],
-            ['〜せんぱい', 'Mais experiente / mais velho no grupo', '★★★', 'すずきせんぱい'],
-            ['〜こうはい', 'Mais novo no grupo (raro como sufixo)', '—', '—'],
-            ['〜どの', 'Arcaico / documentos formais', '★★★★★', 'たなかじろうどの'],
+            ['〜さん', 'san', 'padrão, neutro e educado', '★★★'],
+            ['〜くん', 'kun', 'meninos ou subordinados jovens', '★★'],
+            ['〜ちゃん', 'chan', 'carinhoso (crianças, íntimos)', '★'],
+            ['〜さま', 'sama', 'muito formal e respeitoso', '★★★★'],
+            ['〜せんせい', 'sensei', 'professor, médico, mestre', '★★★★'],
+            ['〜せんぱい', 'senpai', 'veterano no grupo (mais experiente)', '★★★'],
+            ['〜どの', 'dono', 'arcaico, documentos formais', '★★★★★'],
           ]}
         />
       </Section>
 
-      <Section title="〜さん — o sufixo mais versátil">
+      <Section title="〜さん — o mais versátil">
         <p className="text-sm leading-relaxed text-ink">
-          Equivale aproximadamente a "sr.", "sra.", "srta.", mas sem distinção de gênero ou estado
-          civil. É o sufixo mais seguro para usar com pessoas que você acabou de conhecer, colegas
-          de trabalho, professores de japonês e em qualquer situação onde não tenha certeza do que
-          usar.
+          Equivale, mais ou menos, a "sr.", "sra.", "srta.", mas{' '}
+          <strong>sem indicar gênero nem estado civil</strong>.
         </p>
-        <GrammarTable
-          headers={['Combinação', 'Exemplo', 'Uso']}
-          jpCols={[1]}
-          rows={[
-            ['Sobrenome + さん', 'たなかさん', 'mais comum e formal — sempre seguro'],
-            ['Nome próprio + さん', 'はなこさん', 'mais íntimo que sobrenome, mas ainda respeitoso'],
-            ['Profissão + さん', 'さかなやさん', 'ao falar de/com trabalhadores'],
-            ['Apelido + さん', 'タナカさん', 'raro, mas possível com estrangeiros'],
-          ]}
+        <p className="text-sm leading-relaxed text-ink">
+          É o sufixo mais seguro. Use com quem você acabou de conhecer, colegas de trabalho e
+          sempre que estiver na dúvida.
+        </p>
+        <Ex
+          jp="たなかさん、ちょっとよろしいですか？"
+          romaji="tanaka-san, chotto yoroshii desu ka?"
+          pt="Sr. Tanaka, você tem um momento?"
+          notes="Forma educada de abordar alguém."
         />
-        <Ex jp="たなかさん、ちょっとよろしいですか？" pt="Sr. Tanaka, você tem um momento?" notes="forma educada de interpelar alguém" />
-        <Ex jp="おきゃくさん、いらっしゃいませ。" pt="Bem-vindo, cliente." notes="さん após おきゃく em lojas e restaurantes" />
+        <Ex
+          jp="おきゃくさん、いらっしゃいませ。"
+          romaji="okyaku-san, irasshaimase."
+          pt="Bem-vindo, cliente."
+          notes="さん também aparece após おきゃく (cliente), em lojas e restaurantes."
+        />
       </Section>
 
       <Section title="〜くん — para jovens e subordinados">
         <p className="text-sm leading-relaxed text-ink">
-          くん é usado por superiores ou professores ao se dirigir a meninos ou homens jovens, e
-          entre colegas masculinos de mesma faixa etária. Em ambientes de trabalho, gerentes às vezes
-          usam くん com funcionários jovens (homens), independentemente da formalidade do ambiente.
-          Em raros contextos, também é usado com mulheres jovens subordinadas.
+          <span className="font-jp">くん</span> é usado por superiores ou professores ao chamar
+          meninos e homens jovens. Também entre colegas homens da mesma idade.
         </p>
-        <Ex jp="やまだくん、ちょっときて。" pt="Yamada, vem cá um momento." notes="superior chamando subordinado jovem" />
-        <Ex jp="けんくん、きょうもちこくか。" pt="Takeshi, chegou atrasado de novo hoje." notes="professor chamando aluno" />
+        <Ex
+          jp="やまだくん、ちょっときて。"
+          romaji="yamada-kun, chotto kite."
+          pt="Yamada, vem cá um momento."
+          notes="Um superior chamando um subordinado jovem."
+        />
+        <Ex
+          jp="けんくん、きょうもちこくか。"
+          romaji="ken-kun, kyou mo chikoku ka."
+          pt="Ken, atrasou de novo hoje?"
+          notes="Um professor chamando um aluno."
+        />
         <Note>
-          くん dirigido a mulheres (ex.: professores que chamam alunas de ○○くん) é mais comum em
-          escolas e menos em ambientes profissionais. Pode soar paternalista se usado por homens com
-          mulheres adultas sem relação clara de hierarquia.
+          <span className="font-jp">くん</span> dirigido a mulheres (por exemplo, professores que
+          chamam alunas de <span className="font-jp">○○くん</span>) acontece em escolas, mas é raro
+          no trabalho. Fora desses casos, pode soar paternalista.
         </Note>
       </Section>
 
       <Section title="〜ちゃん — carinhoso e íntimo">
         <p className="text-sm leading-relaxed text-ink">
-          ちゃん é a forma diminutiva e carinhosa. É amplamente usado com crianças pequenas
-          (independentemente do gênero), entre amigos muito próximos e com animais de estimação.
-          Para adultos em contexto profissional, use apenas entre pessoas com relação muito próxima
-          e estabelecida. Há também usos com sobrenomes ou apelidos abreviados.
+          <span className="font-jp">ちゃん</span> é a forma carinhosa. Usa-se com crianças pequenas
+          (qualquer gênero), entre amigos muito próximos e com animais de estimação.
         </p>
-        <Ex jp="はなこちゃん、だいじょうぶ？" pt="Hanako, você está bem?" notes="falando carinhosamente com criança ou amiga próxima" />
-        <Ex jp="たくちゃん、ごはんよ！" pt="Taku, hora de comer!" notes="mãe chamando filho pelo apelido + ちゃん" />
+        <Ex
+          jp="はなこちゃん、だいじょうぶ？"
+          romaji="hanako-chan, daijoubu?"
+          pt="Hanako, você está bem?"
+          notes="Falando com carinho com uma criança ou amiga próxima."
+        />
+        <Ex
+          jp="たくちゃん、ごはんよ！"
+          romaji="taku-chan, gohan yo!"
+          pt="Taku, hora de comer!"
+          notes="Uma mãe chamando o filho pelo apelido + ちゃん."
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">ちゃん</span> costuma vir com apelidos encurtados:
+        </p>
         <GrammarTable
           headers={['Apelido', 'Como se forma', 'Nome original']}
-          jpCols={[0, 2]}
+          jpCols={[0, 1, 2]}
           rows={[
             ['たくちゃん', 'たくや → たく + ちゃん', 'たくや'],
-            ['さっちゃん', 'さとこ → さ + っちゃん', 'さとこ'],
             ['けんちゃん', 'けんじ → けん + ちゃん', 'けんじ'],
           ]}
         />
@@ -95,168 +131,260 @@ export default function Sufixos() {
 
       <Section title="〜さま — muito formal e respeitoso">
         <p className="text-sm leading-relaxed text-ink">
-          さま é a forma mais elevada de respeito. No dia a dia oral, é raramente usado (soaria
-          exagerado). Na escrita formal — cartas, e-mails, correspondência comercial — é padrão. Há
-          também usos fixos em atendimento ao cliente.
+          <span className="font-jp">さま</span> é o grau máximo de respeito. Na fala do dia a dia é
+          raro (soaria exagerado). Mas é <strong>padrão na escrita formal</strong>: cartas, e-mails
+          e correspondência comercial.
         </p>
         <GrammarTable
-          headers={['Uso', 'Exemplo', 'Contexto']}
+          headers={['Uso', 'Exemplo', 'Romaji', 'Contexto']}
           jpCols={[1]}
           rows={[
-            ['Nome em cartas', 'たなかじろうさま', 'correspondência formal'],
-            ['Cliente', 'おきゃくさま', 'comércio, hotelaria, transporte'],
-            ['Todos os presentes', 'みなさま', 'discursos, apresentações formais'],
-            ['Deus, divindade', 'かみさま', 'uso religioso ou irônico'],
-            ['Forma de elogio extremo', 'せんせいさま', 'arcaico / irônico atualmente'],
+            ['Nome em carta', 'たなかさま', 'tanaka-sama', 'correspondência formal'],
+            ['Cliente', 'おきゃくさま', 'okyaku-sama', 'lojas, hotéis, transporte'],
+            ['Todos os presentes', 'みなさま', 'mina-sama', 'discursos, cerimônias'],
+            ['Divindade', 'かみさま', 'kami-sama', 'uso religioso'],
           ]}
         />
-        <Ex jp="たなかさま、ほんじつはごらいてんありがとうございます。" pt="Sr. Tanaka, obrigado por nos visitar hoje." notes="atendimento de alto nível" />
-        <Ex jp="みなさま、ほんじつはおあつまりいただきありがとうございます。" pt="Senhoras e senhores, obrigado por se reunirem aqui hoje." />
+        <Ex
+          jp="たなかさま、ほんじつはごらいてんありがとうございます。"
+          romaji="tanaka-sama, honjitsu wa goraiten arigatou gozaimasu."
+          pt="Sr. Tanaka, obrigado por nos visitar hoje."
+          notes="Atendimento de alto nível. ほんじつ = hoje (formal)."
+        />
       </Section>
 
-      <Section title="せんせい — mais que 'professor'">
+      <Section title='〜せんせい — mais que "professor"'>
         <p className="text-sm leading-relaxed text-ink">
-          せんせい é usado como sufixo e como título para professores, médicos, dentistas, advogados,
-          políticos eleitos e qualquer pessoa reconhecida como mestre ou autoridade em sua área. É
-          colocado após o sobrenome.
+          <span className="font-jp">せんせい</span> é usado com professores, mas também com médicos,
+          dentistas, advogados e políticos. Ou seja, qualquer pessoa reconhecida como mestre ou
+          autoridade na sua área. Vai depois do sobrenome.
         </p>
-        <Ex jp="たなかせんせい、しつもんがあります。" pt="Professor Tanaka, tenho uma pergunta." />
-        <Ex jp="せんせい、ありがとうございました。" pt="Obrigado, professor." notes="せんせい sozinho também funciona como chamado" />
-        <Ex jp="やまだせんせいはげかいです。" pt="O Dr. Yamada é cirurgião." />
+        <Ex
+          jp="たなかせんせい、しつもんがあります。"
+          romaji="tanaka-sensei, shitsumon ga arimasu."
+          pt="Professor Tanaka, tenho uma pergunta."
+        />
+        <Ex
+          jp="せんせい、ありがとうございました。"
+          romaji="sensei, arigatou gozaimashita."
+          pt="Obrigado, professor."
+          notes="せんせい sozinho também funciona como forma de chamar."
+        />
         <Note>
-          Nunca use せんせい para se referir a si mesmo. Dizer「わたしはせんせいです」(Sou
-          professor) ao se apresentar é correto; mas dirigir-se a si mesmo como「せんせい」no
-          discurso seria presunçoso.
+          <strong>
+            Nunca use <span className="font-jp">せんせい</span> para se referir a si mesmo.
+          </strong>{' '}
+          Dizer <span className="font-jp">わたしはせんせいです</span> ("sou professor") ao se
+          apresentar está certo. Mas chamar a si próprio de <span className="font-jp">せんせい</span>{' '}
+          soaria presunçoso.
         </Note>
       </Section>
 
-      <Section title="せんぱい e こうはい — hierarquia de grupo">
+      <Section title="せんぱい e こうはい — a hierarquia do grupo">
         <p className="text-sm leading-relaxed text-ink">
-          O conceito de <strong>せんぱい／こうはい</strong> é central na cultura japonesa
-          — mais do que uma simples questão de idade, refere-se a quem entrou antes ou depois em um
-          grupo (escola, clube, empresa). O せんぱい orienta e protege; o こうはい respeita e aprende.
-          Essa relação cria obrigações mútuas que podem durar décadas.
+          Esta dupla é central na cultura japonesa. Não é sobre idade, e sim sobre{' '}
+          <strong>quem entrou antes</strong> num grupo (escola, clube, empresa).
         </p>
-        <Ex jp="せんぱい、おしえてください。" pt="Senpai, por favor me ensine." />
-        <Ex jp="すずきせんぱいのおかげです。" pt="É graças ao senpai Suzuki." />
-        <Ex jp="こうはいのめんどうをみるのはせんぱいのやくめです。" pt="Cuidar dos mais novos é a responsabilidade do senpai." />
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            <strong className="font-jp">せんぱい</strong> (<em>senpai</em>) = quem entrou antes.
+            Orienta e protege.
+          </li>
+          <li>
+            <strong className="font-jp">こうはい</strong> (<em>kouhai</em>) = quem entrou depois.
+            Respeita e aprende.
+          </li>
+        </ul>
+        <Ex
+          jp="せんぱい、おしえてください。"
+          romaji="senpai, oshiete kudasai."
+          pt="Senpai, por favor me ensine."
+          notes="せんぱい pode ser usado sozinho, como forma de chamar."
+        />
+        <Ex
+          jp="すずきせんぱいのおかげです。"
+          romaji="suzuki-senpai no okage desu."
+          pt="É graças ao senpai Suzuki."
+          notes={'〜のおかげです = "graças a...".'}
+        />
         <Note>
-          こうはい raramente é usado como sufixo no nome de alguém. Diz-se 「わたしのこうはい」
-          (meu kouhai) ou usa-se o nome + さん/くん. Tratar um こうはい de forma desrespeitosa é
-          socialmente problemático — a hierarquia é de cuidado mútuo, não de exploração.
+          <span className="font-jp">こうはい</span> quase nunca vira sufixo no nome de alguém.
+          Diz-se <span className="font-jp">わたしのこうはい</span> ("meu kouhai") ou usa-se nome +{' '}
+          <span className="font-jp">さん</span>/<span className="font-jp">くん</span>.
         </Note>
       </Section>
 
       <Section title="Prefixos honoríficos — お e ご">
         <p className="text-sm leading-relaxed text-ink">
-          Além dos sufixos, o japonês usa prefixos <strong>お</strong> e <strong>ご</strong> para
-          tornar palavras mais polidas ou honrosas. お é usado antes de palavras de origem japonesa
-          (わご); ご antes de palavras de origem chinesa (かんご). Há exceções.
+          Além dos sufixos (que vêm depois), há dois prefixos (que vêm antes) para deixar palavras
+          mais educadas: <strong className="font-jp">お</strong> e{' '}
+          <strong className="font-jp">ご</strong>.
         </p>
+        <p className="text-sm leading-relaxed text-ink">Regra geral:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            <strong className="font-jp">お</strong> vai antes de palavras de origem japonesa.
+          </li>
+          <li>
+            <strong className="font-jp">ご</strong> vai antes de palavras de origem chinesa.
+          </li>
+        </ul>
         <GrammarTable
-          headers={['Prefixo', 'Exemplo', 'Significado', 'Origem']}
-          jpCols={[1]}
+          headers={['Prefixo', 'Exemplo', 'Romaji', 'Significado']}
+          jpCols={[0, 1]}
           rows={[
-            ['お', 'おなまえ', 'seu nome (respeitoso)', 'japonesa'],
-            ['お', 'おみず', 'água (polido)', 'japonesa'],
-            ['お', 'おしごと', 'seu trabalho', 'japonesa'],
-            ['お', 'おちゃ', 'chá (polido)', 'japonesa'],
-            ['ご', 'ごかぞく', 'sua família', 'chinesa'],
-            ['ご', 'ごじゅうしょ', 'seu endereço', 'chinesa'],
-            ['ご', 'ごいけん', 'sua opinião', 'chinesa'],
-            ['ご', 'ごはん', 'refeição / arroz', 'exceção comum'],
+            ['お', 'おなまえ', 'onamae', 'seu nome (respeitoso)'],
+            ['お', 'おしごと', 'oshigoto', 'seu trabalho'],
+            ['お', 'おちゃ', 'ocha', 'chá'],
+            ['ご', 'ごかぞく', 'gokazoku', 'sua família'],
+            ['ご', 'ごじゅうしょ', 'gojuusho', 'seu endereço'],
+            ['ご', 'ごはん', 'gohan', 'refeição / arroz (exceção comum)'],
           ]}
         />
         <Note>
-          Não adicione お/ご a tudo — soaria excessivo. Esses prefixos são usados para coisas{' '}
-          <em>relacionadas à outra pessoa</em> (おなまえ, ごじゅうしょ) ou em expressões
-          estabelecidas (おちゃ, ごはん). Para as coisas suas próprias em contexto formal, evite:
-          dizer 「わたしのおなまえは…」 seria estranho.
+          Não coloque <span className="font-jp">お</span>/<span className="font-jp">ご</span> em
+          tudo, senão soa exagerado. Esses prefixos servem para coisas{' '}
+          <strong>relacionadas à outra pessoa</strong> (<span className="font-jp">おなまえ</span>,{' '}
+          <span className="font-jp">ごじゅうしょ</span>) ou expressões fixas (
+          <span className="font-jp">おちゃ</span>, <span className="font-jp">ごはん</span>). Para
+          as <strong>suas</strong> coisas, evite: dizer{' '}
+          <span className="font-jp">わたしのおなまえ</span>… soaria estranho.
         </Note>
       </Section>
 
-      <Section title="Títulos corporativos e organizacionais">
+      <Section title="Títulos de trabalho">
         <p className="text-sm leading-relaxed text-ink">
-          Em empresas e organizações, cargos também funcionam como formas de endereçamento. Em vez de
-          usar さん com superiores, muitas vezes usa-se o cargo diretamente.
+          Em empresas, o <strong>cargo</strong> costuma substituir o{' '}
+          <span className="font-jp">さん</span> ao falar com um superior.
         </p>
         <GrammarTable
-          headers={['Título', 'Cargo']}
-          jpCols={[0]}
+          headers={['Kanji', 'Hiragana', 'Romaji', 'Cargo']}
+          jpCols={[0, 1]}
           rows={[
-            ['しゃちょう', 'Presidente / CEO'],
-            ['ふくしゃちょう', 'Vice-presidente'],
-            ['ぶちょう', 'Diretor / Chefe de departamento'],
-            ['かちょう', 'Gerente / Chefe de seção'],
-            ['かかりちょう', 'Supervisor de equipe'],
-            ['しゅにん', 'Líder / Responsável'],
-            ['どうりょう', 'Colega (mesmo nível)'],
+            ['社長', 'しゃちょう', 'shachou', 'presidente / CEO'],
+            ['部長', 'ぶちょう', 'buchou', 'diretor de departamento'],
+            ['課長', 'かちょう', 'kachou', 'gerente de seção'],
+            ['主任', 'しゅにん', 'shunin', 'líder / responsável'],
+            ['同僚', 'どうりょう', 'douryou', 'colega (mesmo nível)'],
           ]}
         />
-        <Ex jp="ぶちょう、ごほうこくがあります。" pt="Diretor, tenho um relatório para fazer." notes="cargo como forma de chamar — sem usar o nome" />
-        <Ex jp="たなかぶちょうはいらっしゃいますか？" pt="O diretor Tanaka está?" notes="sobrenome + cargo como sufixo" />
+        <Ex
+          jp="ぶちょう、ごほうこくがあります。"
+          romaji="buchou, gohoukoku ga arimasu."
+          pt="Diretor, tenho um relatório para apresentar."
+          notes="O cargo (ぶちょう) é usado como forma de chamar, sem o nome."
+        />
+        <Ex
+          jp="たなかぶちょうはいらっしゃいますか？"
+          romaji="tanaka-buchou wa irasshaimasu ka?"
+          pt="O diretor Tanaka está?"
+          notes="Aqui, sobrenome + cargo funcionam juntos."
+        />
       </Section>
 
-      <Section title="Regras fundamentais">
+      <Section title="Três regras fundamentais">
         <Note>
-          <strong>Nunca adicione sufixos ao seu próprio nome.</strong> Dizer 「わたしはたなかさんです」
-          ao se apresentar soa arrogante. Diga apenas 「たなかです」 ou 「たなかともうします」 (formal).
+          <strong>Nunca ponha sufixo no seu próprio nome.</strong> Dizer{' '}
+          <span className="font-jp">わたしはたなかさんです</span> soa arrogante. Diga só{' '}
+          <span className="font-jp">たなかです</span> ou, formal,{' '}
+          <span className="font-jp">たなかともうします</span>.
         </Note>
         <Note>
-          <strong>Chamar alguém pelo nome sem sufixo</strong> (よびすて) é reservado para
-          relações muito íntimas, ou de um superior a um subordinado. Entre desconhecidos ou pessoas
-          de nível similar, soaria rude ou presunçoso.
+          <strong>Chamar alguém sem sufixo</strong> (<span className="font-jp">よびすて</span>,{' '}
+          <em>yobisute</em>) só vale entre pessoas muito íntimas, ou de um superior para um
+          subordinado. Entre desconhecidos ou iguais, soa rude.
         </Note>
         <Note>
-          <strong>Mudar de さん para ちゃん/くん</strong> simboliza uma aproximação na relação. Sempre
-          espere que a outra pessoa sugira ("ちゃんでよんでいいよ" = Pode me chamar de ちゃん) antes
-          de tomar essa iniciativa.
+          <strong>
+            Mudar de <span className="font-jp">さん</span> para{' '}
+            <span className="font-jp">ちゃん</span>/<span className="font-jp">くん</span>
+          </strong>{' '}
+          marca uma aproximação. Espere a outra pessoa sugerir isso ("
+          <span className="font-jp">ちゃんでよんでいいよ</span>" = "pode me chamar de{' '}
+          <span className="font-jp">ちゃん</span>") antes de tomar a iniciativa.
         </Note>
+      </Section>
+
+      <Section title="Qual sufixo usar? Tabela de decisão">
         <GrammarTable
-          headers={['Contexto', 'Sufixo recomendado']}
+          headers={['Situação', 'Sufixo recomendado']}
           jpCols={[]}
           rows={[
-            ['Pessoa que você acabou de conhecer', 'さん'],
-            ['Professor, médico, dentista, advogado', 'せんせい'],
-            ['Veterano no clube / empresa', 'せんぱい'],
-            ['Criança pequena (qualquer gênero)', 'ちゃん ou nome sem sufixo'],
-            ['Amigo íntimo de longa data', 'くん / ちゃん / nome sem sufixo'],
-            ['Cliente, hóspede', 'さま (ou さん em contexto simples)'],
-            ['Colega de mesmo nível no trabalho', 'さん'],
-            ['Superior com cargo', 'Cargo + さん (ex.: ぶちょうさん) ou só cargo'],
-            ['Email / carta formal', 'さま'],
+            ['Pessoa que você acabou de conhecer', <span className="font-jp">さん</span>],
+            ['Professor, médico, dentista, advogado', <span className="font-jp">せんせい</span>],
+            ['Veterano no clube / empresa', <span className="font-jp">せんぱい</span>],
+            [
+              'Criança pequena',
+              <>
+                <span className="font-jp">ちゃん</span> (ou nome sem sufixo)
+              </>,
+            ],
+            [
+              'Amigo íntimo de longa data',
+              <>
+                <span className="font-jp">くん</span> / <span className="font-jp">ちゃん</span> /
+                nome sem sufixo
+              </>,
+            ],
+            [
+              'Cliente, hóspede',
+              <>
+                <span className="font-jp">さま</span> (<span className="font-jp">さん</span> em
+                contexto simples)
+              </>,
+            ],
+            ['Colega de mesmo nível', <span className="font-jp">さん</span>],
+            [
+              'Superior com cargo',
+              <>
+                cargo (ex.: <span className="font-jp">ぶちょう</span>)
+              </>,
+            ],
+            ['E-mail / carta formal', <span className="font-jp">さま</span>],
           ]}
         />
       </Section>
 
       <Section title="Erros comuns">
         <GrammarTable
-          headers={['Erro', 'Situação', 'Correto', 'Por quê']}
-          jpCols={[]}
+          headers={['Erro', 'Incorreto', 'Correto', 'Por quê']}
+          jpCols={[1, 2]}
           rows={[
             [
-              'Chamar médico de さん',
-              '"やまださん、つぎはわたしですか？" ao médico',
-              '"やまだせんせい、つぎはわたしですか？"',
-              'Médicos, dentistas e professores recebem せんせい',
+              <>
+                Chamar médico de <span className="font-jp">さん</span>
+              </>,
+              'やまださん (ao médico)',
+              'やまだせんせい',
+              <>
+                Médicos, dentistas e professores recebem <span className="font-jp">せんせい</span>.
+              </>,
             ],
             [
-              'Usar さん para si mesmo',
-              '"わたしはたなかさんです。"',
-              '"わたしはたなかです。"',
-              'Adicionar さん ao próprio nome é arrogante',
+              <>
+                Usar <span className="font-jp">さん</span> no próprio nome
+              </>,
+              'わたしはたなかさんです。',
+              'わたしはたなかです。',
+              <>
+                Pôr <span className="font-jp">さん</span> em si mesmo é arrogante.
+              </>,
             ],
             [
-              'Usar ちゃん com desconhecido adulto',
-              'Chamar nova colega de "はなこちゃん" no primeiro dia',
-              '"はなこさん"',
-              'ちゃん com adulto desconhecido é invasivo; espere a relação se desenvolver',
+              <>
+                Usar <span className="font-jp">ちゃん</span> com desconhecido adulto
+              </>,
+              'はなこちゃん (no primeiro dia)',
+              'はなこさん',
+              <>
+                <span className="font-jp">ちゃん</span> com adulto que você mal conhece é invasivo.
+              </>,
             ],
             [
               'Omitir o sufixo com superior',
-              '"たなか、ちょっといいですか？" para o chefe',
-              '"たなかさん" ou "たなかぶちょう"',
-              'Chamar superior pelo nome sem sufixo é muito rude',
+              'たなか、ちょっといいですか？ (ao chefe)',
+              'たなかさん / たなかぶちょう',
+              'Chamar superior sem sufixo é muito rude.',
             ],
           ]}
         />

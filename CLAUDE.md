@@ -47,8 +47,9 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
   `particulas.tsx`, `familia.tsx`). Para adicionar uma lição, crie o arquivo e
   registre-o em `index.ts`.
 - `src/components/Licao.tsx` — componentes de apresentação reutilizáveis pelas
-  lições: `Section`, `Ex` (exemplo com japonês/tradução/nota), `Note` e
-  `GrammarTable`.
+  lições: `Section`, `Ex` (exemplo com japonês/romaji/tradução/nota), `Note`,
+  `GrammarTable` e `ReadingKey` (legenda "kana ← descrição" usada na seção
+  "Como ler esta lição" de cada lição).
 - `src/routes/` — uma página por arquivo.
 
 ## Convenções
@@ -63,11 +64,19 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - Comentários e textos de UI em português (pt-BR).
 - Mantenha a base de cores e o tom calmo; o acento `hanko` (vermelho) é usado com
   parcimônia (ações de destaque/perigo).
-- **Nas lições (`src/licoes/*.tsx`), todo texto em japonês é escrito só em kana
-  (hiragana/katakana), sem kanji.** O usuário ainda não estudou kanji. Por isso
-  o componente `Ex` não tem prop de leitura separada — o próprio `jp` já é a
-  forma legível. Ao revisar essa regra no futuro, se o usuário indicar que já
-  começou a estudar kanji, ela deixa de valer.
+- **Nas lições (`src/licoes/*.tsx`), o texto em japonês é sempre acompanhado de
+  romaji.** O usuário ainda está aprendendo a ler kana. Frases de exemplo
+  (`<Ex jp="..." romaji="..." pt="..." />`) nunca usam kanji — só hiragana/
+  katakana, com o prop `romaji` trazendo a leitura. Kanji só aparece como
+  coluna de referência opcional em algumas tabelas de vocabulário (família,
+  pronomes, sufixos, cargos), sempre ao lado do hiragana e claramente
+  explicado como "pode ignorar por enquanto" na seção "Como ler esta lição"
+  de abertura de cada lição — nunca dentro de uma frase de exemplo. Se o
+  usuário indicar que já avançou bastante nos estudos de kanji, essa regra
+  pode ser revisada.
+- Toda lição abre com uma seção **"Como ler esta lição"**, explicando o
+  formato usado (normalmente via `ReadingKey`) e, quando relevante,
+  pronúncias especiais de partículas/sons daquela lição.
 
 ## Próximas tarefas (sugestão de ordem)
 

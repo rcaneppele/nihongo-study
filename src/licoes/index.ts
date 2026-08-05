@@ -13,6 +13,7 @@ export interface LicaoEntry {
   Component: ComponentType;
 }
 
+import Kana, { meta as metaKana } from './kana';
 import KoSoADo, { meta as metaKoSoADo } from './kosoado';
 import Particulas, { meta as metaParticulas } from './particulas';
 import Familia, { meta as metaFamilia } from './familia';
@@ -22,6 +23,7 @@ import Pronomes, { meta as metaPronomes } from './pronomes';
 import Verbos, { meta as metaVerbos } from './verbos';
 
 export const LICOES: LicaoEntry[] = [
+  { meta: metaKana, Component: Kana },
   { meta: metaApresentacao, Component: Apresentacao },
   { meta: metaSufixos, Component: Sufixos },
   { meta: metaPronomes, Component: Pronomes },
