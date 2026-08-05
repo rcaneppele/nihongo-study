@@ -13,19 +13,16 @@ export function Section({ title, children }: { title: string; children: ReactNod
 
 export function Ex({
   jp,
-  reading,
   pt,
   notes,
 }: {
   jp: string;
-  reading?: string;
   pt: string;
   notes?: string;
 }) {
   return (
     <div className="min-w-0 rounded-lg border-l-4 border-indigo/40 bg-white/70 px-4 py-3">
       <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
-      {reading && <p className="mt-0.5 break-words text-sm text-sage">{reading}</p>}
       <p className="mt-1 break-words text-sm text-ink/80">{pt}</p>
       {notes && <p className="mt-1 break-words text-xs italic text-sage">{notes}</p>}
     </div>

@@ -19,6 +19,7 @@ import Familia, { meta as metaFamilia } from './familia';
 import Apresentacao, { meta as metaApresentacao } from './apresentacao';
 import Sufixos, { meta as metaSufixos } from './sufixos';
 import Pronomes, { meta as metaPronomes } from './pronomes';
+import Verbos, { meta as metaVerbos } from './verbos';
 
 export const LICOES: LicaoEntry[] = [
   { meta: metaApresentacao, Component: Apresentacao },
@@ -27,4 +28,5 @@ export const LICOES: LicaoEntry[] = [
   { meta: metaFamilia, Component: Familia },
   { meta: metaKoSoADo, Component: KoSoADo },
   { meta: metaParticulas, Component: Particulas },
+  { meta: metaVerbos, Component: Verbos },
 ];

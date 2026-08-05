@@ -47,8 +47,8 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
   `particulas.tsx`, `familia.tsx`). Para adicionar uma lição, crie o arquivo e
   registre-o em `index.ts`.
 - `src/components/Licao.tsx` — componentes de apresentação reutilizáveis pelas
-  lições: `Section`, `Ex` (exemplo com japonês/leitura/tradução/nota),
-  `Note` e `GrammarTable`.
+  lições: `Section`, `Ex` (exemplo com japonês/tradução/nota), `Note` e
+  `GrammarTable`.
 - `src/routes/` — uma página por arquivo.
 
 ## Convenções
@@ -63,6 +63,11 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - Comentários e textos de UI em português (pt-BR).
 - Mantenha a base de cores e o tom calmo; o acento `hanko` (vermelho) é usado com
   parcimônia (ações de destaque/perigo).
+- **Nas lições (`src/licoes/*.tsx`), todo texto em japonês é escrito só em kana
+  (hiragana/katakana), sem kanji.** O usuário ainda não estudou kanji. Por isso
+  o componente `Ex` não tem prop de leitura separada — o próprio `jp` já é a
+  forma legível. Ao revisar essa regra no futuro, se o usuário indicar que já
+  começou a estudar kanji, ela deixa de valer.
 
 ## Próximas tarefas (sugestão de ordem)
 
