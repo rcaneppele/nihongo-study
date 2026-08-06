@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { db, type KanaType } from '../db/schema';
 import { KANA_FAMILIES, familyPreview, getKanaByFamilies, type KanaEntry, type KanaGroup } from '../data/kana';
 import KanaCanvas from '../components/KanaCanvas';
+import AudioButton from '../components/AudioButton';
 import { getReferenceStrokes, scoreDrawing, type DrawScore, type ReferenceStrokes, type Stroke } from '../features/kana/strokes';
 
 const CANVAS_SIZE = 280;
@@ -303,7 +304,10 @@ function RomajiQuestion({
 
   return (
     <div className="card-surface space-y-4 text-center">
-      <p className="font-jp text-7xl">{entry.char}</p>
+      <div className="flex items-center justify-center gap-2">
+        <p className="font-jp text-7xl">{entry.char}</p>
+        <AudioButton text={entry.char} />
+      </div>
 
       {feedback === 'idle' ? (
         <div className="mx-auto flex max-w-md items-center gap-2">

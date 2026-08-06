@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { db, type Card, newId } from '../../db/schema';
 import { applySm2, REVIEW_GRADES } from '../srs/sm2';
+import AudioButton from '../../components/AudioButton';
 
 /**
  * "review" usa a nota pra atualizar o SM-2 (ef/interval/dueDate) — é a
@@ -76,7 +77,10 @@ export default function StudySession({
 
       <div className="card-surface min-h-48 grid place-items-center text-center">
         <div>
-          <p className="font-jp text-4xl">{card.front}</p>
+          <div className="flex items-center justify-center gap-2">
+            <p className="font-jp text-4xl">{card.front}</p>
+            <AudioButton text={card.front} />
+          </div>
           {showBack && (
             <div className="mt-4 border-t border-line pt-4">
               {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}

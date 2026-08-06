@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/sm2';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
+import AudioButton from '../components/AudioButton';
 
 export default function Flashcards() {
   const [category, setCategory] = useState<string>('todas');
@@ -81,8 +82,9 @@ export default function Flashcards() {
       <ul className="space-y-2">
         {filtered.map((card) => (
           <li key={card.id} className="card-surface flex items-center justify-between gap-4">
-            <div>
+            <div className="flex items-center">
               <span className="font-jp text-lg">{card.front}</span>
+              <AudioButton text={card.front} size="sm" />
               <span className="mx-2 text-line">·</span>
               <span className="text-sm">{card.back}</span>
               {card.category && (

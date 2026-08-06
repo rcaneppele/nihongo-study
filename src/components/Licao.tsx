@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import AudioButton from './AudioButton';
 
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -24,7 +25,10 @@ export function Ex({
 }) {
   return (
     <div className="min-w-0 rounded-lg border-l-4 border-indigo/40 bg-white/70 px-4 py-3">
-      <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
+      <div className="flex items-start gap-1">
+        <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
+        <AudioButton text={jp} size="sm" />
+      </div>
       {romaji && <p className="mt-0.5 break-words text-sm italic text-sage">{romaji}</p>}
       <p className="mt-1 break-words text-sm text-ink/80">{pt}</p>
       {notes && <p className="mt-1 break-words text-xs italic text-sage">→ {notes}</p>}
