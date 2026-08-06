@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'kosoado',
@@ -6,6 +7,143 @@ export const meta = {
   subtitle: 'Os demonstrativos japoneses (este, esse, aquele, qual)',
   emoji: '👆',
   tags: ['gramática', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'kosoado-f1',
+      tokens: [
+        { texto: 'この', romaji: 'kono' },
+        { texto: 'ほん', romaji: 'hon' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'おもしろい', romaji: 'omoshiroi' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Este livro é interessante.',
+    },
+    {
+      id: 'kosoado-f2',
+      tokens: [
+        { texto: 'それ', romaji: 'sore' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'ください', romaji: 'kudasai' },
+      ],
+      pt: 'Me dá isso, por favor.',
+    },
+    {
+      id: 'kosoado-f3',
+      tokens: [
+        { texto: 'あれ', romaji: 'are' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'の', romaji: 'no' },
+        { texto: 'かさ', romaji: 'kasa' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Aquilo é meu guarda-chuva.',
+    },
+    {
+      id: 'kosoado-f4',
+      tokens: [
+        { texto: 'どの', romaji: 'dono' },
+        { texto: 'でんしゃ', romaji: 'densha' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'のります', romaji: 'norimasu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Em qual trem você vai entrar?',
+    },
+    {
+      id: 'kosoado-f5',
+      tokens: [
+        { texto: 'これ', romaji: 'kore' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'なん', romaji: 'nan' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'O que é isto?',
+    },
+    {
+      id: 'kosoado-f6',
+      tokens: [
+        { texto: 'ここ', romaji: 'koko' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'すわって', romaji: 'suwatte' },
+        { texto: 'ください', romaji: 'kudasai' },
+      ],
+      pt: 'Por favor, sente-se aqui.',
+    },
+    {
+      id: 'kosoado-f7',
+      tokens: [
+        { texto: 'えき', romaji: 'eki' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'あちら', romaji: 'achira' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'A estação é por lá.',
+    },
+    {
+      id: 'kosoado-f8',
+      tokens: [
+        { texto: 'どっち', romaji: 'docchi' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'いい', romaji: 'ii' },
+      ],
+      pt: 'Qual dos dois você prefere?',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'kosoado-sig1',
+      tipo: 'significado',
+      pergunta: 'O que significa これ?',
+      alternativas: ['isto (perto de quem fala)', 'isso (perto de quem ouve)', 'aquilo (longe dos dois)', 'qual'],
+      correta: 0,
+    },
+    {
+      id: 'kosoado-sig2',
+      tipo: 'significado',
+      pergunta: 'O que significa あそこ?',
+      alternativas: ['lá (longe dos dois)', 'aqui', 'aí', 'qual lugar'],
+      correta: 0,
+    },
+    {
+      id: 'kosoado-sig3',
+      tipo: 'significado',
+      pergunta: 'Que grupo do Ko-So-A-Do indica algo perto de quem ouve?',
+      alternativas: ['そ (so)', 'こ (ko)', 'あ (a)', 'ど (do)'],
+      correta: 0,
+    },
+    {
+      id: 'kosoado-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'この precisa vir sempre acompanhado de um substantivo.',
+      correta: true,
+      explicacao: 'この nunca fica sozinho; これ é a forma que fica sozinha.',
+    },
+    {
+      id: 'kosoado-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'あそこ é a forma irregular do grupo あ para lugar (em vez de あこ).',
+      correta: true,
+    },
+    {
+      id: 'kosoado-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'こちら e こっち têm o mesmo grau de formalidade.',
+      correta: false,
+      explicacao: 'こちら é mais formal; こっち é a versão casual.',
+    },
+    {
+      id: 'kosoado-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'これ pode substituir o objeto sem precisar nomeá-lo.',
+      correta: true,
+    },
+  ],
 };
 
 export default function KoSoADo() {

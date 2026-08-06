@@ -11,6 +11,21 @@ export default function Licoes() {
         </p>
       </div>
 
+      <Link
+        to="/licoes/quiz"
+        className="card-surface flex items-center gap-3 border-hanko/30 transition-colors hover:border-hanko"
+      >
+        <span className="text-3xl leading-none" aria-hidden>
+          📝
+        </span>
+        <div className="min-w-0">
+          <div className="font-medium text-ink">Quiz</div>
+          <div className="mt-0.5 text-sm text-sage">
+            Teste seus conhecimentos com perguntas aleatórias das lições
+          </div>
+        </div>
+      </Link>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {LICOES.map(({ meta }) => (
           <Link

@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'kana',
@@ -6,6 +7,74 @@ export const meta = {
   subtitle: 'Os dois alfabetos fonéticos do japonês',
   emoji: '🔤',
   tags: ['escrita', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  perguntas: [
+    {
+      id: 'kana-sig1',
+      tipo: 'significado',
+      pergunta: 'Qual conjunto de kana é usado principalmente para palavras estrangeiras?',
+      alternativas: ['Katakana', 'Hiragana', 'Kanji', 'Romaji'],
+      correta: 0,
+    },
+    {
+      id: 'kana-sig2',
+      tipo: 'significado',
+      pergunta: 'O que faz o っ pequeno (sokuon)?',
+      alternativas: [
+        'dobra a consoante seguinte, criando uma pausa',
+        'alonga a vogal anterior',
+        'transforma o som em sonoro',
+        'nada, é decorativo',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kana-sig3',
+      tipo: 'significado',
+      pergunta: 'O que os dois tracinhos (゛), chamados dakuten, fazem a um kana como か?',
+      alternativas: [
+        'transformam o som numa versão sonora/vibrada (か→が)',
+        'criam o som de "p"',
+        'alongam a vogal',
+        'dobram a consoante',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kana-sig4',
+      tipo: 'significado',
+      pergunta: 'O que a bolinha (゜), chamada handakuten, faz a は?',
+      alternativas: ['cria o som de "p" (は→ぱ)', 'cria o som sonoro (は→ば)', 'alonga a vogal', 'nada'],
+      correta: 0,
+    },
+    {
+      id: 'kana-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'を lê-se "o" e serve apenas como partícula.',
+      correta: true,
+    },
+    {
+      id: 'kana-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'きゃ se lê como dois sons separados, "ki-ya".',
+      correta: false,
+      explicacao: 'きゃ é um único som, "kya" — o や pequeno se funde com o kana anterior.',
+    },
+    {
+      id: 'kana-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'ん é o único kana que representa só uma consoante, sem vogal.',
+      correta: true,
+    },
+    {
+      id: 'kana-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'No katakana, a vogal longa se marca com um traço (ー).',
+      correta: true,
+    },
+  ],
 };
 
 function kanaCell(kana: string, romaji: string) {

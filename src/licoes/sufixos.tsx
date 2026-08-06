@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'sufixos',
@@ -6,6 +7,129 @@ export const meta = {
   subtitle: 'さん, せんせい, せんぱい e outros honoríficos',
   emoji: '🎎',
   tags: ['cultura', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'sufixos-f1',
+      tokens: [
+        { texto: 'たなかさん', romaji: 'tanaka-san' },
+        { texto: 'ちょっと', romaji: 'chotto' },
+        { texto: 'よろしい', romaji: 'yoroshii' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Sr. Tanaka, você tem um momento?',
+    },
+    {
+      id: 'sufixos-f2',
+      tokens: [
+        { texto: 'やまだくん', romaji: 'yamada-kun' },
+        { texto: 'ちょっと', romaji: 'chotto' },
+        { texto: 'きて', romaji: 'kite' },
+      ],
+      pt: 'Yamada, vem cá um momento.',
+    },
+    {
+      id: 'sufixos-f3',
+      tokens: [
+        { texto: 'たなかせんせい', romaji: 'tanaka-sensei' },
+        { texto: 'しつもん', romaji: 'shitsumon' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'あります', romaji: 'arimasu' },
+      ],
+      pt: 'Professor Tanaka, tenho uma pergunta.',
+    },
+    {
+      id: 'sufixos-f4',
+      tokens: [
+        { texto: 'せんせい', romaji: 'sensei' },
+        { texto: 'ありがとうございました', romaji: 'arigatou gozaimashita' },
+      ],
+      pt: 'Obrigado, professor.',
+    },
+    {
+      id: 'sufixos-f5',
+      tokens: [
+        { texto: 'せんぱい', romaji: 'senpai' },
+        { texto: 'おしえて', romaji: 'oshiete' },
+        { texto: 'ください', romaji: 'kudasai' },
+      ],
+      pt: 'Senpai, por favor me ensine.',
+    },
+    {
+      id: 'sufixos-f6',
+      tokens: [
+        { texto: 'すずきせんぱい', romaji: 'suzuki-senpai' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'おかげ', romaji: 'okage' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'É graças ao senpai Suzuki.',
+    },
+    {
+      id: 'sufixos-f7',
+      tokens: [
+        { texto: 'ぶちょう', romaji: 'buchou' },
+        { texto: 'ごほうこく', romaji: 'gohoukoku' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'あります', romaji: 'arimasu' },
+      ],
+      pt: 'Diretor, tenho um relatório para apresentar.',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'sufixos-sig1',
+      tipo: 'significado',
+      pergunta: 'Qual sufixo é o mais seguro e neutro para chamar alguém que você acabou de conhecer?',
+      alternativas: ['さん', 'ちゃん', 'くん', 'さま'],
+      correta: 0,
+    },
+    {
+      id: 'sufixos-sig2',
+      tipo: 'significado',
+      pergunta: 'Qual sufixo se usa com professores, médicos e advogados?',
+      alternativas: ['せんせい', 'さん', 'くん', 'どの'],
+      correta: 0,
+    },
+    {
+      id: 'sufixos-sig3',
+      tipo: 'significado',
+      pergunta: 'Qual prefixo honorífico geralmente vai antes de palavras de origem japonesa, como おなまえ?',
+      alternativas: ['お', 'ご', 'さん', 'さま'],
+      correta: 0,
+    },
+    {
+      id: 'sufixos-sig4',
+      tipo: 'significado',
+      pergunta: 'Em uma empresa, o que costuma substituir さん ao falar com um superior?',
+      alternativas: ['o cargo (ex.: ぶちょう)', 'o sufixo さま sempre', 'o nome sem nada', 'くん'],
+      correta: 0,
+    },
+    {
+      id: 'sufixos-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'É educado colocar さん no seu próprio nome ao se apresentar.',
+      correta: false,
+      explicacao: 'Soa arrogante; diga só o nome, sem sufixo.',
+    },
+    {
+      id: 'sufixos-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'せんぱい se refere a quem entrou depois de você num grupo.',
+      correta: false,
+      explicacao: 'せんぱい é quem entrou ANTES; こうはい é quem entrou depois.',
+    },
+    {
+      id: 'sufixos-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'ちゃん é apropriado para chamar um adulto desconhecido pela primeira vez.',
+      correta: false,
+      explicacao: 'ちゃん é íntimo/carinhoso; use さん com desconhecidos.',
+    },
+  ],
 };
 
 export default function Sufixos() {

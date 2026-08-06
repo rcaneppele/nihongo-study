@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'pronomes',
@@ -6,6 +7,128 @@ export const meta = {
   subtitle: 'わたし, ぼく, あなた e a arte de omiti-los',
   emoji: '👤',
   tags: ['gramática', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'pronomes-f1',
+      tokens: [
+        { texto: 'じぶん', romaji: 'jibun' },
+        { texto: 'で', romaji: 'de', particula: true },
+        { texto: 'やります', romaji: 'yarimasu' },
+      ],
+      pt: 'Faço eu mesmo.',
+    },
+    {
+      id: 'pronomes-f2',
+      tokens: [
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Vou eu (e não outra pessoa).',
+    },
+    {
+      id: 'pronomes-f3',
+      tokens: [
+        { texto: 'みなさん', romaji: 'minasan' },
+        { texto: 'よろしい', romaji: 'yoroshii' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Pessoal, tudo certo?',
+    },
+    {
+      id: 'pronomes-f4',
+      tokens: [
+        { texto: 'たなかさん', romaji: 'tanaka-san' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'コーヒー', romaji: 'koohii' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'のみます', romaji: 'nomimasu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: '(Você,) sr. Tanaka, toma café?',
+    },
+    {
+      id: 'pronomes-f5',
+      tokens: [
+        { texto: 'せんせい', romaji: 'sensei' },
+        { texto: 'しつもん', romaji: 'shitsumon' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'あります', romaji: 'arimasu' },
+      ],
+      pt: 'Professor, tenho uma pergunta.',
+    },
+    {
+      id: 'pronomes-f6',
+      tokens: [
+        { texto: 'コーヒー', romaji: 'koohii' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'すき', romaji: 'suki' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Gosto de café.',
+    },
+    {
+      id: 'pronomes-f7',
+      tokens: [
+        { texto: 'えいが', romaji: 'eiga' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'みました', romaji: 'mimashita' },
+      ],
+      pt: 'Assisti a um filme.',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'pronomes-sig1',
+      tipo: 'significado',
+      pergunta: "Qual é o pronome mais seguro e neutro para 'eu' em qualquer situação?",
+      alternativas: ['わたし', 'ぼく', 'おれ', 'あたし'],
+      correta: 0,
+    },
+    {
+      id: 'pronomes-sig2',
+      tipo: 'significado',
+      pergunta: 'O que significa じぶん?',
+      alternativas: ['si mesmo / eu mesmo', 'você', 'aquela pessoa', 'todos'],
+      correta: 0,
+    },
+    {
+      id: 'pronomes-sig3',
+      tipo: 'significado',
+      pergunta: "Qual pronome de 'eu' é tipicamente masculino e casual/semiformal?",
+      alternativas: ['ぼく', 'わたくし', 'あたし', 'うち'],
+      correta: 0,
+    },
+    {
+      id: 'pronomes-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'No japonês, é comum omitir o pronome quando o contexto já deixa claro quem é o sujeito.',
+      correta: true,
+    },
+    {
+      id: 'pronomes-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: "あなた é sempre a melhor forma de dizer 'você' em qualquer contexto.",
+      correta: false,
+      explicacao: 'Os japoneses preferem chamar a pessoa pelo nome + さん ou pelo cargo, evitando あなた.',
+    },
+    {
+      id: 'pronomes-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: "かれ pode significar tanto 'ele' quanto 'namorado'.",
+      correta: true,
+    },
+    {
+      id: 'pronomes-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: "Incluir o pronome com a partícula が dá ênfase, como em 'fui eu (e não outra pessoa)'.",
+      correta: true,
+    },
+  ],
 };
 
 export default function Pronomes() {

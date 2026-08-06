@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'verbos',
@@ -6,6 +7,177 @@ export const meta = {
   subtitle: 'Os três grupos, a forma ます, a forma て e a base para conjugar',
   emoji: '🏃',
   tags: ['gramática', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'verbos-f1',
+      tokens: [
+        { texto: 'まいにち', romaji: 'mainichi' },
+        { texto: 'みず', romaji: 'mizu' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'のむ', romaji: 'nomu' },
+      ],
+      pt: 'Bebo água todo dia.',
+    },
+    {
+      id: 'verbos-f2',
+      tokens: [
+        { texto: 'まいあさ', romaji: 'maiasa' },
+        { texto: 'コーヒー', romaji: 'koohii' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'のみます', romaji: 'nomimasu' },
+      ],
+      pt: 'Bebo café toda manhã.',
+    },
+    {
+      id: 'verbos-f3',
+      tokens: [
+        { texto: 'けさ', romaji: 'kesa' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'なにも', romaji: 'nani mo' },
+        { texto: 'たべませんでした', romaji: 'tabemasen deshita' },
+      ],
+      pt: 'Não comi nada hoje de manhã.',
+    },
+    {
+      id: 'verbos-f4',
+      tokens: [
+        { texto: 'きのう', romaji: 'kinou' },
+        { texto: 'こうえん', romaji: 'kouen' },
+        { texto: 'まで', romaji: 'made', particula: true },
+        { texto: 'はしりました', romaji: 'hashirimashita' },
+      ],
+      pt: 'Ontem corri até o parque.',
+    },
+    {
+      id: 'verbos-f5',
+      tokens: [
+        { texto: 'ちょっと', romaji: 'chotto' },
+        { texto: 'まって', romaji: 'matte' },
+        { texto: 'ください', romaji: 'kudasai' },
+      ],
+      pt: 'Espere um pouco, por favor.',
+    },
+    {
+      id: 'verbos-f6',
+      tokens: [
+        { texto: 'なっとう', romaji: 'nattou' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'たべない', romaji: 'tabenai' },
+      ],
+      pt: 'Não como natto.',
+    },
+    {
+      id: 'verbos-f7',
+      tokens: [
+        { texto: 'あした', romaji: 'ashita' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'がっこう', romaji: 'gakkou' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'いかない', romaji: 'ikanai' },
+      ],
+      pt: 'Amanhã não vou à escola.',
+    },
+    {
+      id: 'verbos-f8',
+      tokens: [
+        { texto: 'きのう', romaji: 'kinou' },
+        { texto: 'ともだち', romaji: 'tomodachi' },
+        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'はなした', romaji: 'hanashita' },
+      ],
+      pt: 'Ontem conversei com um amigo.',
+    },
+    {
+      id: 'verbos-f9',
+      tokens: [
+        { texto: 'にほん', romaji: 'nihon' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'いった', romaji: 'itta' },
+      ],
+      pt: 'Fui ao Japão.',
+    },
+    {
+      id: 'verbos-f10',
+      tokens: [
+        { texto: 'まいにち', romaji: 'mainichi' },
+        { texto: 'にほんご', romaji: 'nihongo' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'べんきょうします', romaji: 'benkyou shimasu' },
+      ],
+      pt: 'Estudo japonês todo dia.',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'verbos-conj1',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma て de たべる (comer)?',
+      alternativas: ['たべて', 'たべった', 'たべんで', 'たべいて'],
+      correta: 0,
+    },
+    {
+      id: 'verbos-conj2',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma て de のむ (beber)?',
+      alternativas: ['のんで', 'のいて', 'のって', 'のした'],
+      correta: 0,
+      explicacao: 'Verbos terminados em ぬ, ぶ, む viram んで na forma て.',
+    },
+    {
+      id: 'verbos-conj3',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma ない (negativa casual) de かう (comprar)?',
+      alternativas: ['かわない', 'かあない', 'かいない', 'からない'],
+      correta: 0,
+      explicacao: 'Verbos terminados em う usam わ (não あ) na forma ない: かう → かわない.',
+    },
+    {
+      id: 'verbos-conj4',
+      tipo: 'significado',
+      pergunta: 'Qual é o passado casual (た) de いく (ir)? Atenção: é uma exceção.',
+      alternativas: ['いった', 'いいた', 'いた', 'いきた'],
+      correta: 0,
+      explicacao: 'いく é a única exceção da regra く → いて/いた: vira いって/いった.',
+    },
+    {
+      id: 'verbos-conj5',
+      tipo: 'significado',
+      pergunta: 'かえる (voltar) parece Grupo 2, mas é Grupo 1. Qual é a forma ます correta?',
+      alternativas: ['かえります', 'かえます', 'かえるます', 'かえりします'],
+      correta: 0,
+      explicacao: 'かえる é Grupo 1 "disfarçado" — a base é かえり (る → り), não かえ.',
+    },
+    {
+      id: 'verbos-sig1',
+      tipo: 'significado',
+      pergunta: 'Em qual grupo estão os verbos terminados em -iru ou -eru (a maioria deles)?',
+      alternativas: ['Grupo 2 (いちだんどうし)', 'Grupo 1 (ごだんどうし)', 'Grupo 3 (irregulares)', 'Nenhum dos três'],
+      correta: 0,
+    },
+    {
+      id: 'verbos-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'する e くる são os dois únicos verbos irregulares (Grupo 3) do japonês.',
+      correta: true,
+    },
+    {
+      id: 'verbos-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'O verbo japonês muda de forma conforme quem é o sujeito (eu, você, eles).',
+      correta: false,
+      explicacao: 'O verbo não muda conforme a pessoa; たべます serve para eu, você e eles.',
+    },
+    {
+      id: 'verbos-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'A negativa de ある (haver) é あらない.',
+      correta: false,
+      explicacao: 'ある é irregular: a negativa é só ない.',
+    },
+  ],
 };
 
 export default function Verbos() {

@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { QuizLicao } from '../data/quiz/types';
 
 export interface LicaoMeta {
   id: string;
@@ -11,24 +12,25 @@ export interface LicaoMeta {
 export interface LicaoEntry {
   meta: LicaoMeta;
   Component: ComponentType;
+  quiz?: QuizLicao;
 }
 
-import Kana, { meta as metaKana } from './kana';
-import KoSoADo, { meta as metaKoSoADo } from './kosoado';
-import Particulas, { meta as metaParticulas } from './particulas';
-import Familia, { meta as metaFamilia } from './familia';
-import Apresentacao, { meta as metaApresentacao } from './apresentacao';
-import Sufixos, { meta as metaSufixos } from './sufixos';
-import Pronomes, { meta as metaPronomes } from './pronomes';
-import Verbos, { meta as metaVerbos } from './verbos';
+import Kana, { meta as metaKana, quiz as quizKana } from './kana';
+import KoSoADo, { meta as metaKoSoADo, quiz as quizKoSoADo } from './kosoado';
+import Particulas, { meta as metaParticulas, quiz as quizParticulas } from './particulas';
+import Familia, { meta as metaFamilia, quiz as quizFamilia } from './familia';
+import Apresentacao, { meta as metaApresentacao, quiz as quizApresentacao } from './apresentacao';
+import Sufixos, { meta as metaSufixos, quiz as quizSufixos } from './sufixos';
+import Pronomes, { meta as metaPronomes, quiz as quizPronomes } from './pronomes';
+import Verbos, { meta as metaVerbos, quiz as quizVerbos } from './verbos';
 
 export const LICOES: LicaoEntry[] = [
-  { meta: metaKana, Component: Kana },
-  { meta: metaApresentacao, Component: Apresentacao },
-  { meta: metaSufixos, Component: Sufixos },
-  { meta: metaPronomes, Component: Pronomes },
-  { meta: metaFamilia, Component: Familia },
-  { meta: metaKoSoADo, Component: KoSoADo },
-  { meta: metaParticulas, Component: Particulas },
-  { meta: metaVerbos, Component: Verbos },
+  { meta: metaKana, Component: Kana, quiz: quizKana },
+  { meta: metaApresentacao, Component: Apresentacao, quiz: quizApresentacao },
+  { meta: metaSufixos, Component: Sufixos, quiz: quizSufixos },
+  { meta: metaPronomes, Component: Pronomes, quiz: quizPronomes },
+  { meta: metaFamilia, Component: Familia, quiz: quizFamilia },
+  { meta: metaKoSoADo, Component: KoSoADo, quiz: quizKoSoADo },
+  { meta: metaParticulas, Component: Particulas, quiz: quizParticulas },
+  { meta: metaVerbos, Component: Verbos, quiz: quizVerbos },
 ];

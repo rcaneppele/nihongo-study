@@ -1,4 +1,5 @@
 import { Section, Ex, GrammarTable, ReadingKey } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'apresentacao',
@@ -6,6 +7,120 @@ export const meta = {
   subtitle: 'じこしょうかい — jikoshoukai',
   emoji: '🙇',
   tags: ['conversa', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'apresentacao-f1',
+      tokens: [
+        { texto: 'ブラジル', romaji: 'burajiru' },
+        { texto: 'の', romaji: 'no' },
+        { texto: 'サンパウロ', romaji: 'san pauro' },
+        { texto: 'から', romaji: 'kara', particula: true },
+        { texto: 'まいりました', romaji: 'mairimashita' },
+      ],
+      pt: 'Vim de São Paulo, no Brasil.',
+    },
+    {
+      id: 'apresentacao-f2',
+      tokens: [
+        { texto: 'サンパウロ', romaji: 'san pauro' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'すんでいます', romaji: 'sunde imasu' },
+      ],
+      pt: 'Moro em São Paulo.',
+    },
+    {
+      id: 'apresentacao-f3',
+      tokens: [
+        { texto: 'こちら', romaji: 'kochira' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'たなかさん', romaji: 'tanaka-san' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Este é o sr. Tanaka.',
+    },
+    {
+      id: 'apresentacao-f4',
+      tokens: [
+        { texto: 'たなかさん', romaji: 'tanaka-san' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'ごしょうかいします', romaji: 'goshoukai shimasu' },
+      ],
+      pt: 'Vou apresentar o sr. Tanaka.',
+    },
+    {
+      id: 'apresentacao-f5',
+      tokens: [
+        { texto: 'たなかさん', romaji: 'tanaka-san' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'どうりょう', romaji: 'douryou' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'O sr. Tanaka é meu colega de trabalho.',
+    },
+    {
+      id: 'apresentacao-f6',
+      tokens: [
+        { texto: 'にほんご', romaji: 'nihongo' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'べんきょうしています', romaji: 'benkyou shite imasu' },
+      ],
+      pt: 'Estou estudando japonês.',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'apresentacao-sig1',
+      tipo: 'significado',
+      pergunta: 'O que significa はじめまして?',
+      alternativas: ['prazer (primeira vez que se conhece)', 'até logo', 'com licença', 'muito obrigado'],
+      correta: 0,
+    },
+    {
+      id: 'apresentacao-sig2',
+      tipo: 'significado',
+      pergunta: "Qual é a forma humilde/formal de 'meu nome é'?",
+      alternativas: ['ともうします', 'といいます', 'です', 'からきました'],
+      correta: 0,
+    },
+    {
+      id: 'apresentacao-sig3',
+      tipo: 'significado',
+      pergunta: 'O que significa しゅみ?',
+      alternativas: ['hobby', 'trabalho', 'idade', 'nome'],
+      correta: 0,
+    },
+    {
+      id: 'apresentacao-sig4',
+      tipo: 'significado',
+      pergunta: "Qual expressão se usa para dizer 'vim de (lugar)'?",
+      alternativas: ['からきました', 'にすんでいます', 'をしています', 'がすきです'],
+      correta: 0,
+    },
+    {
+      id: 'apresentacao-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'どうぞよろしくおねがいします é o encerramento padrão de uma apresentação.',
+      correta: true,
+    },
+    {
+      id: 'apresentacao-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'よろしく sozinho é apropriado numa entrevista de emprego.',
+      correta: false,
+      explicacao: 'É casual demais para contexto formal; use どうぞよろしくおねがいいたします.',
+    },
+    {
+      id: 'apresentacao-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'はっさい (8 anos) tem uma leitura irregular, com som dobrado.',
+      correta: true,
+    },
+  ],
 };
 
 export default function Apresentacao() {

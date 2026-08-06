@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'familia',
@@ -6,6 +7,137 @@ export const meta = {
   subtitle: 'Vocabulário de parentesco e os dois registros',
   emoji: '👨‍👩‍👧',
   tags: ['vocabulário', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'familia-f1',
+      tokens: [
+        { texto: 'ごかぞく', romaji: 'gokazoku' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'います', romaji: 'imasu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Você tem família?',
+    },
+    {
+      id: 'familia-f2',
+      tokens: [
+        { texto: 'ごきょうだい', romaji: 'gokyoudai' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'います', romaji: 'imasu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Você tem irmãos?',
+    },
+    {
+      id: 'familia-f3',
+      tokens: [
+        { texto: 'これ', romaji: 'kore' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'ちち', romaji: 'chichi' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Este é meu pai.',
+    },
+    {
+      id: 'familia-f4',
+      tokens: [
+        { texto: 'りょうしん', romaji: 'ryoushin' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'ブラジル', romaji: 'burajiru' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'すんでいます', romaji: 'sunde imasu' },
+      ],
+      pt: 'Meus pais moram no Brasil.',
+    },
+    {
+      id: 'familia-f5',
+      tokens: [
+        { texto: 'おこさん', romaji: 'okosan' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'います', romaji: 'imasu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Você tem filhos?',
+    },
+    {
+      id: 'familia-f6',
+      tokens: [
+        { texto: 'なんにん', romaji: 'nan-nin' },
+        { texto: 'かぞく', romaji: 'kazoku' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Quantas pessoas há na sua família?',
+    },
+    {
+      id: 'familia-f7',
+      tokens: [
+        { texto: 'おとうさん', romaji: 'otousan' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'おしごと', romaji: 'oshigoto' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'なん', romaji: 'nan' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Qual é a profissão do seu pai?',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'familia-sig1',
+      tipo: 'significado',
+      pergunta: "Como se diz 'meu pai' no registro humilde?",
+      alternativas: ['ちち', 'おとうさん', 'ちちおや', 'おとうと'],
+      correta: 0,
+    },
+    {
+      id: 'familia-sig2',
+      tipo: 'significado',
+      pergunta: "Como se diz 'pai de outra pessoa' no registro respeitoso?",
+      alternativas: ['おとうさん', 'ちち', 'おっと', 'おじ'],
+      correta: 0,
+    },
+    {
+      id: 'familia-sig3',
+      tipo: 'significado',
+      pergunta: 'O que significa ひとりっこ?',
+      alternativas: ['filho único', 'primogênito', 'caçula', 'gêmeos'],
+      correta: 0,
+    },
+    {
+      id: 'familia-sig4',
+      tipo: 'significado',
+      pergunta: 'Qual prefixo nunca deve ser usado para a própria família (ex.: ごかぞく)?',
+      alternativas: ['ご', 'お', 'は', 'の'],
+      correta: 0,
+    },
+    {
+      id: 'familia-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Deve-se usar ちち para se referir ao pai de outra pessoa.',
+      correta: false,
+      explicacao: 'ちち é humilde, só para a própria família; use おとうさん para o pai de outra pessoa.',
+    },
+    {
+      id: 'familia-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'おじいさん significa avô, com o som "i" longo.',
+      correta: true,
+    },
+    {
+      id: 'familia-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Dentro de casa, os filhos chamam os pais pelas formas humildes ちち/はは.',
+      correta: false,
+      explicacao: 'Usam as formas respeitosas おとうさん/おかあさん, mesmo dentro de casa.',
+    },
+  ],
 };
 
 export default function Familia() {

@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable } from '../components/Licao';
+import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'particulas',
@@ -6,6 +7,159 @@ export const meta = {
   subtitle: 'は, が, を, に, で e as outras',
   emoji: '🔗',
   tags: ['gramática', 'n5'],
+};
+
+export const quiz: QuizLicao = {
+  frases: [
+    {
+      id: 'particulas-f1',
+      tokens: [
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'がくせい', romaji: 'gakusei' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Eu sou estudante.',
+    },
+    {
+      id: 'particulas-f2',
+      tokens: [
+        { texto: 'ねこ', romaji: 'neko' },
+        { texto: 'が', romaji: 'ga', particula: true },
+        { texto: 'います', romaji: 'imasu' },
+      ],
+      pt: 'Há um gato.',
+    },
+    {
+      id: 'particulas-f3',
+      tokens: [
+        { texto: 'りんご', romaji: 'ringo' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'たべます', romaji: 'tabemasu' },
+      ],
+      pt: 'Como uma maçã.',
+    },
+    {
+      id: 'particulas-f4',
+      tokens: [
+        { texto: 'がっこう', romaji: 'gakkou' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Vou para a escola.',
+    },
+    {
+      id: 'particulas-f5',
+      tokens: [
+        { texto: 'としょかん', romaji: 'toshokan' },
+        { texto: 'で', romaji: 'de', particula: true },
+        { texto: 'べんきょうします', romaji: 'benkyou shimasu' },
+      ],
+      pt: 'Estudo na biblioteca.',
+    },
+    {
+      id: 'particulas-f6',
+      tokens: [
+        { texto: 'これ', romaji: 'kore' },
+        { texto: 'は', romaji: 'wa' },
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'ほん', romaji: 'hon' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Este é o meu livro.',
+    },
+    {
+      id: 'particulas-f7',
+      tokens: [
+        { texto: 'パン', romaji: 'pan' },
+        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'バター', romaji: 'bataa' },
+        { texto: 'を', romaji: 'o' },
+        { texto: 'かいました', romaji: 'kaimashita' },
+      ],
+      pt: 'Comprei pão e manteiga.',
+    },
+    {
+      id: 'particulas-f8',
+      tokens: [
+        { texto: 'わたし', romaji: 'watashi' },
+        { texto: 'も', romaji: 'mo', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Eu também vou.',
+    },
+    {
+      id: 'particulas-f9',
+      tokens: [
+        { texto: 'とうきょう', romaji: 'toukyou' },
+        { texto: 'へ', romaji: 'e', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Vou para Tóquio.',
+    },
+    {
+      id: 'particulas-f10',
+      tokens: [
+        { texto: 'くじ', romaji: 'ku-ji' },
+        { texto: 'から', romaji: 'kara', particula: true },
+        { texto: 'ごじ', romaji: 'go-ji' },
+        { texto: 'まで', romaji: 'made' },
+        { texto: 'はたらきます', romaji: 'hatarakimasu' },
+      ],
+      pt: 'Trabalho das 9 às 5.',
+    },
+  ],
+  perguntas: [
+    {
+      id: 'particulas-sig1',
+      tipo: 'significado',
+      pergunta: 'Qual partícula marca o objeto direto do verbo?',
+      alternativas: ['を', 'は', 'が', 'に'],
+      correta: 0,
+    },
+    {
+      id: 'particulas-sig2',
+      tipo: 'significado',
+      pergunta: 'Qual partícula marca o sujeito, dando destaque a uma informação nova?',
+      alternativas: ['が', 'は', 'を', 'の'],
+      correta: 0,
+    },
+    {
+      id: 'particulas-sig3',
+      tipo: 'significado',
+      pergunta: 'O que significa a partícula の em わたしのほん?',
+      alternativas: ['posse (meu livro)', 'destino', 'também', 'contraste'],
+      correta: 0,
+    },
+    {
+      id: 'particulas-sig4',
+      tipo: 'significado',
+      pergunta: 'Qual partícula você usa para dizer "com" (companhia), como em ともだちとえいがをみました?',
+      alternativas: ['と', 'で', 'に', 'も'],
+      correta: 0,
+    },
+    {
+      id: 'particulas-vf1',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'すきです e きらいです pedem a partícula を.',
+      correta: false,
+      explicacao: 'Pedem が, não を — é um erro clássico de iniciante.',
+    },
+    {
+      id: 'particulas-vf2',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'A partícula に pode indicar tanto destino quanto horário exato.',
+      correta: true,
+    },
+    {
+      id: 'particulas-vf3',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'しか pode ser usada com um verbo afirmativo.',
+      correta: false,
+      explicacao: 'しか sempre exige verbo negativo.',
+    },
+  ],
 };
 
 export default function Particulas() {
