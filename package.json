@@ -4,6 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "description": "App pessoal de estudo de japonês: flash cards (SRS) e treino de hiragana/katakana.",
+  "license": "MIT",
+  "author": "Rodrigo da Silva Ferreira Caneppele <r.caneppele@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rcaneppele/nihongo-study"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

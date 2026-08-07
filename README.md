@@ -44,7 +44,7 @@ só abrir o link no celular e "Adicionar à Tela de Início".
 
 ```
 src/
-├── routes/        páginas (Início, Flash cards, Kana, Dados, Config)
+├── routes/        páginas (Início, Flash cards, Kana, Lições, Config)
 ├── components/    UI reutilizável (Layout, KanaCanvas)
 ├── features/
 │   ├── srs/       algoritmo SM-2
@@ -68,3 +68,8 @@ A implementar: reconhecimento do desenho + dicas de caligrafia via KanjiVG
 
 - `CLAUDE.md` — contexto e convenções para desenvolver com o Claude Code.
 - `regras-negocio.md` — regras de domínio (SRS, kana, import/export).
+
+## Licença
+
+Distribuído sob a licença MIT — veja [`LICENSE`](./LICENSE). Contribuições são
+bem-vindas via pull request.

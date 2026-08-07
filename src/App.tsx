@@ -6,8 +6,7 @@ import Kana from './routes/Kana';
 import Licoes from './routes/Licoes';
 import Licao from './routes/Licao';
 import Quiz from './routes/Quiz';
-import ImportExport from './routes/ImportExport';
-import Settings from './routes/Settings';
+import Config from './routes/Config';
 
 export default function App() {
   return (
@@ -19,8 +18,7 @@ export default function App() {
         <Route path="/licoes" element={<Licoes />} />
         <Route path="/licoes/quiz" element={<Quiz />} />
         <Route path="/licoes/:id" element={<Licao />} />
-        <Route path="/dados" element={<ImportExport />} />
-        <Route path="/config" element={<Settings />} />
+        <Route path="/config" element={<Config />} />
       </Routes>
     </Layout>
   );

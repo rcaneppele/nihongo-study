@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type SVGProps } from 'react';
+import type { ReactNode, SVGProps } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const NAV = [
@@ -6,11 +6,6 @@ const NAV = [
   { to: '/flashcards', label: 'Flash cards', end: false, icon: IconCards },
   { to: '/kana', label: 'Kana', end: false, icon: IconKana },
   { to: '/licoes', label: 'Lições', end: false, icon: IconBook },
-];
-
-const GEAR_LINKS = [
-  { to: '/dados', label: 'Dados' },
-  { to: '/config', label: 'Config' },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -39,7 +34,13 @@ function Jumbotron() {
   return (
     <div className="relative border-b border-line bg-gradient-to-b from-indigo/5 to-transparent px-4 py-8 text-center sm:py-10">
       <div className="absolute right-4 top-4">
-        <SettingsMenu />
+        <NavLink
+          to="/config"
+          aria-label="Configurações e dados"
+          className="grid h-10 w-10 place-items-center rounded-full border border-line bg-white/70 text-ink transition-colors hover:bg-line/40"
+        >
+          <IconGear className="h-5 w-5" />
+        </NavLink>
       </div>
       <NavLink to="/" className="inline-block">
         <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Nihongo Study" className="mx-auto h-32 sm:h-40 md:h-44" />
@@ -89,65 +90,6 @@ function bottomNavLinkClass({ isActive }: { isActive: boolean }) {
     'flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors',
     isActive ? 'text-indigo' : 'text-sage',
   ].join(' ');
-}
-
-function SettingsMenu() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function onPointerDown(e: PointerEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') setOpen(false);
-    }
-    document.addEventListener('pointerdown', onPointerDown);
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, []);
-
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        type="button"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-label="Configurações e dados"
-        onClick={() => setOpen((v) => !v)}
-        className="grid h-10 w-10 place-items-center rounded-full border border-line bg-white/70 text-ink transition-colors hover:bg-line/40"
-      >
-        <IconGear className="h-5 w-5" />
-      </button>
-
-      {open && (
-        <div
-          role="menu"
-          className="absolute right-0 top-12 z-20 w-44 overflow-hidden rounded-lg border border-line bg-white text-left shadow-md"
-        >
-          {GEAR_LINKS.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              role="menuitem"
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                [
-                  'block px-4 py-2.5 text-sm transition-colors',
-                  isActive ? 'bg-indigo/10 font-medium text-indigo' : 'text-ink hover:bg-line/40',
-                ].join(' ')
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </div>
-      )}
-    </div>
-  );
 }
 
 function IconHome(props: SVGProps<SVGSVGElement>) {
