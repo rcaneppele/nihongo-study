@@ -188,7 +188,7 @@ function ConfiguracoesTab() {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-sage">Nihongo Study · v0.1.0</p>
+      <p className="text-sm text-sage">Nihongo Study · v{__APP_VERSION__}</p>
 
       <section className="card-surface space-y-3">
         <h2 className="font-medium">Começar com exemplos</h2>
