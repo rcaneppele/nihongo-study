@@ -428,8 +428,13 @@ export default function KoSoADo() {
 
       <Section title="こんな・そんな・あんな・どんな — tipo de coisa">
         <p className="text-sm leading-relaxed text-ink">
-          Significam "deste tipo, desse tipo, daquele tipo, que tipo?". Descrevem a{' '}
+          Significam "(d)este tipo (de), esse tipo, aquele tipo, que tipo?". Descrevem a{' '}
           <strong>natureza</strong> de algo, não apontam um objeto específico.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          Assim como <span className="font-jp">この・その・あの・どの</span>, esta série funciona
+          mais como um <strong>"adjetivo"</strong>: quase sempre vem acompanhada de um
+          substantivo logo em seguida, e não fica sozinha.
         </p>
         <p className="text-sm leading-relaxed text-ink">
           Compare: <strong className="font-jp">この</strong>
