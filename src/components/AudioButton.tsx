@@ -13,6 +13,7 @@ export default function AudioButton({ text, size = 'md' }: { text: string; size?
   return (
     <button
       type="button"
+      onMouseDown={(e) => e.preventDefault()}
       onClick={(e) => {
         e.stopPropagation();
         speakJapanese(text);
