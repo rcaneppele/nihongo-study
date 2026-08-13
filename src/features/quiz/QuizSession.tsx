@@ -1,5 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useHoldToPauseAdvance } from '../../lib/useHoldToPauseAdvance';
 import type { PerguntaGerada, RegistroResposta, Token } from '../../data/quiz/types';
+
+/** Tempo até avançar sozinho pra próxima pergunta após responder (o usuário pode tocar
+ * "Próxima"/"Finalizar" a qualquer momento pra pular a espera). Mais generoso que no treino de
+ * kana porque aqui o feedback costuma ser frase/explicação, não um caractere só. */
+const AUTO_ADVANCE_RIGHT_MS = 1700;
+const AUTO_ADVANCE_WRONG_MS = 3200;
+/** Extra pra quando a pergunta mostra algo a mais pra ler além do "certo/errado" (explicação, ou
+ * a resposta/partícula correta exibida quando erra). */
+const AUTO_ADVANCE_EXTRA_MS = 2200;
 
 export default function QuizSession({
   perguntas,
@@ -77,6 +87,48 @@ function Feedback({ acertou, explicacao }: { acertou: boolean; explicacao?: stri
         {acertou ? '✓ Certo!' : '✗ Errado.'}
       </p>
       {explicacao && <p className="text-sm text-ink/80">{explicacao}</p>}
+    </div>
+  );
+}
+
+/** Botão "Próxima"/"Finalizar" com avanço automático — mesmo padrão do treino de kana (digitar
+ * romaji): timer maior quando erra, e mais tempo ainda quando há algo extra pra ler (explicação
+ * ou a resposta certa exibida). Clicar, ou Enter/Espaço no botão já focado, avança na hora; tocar
+ * e segurar em qualquer lugar fora de botões pausa a contagem. */
+function AvancarAuto({
+  acertou,
+  extra,
+  ultima,
+  onAvancar,
+}: {
+  acertou: boolean;
+  extra: boolean;
+  ultima: boolean;
+  onAvancar: () => void;
+}) {
+  const nextBtnRef = useRef<HTMLButtonElement>(null);
+  const ms = (acertou ? AUTO_ADVANCE_RIGHT_MS : AUTO_ADVANCE_WRONG_MS) + (extra ? AUTO_ADVANCE_EXTRA_MS : 0);
+  const paused = useHoldToPauseAdvance(ms, onAvancar);
+
+  useEffect(() => {
+    const focusId = setTimeout(() => nextBtnRef.current?.focus(), 0);
+    return () => clearTimeout(focusId);
+  }, []);
+
+  return (
+    <div className="space-y-1">
+      <button ref={nextBtnRef} className="btn-primary w-full" onClick={onAvancar}>
+        {ultima ? 'Finalizar' : 'Próxima'}
+      </button>
+      <div className="h-1 w-full overflow-hidden rounded-full bg-line">
+        <div
+          className={`countdown-bar h-full bg-indigo/50 ${paused ? 'paused' : ''}`}
+          style={{ animationDuration: `${ms}ms` }}
+        />
+      </div>
+      <p className="text-center text-[11px] text-sage/70">
+        {paused ? 'Pausado — solte para continuar' : 'Toque e segure para pausar'}
+      </p>
     </div>
   );
 }
@@ -171,9 +223,7 @@ function ReordenarFrase({ pergunta, ultima, onResponder, onAvancar }: CardProps<
           Conferir
         </button>
       ) : (
-        <button className="btn-primary w-full" onClick={onAvancar}>
-          {ultima ? 'Finalizar' : 'Próxima'}
-        </button>
+        <AvancarAuto acertou={acertou} extra={!acertou} ultima={ultima} onAvancar={onAvancar} />
       )}
     </div>
   );
@@ -244,11 +294,7 @@ function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardPro
       {escolhida && !acertou && <p className="text-sm text-ink/70">Partícula correta: <span className="font-jp text-sage">{pergunta.correta}</span></p>}
       {escolhida && <Feedback acertou={acertou} />}
 
-      {escolhida && (
-        <button className="btn-primary w-full" onClick={onAvancar}>
-          {ultima ? 'Finalizar' : 'Próxima'}
-        </button>
-      )}
+      {escolhida && <AvancarAuto acertou={acertou} extra={!acertou} ultima={ultima} onAvancar={onAvancar} />}
     </div>
   );
 }
@@ -296,9 +342,12 @@ function MultiplaEscolha({ pergunta, ultima, onResponder, onAvancar }: CardProps
       {escolhida !== null && <Feedback acertou={escolhida === pergunta.correta} explicacao={pergunta.explicacao} />}
 
       {escolhida !== null && (
-        <button className="btn-primary w-full" onClick={onAvancar}>
-          {ultima ? 'Finalizar' : 'Próxima'}
-        </button>
+        <AvancarAuto
+          acertou={escolhida === pergunta.correta}
+          extra={!!pergunta.explicacao}
+          ultima={ultima}
+          onAvancar={onAvancar}
+        />
       )}
     </div>
   );
@@ -348,9 +397,12 @@ function VerdadeiroFalso({ pergunta, ultima, onResponder, onAvancar }: CardProps
       {resposta !== null && <Feedback acertou={resposta === pergunta.correta} explicacao={pergunta.explicacao} />}
 
       {resposta !== null && (
-        <button className="btn-primary w-full" onClick={onAvancar}>
-          {ultima ? 'Finalizar' : 'Próxima'}
-        </button>
+        <AvancarAuto
+          acertou={resposta === pergunta.correta}
+          extra={!!pergunta.explicacao}
+          ultima={ultima}
+          onAvancar={onAvancar}
+        />
       )}
     </div>
   );

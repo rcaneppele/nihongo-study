@@ -4,6 +4,7 @@ import { KANA_FAMILIES, familyPreview, getKanaByFamilies, type KanaEntry, type K
 import KanaCanvas from '../components/KanaCanvas';
 import AudioButton from '../components/AudioButton';
 import { getReferenceStrokes, scoreDrawing, type DrawScore, type ReferenceStrokes, type Stroke } from '../features/kana/strokes';
+import { useHoldToPauseAdvance } from '../lib/useHoldToPauseAdvance';
 
 const CANVAS_SIZE = 280;
 const STROKE_COLORS = ['text-indigo', 'text-hanko', 'text-sage', 'text-indigo-soft', 'text-ink'];
@@ -288,20 +289,15 @@ function RomajiQuestion({
   const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState<'idle' | 'right' | 'wrong'>('idle');
   const nextBtnRef = useRef<HTMLButtonElement>(null);
-  const onAnsweredRef = useRef(onAnswered);
-  onAnsweredRef.current = onAnswered;
+  const advanceMs = feedback === 'right' ? AUTO_ADVANCE_RIGHT_MS : AUTO_ADVANCE_WRONG_MS;
+  const paused = useHoldToPauseAdvance(advanceMs, () => onAnswered(feedback === 'right'), feedback !== 'idle');
 
   useEffect(() => {
     if (feedback === 'idle') return;
     // setTimeout(0) garante que o keydown/keyup do Enter atual já terminou
     // antes de focar o botão — evita que o mesmo Enter dispare o clique
     const focusId = setTimeout(() => nextBtnRef.current?.focus(), 0);
-    const advanceMs = feedback === 'right' ? AUTO_ADVANCE_RIGHT_MS : AUTO_ADVANCE_WRONG_MS;
-    const advanceId = setTimeout(() => onAnsweredRef.current(feedback === 'right'), advanceMs);
-    return () => {
-      clearTimeout(focusId);
-      clearTimeout(advanceId);
-    };
+    return () => clearTimeout(focusId);
   }, [feedback]);
 
   async function check(giveUp = false) {
@@ -348,10 +344,13 @@ function RomajiQuestion({
             <div className="h-1 w-full overflow-hidden rounded-full bg-line">
               <div
                 key={feedback}
-                className="countdown-bar h-full bg-indigo/50"
-                style={{ animationDuration: `${feedback === 'right' ? AUTO_ADVANCE_RIGHT_MS : AUTO_ADVANCE_WRONG_MS}ms` }}
+                className={`countdown-bar h-full bg-indigo/50 ${paused ? 'paused' : ''}`}
+                style={{ animationDuration: `${advanceMs}ms` }}
               />
             </div>
+            <p className="text-center text-[11px] text-sage/70">
+              {paused ? 'Pausado — solte para continuar' : 'Toque e segure para pausar'}
+            </p>
           </div>
         </div>
       )}
