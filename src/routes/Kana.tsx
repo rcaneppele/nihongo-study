@@ -7,6 +7,9 @@ import { getReferenceStrokes, scoreDrawing, type DrawScore, type ReferenceStroke
 
 const CANVAS_SIZE = 280;
 const STROKE_COLORS = ['text-indigo', 'text-hanko', 'text-sage', 'text-indigo-soft', 'text-ink'];
+/** Tempo até avançar sozinho pra próxima pergunta após responder (o usuário pode tocar "Próximo" a qualquer momento pra pular a espera). Errar dá mais tempo pra ler a resposta certa. */
+const AUTO_ADVANCE_RIGHT_MS = 1100;
+const AUTO_ADVANCE_WRONG_MS = 2600;
 
 type Mode = 'romaji' | 'desenho';
 type Script = KanaType | 'both';
@@ -285,13 +288,20 @@ function RomajiQuestion({
   const [answer, setAnswer] = useState('');
   const [feedback, setFeedback] = useState<'idle' | 'right' | 'wrong'>('idle');
   const nextBtnRef = useRef<HTMLButtonElement>(null);
+  const onAnsweredRef = useRef(onAnswered);
+  onAnsweredRef.current = onAnswered;
 
   useEffect(() => {
     if (feedback === 'idle') return;
     // setTimeout(0) garante que o keydown/keyup do Enter atual já terminou
     // antes de focar o botão — evita que o mesmo Enter dispare o clique
-    const id = setTimeout(() => nextBtnRef.current?.focus(), 0);
-    return () => clearTimeout(id);
+    const focusId = setTimeout(() => nextBtnRef.current?.focus(), 0);
+    const advanceMs = feedback === 'right' ? AUTO_ADVANCE_RIGHT_MS : AUTO_ADVANCE_WRONG_MS;
+    const advanceId = setTimeout(() => onAnsweredRef.current(feedback === 'right'), advanceMs);
+    return () => {
+      clearTimeout(focusId);
+      clearTimeout(advanceId);
+    };
   }, [feedback]);
 
   async function check(giveUp = false) {
@@ -331,9 +341,18 @@ function RomajiQuestion({
           <p className={feedback === 'right' ? 'text-indigo' : 'text-hanko'}>
             {feedback === 'right' ? 'Certo!' : `Era "${entry.romaji}"`}
           </p>
-          <button ref={nextBtnRef} className="btn-primary" onClick={() => onAnswered(feedback === 'right')}>
-            Próximo
-          </button>
+          <div className="mx-auto flex max-w-[10rem] flex-col items-center gap-1">
+            <button ref={nextBtnRef} className="btn-primary w-full" onClick={() => onAnswered(feedback === 'right')}>
+              Próximo
+            </button>
+            <div className="h-1 w-full overflow-hidden rounded-full bg-line">
+              <div
+                key={feedback}
+                className="countdown-bar h-full bg-indigo/50"
+                style={{ animationDuration: `${feedback === 'right' ? AUTO_ADVANCE_RIGHT_MS : AUTO_ADVANCE_WRONG_MS}ms` }}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

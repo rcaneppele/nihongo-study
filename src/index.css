@@ -47,6 +47,22 @@
   }
 }
 
+@keyframes countdown-bar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.countdown-bar {
+  width: 100%;
+  animation-name: countdown-bar;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
