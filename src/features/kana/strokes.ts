@@ -65,21 +65,39 @@ function pathLength(stroke: Stroke): number {
 /**
  * Reconhecimento e feedback de caligrafia.
  *
- * Compara os traços do usuário com os dados de referência do KanjiVG
- * (src/data/kanjivg/kana-strokes.json, gerado por scripts/build-kana-strokes.mjs):
- *   - nº de traços (esperado x feito);
- *   - forma de cada traço (distância média ponto a ponto, após normalizar
- *     posição/escala pela caixa delimitadora — assim um kana desenhado menor
- *     ou deslocado no canvas não é penalizado por isso, só pela forma);
- *   - direção de cada traço (do ponto inicial ao final, comparada por ângulo).
- * Traços são pareados por índice (traço 1 do usuário vs. traço 1 da
- * referência, etc.), o que também penaliza naturalmente erros de ordem: um
- * traço fora de ordem tende a comparar mal contra o traço errado da referência.
+ * A NOTA compara a forma final do desenho com a forma de referência do
+ * KanjiVG (src/data/kanjivg/kana-strokes.json, gerado por
+ * scripts/build-kana-strokes.mjs), tratando todos os traços como uma única
+ * nuvem de pontos (distância de Chamfer) — de propósito, sem exigir que o
+ * usuário acerte quantidade, ordem ou direção dos traços. O que importa pra
+ * nota é só: o desenho final ficou parecido com o kana esperado? Um kana
+ * feito num traço só (sem levantar a caneta), mas com a forma certa, tira
+ * nota alta.
+ *
+ * Quantidade/ordem/direção dos traços continuam gerando DICAS (comparando
+ * traço a traço por índice, como antes), pra orientar o usuário a seguir o
+ * traçado oficial — só não derrubam mais a nota.
  */
 
 const REFERENCE_N = 32;
 const SHAPE_DIST_THRESHOLD = 0.22;
 const MIN_VECTOR_LENGTH = 0.03;
+
+/** Nº total de pontos (aprox.) usado pra representar o desenho inteiro como nuvem, distribuído entre os traços proporcionalmente ao comprimento de cada um. */
+const CLOUD_TOTAL_POINTS = 128;
+const MIN_POINTS_PER_STROKE = 4;
+/**
+ * Distância média (Chamfer, em unidades da caixa delimitadora) acima da qual a
+ * nota de forma vai a zero. Calibrado simulando tremor de mão realista
+ * (ruído + leve desalinhamento entre traços + início/fim imprecisos): nesse
+ * valor, um desenho correto mas tremido passa na maioria das vezes (~85-100%
+ * dependendo do nível de tremor). Limitação conhecida: como a nota ignora
+ * contagem/ordem/direção de traço por completo (de propósito), alguns pares
+ * de kana bem parecidos (は/ほ, る/ろ, ぬ/め, よ/ま...) podem ocasionalmente
+ * passar mesmo desenhados errados — não há como eliminar isso sem voltar a
+ * penalizar contagem/ordem/direção, o que pioraria o problema oposto.
+ */
+const CLOUD_SHAPE_THRESHOLD = 0.12;
 
 export const DRAW_PASS_THRESHOLD = 60;
 
@@ -118,34 +136,28 @@ export function scoreDrawing(strokes: Stroke[], char: string, canvasSize: number
   const userNorm = normalizeByBoundingBox(toUnitSquareStrokes(given, canvasSize));
   const refNorm = normalizeByBoundingBox(reference);
 
-  const pairCount = Math.min(userNorm.length, refNorm.length);
-  const strokeScores: number[] = [];
-  const strokeHints: string[] = [];
+  // Nota: forma do desenho inteiro (nuvem de pontos) vs. forma de referência,
+  // independente de quantos traços o usuário usou, em que ordem ou direção.
+  const userCloud = buildPointCloud(userNorm);
+  const refCloud = buildPointCloud(refNorm);
+  const shape = chamferShapeScore(userCloud, refCloud);
+  const score = Math.max(0, Math.min(100, Math.round(100 * shape)));
 
-  for (let i = 0; i < pairCount; i++) {
-    const shape = shapeScore(userNorm[i], refNorm[i]);
-    const direction = angleScore(strokeVector(userNorm[i]), strokeVector(refNorm[i]));
-    strokeScores.push(shape * 0.65 + direction * 0.35);
-
-    if (direction < 0.4 && shape >= 0.4) {
-      strokeHints.push(`Traço ${i + 1}: confira a direção (de onde a caneta começa e termina).`);
-    } else if (shape < 0.5) {
-      strokeHints.push(`Traço ${i + 1}: tente seguir a forma esperada mais de perto.`);
-    }
-  }
-
-  const pairedAvg = strokeScores.length ? strokeScores.reduce((a, b) => a + b, 0) / strokeScores.length : 0;
+  // Dicas: pareamento traço a traço por índice, só orientativo — não afeta a nota.
   const diff = Math.abs(given.length - reference.length);
-  const countFactor = diff === 0 ? 1 : diff === 1 ? 0.75 : 0.5;
-  const score = Math.max(0, Math.min(100, Math.round(100 * pairedAvg * countFactor)));
-
-  const hints = [...strokeHints];
+  const hints: string[] = [];
   if (diff !== 0) {
-    hints.unshift(
-      given.length < reference.length
-        ? `Esperado ${reference.length} traço(s), você fez ${given.length} — faltou pelo menos um.`
-        : `Esperado ${reference.length} traço(s), você fez ${given.length} — traço(s) extra.`
-    );
+    hints.push(`O traçado oficial usa ${reference.length} traço(s) (você fez ${given.length}) — dá uma olhada na ordem certa.`);
+  } else {
+    for (let i = 0; i < reference.length; i++) {
+      const strokeShape = shapeScore(userNorm[i], refNorm[i]);
+      const direction = angleScore(strokeVector(userNorm[i]), strokeVector(refNorm[i]));
+      if (direction < 0.4 && strokeShape >= 0.4) {
+        hints.push(`Traço ${i + 1}: confira a direção (de onde a caneta começa e termina).`);
+      } else if (strokeShape < 0.5) {
+        hints.push(`Traço ${i + 1}: tente seguir a forma esperada mais de perto.`);
+      }
+    }
   }
 
   return {
@@ -179,6 +191,84 @@ function normalizeByBoundingBox(strokes: ReferenceStrokes): ReferenceStrokes {
   const cx = (minX + maxX) / 2;
   const cy = (minY + maxY) / 2;
   return strokes.map((stroke) => stroke.map(([x, y]) => [(x - cx) / span + 0.5, (y - cy) / span + 0.5]));
+}
+
+/**
+ * Reamostra o desenho inteiro (todos os traços) numa nuvem de ~CLOUD_TOTAL_POINTS
+ * pontos, distribuídos entre os traços proporcionalmente ao comprimento de cada
+ * um — assim um kana desenhado num traço só (sem levantar a caneta) fica
+ * representado com densidade equivalente a se tivesse sido feito no nº
+ * "oficial" de traços.
+ */
+function buildPointCloud(strokes: ReferenceStrokes): number[][] {
+  const lengths = strokes.map(polyline2DLength);
+  const totalLength = lengths.reduce((a, b) => a + b, 0);
+  if (totalLength === 0) return strokes.flatMap((s) => (s.length ? [s[0]] : []));
+
+  const cloud: number[][] = [];
+  strokes.forEach((stroke, i) => {
+    const share = lengths[i] / totalLength;
+    const n = Math.max(MIN_POINTS_PER_STROKE, Math.round(CLOUD_TOTAL_POINTS * share));
+    cloud.push(...resamplePolyline2D(stroke, n));
+  });
+  return cloud;
+}
+
+/** Distância de Chamfer (simétrica): média, nos dois sentidos, da distância de cada ponto até o ponto mais próximo da outra nuvem. Não exige correspondência de traço, ordem ou direção — só proximidade geométrica. */
+function chamferShapeScore(a: number[][], b: number[][]): number {
+  const avgDist = (averageNearestDistance(a, b) + averageNearestDistance(b, a)) / 2;
+  return Math.max(0, Math.min(1, 1 - avgDist / CLOUD_SHAPE_THRESHOLD));
+}
+
+function averageNearestDistance(from: number[][], to: number[][]): number {
+  if (from.length === 0 || to.length === 0) return 0;
+  let total = 0;
+  for (const p of from) {
+    let best = Infinity;
+    for (const q of to) {
+      const d = Math.hypot(p[0] - q[0], p[1] - q[1]);
+      if (d < best) best = d;
+    }
+    total += best;
+  }
+  return total / from.length;
+}
+
+function polyline2DLength(points: number[][]): number {
+  let len = 0;
+  for (let i = 1; i < points.length; i++) len += Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]);
+  return len;
+}
+
+/** Reamostragem equidistante genérica (sem timestamp), usada pra montar a nuvem de pontos. */
+function resamplePolyline2D(points: number[][], n: number): number[][] {
+  if (points.length === 0) return [];
+  if (n <= 1) return [points[0]];
+  if (points.length === 1 || polyline2DLength(points) === 0) {
+    return Array.from({ length: n }, () => points[0]);
+  }
+  const total = polyline2DLength(points);
+  const step = total / (n - 1);
+  const out: number[][] = [points[0]];
+  let acc = 0;
+  let prev = points[0];
+
+  for (let i = 1; i < points.length; i++) {
+    const cur = points[i];
+    let segment = Math.hypot(cur[0] - prev[0], cur[1] - prev[1]);
+    while (acc + segment >= step && out.length < n) {
+      const ratio = segment === 0 ? 0 : (step - acc) / segment;
+      const np = [prev[0] + ratio * (cur[0] - prev[0]), prev[1] + ratio * (cur[1] - prev[1])];
+      out.push(np);
+      prev = np;
+      segment = Math.hypot(cur[0] - prev[0], cur[1] - prev[1]);
+      acc = 0;
+    }
+    acc += segment;
+    prev = cur;
+  }
+  while (out.length < n) out.push(points[points.length - 1]);
+  return out.slice(0, n);
 }
 
 function shapeScore(a: number[][], b: number[][]): number {
