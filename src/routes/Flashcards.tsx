@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
-import { freshSrs } from '../features/srs/sm2';
+import { freshSrs } from '../features/srs/fsrs';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
 import AudioButton from '../components/AudioButton';
 

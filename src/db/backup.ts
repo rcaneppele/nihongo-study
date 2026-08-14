@@ -1,4 +1,5 @@
 import { db, type Card, type Review, type KanaProgress, type Meta } from './schema';
+import { freshSrs } from '../features/srs/fsrs';
 
 /**
  * Backup / sincronização manual entre dispositivos.
@@ -9,7 +10,7 @@ import { db, type Card, type Review, type KanaProgress, type Meta } from './sche
  * armazenamento.
  */
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export interface BackupFile {
   app: 'nihongo-study';
@@ -55,8 +56,32 @@ export function parseBackup(text: string): BackupFile {
   if (data?.app !== 'nihongo-study') {
     throw new Error('Não parece um backup do Nihongo Study.');
   }
-  // TODO: migrar dados se data.schemaVersion < SCHEMA_VERSION
-  return data as BackupFile;
+  return migrateBackup(data as BackupFile);
+}
+
+/**
+ * Backups de schemaVersion 1 (SM-2) trazem cards com `ef/interval/
+ * repetitions` em vez dos campos do FSRS. Sem conversão exata entre os dois
+ * modelos, cards antigos são resetados para o estado "novo" do FSRS — igual
+ * à migração que já roda no upgrade do Dexie (ver src/db/schema.ts).
+ */
+function migrateBackup(data: BackupFile): BackupFile {
+  if (data.schemaVersion >= SCHEMA_VERSION) return data;
+  const now = Date.now();
+  return {
+    ...data,
+    schemaVersion: SCHEMA_VERSION,
+    cards: data.cards.map((card) => {
+      const migrated: Card & { ef?: number; interval?: number; repetitions?: number } = {
+        ...card,
+        ...freshSrs(now),
+      };
+      delete migrated.ef;
+      delete migrated.interval;
+      delete migrated.repetitions;
+      return migrated;
+    }),
+  };
 }
 
 export type ImportMode = 'replace' | 'merge';

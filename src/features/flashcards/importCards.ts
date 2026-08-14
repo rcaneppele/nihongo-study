@@ -1,5 +1,5 @@
 import { type Card, newId } from '../../db/schema';
-import { freshSrs } from '../srs/sm2';
+import { freshSrs } from '../srs/fsrs';
 
 /**
  * Importação simples de cards via CSV.

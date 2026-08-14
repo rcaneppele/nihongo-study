@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { db, newId } from '../db/schema';
-import { freshSrs } from '../features/srs/sm2';
+import { freshSrs } from '../features/srs/fsrs';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
 import { parseCardsFile } from '../features/flashcards/importCards';
 import { useTheme, type ThemeMode } from '../lib/useTheme';

@@ -10,28 +10,35 @@ comportamento devem ser refletidas aqui.
   categoria opcional e tags.
 - Categoria é o eixo principal de filtro na tela de estudo.
 
-### Repetição espaçada (SM-2)
-Cada card carrega `ef` (easiness factor), `interval` (dias), `repetitions`
-(acertos consecutivos) e `dueDate` (timestamp da próxima revisão).
+### Repetição espaçada (FSRS)
+Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
+`difficulty`, `state` (New/Learning/Review/Relearning), `reps`, `lapses`,
+`scheduledDays` e `dueDate` (timestamp da próxima revisão). O algoritmo em si
+é o pacote `ts-fsrs`; o app só monta/lê o estado do card — ver
+`src/features/srs/fsrs.ts`.
 
-- Card novo: `ef = 2.5`, `interval = 0`, `repetitions = 0`, vence imediatamente.
+- Card novo: `freshSrs()` cria um card FSRS vazio (`createEmptyCard`), que
+  vence imediatamente.
 - A sessão de estudo só inclui cards com `dueDate <= agora`, respeitando o filtro
   de categoria selecionado.
-- O usuário avalia cada revisão com uma nota de qualidade `q` (0 a 5). Botões:
-  - **De novo** → 0
-  - **Difícil** → 3
-  - **Bom** → 4
-  - **Fácil** → 5
-- Atualização após a nota:
-  1. Se `q >= 3` (acertou):
-     - `repetitions == 0` → `interval = 1`
-     - `repetitions == 1` → `interval = 6`
-     - senão → `interval = round(interval * ef)`
-     - `repetitions += 1`
-  2. Se `q < 3` (errou): `repetitions = 0` e `interval = 1`.
-  3. `ef = ef + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))`, com mínimo de `1.3`.
-  4. `dueDate = agora + interval dias`.
+- O usuário avalia cada revisão com uma nota do FSRS (`Rating`). Botões:
+  - **De novo** → `Rating.Again` (1)
+  - **Difícil** → `Rating.Hard` (2)
+  - **Bom** → `Rating.Good` (3)
+  - **Fácil** → `Rating.Easy` (4)
+- `applyFsrs(card, rating)` delega ao `ts-fsrs` (`enable_short_term: false`,
+  então o menor intervalo possível é 1 dia — sem passos de aprendizado em
+  minutos, já que cada card só é revisado uma vez por sessão) e devolve o
+  novo `stability/difficulty/state/reps/lapses/scheduledDays/dueDate`.
 - Cada revisão grava uma linha em `reviews` (para estatísticas futuras).
+
+**Migração do SM-2** (schemaVersion 1 → 2): não há conversão exata entre os
+modelos de estado do SM-2 (`ef/interval/repetitions`) e do FSRS
+(`stability/difficulty`). Cards existentes — no upgrade do Dexie e em
+backups antigos importados — são resetados para o estado "novo" do FSRS.
+O histórico em `reviews` é preservado, mas notas gravadas antes da migração
+usam a escala antiga do SM-2 (0..5); não é relido pelo algoritmo, só fica
+como registro histórico.
 
 ### Importação
 - CSV: `front,back,reading,category,tags` (com ou sem cabeçalho; tags separadas

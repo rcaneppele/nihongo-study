@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { db, type Card, newId } from '../../db/schema';
-import { applySm2, REVIEW_GRADES } from '../srs/sm2';
+import { applyFsrs, REVIEW_GRADES, type Grade } from '../srs/fsrs';
 import AudioButton from '../../components/AudioButton';
 
 /**
- * "review" usa a nota pra atualizar o SM-2 (ef/interval/dueDate) — é a
- * revisão guiada pelo algoritmo. "practice" só passa os cards pra frente,
- * sem gravar nada — pra poder treinar a qualquer momento sem distorcer a
- * agenda de repetição espaçada.
+ * "review" usa a nota pra atualizar o FSRS (stability/difficulty/dueDate) —
+ * é a revisão guiada pelo algoritmo. "practice" só passa os cards pra
+ * frente, sem gravar nada — pra poder treinar a qualquer momento sem
+ * distorcer a agenda de repetição espaçada.
  */
 export type StudyMode = 'review' | 'practice';
 
@@ -40,20 +40,19 @@ export default function StudySession({
     setIndex((i) => i + 1);
   }
 
-  async function grade(quality: number) {
-    const result = applySm2(card, quality);
+  async function grade(rating: Grade) {
+    const result = applyFsrs(card, rating);
     await db.transaction('rw', db.cards, db.reviews, async () => {
       await db.cards.update(card.id, {
         ...result,
-        lastReviewedAt: Date.now(),
         updatedAt: Date.now(),
       });
       await db.reviews.add({
         id: newId(),
         cardId: card.id,
         reviewedAt: Date.now(),
-        quality,
-        intervalAfter: result.interval,
+        quality: rating,
+        intervalAfter: result.scheduledDays,
       });
     });
     advance();
@@ -97,7 +96,7 @@ export default function StudySession({
       ) : mode === 'review' ? (
         <div className="grid grid-cols-4 gap-2">
           {REVIEW_GRADES.map((g) => (
-            <button key={g.label} className="btn-ghost" onClick={() => grade(g.quality)}>
+            <button key={g.label} className="btn-ghost" onClick={() => grade(g.grade)}>
               {g.label}
             </button>
           ))}

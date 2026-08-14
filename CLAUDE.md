@@ -31,7 +31,9 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 
 - `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`, `meta`.
 - `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`.
-- `src/features/srs/sm2.ts` — algoritmo SM-2 isolado (trocável por FSRS depois).
+- `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
+  `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
+  `regras-negocio.md`).
 - `src/features/flashcards/` — importação CSV/JSON e sessão de revisão.
 - `src/features/kana/strokes.ts` — captura/normalização de traços e
   `scoreDrawing()`: reconhecimento + pontuação de caligrafia contra o KanjiVG.
@@ -85,7 +87,6 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
    em `src/routes/Kana.tsx`).
 2. Deck N5 completo em `src/data/seed/` + importação com um clique.
 3. Estatísticas de progresso (usar a tabela `reviews`).
-4. Migrações de schema no import quando `schemaVersion` mudar.
 
 ## Regras de negócio
 

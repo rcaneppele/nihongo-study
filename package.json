@@ -1,7 +1,7 @@
 {
   "name": "nihongo-study",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "description": "App pessoal de estudo de japonês: flash cards (SRS) e treino de hiragana/katakana.",
   "license": "MIT",
@@ -22,7 +22,8 @@
     "dexie-react-hooks": "^1.1.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "ts-fsrs": "^5.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

@@ -1,4 +1,5 @@
 import Dexie, { type Table } from 'dexie';
+import { freshSrs } from '../features/srs/fsrs';
 
 /**
  * Modelo de dados local (IndexedDB via Dexie).
@@ -15,10 +16,13 @@ export interface Card {
   reading?: string; // leitura (kana/romaji)
   category?: string; // categoria principal (usada no filtro)
   tags: string[];
-  // Estado SRS (SM-2)
-  ef: number; // easiness factor
-  interval: number; // intervalo atual em dias
-  repetitions: number; // acertos consecutivos
+  // Estado SRS (FSRS) — ver src/features/srs/fsrs.ts
+  stability: number;
+  difficulty: number;
+  state: number; // State do ts-fsrs: 0 New, 1 Learning, 2 Review, 3 Relearning
+  reps: number;
+  lapses: number;
+  scheduledDays: number;
   dueDate: number; // timestamp da próxima revisão
   lastReviewedAt?: number;
   createdAt: number;
@@ -29,7 +33,7 @@ export interface Review {
   id: string;
   cardId: string;
   reviewedAt: number;
-  quality: number; // 0..5
+  quality: number; // Rating do FSRS (1..4). Reviews anteriores à migração para FSRS usam a escala antiga do SM-2 (0..5) — é só histórico, não é relido pelo app.
   intervalAfter: number;
 }
 
@@ -64,6 +68,25 @@ export class NihongoDB extends Dexie {
       kanaProgress: 'char, type',
       meta: 'key',
     });
+    // v2: troca do algoritmo de repetição espaçada de SM-2 para FSRS. Os
+    // campos antigos (ef/interval/repetitions) não têm conversão exata pros
+    // novos (stability/difficulty/state) — os cards existentes são
+    // resetados para o estado "novo" do FSRS, perdendo o progresso de
+    // agendamento acumulado mas mantendo o histórico em `reviews`.
+    this.version(2)
+      .stores({})
+      .upgrade(async (tx) => {
+        const now = Date.now();
+        await tx
+          .table('cards')
+          .toCollection()
+          .modify((card) => {
+            delete card.ef;
+            delete card.interval;
+            delete card.repetitions;
+            Object.assign(card, freshSrs(now));
+          });
+      });
   }
 }
 
