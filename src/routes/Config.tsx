@@ -1,9 +1,9 @@
-import { useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { db, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/sm2';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
-import { parseCardsCsv, parseCardsJson } from '../features/flashcards/importCards';
+import { parseCardsFile } from '../features/flashcards/importCards';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
 
@@ -66,6 +66,7 @@ function asTabKey(value: string | null): TabKey | null {
 function DadosTab() {
   const [mode, setMode] = useState<ImportMode>('replace');
   const [msg, setMsg] = useState<string | null>(null);
+  const [helpOpen, setHelpOpen] = useState(false);
   const backupInput = useRef<HTMLInputElement>(null);
   const cardsInput = useRef<HTMLInputElement>(null);
 
@@ -88,7 +89,8 @@ function DadosTab() {
   async function handleImportCards(file: File) {
     try {
       const text = await file.text();
-      const cards = file.name.endsWith('.json') ? parseCardsJson(text) : parseCardsCsv(text);
+      const cards = parseCardsFile(text, file.name);
+      if (cards.length === 0) throw new Error('Nenhum card encontrado no arquivo.');
       await db.cards.bulkAdd(cards);
       setMsg(`${cards.length} card(s) importado(s).`);
     } catch (err) {
@@ -140,10 +142,21 @@ function DadosTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Importar cards</h2>
+        <div className="flex items-center gap-1.5">
+          <h2 className="font-medium">Importar cards</h2>
+          <button
+            type="button"
+            onClick={() => setHelpOpen(true)}
+            aria-label="Ajuda: formatos aceitos e como exportar do Anki"
+            className="grid h-5 w-5 place-items-center rounded-full border border-line text-[11px] font-semibold text-sage hover:border-indigo hover:text-indigo"
+          >
+            ?
+          </button>
+        </div>
         <p className="text-sm text-sage">
-          CSV no formato <code>front,back,reading,category,tags</code> (tags separadas por ;) ou um
-          array JSON.
+          Aceita CSV próprio, JSON ou exports em texto do Anki (.txt). Toque no{' '}
+          <span className="font-semibold text-ink">?</span> acima para ver os detalhes de cada
+          formato e como exportar do Anki.
         </p>
         <button className="btn-ghost" onClick={() => cardsInput.current?.click()}>
           Escolher arquivo
@@ -151,13 +164,102 @@ function DadosTab() {
         <input
           ref={cardsInput}
           type="file"
-          accept=".csv,.json,text/csv,application/json"
+          accept=".csv,.json,.txt,text/csv,application/json,text/plain"
           className="hidden"
           onChange={(e) => e.target.files?.[0] && handleImportCards(e.target.files[0])}
         />
       </section>
 
+      {helpOpen && <ImportHelpModal onClose={() => setHelpOpen(false)} />}
+
       {msg && <p className="text-sm text-indigo">{msg}</p>}
+    </div>
+  );
+}
+
+function ImportHelpModal({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
+  return (
+    <div
+      role="presentation"
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4"
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="import-help-title"
+        onClick={(e) => e.stopPropagation()}
+        className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-line bg-paper p-5 shadow-lg space-y-4"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <h2 id="import-help-title" className="font-display text-lg font-semibold">
+            Formatos aceitos para importar cards
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Fechar"
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-sage hover:bg-line/40 hover:text-ink"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium">Vindo do Anki</h3>
+          <p className="text-sm text-sage">
+            No Anki Desktop: selecione o baralho → menu <strong>Exportar</strong> → escolha um dos
+            formatos abaixo → salve como <code>.txt</code> e importe esse arquivo aqui.
+          </p>
+          <ul className="list-disc space-y-1.5 pl-5 text-sm text-sage">
+            <li>
+              <strong className="text-ink">Notas em Texto Simples</strong> — recomendado. Traz as
+              tags e, se o modelo de nota tiver um campo de leitura (ex.: "Reading"), ele é
+              detectado automaticamente.
+            </li>
+            <li>
+              <strong className="text-ink">Cartões em Texto Simples</strong> — mais simples,
+              sempre Pergunta/Resposta. Bom para baralhos com formatação especial (cloze, cartões
+              invertidos), mas sem tags.
+            </li>
+          </ul>
+          <p className="text-sm text-sage">
+            Áudio e imagens não são importados — só o texto dos cards. A categoria não vem do
+            Anki; dá pra organizar os cards em categorias depois, dentro do app.
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium">CSV próprio</h3>
+          <p className="text-sm text-sage">
+            Uma linha por card, com ou sem cabeçalho:
+          </p>
+          <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
+            front,back,reading,category,tags{'\n'}猫,gato,ねこ,Animais,n5;substantivo
+          </pre>
+          <p className="text-sm text-sage">Tags separadas por ponto e vírgula (;).</p>
+        </div>
+
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-medium">JSON</h3>
+          <p className="text-sm text-sage">Um array de objetos de card, ex.:</p>
+          <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
+            {'[{ "front": "猫", "back": "gato", "reading": "ねこ", "category": "Animais" }]'}
+          </pre>
+        </div>
+
+        <button className="btn-ghost w-full" onClick={onClose}>
+          Entendi
+        </button>
+      </div>
     </div>
   );
 }
