@@ -144,7 +144,7 @@ function TokenButton({
   disabled?: boolean;
   estado?: 'correta' | 'errada';
 }) {
-  const cor = estado === 'correta' ? ESTADO_CORRETO : estado === 'errada' ? ESTADO_ERRADO : 'border border-line bg-white/70 hover:bg-line/40';
+  const cor = estado === 'correta' ? ESTADO_CORRETO : estado === 'errada' ? ESTADO_ERRADO : 'border border-line bg-surface/70 hover:bg-line/40';
   return (
     <button
       onClick={onClick}
@@ -283,7 +283,7 @@ function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardPro
               key={alt}
               onClick={() => escolher(alt)}
               disabled={!!escolhida}
-              className={`rounded-lg border border-line bg-white/70 py-2 font-jp text-lg text-ink transition-colors disabled:opacity-100 ${estado}`}
+              className={`rounded-lg border border-line bg-surface/70 py-2 font-jp text-lg text-ink transition-colors disabled:opacity-100 ${estado}`}
             >
               {alt}
             </button>
@@ -331,7 +331,7 @@ function MultiplaEscolha({ pergunta, ultima, onResponder, onAvancar }: CardProps
               key={i}
               onClick={() => escolher(i)}
               disabled={escolhida !== null}
-              className={`w-full rounded-lg border border-line bg-white/70 px-4 py-2.5 text-left font-jp text-base text-ink transition-colors disabled:opacity-100 ${estado}`}
+              className={`w-full rounded-lg border border-line bg-surface/70 px-4 py-2.5 text-left font-jp text-base text-ink transition-colors disabled:opacity-100 ${estado}`}
             >
               {alt}
             </button>

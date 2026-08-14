@@ -24,7 +24,7 @@ export function Ex({
   notes?: string;
 }) {
   return (
-    <div className="min-w-0 rounded-lg border-l-4 border-indigo/40 bg-white/70 px-4 py-3">
+    <div className="min-w-0 rounded-lg border-l-4 border-indigo/40 bg-surface/70 px-4 py-3">
       <div className="flex items-start gap-1">
         <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
         <AudioButton text={jp} size="sm" />
@@ -68,7 +68,7 @@ export function GrammarTable({
   jpCols?: number[];
 }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-line bg-white/60">
+    <div className="overflow-x-auto rounded-xl border border-line bg-surface/60">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-line">

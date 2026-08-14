@@ -4,6 +4,7 @@ import { db, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/sm2';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
 import { parseCardsFile } from '../features/flashcards/importCards';
+import { useTheme, type ThemeMode } from '../lib/useTheme';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
 
@@ -41,7 +42,7 @@ export default function Config() {
             className={[
               'rounded-t-lg px-4 py-2 text-sm font-medium transition-colors',
               tab === t.key
-                ? 'border border-b-0 border-line bg-white text-indigo'
+                ? 'border border-b-0 border-line bg-surface text-indigo'
                 : 'text-sage hover:text-ink',
             ].join(' ')}
           >
@@ -103,6 +104,27 @@ function DadosTab() {
     } catch (err) {
       setMsg(`Erro: ${(err as Error).message}`);
     }
+  }
+
+  async function seedExample() {
+    const now = Date.now();
+    const examples = [
+      { front: '猫', back: 'gato', reading: 'ねこ', category: 'Animais' },
+      { front: '犬', back: 'cachorro', reading: 'いぬ', category: 'Animais' },
+      { front: '水', back: 'água', reading: 'みず', category: 'N5' },
+      { front: '本', back: 'livro', reading: 'ほん', category: 'N5' },
+      { front: 'ありがとう', back: 'obrigado(a)', reading: 'arigatō', category: 'Saudações' },
+    ];
+    await db.cards.bulkAdd(
+      examples.map((e) => ({ id: newId(), tags: [], ...e, ...freshSrs(now), createdAt: now, updatedAt: now }))
+    );
+    setMsg('Cards de exemplo adicionados.');
+  }
+
+  async function resetAll() {
+    if (!confirm('Apagar TODOS os dados deste dispositivo? Esta ação não pode ser desfeita.')) return;
+    await Promise.all([db.cards.clear(), db.reviews.clear(), db.kanaProgress.clear(), db.meta.clear()]);
+    setMsg('Todos os dados foram apagados.');
   }
 
   return (
@@ -189,6 +211,24 @@ function DadosTab() {
         />
       </section>
 
+      <section className="card-surface space-y-3">
+        <h2 className="font-medium">Começar com exemplos</h2>
+        <p className="text-sm text-sage">Adiciona alguns cards para você testar o fluxo.</p>
+        <button className="btn-ghost" onClick={seedExample}>
+          Adicionar cards de exemplo
+        </button>
+      </section>
+
+      <section className="card-surface space-y-3">
+        <h2 className="font-medium">Zona de risco</h2>
+        <p className="text-sm text-sage">
+          Apaga tudo deste dispositivo. Faça um backup antes (seção acima) se quiser preservar.
+        </p>
+        <button className="btn-accent" onClick={resetAll}>
+          Apagar todos os dados
+        </button>
+      </section>
+
       {backupHelpOpen && (
         <HelpModal title="Como funciona o backup completo" onClose={() => setBackupHelpOpen(false)}>
           <div className="space-y-1.5">
@@ -264,7 +304,7 @@ function DadosTab() {
           <div className="space-y-1.5">
             <h3 className="text-sm font-medium">CSV próprio</h3>
             <p className="text-sm text-sage">Uma linha por card, com ou sem cabeçalho:</p>
-            <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
+            <pre className="overflow-x-auto rounded-lg border border-line bg-surface/70 p-2 text-xs">
               front,back,reading,category,tags{'\n'}猫,gato,ねこ,Animais,n5;substantivo
             </pre>
             <p className="text-sm text-sage">Tags separadas por ponto e vírgula (;).</p>
@@ -273,7 +313,7 @@ function DadosTab() {
           <div className="space-y-1.5">
             <h3 className="text-sm font-medium">JSON</h3>
             <p className="text-sm text-sage">Um array de objetos de card, ex.:</p>
-            <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
+            <pre className="overflow-x-auto rounded-lg border border-line bg-surface/70 p-2 text-xs">
               {'[{ "front": "猫", "back": "gato", "reading": "ねこ", "category": "Animais" }]'}
             </pre>
           </div>
@@ -311,7 +351,7 @@ function HelpModal({ title, onClose, children }: { title: string; onClose: () =>
     <div
       role="presentation"
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
     >
       <div
         role="dialog"
@@ -344,53 +384,36 @@ function HelpModal({ title, onClose, children }: { title: string; onClose: () =>
   );
 }
 
+const THEME_OPTIONS: { key: ThemeMode; label: string }[] = [
+  { key: 'light', label: 'Claro' },
+  { key: 'dark', label: 'Escuro' },
+  { key: 'system', label: 'Sistema' },
+];
+
 function ConfiguracoesTab() {
-  const [msg, setMsg] = useState<string | null>(null);
-
-  async function seedExample() {
-    const now = Date.now();
-    const examples = [
-      { front: '猫', back: 'gato', reading: 'ねこ', category: 'Animais' },
-      { front: '犬', back: 'cachorro', reading: 'いぬ', category: 'Animais' },
-      { front: '水', back: 'água', reading: 'みず', category: 'N5' },
-      { front: '本', back: 'livro', reading: 'ほん', category: 'N5' },
-      { front: 'ありがとう', back: 'obrigado(a)', reading: 'arigatō', category: 'Saudações' },
-    ];
-    await db.cards.bulkAdd(
-      examples.map((e) => ({ id: newId(), tags: [], ...e, ...freshSrs(now), createdAt: now, updatedAt: now }))
-    );
-    setMsg('Cards de exemplo adicionados.');
-  }
-
-  async function resetAll() {
-    if (!confirm('Apagar TODOS os dados deste dispositivo? Esta ação não pode ser desfeita.')) return;
-    await Promise.all([db.cards.clear(), db.reviews.clear(), db.kanaProgress.clear(), db.meta.clear()]);
-    setMsg('Todos os dados foram apagados.');
-  }
+  const { mode, setMode } = useTheme();
 
   return (
     <div className="space-y-6">
       <p className="text-sm text-sage">Nihongo Study · v{__APP_VERSION__}</p>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Começar com exemplos</h2>
-        <p className="text-sm text-sage">Adiciona alguns cards para você testar o fluxo.</p>
-        <button className="btn-ghost" onClick={seedExample}>
-          Adicionar cards de exemplo
-        </button>
-      </section>
-
-      <section className="card-surface space-y-3">
-        <h2 className="font-medium">Zona de risco</h2>
+        <h2 className="font-medium">Aparência</h2>
         <p className="text-sm text-sage">
-          Apaga tudo deste dispositivo. Faça um backup antes (aba Dados) se quiser preservar.
+          "Sistema" segue o tema do seu aparelho/navegador e muda sozinho se ele mudar.
         </p>
-        <button className="btn-accent" onClick={resetAll}>
-          Apagar todos os dados
-        </button>
+        <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+          {THEME_OPTIONS.map((opt) => (
+            <button
+              key={opt.key}
+              className={`rounded-md px-3 py-1.5 ${mode === opt.key ? 'bg-indigo text-paper' : ''}`}
+              onClick={() => setMode(opt.key)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </section>
-
-      {msg && <p className="text-sm text-indigo">{msg}</p>}
     </div>
   );
 }

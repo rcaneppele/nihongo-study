@@ -1,5 +1,6 @@
 import type { ReactNode, SVGProps } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from '../lib/useTheme';
 
 const NAV = [
   { to: '/', label: 'Início', end: true, icon: IconHome },
@@ -31,19 +32,26 @@ export default function Layout({ children }: { children: ReactNode }) {
 }
 
 function Jumbotron() {
+  const { resolvedTheme } = useTheme();
+  const logoFile = resolvedTheme === 'dark' ? 'logo-dark.png' : 'logo.png';
+
   return (
     <div className="relative border-b border-line bg-gradient-to-b from-indigo/5 to-transparent px-4 py-8 text-center sm:py-10">
       <div className="absolute right-4 top-4">
         <NavLink
           to="/config"
           aria-label="Configurações e dados"
-          className="grid h-10 w-10 place-items-center rounded-full border border-line bg-white/70 text-ink transition-colors hover:bg-line/40"
+          className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface/70 text-ink transition-colors hover:bg-line/40"
         >
           <IconGear className="h-5 w-5" />
         </NavLink>
       </div>
       <NavLink to="/" className="inline-block">
-        <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Nihongo Study" className="mx-auto h-32 sm:h-40 md:h-44" />
+        <img
+          src={`${import.meta.env.BASE_URL}${logoFile}`}
+          alt="Nihongo Study"
+          className="mx-auto h-32 sm:h-40 md:h-44"
+        />
       </NavLink>
       <p className="mt-1 text-sage">Flash cards, kana e tópicos de estudo</p>
     </div>
@@ -52,7 +60,7 @@ function Jumbotron() {
 
 function Sidebar() {
   return (
-    <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-line bg-white/60 px-3 py-5 md:flex">
+    <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-line bg-surface/60 px-3 py-5 md:flex">
       <nav className="flex flex-1 flex-col gap-1">
         {NAV.map((item) => (
           <NavLink key={item.to} to={item.to} end={item.end} className={sidebarLinkClass}>

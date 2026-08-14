@@ -4,7 +4,31 @@
 
 @layer base {
   :root {
+    /* Tema claro (padrão). Valores em "R G B" para composição com opacidade no Tailwind. */
+    --color-paper: 247 245 240;
+    --color-surface: 255 255 255;
+    --color-ink: 27 36 48;
+    --color-indigo: 30 58 95;
+    --color-indigo-soft: 45 74 124;
+    --color-hanko: 215 71 47;
+    --color-sage: 124 138 126;
+    --color-line: 228 223 212;
     color-scheme: light;
+  }
+
+  /* Tema escuro: mesma identidade (índigo/hanko/sage sobre papel), com papel e tinta
+     invertidos e os acentos clareados o suficiente para continuar legíveis como texto
+     sobre fundo escuro e como fundo de botão com texto escuro por cima. */
+  :root.dark {
+    --color-paper: 20 22 26;
+    --color-surface: 30 33 38;
+    --color-ink: 230 228 222;
+    --color-indigo: 122 162 216;
+    --color-indigo-soft: 148 182 227;
+    --color-hanko: 224 116 92;
+    --color-sage: 158 168 158;
+    --color-line: 51 56 63;
+    color-scheme: dark;
   }
 
   html,
@@ -37,10 +61,10 @@
     @apply btn bg-hanko text-paper hover:opacity-90;
   }
   .card-surface {
-    @apply rounded-2xl border border-line bg-white/60 p-5 shadow-sm;
+    @apply rounded-2xl border border-line bg-surface/60 p-5 shadow-sm;
   }
   .field {
-    @apply w-full rounded-lg border border-line bg-white/70 px-3 py-2 text-sm focus:border-indigo;
+    @apply w-full rounded-lg border border-line bg-surface/70 px-3 py-2 text-sm focus:border-indigo;
   }
   .label {
     @apply mb-1 block text-xs font-medium uppercase tracking-wide text-sage;

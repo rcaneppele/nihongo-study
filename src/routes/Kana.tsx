@@ -513,7 +513,7 @@ function KanaStrokeAnimation({
 
   return (
     <div className="flex flex-col items-center gap-1.5">
-      <svg width={size} height={size} viewBox="0 0 1 1" className="rounded-xl border border-line bg-white">
+      <svg width={size} height={size} viewBox="0 0 1 1" className="rounded-xl border border-line bg-surface">
         {strokes.map((stroke, i) => {
           const pts = visiblePoints[i];
           if (pts === 0) return null;

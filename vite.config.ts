@@ -12,7 +12,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/apple-touch-icon.png', 'favicon.png', 'logo.png'],
+      includeAssets: ['icons/apple-touch-icon.png', 'favicon.png', 'logo.png', 'logo-dark.png'],
       manifest: {
         name: 'Nihongo Study',
         short_name: 'Nihongo',

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Point, Stroke } from '../features/kana/strokes';
+import { useTheme } from '../lib/useTheme';
 
 /**
  * Canvas de desenho de kana. Captura traços via pointer events (funciona com
@@ -18,6 +19,7 @@ export default function KanaCanvas({
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const drawing = useRef(false);
   const current = useRef<Stroke>([]);
+  const { resolvedTheme } = useTheme();
 
   // Densidade de pixels para traço nítido em telas retina.
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
@@ -26,7 +28,7 @@ export default function KanaCanvas({
     redraw(canvasRef.current, strokes, size, dpr);
     onStrokesChange?.(strokes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [strokes]);
+  }, [strokes, resolvedTheme]);
 
   function pos(e: React.PointerEvent): Point {
     const rect = canvasRef.current!.getBoundingClientRect();
@@ -62,7 +64,7 @@ export default function KanaCanvas({
         width={size * dpr}
         height={size * dpr}
         style={{ width: size, height: size, touchAction: 'none' }}
-        className="rounded-2xl border border-line bg-white"
+        className="rounded-2xl border border-line bg-surface"
         onPointerDown={start}
         onPointerMove={move}
         onPointerUp={end}
@@ -78,6 +80,12 @@ export default function KanaCanvas({
   );
 }
 
+/** Lê o valor atual (já resolvido pro tema claro/escuro) de um token de cor do index.css. */
+function themeColor(cssVar: string, fallback: string): string {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
+  return value ? `rgb(${value})` : fallback;
+}
+
 function redraw(canvas: HTMLCanvasElement | null, strokes: Stroke[], size: number, dpr: number) {
   const ctx = canvas?.getContext('2d');
   if (!ctx || !canvas) return;
@@ -85,7 +93,7 @@ function redraw(canvas: HTMLCanvasElement | null, strokes: Stroke[], size: numbe
   ctx.clearRect(0, 0, size, size);
 
   // Guias (linhas centrais) para apoiar a caligrafia.
-  ctx.strokeStyle = '#E4DFD4';
+  ctx.strokeStyle = themeColor('--color-line', '#E4DFD4');
   ctx.lineWidth = 1;
   ctx.setLineDash([6, 6]);
   ctx.beginPath();
@@ -97,7 +105,7 @@ function redraw(canvas: HTMLCanvasElement | null, strokes: Stroke[], size: numbe
   ctx.setLineDash([]);
 
   // Traços do usuário.
-  ctx.strokeStyle = '#1B2430';
+  ctx.strokeStyle = themeColor('--color-ink', '#1B2430');
   ctx.lineWidth = 8;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
