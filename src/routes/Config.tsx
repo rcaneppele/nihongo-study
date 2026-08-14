@@ -66,7 +66,8 @@ function asTabKey(value: string | null): TabKey | null {
 function DadosTab() {
   const [mode, setMode] = useState<ImportMode>('replace');
   const [msg, setMsg] = useState<string | null>(null);
-  const [helpOpen, setHelpOpen] = useState(false);
+  const [cardsHelpOpen, setCardsHelpOpen] = useState(false);
+  const [backupHelpOpen, setBackupHelpOpen] = useState(false);
   const backupInput = useRef<HTMLInputElement>(null);
   const cardsInput = useRef<HTMLInputElement>(null);
 
@@ -77,6 +78,12 @@ function DadosTab() {
   }
 
   async function handleImportBackup(file: File) {
+    if (
+      mode === 'replace' &&
+      !confirm('Isso apaga todos os dados atuais deste aparelho e coloca no lugar o conteúdo do arquivo. Continuar?')
+    ) {
+      return;
+    }
     try {
       const backup = parseBackup(await file.text());
       await importData(backup, mode);
@@ -105,53 +112,65 @@ function DadosTab() {
         protege contra perda de dados.
       </p>
 
-      <section className="card-surface space-y-3">
-        <h2 className="font-medium">Backup completo</h2>
-        <p className="text-sm text-sage">Exporta cards, histórico e progresso de kana num único JSON.</p>
-        <div className="flex flex-wrap items-center gap-3">
-          <button className="btn-primary" onClick={handleExport}>
-            Exportar backup
-          </button>
+      <section className="card-surface space-y-4">
+        <div className="flex items-center gap-1.5">
+          <h2 className="font-medium">Backup completo</h2>
+          <HelpButton label="Ajuda: como funciona o backup completo" onClick={() => setBackupHelpOpen(true)} />
+        </div>
+        <p className="text-sm text-sage">
+          Cards, histórico de revisões e progresso de kana num único arquivo JSON — serve tanto pra
+          sincronizar entre aparelhos quanto pra manter uma cópia de segurança.
+        </p>
 
-          <div className="inline-flex rounded-lg border border-line p-1 text-sm">
-            <button
-              className={`rounded-md px-3 py-1.5 ${mode === 'replace' ? 'bg-indigo text-paper' : ''}`}
-              onClick={() => setMode('replace')}
-            >
-              Substituir
-            </button>
-            <button
-              className={`rounded-md px-3 py-1.5 ${mode === 'merge' ? 'bg-indigo text-paper' : ''}`}
-              onClick={() => setMode('merge')}
-            >
-              Mesclar
+        <div className="grid gap-4 sm:grid-cols-2 sm:divide-x sm:divide-line">
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold text-ink">Exportar</h3>
+            <p className="text-sm text-sage">Baixa um arquivo com tudo que está salvo neste aparelho agora.</p>
+            <button className="btn-primary" onClick={handleExport}>
+              Exportar backup
             </button>
           </div>
 
-          <button className="btn-ghost" onClick={() => backupInput.current?.click()}>
-            Importar backup
-          </button>
-          <input
-            ref={backupInput}
-            type="file"
-            accept="application/json"
-            className="hidden"
-            onChange={(e) => e.target.files?.[0] && handleImportBackup(e.target.files[0])}
-          />
+          <div className="space-y-2 sm:pl-4">
+            <h3 className="text-sm font-semibold text-ink">Importar</h3>
+            <p className="text-sm text-sage">Escolha como o arquivo se combina com o que já está salvo aqui:</p>
+            <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+              <button
+                className={`rounded-md px-3 py-1.5 ${mode === 'replace' ? 'bg-indigo text-paper' : ''}`}
+                onClick={() => setMode('replace')}
+              >
+                Substituir
+              </button>
+              <button
+                className={`rounded-md px-3 py-1.5 ${mode === 'merge' ? 'bg-indigo text-paper' : ''}`}
+                onClick={() => setMode('merge')}
+              >
+                Mesclar
+              </button>
+            </div>
+            <div>
+              <button className="btn-ghost" onClick={() => backupInput.current?.click()}>
+                Importar backup
+              </button>
+              <input
+                ref={backupInput}
+                type="file"
+                accept="application/json"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && handleImportBackup(e.target.files[0])}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="card-surface space-y-3">
         <div className="flex items-center gap-1.5">
           <h2 className="font-medium">Importar cards</h2>
-          <button
-            type="button"
-            onClick={() => setHelpOpen(true)}
-            aria-label="Ajuda: formatos aceitos e como exportar do Anki"
-            className="grid h-5 w-5 place-items-center rounded-full border border-line text-[11px] font-semibold text-sage hover:border-indigo hover:text-indigo"
-          >
-            ?
-          </button>
+          <HelpButton
+            label="Ajuda: formatos aceitos e como exportar do Anki"
+            onClick={() => setCardsHelpOpen(true)}
+          />
         </div>
         <p className="text-sm text-sage">
           Aceita CSV próprio, JSON ou exports em texto do Anki (.txt). Toque no{' '}
@@ -170,14 +189,116 @@ function DadosTab() {
         />
       </section>
 
-      {helpOpen && <ImportHelpModal onClose={() => setHelpOpen(false)} />}
+      {backupHelpOpen && (
+        <HelpModal title="Como funciona o backup completo" onClose={() => setBackupHelpOpen(false)}>
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">O que entra no arquivo</h3>
+            <p className="text-sm text-sage">
+              Todos os cards (e o progresso de SRS de cada um), o histórico de revisões e o
+              progresso de treino de kana. Um snapshot completo do aparelho, sem nada de fora.
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">Exportar</h3>
+            <p className="text-sm text-sage">
+              Só baixa o arquivo — não apaga nem altera nada neste aparelho. Pode exportar quantas
+              vezes quiser.
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">Importar: Substituir vs. Mesclar</h3>
+            <p className="text-sm text-sage">O modo escolhido só afeta a importação — a exportação é sempre um snapshot completo.</p>
+            <ul className="list-disc space-y-1.5 pl-5 text-sm text-sage">
+              <li>
+                <strong className="text-ink">Substituir</strong> — apaga tudo que está neste
+                aparelho e coloca no lugar o conteúdo do arquivo. Use pra restaurar um backup ou
+                "clonar" o estado de outro aparelho.
+              </li>
+              <li>
+                <strong className="text-ink">Mesclar</strong> — combina com o que já existe aqui;
+                quando um card se repete nos dois lados, vence o mais recente. Use pra juntar o
+                progresso de dois aparelhos usados separadamente.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">Sincronizar dois aparelhos</h3>
+            <p className="text-sm text-sage">
+              Exporte no aparelho A, transfira o arquivo (e-mail, nuvem, cabo) e importe no
+              aparelho B com <strong className="text-ink">Mesclar</strong>. Repita no sentido
+              contrário se quiser manter os dois atualizados.
+            </p>
+          </div>
+        </HelpModal>
+      )}
+
+      {cardsHelpOpen && (
+        <HelpModal title="Formatos aceitos para importar cards" onClose={() => setCardsHelpOpen(false)}>
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">Vindo do Anki</h3>
+            <p className="text-sm text-sage">
+              No Anki Desktop: selecione o baralho → menu <strong>Exportar</strong> → escolha um dos
+              formatos abaixo → salve como <code>.txt</code> e importe esse arquivo aqui.
+            </p>
+            <ul className="list-disc space-y-1.5 pl-5 text-sm text-sage">
+              <li>
+                <strong className="text-ink">Notas em Texto Simples</strong> — recomendado. Traz as
+                tags e, se o modelo de nota tiver um campo de leitura (ex.: "Reading"), ele é
+                detectado automaticamente.
+              </li>
+              <li>
+                <strong className="text-ink">Cartões em Texto Simples</strong> — mais simples,
+                sempre Pergunta/Resposta. Bom para baralhos com formatação especial (cloze, cartões
+                invertidos), mas sem tags.
+              </li>
+            </ul>
+            <p className="text-sm text-sage">
+              Áudio e imagens não são importados — só o texto dos cards. A categoria não vem do
+              Anki; dá pra organizar os cards em categorias depois, dentro do app.
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">CSV próprio</h3>
+            <p className="text-sm text-sage">Uma linha por card, com ou sem cabeçalho:</p>
+            <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
+              front,back,reading,category,tags{'\n'}猫,gato,ねこ,Animais,n5;substantivo
+            </pre>
+            <p className="text-sm text-sage">Tags separadas por ponto e vírgula (;).</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-medium">JSON</h3>
+            <p className="text-sm text-sage">Um array de objetos de card, ex.:</p>
+            <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
+              {'[{ "front": "猫", "back": "gato", "reading": "ねこ", "category": "Animais" }]'}
+            </pre>
+          </div>
+        </HelpModal>
+      )}
 
       {msg && <p className="text-sm text-indigo">{msg}</p>}
     </div>
   );
 }
 
-function ImportHelpModal({ onClose }: { onClose: () => void }) {
+function HelpButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className="grid h-5 w-5 place-items-center rounded-full border border-line text-[11px] font-semibold text-sage hover:border-indigo hover:text-indigo"
+    >
+      ?
+    </button>
+  );
+}
+
+function HelpModal({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose();
@@ -195,13 +316,13 @@ function ImportHelpModal({ onClose }: { onClose: () => void }) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="import-help-title"
+        aria-labelledby="help-modal-title"
         onClick={(e) => e.stopPropagation()}
         className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-line bg-paper p-5 shadow-lg space-y-4"
       >
         <div className="flex items-start justify-between gap-3">
-          <h2 id="import-help-title" className="font-display text-lg font-semibold">
-            Formatos aceitos para importar cards
+          <h2 id="help-modal-title" className="font-display text-lg font-semibold">
+            {title}
           </h2>
           <button
             type="button"
@@ -213,48 +334,7 @@ function ImportHelpModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-medium">Vindo do Anki</h3>
-          <p className="text-sm text-sage">
-            No Anki Desktop: selecione o baralho → menu <strong>Exportar</strong> → escolha um dos
-            formatos abaixo → salve como <code>.txt</code> e importe esse arquivo aqui.
-          </p>
-          <ul className="list-disc space-y-1.5 pl-5 text-sm text-sage">
-            <li>
-              <strong className="text-ink">Notas em Texto Simples</strong> — recomendado. Traz as
-              tags e, se o modelo de nota tiver um campo de leitura (ex.: "Reading"), ele é
-              detectado automaticamente.
-            </li>
-            <li>
-              <strong className="text-ink">Cartões em Texto Simples</strong> — mais simples,
-              sempre Pergunta/Resposta. Bom para baralhos com formatação especial (cloze, cartões
-              invertidos), mas sem tags.
-            </li>
-          </ul>
-          <p className="text-sm text-sage">
-            Áudio e imagens não são importados — só o texto dos cards. A categoria não vem do
-            Anki; dá pra organizar os cards em categorias depois, dentro do app.
-          </p>
-        </div>
-
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-medium">CSV próprio</h3>
-          <p className="text-sm text-sage">
-            Uma linha por card, com ou sem cabeçalho:
-          </p>
-          <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
-            front,back,reading,category,tags{'\n'}猫,gato,ねこ,Animais,n5;substantivo
-          </pre>
-          <p className="text-sm text-sage">Tags separadas por ponto e vírgula (;).</p>
-        </div>
-
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-medium">JSON</h3>
-          <p className="text-sm text-sage">Um array de objetos de card, ex.:</p>
-          <pre className="overflow-x-auto rounded-lg border border-line bg-white/70 p-2 text-xs">
-            {'[{ "front": "猫", "back": "gato", "reading": "ねこ", "category": "Animais" }]'}
-          </pre>
-        </div>
+        {children}
 
         <button className="btn-ghost w-full" onClick={onClose}>
           Entendi
