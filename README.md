@@ -66,9 +66,6 @@ o KanjiVG e animação da ordem de traço correta, export/import de backup e de
 cards (CSV, JSON ou texto exportado do Anki), tema claro/escuro, e 10 lições
 de gramática/vocabulário com quiz de fixação.
 
-A implementar: estatísticas de progresso a partir da tabela `reviews`. Veja
-`CLAUDE.md` para a lista priorizada.
-
 ## Documentação
 
 - `CLAUDE.md` — contexto e convenções para desenvolver com o Claude Code.
