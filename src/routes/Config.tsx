@@ -451,9 +451,7 @@ function ConfiguracoesTab() {
   const { mode, setMode } = useTheme();
 
   return (
-    <div className="space-y-6">
-      <p className="text-sm text-sage">Nihongo Study · v{__APP_VERSION__}</p>
-
+    <div className="space-y-6"> 
       <section className="card-surface space-y-3">
         <h2 className="font-medium">Aparência</h2>
         <p className="text-sm text-sage">

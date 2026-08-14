@@ -54,6 +54,7 @@ function Jumbotron() {
         />
       </NavLink>
       <p className="mt-1 text-sage">Flash cards, kana e tópicos de estudo</p>
+      <p className="mt-1 text-xs text-sage/70">Nihongo Study · v{__APP_VERSION__}</p>
     </div>
   );
 }
