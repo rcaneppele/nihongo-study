@@ -1,0 +1,7102 @@
+[
+ {
+  "front": "ああ",
+  "reading": "aa",
+  "back": "ah!",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "会う",
+  "reading": "あう",
+  "back": "encontrar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "青",
+  "reading": "あお",
+  "back": "azul",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "青い",
+  "reading": "あおい",
+  "back": "azul",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "赤",
+  "reading": "あか",
+  "back": "vermelho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "赤い",
+  "reading": "あかい",
+  "back": "vermelho",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "明るい",
+  "reading": "あかるい",
+  "back": "alegre/claro",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "秋",
+  "reading": "あき",
+  "back": "outono",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "開く",
+  "reading": "あく",
+  "back": "abrir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "開ける",
+  "reading": "あける",
+  "back": "abrir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "上げる",
+  "reading": "あげる",
+  "back": "levantar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "朝",
+  "reading": "あさ",
+  "back": "manhã",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "朝御飯",
+  "reading": "あさごはん",
+  "back": "café da manhã",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "明後日",
+  "reading": "あさって",
+  "back": "depois de amanhã",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "足",
+  "reading": "あし",
+  "back": "pé/perna",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "明日",
+  "reading": "あした",
+  "back": "amanhã",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "あそこ",
+  "reading": "asoko",
+  "back": "ali/lá",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "遊ぶ",
+  "reading": "あそぶ",
+  "back": "brincar/se divertir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "暖かい",
+  "reading": "あたたかい",
+  "back": "morno/ameno",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "頭",
+  "reading": "あたま",
+  "back": "cabeça",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "新しい",
+  "reading": "あたらしい",
+  "back": "novo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "あちら",
+  "reading": "achira",
+  "back": "por ali",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "暑い",
+  "reading": "あつい",
+  "back": "quente (clima)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "熱い",
+  "reading": "あつい",
+  "back": "quente",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "厚い",
+  "reading": "あつい",
+  "back": "grosso",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "あっち",
+  "reading": "atchi",
+  "back": "lá/ali",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "後",
+  "reading": "あと",
+  "back": "depois",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "あなた",
+  "reading": "anata",
+  "back": "você",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "兄",
+  "reading": "あに",
+  "back": "irmão mais velho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "姉",
+  "reading": "あね",
+  "back": "irmã mais velha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "アパート",
+  "reading": "apāto",
+  "back": "apartamento",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "あの",
+  "reading": "ano",
+  "back": "aquele",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "浴びる",
+  "reading": "あびる",
+  "back": "tomar banho",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "危ない",
+  "reading": "あぶない",
+  "back": "perigoso",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "甘い",
+  "reading": "あまい",
+  "back": "doce",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "余り",
+  "reading": "あまり",
+  "back": "não muito",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "雨",
+  "reading": "あめ",
+  "back": "chuva",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "飴",
+  "reading": "あめ",
+  "back": "bala/doce",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "洗う",
+  "reading": "あらう",
+  "back": "lavar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "在る",
+  "reading": "ある",
+  "back": "existir/haver",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "有る",
+  "reading": "ある",
+  "back": "existir/haver",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "歩く",
+  "reading": "あるく",
+  "back": "andar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "あれ",
+  "reading": "are",
+  "back": "aquilo",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "いい",
+  "reading": "ii",
+  "back": "bom",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "いいえ",
+  "reading": "iie",
+  "back": "não",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "言う",
+  "reading": "いう",
+  "back": "dizer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "家",
+  "reading": "いえ",
+  "back": "casa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "いかが",
+  "reading": "ikaga",
+  "back": "como",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "行く",
+  "reading": "いく",
+  "back": "ir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "いくつ",
+  "reading": "ikutsu",
+  "back": "quantos",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "いくら",
+  "reading": "ikura",
+  "back": "quanto custa",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "池",
+  "reading": "いけ",
+  "back": "lagoa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "医者",
+  "reading": "いしゃ",
+  "back": "médico(a)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "椅子",
+  "reading": "いす",
+  "back": "cadeira",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "忙しい",
+  "reading": "いそがしい",
+  "back": "ocupado",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "痛い",
+  "reading": "いたい",
+  "back": "dolorido",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "一",
+  "reading": "いち",
+  "back": "um",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "一日",
+  "reading": "いちにち",
+  "back": "um dia",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "一番",
+  "reading": "いちばん",
+  "back": "o mais/primeiro",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "いつ",
+  "reading": "itsu",
+  "back": "quando",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "五日",
+  "reading": "いつか",
+  "back": "dia cinco",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "一緒",
+  "reading": "いっしょ",
+  "back": "junto",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "五つ",
+  "reading": "いつつ",
+  "back": "cinco (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "いつも",
+  "reading": "itsumo",
+  "back": "sempre",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "犬",
+  "reading": "いぬ",
+  "back": "cachorro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "今",
+  "reading": "いま",
+  "back": "agora",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "意味",
+  "reading": "いみ",
+  "back": "significado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "妹",
+  "reading": "いもうと",
+  "back": "irmã mais nova",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "嫌",
+  "reading": "いや",
+  "back": "desagradável",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "入口",
+  "reading": "いりぐち",
+  "back": "entrada",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "居る",
+  "reading": "いる",
+  "back": "estar/existir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "要る",
+  "reading": "いる",
+  "back": "precisar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "入れる",
+  "reading": "いれる",
+  "back": "colocar (dentro)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "色",
+  "reading": "いろ",
+  "back": "cor",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "色々",
+  "reading": "いろいろ",
+  "back": "vários",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "上",
+  "reading": "うえ",
+  "back": "em cima",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "後ろ",
+  "reading": "うしろ",
+  "back": "atrás",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "薄い",
+  "reading": "うすい",
+  "back": "fino",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "歌",
+  "reading": "うた",
+  "back": "música",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "歌う",
+  "reading": "うたう",
+  "back": "cantar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "うち",
+  "reading": "uchi",
+  "back": "casa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "生まれる",
+  "reading": "うまれる",
+  "back": "nascer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "海",
+  "reading": "うみ",
+  "back": "mar",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "売る",
+  "reading": "うる",
+  "back": "vender",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "うるさい",
+  "reading": "urusai",
+  "back": "barulhento",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "上着",
+  "reading": "うわぎ",
+  "back": "casaco",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "絵",
+  "reading": "え",
+  "back": "desenho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "映画",
+  "reading": "えいが",
+  "back": "filme",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "映画館",
+  "reading": "えいがかん",
+  "back": "cinema",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "英語",
+  "reading": "えいご",
+  "back": "inglês",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ええ",
+  "reading": "ee",
+  "back": "sim",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "駅",
+  "reading": "えき",
+  "back": "estação",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "エレベーター",
+  "reading": "erebētā",
+  "back": "elevador",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～円",
+  "reading": "～えん",
+  "back": "iene",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "鉛筆",
+  "reading": "えんぴつ",
+  "back": "lápis",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お～",
+  "reading": "o～",
+  "back": "prefixo honorífico",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "美味しい",
+  "reading": "おいしい",
+  "back": "delicioso",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "多い",
+  "reading": "おおい",
+  "back": "muito(s)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "大きい",
+  "reading": "おおきい",
+  "back": "grande",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "大きな",
+  "reading": "おおきな",
+  "back": "grande",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "大勢",
+  "reading": "おおぜい",
+  "back": "muita gente",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お母さん",
+  "reading": "おかあさん",
+  "back": "mãe",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お菓子",
+  "reading": "おかし",
+  "back": "doce/lanche",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お金",
+  "reading": "おかね",
+  "back": "dinheiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "起きる",
+  "reading": "おきる",
+  "back": "acordar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "置く",
+  "reading": "おく",
+  "back": "colocar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "奥さん",
+  "reading": "おくさん",
+  "back": "esposa (de outra pessoa)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お酒",
+  "reading": "おさけ",
+  "back": "saquê",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お皿",
+  "reading": "おさら",
+  "back": "prato",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "伯父",
+  "reading": "おじさん",
+  "back": "tio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "おじいさん",
+  "reading": "ojiisan",
+  "back": "avô",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "教える",
+  "reading": "おしえる",
+  "back": "ensinar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "押す",
+  "reading": "おす",
+  "back": "empurrar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "遅い",
+  "reading": "おそい",
+  "back": "lento/atrasado",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "お茶",
+  "reading": "おちゃ",
+  "back": "chá",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お手洗い",
+  "reading": "おてあらい",
+  "back": "banheiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お父さん",
+  "reading": "おとうさん",
+  "back": "pai",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "弟",
+  "reading": "おとうと",
+  "back": "irmão mais novo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "男",
+  "reading": "おとこ",
+  "back": "homem",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "男の子",
+  "reading": "おとこのこ",
+  "back": "menino",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "一昨日",
+  "reading": "おととい",
+  "back": "anteontem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "おととし",
+  "reading": "ototoshi",
+  "back": "ano retrasado",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "大人",
+  "reading": "おとな",
+  "back": "adulto",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お腹",
+  "reading": "おなか",
+  "back": "barriga",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "同じ",
+  "reading": "おなじ",
+  "back": "mesmo/igual",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "お兄さん",
+  "reading": "おにいさん",
+  "back": "irmão mais velho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お姉さん",
+  "reading": "おねえさん",
+  "back": "irmã mais velha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "伯母さん",
+  "reading": "おばさん",
+  "back": "tia",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "おばあさん",
+  "reading": "obaasan",
+  "back": "avó",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お風呂",
+  "reading": "おふろ",
+  "back": "banho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "お弁当",
+  "reading": "おべんとう",
+  "back": "marmita",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "覚える",
+  "reading": "おぼえる",
+  "back": "lembrar/memorizar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "おまわりさん",
+  "reading": "omawarisan",
+  "back": "policial",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "重い",
+  "reading": "おもい",
+  "back": "pesado",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "面白い",
+  "reading": "おもしろい",
+  "back": "interessante",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "泳ぐ",
+  "reading": "およぐ",
+  "back": "nadar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "降りる",
+  "reading": "おりる",
+  "back": "descer (de veículo)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "終る",
+  "reading": "おわる",
+  "back": "terminar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "音楽",
+  "reading": "おんがく",
+  "back": "música",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "女",
+  "reading": "おんな",
+  "back": "mulher",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "女の子",
+  "reading": "おんなのこ",
+  "back": "menina",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～回",
+  "reading": "～かい",
+  "back": "vezes (contador)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～階",
+  "reading": "～かい",
+  "back": "andar (contador)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "外国",
+  "reading": "がいこく",
+  "back": "exterior/país estrangeiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "外国人",
+  "reading": "がいこくじん",
+  "back": "estrangeiro(a)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "会社",
+  "reading": "かいしゃ",
+  "back": "empresa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "階段",
+  "reading": "かいだん",
+  "back": "escada",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "買い物",
+  "reading": "かいもの",
+  "back": "compras",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "買う",
+  "reading": "かう",
+  "back": "comprar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "返す",
+  "reading": "かえす",
+  "back": "devolver",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "帰る",
+  "reading": "かえる",
+  "back": "voltar (para casa)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "顔",
+  "reading": "かお",
+  "back": "rosto",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "かかる",
+  "reading": "kakaru",
+  "back": "custar/levar (tempo)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "鍵",
+  "reading": "かぎ",
+  "back": "chave",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "書く",
+  "reading": "かく",
+  "back": "escrever",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "学生",
+  "reading": "がくせい",
+  "back": "estudante",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～か月",
+  "reading": "～かげつ",
+  "back": "meses (contador)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "掛ける",
+  "reading": "かける",
+  "back": "pendurar/colocar (óculos)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "かける",
+  "reading": "kakeru",
+  "back": "ligar (telefone)/sentar-se",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "傘",
+  "reading": "かさ",
+  "back": "guarda-chuva",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "貸す",
+  "reading": "かす",
+  "back": "emprestar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "風",
+  "reading": "かぜ",
+  "back": "vento",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "風邪",
+  "reading": "かぜ",
+  "back": "resfriado/gripe",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "方",
+  "reading": "かた",
+  "back": "pessoa (forma educada)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "家族",
+  "reading": "かぞく",
+  "back": "família",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "片仮名",
+  "reading": "かたかな",
+  "back": "katakana",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～月",
+  "reading": "～がつ",
+  "back": "mês (do ano)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "学校",
+  "reading": "がっこう",
+  "back": "escola",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "カップ",
+  "reading": "kappu",
+  "back": "xícara",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "家庭",
+  "reading": "かてい",
+  "back": "lar/família",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "角",
+  "reading": "かど",
+  "back": "canto/esquina",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "かばん",
+  "reading": "kaban",
+  "back": "bolsa/mala",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "花瓶",
+  "reading": "かびん",
+  "back": "vaso (de flores)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "かぶる",
+  "reading": "kaburu",
+  "back": "colocar (na cabeça)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "紙",
+  "reading": "かみ",
+  "back": "papel",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "カメラ",
+  "reading": "kamera",
+  "back": "câmera",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "火曜日",
+  "reading": "かようび",
+  "back": "terça-feira",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "辛い",
+  "reading": "からい",
+  "back": "picante",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "体",
+  "reading": "からだ",
+  "back": "corpo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "借りる",
+  "reading": "かりる",
+  "back": "pegar emprestado",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "～がる",
+  "reading": "～garu",
+  "back": "demonstrar (sentimento)",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "軽い",
+  "reading": "かるい",
+  "back": "leve",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "カレー",
+  "reading": "karē",
+  "back": "curry",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "カレンダー",
+  "reading": "karendā",
+  "back": "calendário",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "川",
+  "reading": "かわ",
+  "back": "rio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～側",
+  "reading": "～がわ",
+  "back": "lado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "可愛い",
+  "reading": "かわいい",
+  "back": "fofo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "漢字",
+  "reading": "かんじ",
+  "back": "kanji",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "木",
+  "reading": "き",
+  "back": "árvore",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "黄色",
+  "reading": "きいろ",
+  "back": "amarelo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "黄色い",
+  "reading": "きいろい",
+  "back": "amarelo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "消える",
+  "reading": "きえる",
+  "back": "desaparecer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "聞く",
+  "reading": "きく",
+  "back": "ouvir/perguntar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "北",
+  "reading": "きた",
+  "back": "norte",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ギター",
+  "reading": "gitā",
+  "back": "violão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "汚い",
+  "reading": "きたない",
+  "back": "sujo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "喫茶店",
+  "reading": "きっさてん",
+  "back": "cafeteria",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "切手",
+  "reading": "きって",
+  "back": "selo (postal)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "切符",
+  "reading": "きっぷ",
+  "back": "bilhete/passagem",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "昨日",
+  "reading": "きのう",
+  "back": "ontem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "九",
+  "reading": "きゅう",
+  "back": "nove",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "牛肉",
+  "reading": "ぎゅうにく",
+  "back": "carne bovina",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "牛乳",
+  "reading": "ぎゅうにゅう",
+  "back": "leite",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "今日",
+  "reading": "きょう",
+  "back": "hoje",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "教室",
+  "reading": "きょうしつ",
+  "back": "sala de aula",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "兄弟",
+  "reading": "きょうだい",
+  "back": "irmãos",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "去年",
+  "reading": "きょねん",
+  "back": "ano passado",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "嫌い",
+  "reading": "きらい",
+  "back": "detestar",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "切る",
+  "reading": "きる",
+  "back": "cortar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "着る",
+  "reading": "きる",
+  "back": "vestir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "綺麗",
+  "reading": "きれい",
+  "back": "bonito/limpo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "キロ",
+  "reading": "kiro",
+  "back": "quilograma",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "キロメートル",
+  "reading": "kiromētoru",
+  "back": "quilômetro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "銀行",
+  "reading": "ぎんこう",
+  "back": "banco",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "金曜日",
+  "reading": "きんようび",
+  "back": "sexta-feira",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "薬",
+  "reading": "くすり",
+  "back": "remédio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "下さい",
+  "reading": "ください",
+  "back": "por favor",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "果物",
+  "reading": "くだもの",
+  "back": "fruta",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "口",
+  "reading": "くち",
+  "back": "boca",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "靴",
+  "reading": "くつ",
+  "back": "sapato",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "靴下",
+  "reading": "くつした",
+  "back": "meia",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "国",
+  "reading": "くに",
+  "back": "país",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "曇り",
+  "reading": "くもり",
+  "back": "nublado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "曇る",
+  "reading": "くもる",
+  "back": "ficar nublado",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "暗い",
+  "reading": "くらい",
+  "back": "escuro",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～くらい",
+  "reading": "～kurai",
+  "back": "aproximadamente",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "クラス",
+  "reading": "kurasu",
+  "back": "turma/aula",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "グラム",
+  "reading": "guramu",
+  "back": "grama (peso)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "来る",
+  "reading": "くる",
+  "back": "vir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "車",
+  "reading": "くるま",
+  "back": "carro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "黒",
+  "reading": "くろ",
+  "back": "preto",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "黒い",
+  "reading": "くろい",
+  "back": "preto",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "警官",
+  "reading": "けいかん",
+  "back": "policial",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "今朝",
+  "reading": "けさ",
+  "back": "esta manhã",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "消す",
+  "reading": "けす",
+  "back": "apagar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "結構",
+  "reading": "けっこう",
+  "back": "ótimo/suficiente",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "結婚",
+  "reading": "けっこん",
+  "back": "casar(-se)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "月曜日",
+  "reading": "げつようび",
+  "back": "segunda-feira",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "玄関",
+  "reading": "げんかん",
+  "back": "entrada (de casa)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "元気",
+  "reading": "げんき",
+  "back": "saudável, animado",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～個",
+  "reading": "～こ",
+  "back": "contador de objetos pequenos",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "五",
+  "reading": "ご",
+  "back": "cinco",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～語",
+  "reading": "～ご",
+  "back": "idioma, língua",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "公園",
+  "reading": "こうえん",
+  "back": "parque",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "交差点",
+  "reading": "こうさてん",
+  "back": "cruzamento",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "紅茶",
+  "reading": "こうちゃ",
+  "back": "chá preto",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "交番",
+  "reading": "こうばん",
+  "back": "posto policial",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "声",
+  "reading": "こえ",
+  "back": "voz",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "コート",
+  "reading": "kōto",
+  "back": "casaco",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "コーヒー",
+  "reading": "kōhī",
+  "back": "café",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ここ",
+  "reading": "koko",
+  "back": "aqui",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "午後",
+  "reading": "ごご",
+  "back": "tarde (PM)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "九日",
+  "reading": "ここのか",
+  "back": "dia nove (do mês)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "九つ",
+  "reading": "ここのつ",
+  "back": "nove (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "午前",
+  "reading": "ごぜん",
+  "back": "manhã (AM)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "答える",
+  "reading": "こたえる",
+  "back": "responder",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "こちら",
+  "reading": "kochira",
+  "back": "este/aqui (polido)",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "こっち",
+  "reading": "kotchi",
+  "back": "este lado, aqui",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "コップ",
+  "reading": "koppu",
+  "back": "copo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "今年",
+  "reading": "ことし",
+  "back": "este ano",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "言葉",
+  "reading": "ことば",
+  "back": "palavra, idioma",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "子供",
+  "reading": "こども",
+  "back": "criança",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "この",
+  "reading": "kono",
+  "back": "este/esta",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "御飯",
+  "reading": "ごはん",
+  "back": "arroz; refeição",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "コピーする",
+  "reading": "kopī suru",
+  "back": "copiar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "困る",
+  "reading": "こまる",
+  "back": "ficar em apuros",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "これ",
+  "reading": "kore",
+  "back": "isto",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "～ころ",
+  "reading": "～koro",
+  "back": "cerca de, por volta de",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "今月",
+  "reading": "こんげつ",
+  "back": "este mês",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "今週",
+  "reading": "こんしゅう",
+  "back": "esta semana",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "こんな",
+  "reading": "konna",
+  "back": "assim, deste tipo",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "今晩",
+  "reading": "こんばん",
+  "back": "hoje à noite",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "さあ",
+  "reading": "saa",
+  "back": "bem... (vamos lá)",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "～歳",
+  "reading": "～さい",
+  "back": "~ anos (de idade)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "財布",
+  "reading": "さいふ",
+  "back": "carteira",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "魚",
+  "reading": "さかな",
+  "back": "peixe",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "先",
+  "reading": "さき",
+  "back": "antes, à frente",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "咲く",
+  "reading": "さく",
+  "back": "florescer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "作文",
+  "reading": "さくぶん",
+  "back": "redação",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "差す",
+  "reading": "さす",
+  "back": "erguer, abrir (guarda-chuva)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "～冊",
+  "reading": "～さつ",
+  "back": "contador de livros",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "雑誌",
+  "reading": "ざっし",
+  "back": "revista",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "砂糖",
+  "reading": "さとう",
+  "back": "açúcar",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "寒い",
+  "reading": "さむい",
+  "back": "frio",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "さ来年",
+  "reading": "さらいねん",
+  "back": "depois do ano que vem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～さん",
+  "reading": "～san",
+  "back": "senhor(a) ~",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "三",
+  "reading": "さん",
+  "back": "três",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "散歩",
+  "reading": "さんぽ (する)",
+  "back": "passear, caminhar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "四",
+  "reading": "し",
+  "back": "quatro",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～時",
+  "reading": "～じ",
+  "back": "~ horas",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "塩",
+  "reading": "しお",
+  "back": "sal",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "しかし",
+  "reading": "shikashi",
+  "back": "porém, mas",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "時間",
+  "reading": "じかん",
+  "back": "tempo, hora",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～時間",
+  "reading": "～じかん",
+  "back": "~ horas (duração)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "仕事",
+  "reading": "しごと",
+  "back": "trabalho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "辞書",
+  "reading": "じしょ",
+  "back": "dicionário",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "静か",
+  "reading": "しずか",
+  "back": "quieto, calmo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "下",
+  "reading": "した",
+  "back": "embaixo, abaixo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "七",
+  "reading": "しち",
+  "back": "sete",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "質問",
+  "reading": "しつもん",
+  "back": "pergunta",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "自転車",
+  "reading": "じてんしゃ",
+  "back": "bicicleta",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "自動車",
+  "reading": "じどうしゃ",
+  "back": "automóvel, carro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "死ぬ",
+  "reading": "しぬ",
+  "back": "morrer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "字引",
+  "reading": "じびき",
+  "back": "dicionário",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "自分",
+  "reading": "じぶん",
+  "back": "eu mesmo, si próprio",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "閉まる",
+  "reading": "しまる",
+  "back": "fechar-se",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "閉める",
+  "reading": "しめる",
+  "back": "fechar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "締める",
+  "reading": "しめる",
+  "back": "apertar, amarrar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "じゃ",
+  "reading": "ja",
+  "back": "então, bem",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "写真",
+  "reading": "しゃしん",
+  "back": "foto",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "シャツ",
+  "reading": "shatsu",
+  "back": "camisa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "シャワー",
+  "reading": "shawā",
+  "back": "chuveiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "十",
+  "reading": "じゅう",
+  "back": "dez",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～中",
+  "reading": "～じゅう",
+  "back": "durante, o ~ todo",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "～週間",
+  "reading": "～しゅうかん",
+  "back": "~ semanas",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "授業",
+  "reading": "じゅぎょう",
+  "back": "aula",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "宿題",
+  "reading": "しゅくだい",
+  "back": "lição de casa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "上手",
+  "reading": "じょうず",
+  "back": "habilidoso, bom em",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "丈夫",
+  "reading": "じょうぶ",
+  "back": "resistente, robusto",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "醤油",
+  "reading": "しょうゆ",
+  "back": "molho de soja",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "食堂",
+  "reading": "しょくどう",
+  "back": "refeitório",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "知る",
+  "reading": "しる",
+  "back": "saber, conhecer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "白",
+  "reading": "しろ",
+  "back": "branco",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "白い",
+  "reading": "しろい",
+  "back": "branco",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～人",
+  "reading": "～じん",
+  "back": "pessoa (sufixo de nacionalidade)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "新聞",
+  "reading": "しんぶん",
+  "back": "jornal",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "水曜日",
+  "reading": "すいようび",
+  "back": "quarta-feira",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "吸う",
+  "reading": "すう",
+  "back": "inalar, tragar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "スカート",
+  "reading": "sukāto",
+  "back": "saia",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "好き",
+  "reading": "すき",
+  "back": "gostar (de)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～すぎ",
+  "reading": "～sugi",
+  "back": "demais; passado de",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "少ない",
+  "reading": "すくない",
+  "back": "pouco, escasso",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "すぐに",
+  "reading": "suguni",
+  "back": "imediatamente",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "少し",
+  "reading": "すこし",
+  "back": "um pouco",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "涼しい",
+  "reading": "すずしい",
+  "back": "fresco (clima)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～ずつ",
+  "reading": "～zutsu",
+  "back": "cada, de cada vez",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "ストーブ",
+  "reading": "sutōbu",
+  "back": "aquecedor",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "スプーン",
+  "reading": "supūn",
+  "back": "colher",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "スポーツ",
+  "reading": "supōtsu",
+  "back": "esporte",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ズボン",
+  "reading": "zubon",
+  "back": "calça",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "住む",
+  "reading": "すむ",
+  "back": "morar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "する",
+  "reading": "suru",
+  "back": "fazer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "座る",
+  "reading": "すわる",
+  "back": "sentar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "背",
+  "reading": "せい",
+  "back": "altura (do corpo)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "生徒",
+  "reading": "せいと",
+  "back": "aluno(a)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "セーター",
+  "reading": "sētā",
+  "back": "suéter",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "石鹸",
+  "reading": "せっけん",
+  "back": "sabonete",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "背広",
+  "reading": "せびろ",
+  "back": "terno",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "狭い",
+  "reading": "せまい",
+  "back": "estreito, apertado",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "ゼロ",
+  "reading": "zero",
+  "back": "zero",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "千",
+  "reading": "せん",
+  "back": "mil",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "先月",
+  "reading": "せんげつ",
+  "back": "mês passado",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "先週",
+  "reading": "せんしゅう",
+  "back": "semana passada",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "先生",
+  "reading": "せんせい",
+  "back": "professor(a)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "洗濯",
+  "reading": "せんたく",
+  "back": "lavagem de roupa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "全部",
+  "reading": "ぜんぶ",
+  "back": "tudo, completamente",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "そう",
+  "reading": "sō",
+  "back": "é isso, assim é",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "掃除",
+  "reading": "そうじ",
+  "back": "limpar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "そうして",
+  "reading": "sōshite",
+  "back": "e então/assim",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "そこ",
+  "reading": "soko",
+  "back": "aí, lá",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "そちら",
+  "reading": "sochira",
+  "back": "por aí, aquele lado",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "そっち",
+  "reading": "sotchi",
+  "back": "por aí, aquele lado",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "外",
+  "reading": "そと",
+  "back": "fora, exterior",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "その",
+  "reading": "sono",
+  "back": "esse, aquele",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "そば",
+  "reading": "soba",
+  "back": "perto, ao lado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "空",
+  "reading": "そら",
+  "back": "céu",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "それ",
+  "reading": "sore",
+  "back": "isso, aquilo",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "それから",
+  "reading": "sorekara",
+  "back": "e depois, então",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "それでは",
+  "reading": "soredewa",
+  "back": "bom, então",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "～台",
+  "reading": "～だい",
+  "back": "contador de veículos/máquinas",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "大学",
+  "reading": "だいがく",
+  "back": "universidade",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "大使館",
+  "reading": "たいしかん",
+  "back": "embaixada",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "大丈夫",
+  "reading": "だいじょうぶ",
+  "back": "tudo bem, sem problema",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "大好き",
+  "reading": "だいすき",
+  "back": "gostar muito, favorito",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "大切",
+  "reading": "たいせつ",
+  "back": "importante",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "台所",
+  "reading": "だいどころ",
+  "back": "cozinha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "大変",
+  "reading": "たいへん",
+  "back": "difícil, sério",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "高い",
+  "reading": "たかい",
+  "back": "alto, caro",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～だけ",
+  "reading": "～dake",
+  "back": "somente, apenas",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "沢山",
+  "reading": "たくさん",
+  "back": "muito, bastante",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "タクシー",
+  "reading": "takushī",
+  "back": "táxi",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "出す",
+  "reading": "だす",
+  "back": "tirar, entregar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "～たち",
+  "reading": "～tachi",
+  "back": "sufixo de plural",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "立つ",
+  "reading": "たつ",
+  "back": "levantar-se, ficar em pé",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "たて",
+  "reading": "tate",
+  "back": "altura, comprimento",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "建物",
+  "reading": "たてもの",
+  "back": "prédio, edifício",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "楽しい",
+  "reading": "たのしい",
+  "back": "divertido",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "頼む",
+  "reading": "たのむ",
+  "back": "pedir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "たばこ",
+  "reading": "tabako",
+  "back": "cigarro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "多分",
+  "reading": "たぶん",
+  "back": "talvez, provavelmente",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "食べ物",
+  "reading": "たべもの",
+  "back": "comida",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "食べる",
+  "reading": "たべる",
+  "back": "comer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "卵",
+  "reading": "たまご",
+  "back": "ovo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "誰",
+  "reading": "だれ",
+  "back": "quem",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "誰か",
+  "reading": "だれか",
+  "back": "alguém",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "誕生日",
+  "reading": "たんじょうび",
+  "back": "aniversário",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "段々",
+  "reading": "だんだん",
+  "back": "gradualmente, pouco a pouco",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "小さい",
+  "reading": "ちいさい",
+  "back": "pequeno",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "小さな",
+  "reading": "ちいさな",
+  "back": "pequeno",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "近い",
+  "reading": "ちかい",
+  "back": "perto, próximo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "違う",
+  "reading": "ちがう",
+  "back": "ser diferente, estar errado",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "近く",
+  "reading": "ちかく",
+  "back": "perto, vizinhança",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "地下鉄",
+  "reading": "ちかてつ",
+  "back": "metrô",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "地図",
+  "reading": "ちず",
+  "back": "mapa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "父",
+  "reading": "ちち",
+  "back": "pai",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "茶色",
+  "reading": "ちゃいろ",
+  "back": "marrom",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "茶碗",
+  "reading": "ちゃわん",
+  "back": "tigela de arroz",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "丁度",
+  "reading": "ちょうど",
+  "back": "exatamente, justo",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "ちょっと",
+  "reading": "chotto",
+  "back": "um pouco",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "使う",
+  "reading": "つかう",
+  "back": "usar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "疲れる",
+  "reading": "つかれる",
+  "back": "cansar-se",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "次",
+  "reading": "つぎ",
+  "back": "próximo, seguinte",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "着く",
+  "reading": "つく",
+  "back": "chegar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "机",
+  "reading": "つくえ",
+  "back": "mesa, escrivaninha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "作る",
+  "reading": "つくる",
+  "back": "fazer, criar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "つける",
+  "reading": "tsukeru",
+  "back": "acender, ligar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "勤める",
+  "reading": "つとめる",
+  "back": "trabalhar (em)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "つまらない",
+  "reading": "tsumaranai",
+  "back": "chato, entediante",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "冷たい",
+  "reading": "つめたい",
+  "back": "frio (ao toque)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "強い",
+  "reading": "つよい",
+  "back": "forte",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "手",
+  "reading": "て",
+  "back": "mão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "テープ",
+  "reading": "tēpu",
+  "back": "fita",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "テープレコーダー",
+  "reading": "tēpurekōdā",
+  "back": "gravador de fita",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "テーブル",
+  "reading": "tēburu",
+  "back": "mesa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "出かける",
+  "reading": "でかける",
+  "back": "sair",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "手紙",
+  "reading": "てがみ",
+  "back": "carta",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "できる",
+  "reading": "dekiru",
+  "back": "poder, conseguir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "出口",
+  "reading": "でぐち",
+  "back": "saída",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "テスト",
+  "reading": "tesuto",
+  "back": "prova, teste",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "では",
+  "reading": "dewa",
+  "back": "então, bem",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "デパート",
+  "reading": "depāto",
+  "back": "loja de departamentos",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "でも",
+  "reading": "demo",
+  "back": "mas, porém",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "出る",
+  "reading": "でる",
+  "back": "sair, aparecer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "テレビ",
+  "reading": "terebi",
+  "back": "televisão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "天気",
+  "reading": "てんき",
+  "back": "tempo (clima)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "電気",
+  "reading": "でんき",
+  "back": "eletricidade, luz",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "電車",
+  "reading": "でんしゃ",
+  "back": "trem",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "電話",
+  "reading": "でんわ",
+  "back": "telefone",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "戸",
+  "reading": "と",
+  "back": "porta (estilo japonês)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～度",
+  "reading": "～ど",
+  "back": "contador de vezes/graus",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "ドア",
+  "reading": "doa",
+  "back": "porta",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "トイレ",
+  "reading": "toire",
+  "back": "banheiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "どう",
+  "reading": "dō",
+  "back": "como",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "どうして",
+  "reading": "dōshite",
+  "back": "por quê",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "どうぞ",
+  "reading": "dōzo",
+  "back": "por favor",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "動物",
+  "reading": "どうぶつ",
+  "back": "animal",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "どうも",
+  "reading": "dōmo",
+  "back": "obrigado(a), muito",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "遠い",
+  "reading": "とおい",
+  "back": "longe, distante",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "十日",
+  "reading": "とおか",
+  "back": "dez dias, dia dez",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "時々",
+  "reading": "ときどき",
+  "back": "às vezes",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "時計",
+  "reading": "とけい",
+  "back": "relógio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "どこ",
+  "reading": "doko",
+  "back": "onde",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "所",
+  "reading": "ところ",
+  "back": "lugar",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "年",
+  "reading": "とし",
+  "back": "ano, idade",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "図書館",
+  "reading": "としょかん",
+  "back": "biblioteca",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "どちら",
+  "reading": "dochira",
+  "back": "qual, onde (educado)",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "どっち",
+  "reading": "dotchi",
+  "back": "qual dos dois",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "とても",
+  "reading": "totemo",
+  "back": "muito",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "どなた",
+  "reading": "donata",
+  "back": "quem (educado)",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "隣",
+  "reading": "となり",
+  "back": "ao lado, vizinho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "どの",
+  "reading": "dono",
+  "back": "qual",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "飛ぶ",
+  "reading": "とぶ",
+  "back": "voar, pular",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "止まる",
+  "reading": "とまる",
+  "back": "parar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "友達",
+  "reading": "ともだち",
+  "back": "amigo(a)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "土曜日",
+  "reading": "どようび",
+  "back": "sábado",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "鳥",
+  "reading": "とり",
+  "back": "pássaro, galinha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "鶏肉",
+  "reading": "とりにく",
+  "back": "carne de frango",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "取る",
+  "reading": "とる",
+  "back": "pegar, tirar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "撮る",
+  "reading": "とる",
+  "back": "tirar (foto), filmar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "どれ",
+  "reading": "dore",
+  "back": "qual",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "どんな",
+  "reading": "donna",
+  "back": "que tipo de",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "ない",
+  "reading": "nai",
+  "back": "não ter, não existir",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "ナイフ",
+  "reading": "naifu",
+  "back": "faca",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "中",
+  "reading": "なか",
+  "back": "dentro, meio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "長い",
+  "reading": "ながい",
+  "back": "longo, comprido",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "鳴く",
+  "reading": "なく",
+  "back": "cantar, emitir som (animal)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "無くす",
+  "reading": "なくす",
+  "back": "perder",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "なぜ",
+  "reading": "naze",
+  "back": "por quê",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "夏",
+  "reading": "なつ",
+  "back": "verão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "夏休み",
+  "reading": "なつやすみ",
+  "back": "férias de verão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～など",
+  "reading": "～nado",
+  "back": "etc.",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "七つ",
+  "reading": "ななつ",
+  "back": "sete (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "何",
+  "reading": "なん",
+  "back": "o quê",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "七日",
+  "reading": "なのか",
+  "back": "sete dias / dia sete",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "名前",
+  "reading": "なまえ",
+  "back": "nome",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "習う",
+  "reading": "ならう",
+  "back": "aprender",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "並ぶ",
+  "reading": "ならぶ",
+  "back": "enfileirar-se",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "並べる",
+  "reading": "ならべる",
+  "back": "colocar em fila/alinhar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "なる",
+  "reading": "naru",
+  "back": "tornar-se, ficar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "何～",
+  "reading": "なん～",
+  "back": "que tipo de ~",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "二",
+  "reading": "に",
+  "back": "dois",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "にぎやか",
+  "reading": "nigiyaka",
+  "back": "animado, movimentado",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "肉",
+  "reading": "にく",
+  "back": "carne",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "西",
+  "reading": "にし",
+  "back": "oeste",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～日",
+  "reading": "～にち",
+  "back": "~ dia(s) (do mês)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "日曜日",
+  "reading": "にちようび",
+  "back": "domingo",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "荷物",
+  "reading": "にもつ",
+  "back": "bagagem",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ニュース",
+  "reading": "nyūsu",
+  "back": "notícia",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "庭",
+  "reading": "にわ",
+  "back": "jardim",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "脱ぐ",
+  "reading": "ぬぐ",
+  "back": "tirar (a roupa)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "温い",
+  "reading": "ぬるい",
+  "back": "morno",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "ネクタイ",
+  "reading": "nekutai",
+  "back": "gravata",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "猫",
+  "reading": "ねこ",
+  "back": "gato",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "寝る",
+  "reading": "ねる",
+  "back": "dormir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "～年",
+  "reading": "～ねん",
+  "back": "~ ano(s)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "ノート",
+  "reading": "nōto",
+  "back": "caderno",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "登る",
+  "reading": "のぼる",
+  "back": "subir, escalar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "飲み物",
+  "reading": "のみもの",
+  "back": "bebida",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "飲む",
+  "reading": "のむ",
+  "back": "beber",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "乗る",
+  "reading": "のる",
+  "back": "embarcar, pegar (transporte)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "歯",
+  "reading": "は",
+  "back": "dente",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "パーティー",
+  "reading": "pātī",
+  "back": "festa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "はい",
+  "reading": "hai",
+  "back": "sim",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "～杯",
+  "reading": "～はい",
+  "back": "~ copo(s)/xícara(s)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "灰皿",
+  "reading": "はいざら",
+  "back": "cinzeiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "入る",
+  "reading": "はいる",
+  "back": "entrar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "葉書",
+  "reading": "はがき",
+  "back": "cartão-postal",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "はく",
+  "reading": "haku",
+  "back": "vestir, calçar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "箱",
+  "reading": "はこ",
+  "back": "caixa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "橋",
+  "reading": "はし",
+  "back": "ponte",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "箸",
+  "reading": "はし",
+  "back": "hashi (pauzinhos)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "始まる",
+  "reading": "はじまる",
+  "back": "começar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "初め",
+  "reading": "はじめ",
+  "back": "início",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "初めて",
+  "reading": "はじめて",
+  "back": "pela primeira vez",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "走る",
+  "reading": "はしる",
+  "back": "correr",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "バス",
+  "reading": "basu",
+  "back": "ônibus",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "バター",
+  "reading": "batā",
+  "back": "manteiga",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "二十歳",
+  "reading": "はたち",
+  "back": "vinte anos (de idade)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "働く",
+  "reading": "はたらく",
+  "back": "trabalhar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "八",
+  "reading": "はち",
+  "back": "oito",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "二十日",
+  "reading": "はつか",
+  "back": "vinte dias / dia vinte",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "花",
+  "reading": "はな",
+  "back": "flor",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "鼻",
+  "reading": "はな",
+  "back": "nariz",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "話",
+  "reading": "はなし",
+  "back": "conversa, história",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "話す",
+  "reading": "はなす",
+  "back": "falar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "母",
+  "reading": "はは",
+  "back": "mãe",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "早い",
+  "reading": "はやい",
+  "back": "cedo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "速い",
+  "reading": "はやい",
+  "back": "rápido",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "春",
+  "reading": "はる",
+  "back": "primavera",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "貼る",
+  "reading": "はる",
+  "back": "colar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "晴れ",
+  "reading": "はれ",
+  "back": "tempo limpo, ensolarado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "晴れる",
+  "reading": "はれる",
+  "back": "ficar ensolarado",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "半",
+  "reading": "はん",
+  "back": "meio, metade",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "晩",
+  "reading": "ばん",
+  "back": "noite",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "～番",
+  "reading": "～ばん",
+  "back": "~ (número/ordem)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "パン",
+  "reading": "pan",
+  "back": "pão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ハンカチ",
+  "reading": "hankachi",
+  "back": "lenço",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "番号",
+  "reading": "ばんごう",
+  "back": "número",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "晩御飯",
+  "reading": "ばんごはん",
+  "back": "jantar",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "半分",
+  "reading": "はんぶん",
+  "back": "metade",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "東",
+  "reading": "ひがし",
+  "back": "leste",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～匹",
+  "reading": "～ひき",
+  "back": "~ (contador de animais)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "引く",
+  "reading": "ひく",
+  "back": "puxar, subtrair",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "弾く",
+  "reading": "ひく",
+  "back": "tocar (instrumento)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "低い",
+  "reading": "ひくい",
+  "back": "baixo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "飛行機",
+  "reading": "ひこうき",
+  "back": "avião",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "左",
+  "reading": "ひだり",
+  "back": "esquerda",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "人",
+  "reading": "ひと",
+  "back": "pessoa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "一つ",
+  "reading": "ひとつ",
+  "back": "um (uma coisa)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "一月",
+  "reading": "ひとつき",
+  "back": "um mês",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "一人",
+  "reading": "ひとり",
+  "back": "uma pessoa",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "暇",
+  "reading": "ひま",
+  "back": "tempo livre",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "百",
+  "reading": "ひゃく",
+  "back": "cem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "病院",
+  "reading": "びょういん",
+  "back": "hospital",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "病気",
+  "reading": "びょうき",
+  "back": "doença",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "平仮名",
+  "reading": "ひらがな",
+  "back": "hiragana",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "昼",
+  "reading": "ひる",
+  "back": "meio-dia, dia",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "昼御飯",
+  "reading": "ひるごはん",
+  "back": "almoço",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "広い",
+  "reading": "ひろい",
+  "back": "espaçoso, amplo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "フィルム",
+  "reading": "firumu",
+  "back": "filme (rolo)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "封筒",
+  "reading": "ふうとう",
+  "back": "envelope",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "プール",
+  "reading": "pūru",
+  "back": "piscina",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "フォーク",
+  "reading": "fōku",
+  "back": "garfo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "吹く",
+  "reading": "ふく",
+  "back": "soprar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "服",
+  "reading": "ふく",
+  "back": "roupa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "二つ",
+  "reading": "ふたつ",
+  "back": "dois (duas coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "豚肉",
+  "reading": "ぶたにく",
+  "back": "carne de porco",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "二人",
+  "reading": "ふたり",
+  "back": "duas pessoas",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "二日",
+  "reading": "ふつか",
+  "back": "dois dias / dia dois",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "太い",
+  "reading": "ふとい",
+  "back": "grosso",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "冬",
+  "reading": "ふゆ",
+  "back": "inverno",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "降る",
+  "reading": "ふる",
+  "back": "cair (chuva, neve)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "古い",
+  "reading": "ふるい",
+  "back": "velho, antigo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～分",
+  "reading": "～ふん",
+  "back": "~ minuto(s)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "文章",
+  "reading": "ぶんしょう",
+  "back": "texto, frase",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ページ",
+  "reading": "pēji",
+  "back": "página",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "下手",
+  "reading": "へた",
+  "back": "desajeitado, ruim (em algo)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "ベッド",
+  "reading": "beddo",
+  "back": "cama",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ペット",
+  "reading": "petto",
+  "back": "animal de estimação",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "部屋",
+  "reading": "へや",
+  "back": "quarto",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "辺",
+  "reading": "へん",
+  "back": "arredores",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ペン",
+  "reading": "pen",
+  "back": "caneta",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "勉強",
+  "reading": "べんきょう",
+  "back": "estudar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "便利",
+  "reading": "べんり",
+  "back": "conveniente, prático",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "帽子",
+  "reading": "ぼうし",
+  "back": "chapéu",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ボールペン",
+  "reading": "bōrupen",
+  "back": "caneta esferográfica",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ポケット",
+  "reading": "poketto",
+  "back": "bolso",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "欲しい",
+  "reading": "ほしい",
+  "back": "querer",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "ポスト",
+  "reading": "posuto",
+  "back": "caixa de correio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "細い",
+  "reading": "ほそい",
+  "back": "fino",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "ボタン",
+  "reading": "botan",
+  "back": "botão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ホテル",
+  "reading": "hoteru",
+  "back": "hotel",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "本",
+  "reading": "ほん",
+  "back": "livro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～本",
+  "reading": "～ほん",
+  "back": "contador de objetos compridos",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "本棚",
+  "reading": "ほんだな",
+  "back": "estante de livros",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "本当",
+  "reading": "ほんとう",
+  "back": "verdadeiro",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "～枚",
+  "reading": "～まい",
+  "back": "contador de objetos planos",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "毎朝",
+  "reading": "まいあさ",
+  "back": "toda manhã",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "毎月",
+  "reading": "まいげつ",
+  "back": "todo mês",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "毎週",
+  "reading": "まいしゅう",
+  "back": "toda semana",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "毎日",
+  "reading": "まいにち",
+  "back": "todo dia",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "毎年",
+  "reading": "まいねん",
+  "back": "todo ano",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "毎晩",
+  "reading": "まいばん",
+  "back": "toda noite",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "前",
+  "reading": "まえ",
+  "back": "antes; frente",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～前",
+  "reading": "～まえ",
+  "back": "na frente de",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "曲る",
+  "reading": "まがる",
+  "back": "virar; curvar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "まずい",
+  "reading": "mazui",
+  "back": "sem gosto (comida)",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "また",
+  "reading": "mata",
+  "back": "além disso",
+  "category": "Partículas e gramática",
+  "tags": [
+   "n5",
+   "particula-gramatica"
+  ]
+ },
+ {
+  "front": "まだ",
+  "reading": "mada",
+  "back": "ainda",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "町",
+  "reading": "まち",
+  "back": "cidade",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "待つ",
+  "reading": "まつ",
+  "back": "esperar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "まっすぐ",
+  "reading": "massugu",
+  "back": "reto; direto",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "マッチ",
+  "reading": "matchi",
+  "back": "fósforo",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "窓",
+  "reading": "まど",
+  "back": "janela",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "丸い",
+  "reading": "まるい",
+  "back": "redondo",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "万",
+  "reading": "まん",
+  "back": "dez mil",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "万年筆",
+  "reading": "まんねんひつ",
+  "back": "caneta-tinteiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "磨く",
+  "reading": "みがく",
+  "back": "escovar; polir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "右",
+  "reading": "みぎ",
+  "back": "direita",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "短い",
+  "reading": "みじかい",
+  "back": "curto",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "水",
+  "reading": "みず",
+  "back": "água",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "店",
+  "reading": "みせ",
+  "back": "loja",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "見せる",
+  "reading": "みせる",
+  "back": "mostrar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "道",
+  "reading": "みち",
+  "back": "rua; caminho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "三日",
+  "reading": "みっか",
+  "back": "dia três; três dias",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "三つ",
+  "reading": "みっつ",
+  "back": "três (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "緑",
+  "reading": "みどり",
+  "back": "verde",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "皆さん",
+  "reading": "みなさん",
+  "back": "todos vocês",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "南",
+  "reading": "みなみ",
+  "back": "sul",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "耳",
+  "reading": "みみ",
+  "back": "orelha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "見る",
+  "reading": "みる",
+  "back": "ver",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "みんな",
+  "reading": "minna",
+  "back": "todo mundo",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "六日",
+  "reading": "むいか",
+  "back": "dia seis; seis dias",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "向こう",
+  "reading": "むこう",
+  "back": "lá longe; do outro lado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "難しい",
+  "reading": "むずかしい",
+  "back": "difícil",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "六つ",
+  "reading": "むっつ",
+  "back": "seis (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "村",
+  "reading": "むら",
+  "back": "vila",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "目",
+  "reading": "め",
+  "back": "olho",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "メートル",
+  "reading": "mētoru",
+  "back": "metro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "眼鏡",
+  "reading": "めがね",
+  "back": "óculos",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "もう",
+  "reading": "mō",
+  "back": "já",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "木曜日",
+  "reading": "もくようび",
+  "back": "quinta-feira",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "もしもし",
+  "reading": "moshimoshi",
+  "back": "alô",
+  "category": "Saudações e expressões",
+  "tags": [
+   "n5",
+   "saudacao-expressao"
+  ]
+ },
+ {
+  "front": "持つ",
+  "reading": "もつ",
+  "back": "segurar; carregar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "もっと",
+  "reading": "motto",
+  "back": "mais",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "物",
+  "reading": "もの",
+  "back": "coisa",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "門",
+  "reading": "もん",
+  "back": "portão",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "問題",
+  "reading": "もんだい",
+  "back": "problema",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "～屋",
+  "reading": "～や",
+  "back": "loja de",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "八百屋",
+  "reading": "やおや",
+  "back": "quitanda",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "野菜",
+  "reading": "やさい",
+  "back": "verdura",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "易しい",
+  "reading": "やさしい",
+  "back": "fácil",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "安い",
+  "reading": "やすい",
+  "back": "barato",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "休み",
+  "reading": "やすみ",
+  "back": "folga; férias",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "休む",
+  "reading": "やすむ",
+  "back": "descansar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "八つ",
+  "reading": "やっつ",
+  "back": "oito (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "山",
+  "reading": "やま",
+  "back": "montanha",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "やる",
+  "reading": "yaru",
+  "back": "fazer; dar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "夕方",
+  "reading": "ゆうがた",
+  "back": "final da tarde",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "夕飯",
+  "reading": "ゆうはん",
+  "back": "jantar",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "郵便局",
+  "reading": "ゆうびんきょく",
+  "back": "correio (agência)",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "昨夜",
+  "reading": "ゆうべ",
+  "back": "ontem à noite",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "有名",
+  "reading": "ゆうめい",
+  "back": "famoso",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "雪",
+  "reading": "ゆき",
+  "back": "neve",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ゆっくりと",
+  "reading": "yukkurito",
+  "back": "devagar",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "八日",
+  "reading": "ようか",
+  "back": "dia oito; oito dias",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "洋服",
+  "reading": "ようふく",
+  "back": "roupa ocidental",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "よく",
+  "reading": "yoku",
+  "back": "frequentemente",
+  "category": "Advérbios",
+  "tags": [
+   "n5",
+   "adverbio"
+  ]
+ },
+ {
+  "front": "横",
+  "reading": "よこ",
+  "back": "lado",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "四日",
+  "reading": "よっか",
+  "back": "dia quatro; quatro dias",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "四つ",
+  "reading": "よっつ",
+  "back": "quatro (coisas)",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "呼ぶ",
+  "reading": "よぶ",
+  "back": "chamar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "読む",
+  "reading": "よむ",
+  "back": "ler",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "夜",
+  "reading": "よる",
+  "back": "noite",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "弱い",
+  "reading": "よわい",
+  "back": "fraco",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "来月",
+  "reading": "らいげつ",
+  "back": "mês que vem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "来週",
+  "reading": "らいしゅう",
+  "back": "semana que vem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "来年",
+  "reading": "らいねん",
+  "back": "ano que vem",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "ラジオ",
+  "reading": "rajio",
+  "back": "rádio",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "ラジオカセ",
+  "reading": "rajiokase",
+  "back": "rádio gravador",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "りっぱ",
+  "reading": "rippa",
+  "back": "esplêndido",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "留学生",
+  "reading": "りゅうがくせい",
+  "back": "estudante estrangeiro",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "両親",
+  "reading": "りょうしん",
+  "back": "pais",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "料理",
+  "reading": "りょうり",
+  "back": "culinária",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "旅行",
+  "reading": "りょこう",
+  "back": "viagem",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "零",
+  "reading": "れい",
+  "back": "zero",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "冷蔵庫",
+  "reading": "れいぞうこ",
+  "back": "geladeira",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "レコード",
+  "reading": "rekōdo",
+  "back": "disco",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "レストラン",
+  "reading": "resutoran",
+  "back": "restaurante",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "練習",
+  "reading": "れんしゅう",
+  "back": "praticar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "廊下",
+  "reading": "ろうか",
+  "back": "corredor",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "六",
+  "reading": "ろく",
+  "back": "seis",
+  "category": "Números e tempo",
+  "tags": [
+   "n5",
+   "numero-tempo"
+  ]
+ },
+ {
+  "front": "ワイシャツ",
+  "reading": "waishatsu",
+  "back": "camisa social",
+  "category": "Substantivos",
+  "tags": [
+   "n5",
+   "substantivo"
+  ]
+ },
+ {
+  "front": "若い",
+  "reading": "わかい",
+  "back": "jovem",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ },
+ {
+  "front": "分かる",
+  "reading": "わかる",
+  "back": "entender",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "忘れる",
+  "reading": "わすれる",
+  "back": "esquecer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "私",
+  "reading": "わたし",
+  "back": "eu",
+  "category": "Pronomes e interrogativos",
+  "tags": [
+   "n5",
+   "pronome-interrogativo"
+  ]
+ },
+ {
+  "front": "渡す",
+  "reading": "わたす",
+  "back": "entregar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "渡る",
+  "reading": "わたる",
+  "back": "atravessar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "悪い",
+  "reading": "わるい",
+  "back": "ruim",
+  "category": "Adjetivos",
+  "tags": [
+   "n5",
+   "adjetivo"
+  ]
+ }
+]

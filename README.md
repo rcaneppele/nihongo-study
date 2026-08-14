@@ -60,15 +60,14 @@ src/
 ## Estado atual
 
 Funciona: cadastro/listagem/filtro de cards, sessão de revisão com FSRS,
-drill de kana por romaji, canvas de desenho com reconhecimento e pontuação de
-caligrafia contra o KanjiVG, export/import de backup e de cards (CSV, JSON ou
-texto exportado do Anki), tema claro/escuro, e 10 lições de gramática/
-vocabulário com quiz de fixação.
+import do deck de vocabulário N5 completo por categoria, drill de kana por
+romaji, canvas de desenho com reconhecimento, pontuação de caligrafia contra
+o KanjiVG e animação da ordem de traço correta, export/import de backup e de
+cards (CSV, JSON ou texto exportado do Anki), tema claro/escuro, e 10 lições
+de gramática/vocabulário com quiz de fixação.
 
-A implementar: animação da ordem de traço correta no canvas de kana, deck N5
-completo (hoje há só um CSV de exemplo em `src/data/seed/`) e estatísticas de
-progresso a partir da tabela `reviews`. Veja `CLAUDE.md` para a lista
-priorizada.
+A implementar: estatísticas de progresso a partir da tabela `reviews`. Veja
+`CLAUDE.md` para a lista priorizada.
 
 ## Documentação
 

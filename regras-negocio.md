@@ -56,6 +56,28 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   genérico para qualquer TSV.
 - Cards importados entram como novos (estado SRS inicial), com novo UUID.
 
+### Deck de vocabulário N5
+- `n5.json` traz ~700 palavras do vocabulário N5 (JLPT), traduzidas e
+  categorizadas em pt-BR em 8 categorias: Substantivos, Verbos, Adjetivos,
+  Advérbios, Números e tempo, Pronomes e interrogativos, Saudações e
+  expressões, Partículas e gramática. `src/data/seed/n5.ts` reexporta esse
+  arquivo filtrando fora, por enquanto, as entradas com kanji na frente
+  (`N5_DECK`) — mesmo motivo da regra de kanji nas lições (usuário ainda
+  aprendendo kana). É só remover o filtro quando fizer sentido reintroduzir
+  kanji; o dado completo continua em `n5.json`. Para essas ~155 entradas
+  sem kanji, o campo `reading` em `n5.json` já vem em **romaji** (não
+  hiragana/katakana), já que a frente do card é a própria palavra em kana —
+  repetir em kana no verso não ajudaria; nas ~555 entradas com kanji
+  (hoje filtradas), `reading` continua em hiragana, já que ali serve de
+  furigana pro kanji.
+- Em Config > Dados > "Vocabulário N5" (`src/routes/Config.tsx`), o usuário
+  marca quais categorias quer e importa só essas — evita popular a fila de
+  revisão com centenas de cards de uma vez só. Antes de importar, o app
+  verifica os `front` já existentes em `db.cards` e pula os que já foram
+  importados (clicar "Importar selecionados" de novo, ou selecionar
+  categorias sobrepostas, não duplica cards). Cards novos entram com estado
+  SRS inicial, igual à importação manual.
+
 ## 2. Treino de kana
 
 ### Conjuntos

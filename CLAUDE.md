@@ -49,6 +49,9 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
   `localStorage` só para aplicar antes do primeiro paint.
 - `src/data/kana.ts` — kana (seion, dakuten/handakuten, yōon) com romaji e
   famílias para o seletor de treino.
+- `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 completo
+  (~700 palavras, pt-BR), importável por categoria em Config > Dados >
+  "Vocabulário N5".
 - `src/data/kanjivg/kana-strokes.json` — dados de traço (ordem/forma) do
   KanjiVG, gerado por `scripts/build-kana-strokes.mjs`
   (`npm run build:kana-strokes` para regenerar).
@@ -94,8 +97,7 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 
 ## Próximas tarefas (sugestão de ordem)
 
-1. Deck N5 completo em `src/data/seed/` + importação com um clique.
-2. Estatísticas de progresso (usar a tabela `reviews`).
+1. Estatísticas de progresso (usar a tabela `reviews`).
 
 ## Regras de negócio
 

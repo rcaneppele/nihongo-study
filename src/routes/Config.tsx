@@ -5,6 +5,7 @@ import { freshSrs } from '../features/srs/fsrs';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
 import { parseCardsFile } from '../features/flashcards/importCards';
 import { useTheme, type ThemeMode } from '../lib/useTheme';
+import { N5_DECK, n5CategoryCounts } from '../data/seed/n5';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
 
@@ -106,19 +107,45 @@ function DadosTab() {
     }
   }
 
-  async function seedExample() {
-    const now = Date.now();
-    const examples = [
-      { front: '猫', back: 'gato', reading: 'ねこ', category: 'Animais' },
-      { front: '犬', back: 'cachorro', reading: 'いぬ', category: 'Animais' },
-      { front: '水', back: 'água', reading: 'みず', category: 'N5' },
-      { front: '本', back: 'livro', reading: 'ほん', category: 'N5' },
-      { front: 'ありがとう', back: 'obrigado(a)', reading: 'arigatō', category: 'Saudações' },
-    ];
-    await db.cards.bulkAdd(
-      examples.map((e) => ({ id: newId(), tags: [], ...e, ...freshSrs(now), createdAt: now, updatedAt: now }))
-    );
-    setMsg('Cards de exemplo adicionados.');
+  const n5Counts = n5CategoryCounts();
+  const [n5Selected, setN5Selected] = useState<Set<string>>(new Set());
+  const [n5Importing, setN5Importing] = useState(false);
+  const n5SelectedCount = n5Counts
+    .filter((c) => n5Selected.has(c.category))
+    .reduce((sum, c) => sum + c.count, 0);
+
+  function toggleN5Category(category: string) {
+    setN5Selected((prev) => {
+      const next = new Set(prev);
+      if (next.has(category)) next.delete(category);
+      else next.add(category);
+      return next;
+    });
+  }
+
+  async function importN5() {
+    if (n5Selected.size === 0 || n5Importing) return;
+    setN5Importing(true);
+    try {
+      const chosen = N5_DECK.filter((e) => n5Selected.has(e.category));
+      const existingFronts = new Set((await db.cards.toArray()).map((c) => c.front));
+      const toAdd = chosen.filter((e) => !existingFronts.has(e.front));
+      const skipped = chosen.length - toAdd.length;
+      if (toAdd.length === 0) {
+        setMsg('Esses cards já tinham sido importados antes.');
+        return;
+      }
+      const now = Date.now();
+      await db.cards.bulkAdd(
+        toAdd.map((e) => ({ id: newId(), ...e, ...freshSrs(now), createdAt: now, updatedAt: now }))
+      );
+      setMsg(
+        `${toAdd.length} card(s) do N5 importado(s).` +
+          (skipped > 0 ? ` ${skipped} já existiam e foram ignorados.` : '')
+      );
+    } finally {
+      setN5Importing(false);
+    }
   }
 
   async function resetAll() {
@@ -212,11 +239,41 @@ function DadosTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Começar com exemplos</h2>
-        <p className="text-sm text-sage">Adiciona alguns cards para você testar o fluxo.</p>
-        <button className="btn-ghost" onClick={seedExample}>
-          Adicionar cards de exemplo
-        </button>
+        <h2 className="font-medium">Vocabulário N5</h2>
+        <p className="text-sm text-sage">
+          Marque as categorias que quiser importar. Cada card entra como novo, pronto pra revisão —
+          escolha só o que for estudar agora pra não lotar a fila de revisão de uma vez.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {n5Counts.map(({ category, count }) => {
+            const active = n5Selected.has(category);
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => toggleN5Category(category)}
+                className={[
+                  'rounded-full border px-3 py-1.5 text-sm transition-colors',
+                  active ? 'border-indigo bg-indigo/10 text-indigo' : 'border-line text-sage hover:bg-line/30',
+                ].join(' ')}
+              >
+                {category} <span className="text-xs opacity-70">({count})</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            className="btn-primary"
+            onClick={importN5}
+            disabled={n5Selected.size === 0 || n5Importing}
+          >
+            {n5Importing ? 'Importando…' : 'Importar selecionados'}
+          </button>
+          {n5SelectedCount > 0 && (
+            <span className="text-sm text-sage">{n5SelectedCount} card(s) selecionado(s)</span>
+          )}
+        </div>
       </section>
 
       <section className="card-surface space-y-3">
