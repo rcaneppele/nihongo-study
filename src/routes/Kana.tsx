@@ -11,6 +11,10 @@ const STROKE_COLORS = ['text-indigo', 'text-hanko', 'text-sage', 'text-indigo-so
 /** Tempo até avançar sozinho pra próxima pergunta após responder (o usuário pode tocar "Próximo" a qualquer momento pra pular a espera). Errar dá mais tempo pra ler a resposta certa. */
 const AUTO_ADVANCE_RIGHT_MS = 1100;
 const AUTO_ADVANCE_WRONG_MS = 2600;
+/** Igual ao acima, mas para o modo desenho: só começa a contar depois que a animação do traço
+ * correto termina, e o tempo é maior porque tem % + dicas pra ler, além da própria animação. */
+const AUTO_ADVANCE_DRAW_RIGHT_MS = 3000;
+const AUTO_ADVANCE_DRAW_WRONG_MS = 6000;
 
 type Mode = 'romaji' | 'desenho';
 type Script = KanaType | 'both';
@@ -367,6 +371,9 @@ function DrawQuestion({
 }) {
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [result, setResult] = useState<DrawScore | null>(null);
+  const [animationDone, setAnimationDone] = useState(false);
+  const advanceMs = result?.passed ? AUTO_ADVANCE_DRAW_RIGHT_MS : AUTO_ADVANCE_DRAW_WRONG_MS;
+  const paused = useHoldToPauseAdvance(advanceMs, () => onAnswered(!!result?.passed), !!result && animationDone);
 
   async function check(giveUp = false) {
     if (result) return;
@@ -419,30 +426,67 @@ function DrawQuestion({
 
           <div className="flex flex-col items-center gap-1">
             <p className="text-xs text-sage">Traço correto:</p>
-            <KanaReferenceFigure char={entry.char} />
+            <KanaReferenceFigure
+              char={entry.char}
+              onDone={() => setAnimationDone(true)}
+              onReplayStart={() => setAnimationDone(false)}
+            />
           </div>
 
-          <button className="btn-primary" onClick={() => onAnswered(result.passed)} autoFocus>
-            Próximo
-          </button>
+          <div className="mx-auto flex max-w-[10rem] flex-col items-center gap-1">
+            <button className="btn-primary w-full" onClick={() => onAnswered(result.passed)} autoFocus>
+              Próximo
+            </button>
+            {animationDone && (
+              <>
+                <div className="h-1 w-full overflow-hidden rounded-full bg-line">
+                  <div
+                    className={`countdown-bar h-full bg-indigo/50 ${paused ? 'paused' : ''}`}
+                    style={{ animationDuration: `${advanceMs}ms` }}
+                  />
+                </div>
+                <p className="text-center text-[11px] text-sage/70">
+                  {paused ? 'Pausado — solte para continuar' : 'Toque e segure para pausar'}
+                </p>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-function KanaReferenceFigure({ char, size = 96 }: { char: string; size?: number }) {
+function KanaReferenceFigure({
+  char,
+  size = 96,
+  onDone,
+  onReplayStart,
+}: {
+  char: string;
+  size?: number;
+  onDone?: () => void;
+  onReplayStart?: () => void;
+}) {
   const refStrokes = getReferenceStrokes(char);
   const [replayKey, setReplayKey] = useState(0);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
+
+  useEffect(() => {
+    // Sem dados de traço pra esse kana: não há animação a esperar, libera o avanço na hora.
+    if (!refStrokes) onDoneRef.current?.();
+  }, [refStrokes]);
+
   if (!refStrokes) return null;
 
+  function handleReplay() {
+    onReplayStart?.();
+    setReplayKey((k) => k + 1);
+  }
+
   return (
-    <KanaStrokeAnimation
-      key={replayKey}
-      strokes={refStrokes}
-      size={size}
-      onReplay={() => setReplayKey((k) => k + 1)}
-    />
+    <KanaStrokeAnimation key={replayKey} strokes={refStrokes} size={size} onDone={onDone} onReplay={handleReplay} />
   );
 }
 
@@ -450,14 +494,18 @@ function KanaStrokeAnimation({
   strokes,
   size,
   onReplay,
+  onDone,
 }: {
   strokes: ReferenceStrokes;
   size: number;
   onReplay: () => void;
+  onDone?: () => void;
 }) {
   const [visiblePoints, setVisiblePoints] = useState<number[]>(() => strokes.map(() => 0));
   const [currentStroke, setCurrentStroke] = useState(0);
   const [done, setDone] = useState(false);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
 
   useEffect(() => {
     let strokeIdx = 0;
@@ -489,6 +537,7 @@ function KanaStrokeAnimation({
         if (strokeIdx >= strokes.length) {
           setCurrentStroke(strokes.length);
           setDone(true);
+          onDoneRef.current?.();
           return;
         }
         pointIdx = 0;
@@ -558,8 +607,8 @@ function KanaStrokeAnimation({
         })}
       </svg>
       {done && (
-        <button className="text-xs text-sage hover:text-indigo" onClick={onReplay}>
-          ↺ Repetir
+        <button className="btn-ghost gap-1.5 px-3 py-1.5 text-xs" onClick={onReplay}>
+          <span aria-hidden="true">↺</span> Repetir animação
         </button>
       )}
     </div>
