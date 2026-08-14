@@ -74,6 +74,34 @@ export const quiz: QuizLicao = {
       afirmacao: 'No katakana, a vogal longa se marca com um traço (ー).',
       correta: true,
     },
+    {
+      id: 'kana-sig5',
+      tipo: 'significado',
+      pergunta: 'Como se lê は quando funciona como partícula de tema, como em わたしは...?',
+      alternativas: ['wa', 'ha', 'wo', 'e'],
+      correta: 0,
+      explicacao: 'は só vira "wa" quando é partícula; como parte de uma palavra comum (はな, hana), continua "ha".',
+    },
+    {
+      id: 'kana-vf5',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'へ, quando funciona como partícula de direção (ex.: がっこうへ), lê-se "e", não "he".',
+      correta: true,
+    },
+    {
+      id: 'kana-vf6',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'は sempre se lê "wa", em qualquer palavra.',
+      correta: false,
+      explicacao: 'は só vira "wa" como partícula de tema. Em palavras comuns, como はな (flor) ou はる (primavera), continua "ha".',
+    },
+    {
+      id: 'kana-vf7',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Livros e mangás japoneses são sempre escritos da esquerda para a direita, como em português.',
+      correta: false,
+      explicacao: 'Muito material impresso (mangá, romance, jornal) usa escrita vertical (縦書き), lida de cima para baixo e da direita para a esquerda; sites e documentos de trabalho costumam usar escrita horizontal.',
+    },
   ],
 };
 
@@ -95,7 +123,10 @@ export default function Kana() {
       <p className="leading-relaxed text-ink">
         O japonês se escreve com três sistemas ao mesmo tempo: <strong>kanji</strong>,{' '}
         <strong>hiragana</strong> e <strong>katakana</strong>. Esta lição cobre os dois últimos —
-        os alfabetos fonéticos, que são a porta de entrada para ler e escrever japonês.
+        os alfabetos fonéticos, que são a porta de entrada para ler e escrever japonês. Sem eles,
+        até um cardápio, uma placa de estação ou o nome de um produto no mercado ficam ilegíveis:
+        é neles que se apoiam as partículas, as terminações de verbo e boa parte do vocabulário do
+        dia a dia — inclusive depois que você começar a estudar kanji.
       </p>
 
       <Section title="Como ler esta lição">
@@ -111,6 +142,40 @@ export default function Kana() {
         <p className="text-sm leading-relaxed text-ink">
           Nas tabelas, cada quadradinho traz o kana em cima e o romaji embaixo.
         </p>
+        <Note>
+          Esta lição ensina a <strong>reconhecer e ler</strong> hiragana e katakana. Ela não cobre
+          kanji (fica para lições futuras) nem ordem de traços/caligrafia — para treinar a mão,
+          use o <strong>treino de kana</strong> do app (menu "Kana"), que tem um modo de desenho
+          com feedback de caligrafia. O uso de partículas como は, を e へ dentro de frases é
+          assunto da lição de Partículas; aqui o foco é só a leitura correta delas.
+        </Note>
+      </Section>
+
+      <Section title="Objetivos desta lição">
+        <p className="text-sm leading-relaxed text-ink">Ao final, você deve saber:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            Ler e reconhecer os 46 sons básicos de hiragana e katakana, e saber quando usar cada
+            sistema.
+          </li>
+          <li>
+            Ler a tabela gojūon na ordem tradicional japonesa (direita para a esquerda, cima para
+            baixo).
+          </li>
+          <li>
+            Reconhecer dakuten (゛), handakuten (゜), yōon (ゃゅょ), o っ pequeno e a vogal longa —
+            e como cada um muda o som e, às vezes, o significado da palavra.
+          </li>
+          <li>Identificar os kana que mais se confundem visualmente, em hiragana e em katakana.</li>
+          <li>
+            Reconhecer as leituras irregulares mais frequentes: を, は e へ quando funcionam como
+            partícula.
+          </li>
+          <li>
+            Ter uma estratégia concreta para memorizar o kana e seguir praticando depois desta
+            lição — não só ter visto a tabela uma vez.
+          </li>
+        </ul>
       </Section>
 
       <Section title="O que é o kana">
@@ -163,6 +228,12 @@ export default function Kana() {
         <p className="text-sm leading-relaxed text-ink">
           Regra prática: se a palavra "veio de fora", provavelmente se escreve em katakana.
         </p>
+        <Note>
+          Mesmo depois de aprender kanji, o hiragana continua central: livros infantis, mangás e
+          placas costumam escrever um kanji mais difícil com <strong>furigana</strong> — a leitura
+          em hiragana, bem pequena, escrita acima dele (ou ao lado, na escrita vertical). Sabendo
+          ler hiragana, você já consegue pronunciar palavras cujo kanji ainda não conhece.
+        </Note>
       </Section>
 
       <Section title="As 5 vogais — a base de tudo">
@@ -242,6 +313,16 @@ export default function Kana() {
           Nas tabelas abaixo, o traço "—" marca um som que <strong>não existe</strong> no
           japonês moderno (a posição fica vazia).
         </p>
+        <Note>
+          <strong>Nota cultural:</strong> essa direção não é só um capricho da tabela. É a mesma
+          direção da escrita vertical tradicional (縦書き, <em>tategaki</em>), ainda comum em
+          romances, mangás, jornais e placas no Japão: o texto desce em colunas, e a próxima
+          coluna fica à <strong>esquerda</strong> da anterior — o oposto do português. Sites,
+          aplicativos e a maior parte dos documentos de trabalho hoje usam escrita horizontal
+          (横書き, <em>yokogaki</em>), da esquerda para a direita, como o nosso alfabeto. Ao pegar
+          um mangá japonês, não estranhe se a capa parecer estar "do lado errado" — é só a direção
+          de leitura mudando.
+        </Note>
       </Section>
 
       <Section title="Hiragana — seion (sons básicos)">
@@ -287,10 +368,6 @@ export default function Kana() {
         <Note>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>
-              <strong className="font-jp">を</strong> lê-se <em>o</em> e serve <strong>só</strong>{' '}
-              como partícula (a de objeto direto). Nunca aparece dentro de uma palavra comum.
-            </li>
-            <li>
               As posições vazias da coluna や (só や, ゆ, よ) e da coluna わ (só わ e を) são
               normais: esses sons se perderam ao longo da história.
             </li>
@@ -298,6 +375,11 @@ export default function Kana() {
               <strong className="font-jp">ん</strong> muda de som conforme o que vem depois (às
               vezes soa "n", às vezes "m" ou "ng"). Isso acontece naturalmente; não precisa
               forçar.
+            </li>
+            <li>
+              <strong className="font-jp">を</strong>, nesta tabela, aparece com a leitura "wo" —
+              mas na prática ele só existe como partícula, e se lê diferente. Duas seções à
+              frente explica esse caso, junto com は e へ.
             </li>
           </ul>
         </Note>
@@ -344,6 +426,69 @@ export default function Kana() {
           rows={[['ン', 'n', 'Versão em katakana do ん.']]}
         />
         <Note>ヲ (o katakana de を) quase nunca é usado hoje. Está aqui só para a tabela ficar completa.</Note>
+      </Section>
+
+      <Section title="は, へ e を — quando a leitura muda (uso como partícula)">
+        <p className="text-sm leading-relaxed text-ink">
+          Três kana das tabelas que você acabou de ver têm uma pegadinha: quando funcionam como{' '}
+          <strong>partícula gramatical</strong> — a peça curta que vem colada depois de uma
+          palavra e marca sua função na frase — a leitura muda. Como parte de uma palavra comum,{' '}
+          <span className="font-jp">は</span> soa "ha" e <span className="font-jp">へ</span> soa
+          "he". Como partícula, <span className="font-jp">は</span> soa{' '}
+          <strong>"wa"</strong> e <span className="font-jp">へ</span> soa <strong>"e"</strong>.{' '}
+          <span className="font-jp">を</span> é mais simples: fora deste uso ele quase não
+          aparece, e sempre soa <strong>"o"</strong>.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          Isso é resquício de uma pronúncia mais antiga do japonês, que mudou na fala mas não na
+          escrita. Você vai encontrar <span className="font-jp">は</span> e{' '}
+          <span className="font-jp">を</span> em praticamente toda frase japonesa (
+          <span className="font-jp">は</span> marca o assunto da frase,{' '}
+          <span className="font-jp">を</span> marca o objeto direto do verbo);{' '}
+          <span className="font-jp">へ</span> aparece sempre que se fala de destino ou direção.
+          Qual usar e por quê — quando preferir は a が, por exemplo — é assunto da lição de
+          Partículas; aqui o importante é só saber ler certo.
+        </p>
+        <GrammarTable
+          headers={['Kana', 'Como parte de uma palavra', 'Como partícula']}
+          jpCols={[0]}
+          rows={[
+            ['は', 'ha (はな, hana, flor)', 'wa (marca o assunto da frase)'],
+            ['へ', 'he (へや, heya, quarto)', 'e (marca destino/direção)'],
+            ['を', '(quase não aparece fora deste uso)', 'o (marca o objeto direto do verbo)'],
+          ]}
+        />
+        <Ex
+          jp="わたしはがくせいです。"
+          romaji="watashi wa gakusei desu."
+          pt="Eu sou estudante."
+          notes="は aqui é partícula: lê-se wa, nunca ha"
+        />
+        <Ex
+          jp="はなです。"
+          romaji="hana desu."
+          pt="É uma flor."
+          notes="aqui は é parte da palavra はな (flor): lê-se ha, normal"
+        />
+        <Ex
+          jp="がっこうへいきます。"
+          romaji="gakkou e ikimasu."
+          pt="Vou para a escola."
+          notes="へ aqui é partícula de direção: lê-se e, nunca he"
+        />
+        <Ex
+          jp="ほんをよみます。"
+          romaji="hon o yomimasu."
+          pt="Leio um livro."
+          notes="を é sempre partícula, e sempre se lê o"
+        />
+        <Note>
+          Esta é provavelmente a exceção mais importante de toda a leitura de hiragana: aparece
+          cedo, aparece sempre, e é fácil esquecer no início porque a tabela gojūon mostra{' '}
+          <span className="font-jp">は</span> e <span className="font-jp">へ</span> só com a
+          leitura normal. Se uma frase não fizer sentido com "ha"/"he", teste "wa"/"e" — é bem
+          provável que seja partícula.
+        </Note>
       </Section>
 
       <Section title="Dakuten (゛) — os sons «sonoros»">
@@ -586,59 +731,99 @@ export default function Kana() {
         <Ex jp="パン" romaji="pan" pt="pão" notes="palavra estrangeira, por isso katakana. パ tem handakuten (som de p)" />
         <Ex jp="テレビ" romaji="terebi" pt="televisão" notes="katakana, do inglês television. ビ tem dakuten" />
         <Ex jp="コーヒー" romaji="koohii" pt="café" notes="katakana com dois traços de vogal longa (ー)" />
+        <Ex
+          jp="わたしはにほんごをべんきょうしています。"
+          romaji="watashi wa nihongo o benkyou shite imasu."
+          pt="Estou estudando japonês."
+          notes="reúne は e を como partícula (wa/o, não ha/wo), dakuten em べ/ご, e o kana ん"
+        />
       </Section>
 
       <Section title="Kana parecidos (cuidado para não confundir)">
         <p className="text-sm leading-relaxed text-ink">
-          Alguns kana têm desenhos parecidos. Vale olhar com atenção desde o começo.
+          Alguns kana têm desenhos muito próximos, e é normal trocá-los nas primeiras semanas. Os
+          grupos abaixo são os mesmos que o <strong>treino de kana</strong> do app usa como opções
+          "armadilha" no modo múltipla escolha — ou seja, são exatamente os pares que mais
+          confundem quem está começando, não uma lista arbitrária.
         </p>
         <p className="text-sm leading-relaxed text-ink">
           <strong>No hiragana:</strong>
         </p>
-        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
-          <li>
-            <strong className="font-jp">さ</strong> (<em>sa</em>) e{' '}
-            <strong className="font-jp">ち</strong> (<em>chi</em>) — quase espelhados.
-          </li>
-          <li>
-            <strong className="font-jp">ぬ</strong> (<em>nu</em>),{' '}
-            <strong className="font-jp">め</strong> (<em>me</em>) e{' '}
-            <strong className="font-jp">ね</strong> (<em>ne</em>) — parecidos, mas com "rabinhos"
-            diferentes.
-          </li>
-          <li>
-            <strong className="font-jp">は</strong> (<em>ha</em>),{' '}
-            <strong className="font-jp">ほ</strong> (<em>ho</em>) e{' '}
-            <strong className="font-jp">ま</strong> (<em>ma</em>) — atenção aos traços.
-          </li>
-          <li>
-            <strong className="font-jp">れ</strong> (<em>re</em>),{' '}
-            <strong className="font-jp">ね</strong> (<em>ne</em>) e{' '}
-            <strong className="font-jp">わ</strong> (<em>wa</em>) — só muda a parte de baixo.
-          </li>
-        </ul>
+        <GrammarTable
+          headers={['Grupo', 'Como diferenciar']}
+          jpCols={[0]}
+          rows={[
+            ['あ / お', 'お tem um traço curto isolado a mais, no canto superior direito, que あ não tem.'],
+            ['い / り', 'り é mais alta e termina com um traço que desce à direita; い são só dois tracinhos curtos.'],
+            ['さ / ち / き', 'き tem um traço a mais cruzando o corpo (fica mais "cheio"); ち é uma curva só, sem cruzamento.'],
+            ['く / へ', 'く forma um ângulo mais fechado, como um "menor que" (<); へ é um traço só, mais aberto e raso.'],
+            ['は / ほ', 'ほ tem um tracinho extra no meio do corpo, que は não tem.'],
+            ['る / ろ', 'る fecha o traço final num laço; ろ termina em gancho aberto, sem fechar.'],
+            [
+              'ぬ / め / ね / れ / わ',
+              'preste atenção no laço final: ぬ e め fecham a voltinha; ね fecha e ainda soma um rabinho; れ e わ não chegam a fechar, só fazem um gancho.',
+            ],
+          ]}
+        />
         <p className="text-sm leading-relaxed text-ink">
           <strong>No katakana:</strong>
         </p>
+        <GrammarTable
+          headers={['Grupo', 'Como diferenciar']}
+          jpCols={[0]}
+          rows={[
+            ['シ / ツ', 'シ termina com uma curva que sobe (como um sorriso); ツ termina com um traço que desce (como uma carranca).'],
+            ['ソ / ン', 'mesma lógica de シ/ツ, em miniatura: ソ termina subindo (como シ); ン termina mais reto/para baixo (como ツ).'],
+            ['ウ / ワ', 'ウ tem um tracinho curto a mais, perto do topo, que ワ não tem.'],
+            ['チ / テ', 'テ começa com um traço horizontal comprido, atravessando o topo; チ começa com um tracinho curto e diagonal.'],
+            ['ル / レ', 'レ é uma curva só, um traço; ル tem essa mesma curva mais um traço curto extra à esquerda.'],
+            ['ミ / ニ / コ', 'conte os traços: ミ tem três tracinhos diagonais; ニ tem dois traços horizontais; コ é um traço só, dobrado em ângulo reto.'],
+            ['ク / タ', 'タ tem um traço a mais cruzando o corpo (fica mais "cheio"), que ク não tem.'],
+          ]}
+        />
+        <Note>
+          Ler sobre a diferença ajuda a notar o que procurar, mas o que resolve mesmo é{' '}
+          <strong>prática com repetição</strong> — é para isso que serve o modo múltipla escolha
+          do treino de kana: ele mostra esses pares parecidos como opções erradas de propósito,
+          até o seu olho parar de hesitar.
+        </Note>
+      </Section>
+
+      <Section title="Como memorizar o kana de verdade">
+        <p className="text-sm leading-relaxed text-ink">
+          Ler esta lição uma vez não basta para gravar mais de 46 formas novas — isso é normal,
+          não é falha sua. O que funciona é uma combinação simples, bem estabelecida em pesquisa
+          de aprendizagem: tentar produzir o som <strong>antes</strong> de olhar a resposta, e
+          repetir em sessões curtas e espaçadas ao longo de vários dias, em vez de uma sessão
+          longa só.
+        </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
-            <strong className="font-jp">シ</strong> (<em>shi</em>) e{' '}
-            <strong className="font-jp">ツ</strong> (<em>tsu</em>) — os traços mudam de ângulo
-            (シ "deitado", ツ "em pé").
+            <strong>Teste antes de checar.</strong> Cubra a coluna de romaji e tente ler cada kana
+            em voz alta antes de conferir. Errar e corrigir na hora grava mais do que só
+            reconhecer a resposta certa depois de vê-la.
           </li>
           <li>
-            <strong className="font-jp">ソ</strong> (<em>so</em>) e{' '}
-            <strong className="font-jp">ン</strong> (<em>n</em>) — igualmente sutis.
+            <strong>Escreva à mão.</strong> Mesmo sem se preocupar com a ordem de traço "perfeita"
+            (isso é outro assunto — veja a nota abaixo), o gesto de escrever ajuda a memória mais
+            do que só olhar.
           </li>
           <li>
-            <strong className="font-jp">ク</strong> (<em>ku</em>),{' '}
-            <strong className="font-jp">ケ</strong> (<em>ke</em>) e{' '}
-            <strong className="font-jp">タ</strong> (<em>ta</em>) — parecem, mas são diferentes.
+            <strong>Leia palavras reais cedo</strong>, não só kana isolado. すし, ねこ, パン —
+            palavras curtas do dia a dia dão significado ao símbolo, e significado gruda mais do
+            que forma pura.
+          </li>
+          <li>
+            <strong>Sessões curtas e frequentes</strong> vencem uma sessão longa. Praticar poucos
+            kana por dia, por uma semana, funciona melhor do que tentar os 46 de uma vez.
           </li>
         </ul>
         <Note>
-          Dica: シ/ツ e ソ/ン são o pesadelo clássico de quem começa. Não se assuste se confundir
-          no início; com leitura, o olho se acostuma.
+          É exatamente para isso que existe o <strong>treino de kana</strong> do app (menu
+          "Kana"): digitar o romaji, responder por múltipla escolha ou desenhar o kana com
+          feedback de caligrafia — e ele acompanha seus acertos e erros por kana, inserindo mais
+          repetições dos que você mais erra e oferecendo um modo dedicado de "praticar pontos
+          fracos". Use esta lição para entender o sistema; use o treino para gravá-lo.
         </Note>
       </Section>
 
@@ -648,6 +833,12 @@ export default function Kana() {
           jpCols={[1, 2]}
           rows={[
             ['Ler を como "uo"', 'を = "uo"', 'を = o', 'を é sempre o, e só como partícula.'],
+            [
+              'Ler は como "ha" sendo partícula',
+              'わたしは = "watashi ha"',
+              'わたしは = "watashi wa"',
+              'は muda para "wa" só quando é partícula de tema. Como parte de uma palavra (はな), continua "ha".',
+            ],
             [
               'Ignorar o っ pequeno',
               'きて / きって trocados',
@@ -713,6 +904,12 @@ export default function Kana() {
             ['vogal longa (em katakana)', 'traço ー'],
           ]}
         />
+        <p className="text-sm leading-relaxed text-ink">
+          Um lembrete final, fácil de esquecer justo por ser tão comum:{' '}
+          <strong className="font-jp">は</strong>, <strong className="font-jp">へ</strong> e{' '}
+          <strong className="font-jp">を</strong> mudam de leitura quando são partícula — "wa",
+          "e" e "o", nessa ordem. É a exceção que mais aparece em qualquer frase japonesa.
+        </p>
       </Section>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Section, Ex, Note, GrammarTable } from '../components/Licao';
+import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
@@ -129,6 +129,34 @@ export const quiz: QuizLicao = {
       correta: false,
       explicacao: 'ちゃん é íntimo/carinhoso; use さん com desconhecidos.',
     },
+    {
+      id: 'sufixos-sig5',
+      tipo: 'significado',
+      pergunta: 'Ao perguntar o nome de alguém que você acabou de conhecer, qual é a forma educada?',
+      alternativas: ['おなまえはなんですか？', 'なまえはなんですか？', 'おなまえです', 'なまえをおしえます'],
+      correta: 0,
+      explicacao: 'お eleva なまえ porque a pergunta é sobre a outra pessoa — nunca use お nas suas próprias coisas.',
+    },
+    {
+      id: 'sufixos-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'こうはい pode virar sufixo, como em たなかこうはい.',
+      correta: false,
+      explicacao: 'こうはい quase nunca vira sufixo — usa-se como substantivo (わたしのこうはい) ou nome + さん/くん.',
+    },
+    {
+      id: 'sufixos-vf5',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'いらっしゃいます (respeitoso) e おります (humilde) são as duas versões de います — uma eleva quem é mencionado, a outra rebaixa quem fala.',
+      correta: true,
+    },
+    {
+      id: 'sufixos-vf6',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'さん só é usado para chamar alguém diretamente, nunca para falar sobre a pessoa com um terceiro.',
+      correta: false,
+      explicacao: 'さん também aparece ao falar sobre alguém, como em たなかさんはもうきましたか？',
+    },
   ],
 };
 
@@ -138,8 +166,35 @@ export default function Sufixos() {
       <Section title="Como ler esta lição">
         <p className="text-sm leading-relaxed text-ink">
           Os sufixos se escrevem em hiragana. Você verá cada um em hiragana e romaji, com exemplos
-          explicados.
+          explicados. Algumas tabelas de vocabulário (cargos de trabalho) trazem uma coluna extra
+          com o kanji, só como referência — você pode ignorá-la por enquanto.
         </p>
+        <ReadingKey
+          lines={[
+            { text: '〜さん', desc: 'hiragana' },
+            { text: 'san', desc: 'romaji' },
+            { text: 'sr./sra./srta. (sem indicar gênero)', desc: 'significado' },
+          ]}
+        />
+      </Section>
+
+      <Section title="Objetivos desta lição">
+        <p className="text-sm leading-relaxed text-ink">Ao final, você deve saber:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            Escolher o sufixo certo (さん, くん, ちゃん, さま, せんせい, せんぱい ou cargo) para
+            cada pessoa e situação.
+          </li>
+          <li>Nunca colocar um sufixo honorífico no seu próprio nome.</li>
+          <li>
+            Usar お/ご para deixar uma palavra sobre a outra pessoa mais educada — e saber por que
+            não se usa nas suas próprias coisas.
+          </li>
+          <li>
+            Reconhecer que um sufixo carrega informação de hierarquia (せんぱい/こうはい) que o
+            português não tem embutida no vocabulário.
+          </li>
+        </ul>
       </Section>
 
       <Section title="A ideia central">
@@ -158,9 +213,18 @@ export default function Sufixos() {
         <p className="text-sm leading-relaxed text-ink">
           O sufixo vem depois do sobrenome ou do nome próprio. Qual escolher depende da relação.
         </p>
+        <Note>
+          Isto é só a metade "nome" da polidez japonesa — como chamar as pessoas. A outra metade,
+          trocar o próprio verbo por uma versão humilde ou respeitosa (けいご), é assunto da lição
+          de Auto-apresentação. As duas coisas trabalham juntas, mas são peças diferentes.
+        </Note>
       </Section>
 
       <Section title="Visão geral dos principais sufixos">
+        <p className="text-sm leading-relaxed text-ink">
+          Use esta tabela como um mapa rápido — os detalhes e exemplos de cada sufixo vêm nas
+          seções seguintes.
+        </p>
         <GrammarTable
           headers={['Sufixo', 'Romaji', 'Uso principal', 'Formalidade']}
           jpCols={[0]}
@@ -196,6 +260,12 @@ export default function Sufixos() {
           romaji="okyaku-san, irasshaimase."
           pt="Bem-vindo, cliente."
           notes="さん também aparece após おきゃく (cliente), em lojas e restaurantes."
+        />
+        <Ex
+          jp="たなかさんはもうきましたか？"
+          romaji="tanaka-san wa mou kimashita ka?"
+          pt="O sr. Tanaka já chegou?"
+          notes="aqui さん não chama ninguém — é usado ao falar SOBRE a pessoa, numa conversa com um terceiro"
         />
       </Section>
 
@@ -275,6 +345,12 @@ export default function Sufixos() {
           pt="Sr. Tanaka, obrigado por nos visitar hoje."
           notes="Atendimento de alto nível. ほんじつ = hoje (formal)."
         />
+        <Ex
+          jp="おきゃくさま、こちらへどうぞ。"
+          romaji="okyaku-sama, kochira e douzo."
+          pt="Prezado(a) cliente, por aqui, por favor."
+          notes="おきゃくさま é o que você vai ouvir o tempo todo em lojas, hotéis e anúncios — mesmo sem esperar formalidade de volta"
+        />
       </Section>
 
       <Section title='〜せんせい — mais que "professor"'>
@@ -331,6 +407,12 @@ export default function Sufixos() {
           pt="É graças ao senpai Suzuki."
           notes={'〜のおかげです = "graças a...".'}
         />
+        <Ex
+          jp="かれはわたしのこうはいです。"
+          romaji="kare wa watashi no kouhai desu."
+          pt="Ele é meu kouhai (entrou depois de mim no grupo)."
+          notes="こうはい não vira sufixo (nunca たなかこうはい) — só se usa como substantivo, assim"
+        />
         <Note>
           <span className="font-jp">こうはい</span> quase nunca vira sufixo no nome de alguém.
           Diz-se <span className="font-jp">わたしのこうはい</span> ("meu kouhai") ou usa-se nome +{' '}
@@ -364,6 +446,18 @@ export default function Sufixos() {
             ['ご', 'ごじゅうしょ', 'gojuusho', 'seu endereço'],
             ['ご', 'ごはん', 'gohan', 'refeição / arroz (exceção comum)'],
           ]}
+        />
+        <Ex
+          jp="おなまえはなんですか？"
+          romaji="onamae wa nan desu ka?"
+          pt="Qual é o seu nome?"
+          notes="お eleva なまえ porque a pergunta é sobre a outra pessoa — pergunte assim, não なまえは...?"
+        />
+        <Ex
+          jp="ごじゅうしょをおしえてください。"
+          romaji="gojuusho o oshiete kudasai."
+          pt="Poderia me informar seu endereço?"
+          notes="comum em formulários e no balcão de uma imobiliária/prefeitura, pedindo o endereço de outra pessoa"
         />
         <Note>
           Não coloque <span className="font-jp">お</span>/<span className="font-jp">ご</span> em
@@ -404,6 +498,15 @@ export default function Sufixos() {
           pt="O diretor Tanaka está?"
           notes="Aqui, sobrenome + cargo funcionam juntos."
         />
+        <Note>
+          <span className="font-jp">いらっしゃいます</span> é a versão respeitosa de{' '}
+          <span className="font-jp">います</span>, usada para <strong>elevar</strong> quem você
+          menciona (aqui, o diretor). É o espelho de{' '}
+          <span className="font-jp">おります</span> — a versão humilde de{' '}
+          <span className="font-jp">います</span> que <strong>rebaixa você mesmo</strong>, vista na
+          lição de Auto-apresentação. Duas peças do mesmo sistema, cada uma apontando para um lado
+          diferente.
+        </Note>
       </Section>
 
       <Section title="Três regras fundamentais">

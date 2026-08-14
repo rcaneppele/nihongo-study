@@ -1,4 +1,4 @@
-import { Section, Ex, GrammarTable, ReadingKey } from '../components/Licao';
+import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
 
 export const meta = {
@@ -120,6 +120,31 @@ export const quiz: QuizLicao = {
       afirmacao: 'はっさい (8 anos) tem uma leitura irregular, com som dobrado.',
       correta: true,
     },
+    {
+      id: 'apresentacao-sig5',
+      tipo: 'significado',
+      pergunta: 'Qual é o registro de といいます, comparado com です e ともうします?',
+      alternativas: [
+        'padrão — mais formal que です, menos formal que ともうします',
+        'o mais formal dos três',
+        'só serve para apresentar outra pessoa',
+        'é casual, mais informal que です',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'apresentacao-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: '〜からきました e 〜しゅっしんです significam exatamente a mesma coisa e são sempre intercambiáveis.',
+      correta: false,
+      explicacao: 'からきました é mais neutro; しゅっしん é especificamente a terra natal/origem, mesmo que você more em outro lugar hoje.',
+    },
+    {
+      id: 'apresentacao-vf5',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'もうします, まいりました, おります e いたします são versões humildes (けんじょうご) dos verbos いいます, きました, います e します.',
+      correta: true,
+    },
   ],
 };
 
@@ -157,6 +182,26 @@ export default function Apresentacao() {
         <p className="text-sm leading-relaxed text-ink">Agora sim, vamos à lição.</p>
       </Section>
 
+      <Section title="Objetivos desta lição">
+        <p className="text-sm leading-relaxed text-ink">Ao final, você deve saber:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>Montar uma auto-apresentação completa, seguindo a ordem que os japoneses esperam.</li>
+          <li>
+            Escolher o registro certo — casual, padrão ou muito formal — para nome, origem e
+            encerramento, conforme a situação.
+          </li>
+          <li>
+            Reconhecer as formas humildes (もうします, まいります, おります, いたします) como
+            parte de um mesmo padrão — não decorar cada uma isoladamente.
+          </li>
+          <li>
+            Diferenciar 〜からきました (de onde você veio) de 〜しゅっしんです (sua origem/terra
+            natal) — não são sempre intercambiáveis.
+          </li>
+          <li>Responder às perguntas mais comuns que vêm depois de uma apresentação.</li>
+        </ul>
+      </Section>
+
       <Section title="O que é a じこしょうかい">
         <p className="text-sm leading-relaxed text-ink">
           A <strong className="font-jp">じこしょうかい</strong> (<em>jikoshoukai</em>) é a
@@ -171,6 +216,13 @@ export default function Apresentacao() {
           O bom é que existe uma ordem quase fixa que os japoneses seguem. Quando você domina essa
           ordem, consegue se apresentar com segurança em qualquer situação.
         </p>
+        <Note>
+          Esta lição ensina o roteiro pronto — não a gramática por trás de cada peça (isso fica
+          para as lições de Partículas e Verbos). Você também vai ver formas como{' '}
+          <span className="font-jp">もうします</span> e{' '}
+          <span className="font-jp">〜たことがあります</span> como frases fixas prontas para usar,
+          sem entrar na regra completa de conjugação por trás delas.
+        </Note>
       </Section>
 
       <Section title="A estrutura padrão">
@@ -183,7 +235,11 @@ export default function Apresentacao() {
           jpCols={[2]}
           rows={[
             ['1', 'Cumprimentar', 'はじめまして。(hajimemashite)'],
-            ['2', 'Dizer o nome', '〜です。(desu, neutro) / 〜ともうします。(to moushimasu, formal)'],
+            [
+              '2',
+              'Dizer o nome',
+              '〜です (casual) / 〜といいます (padrão) / 〜ともうします (muito formal)',
+            ],
             ['3', 'Dizer de onde é', '〜からきました。(kara kimashita)'],
             ['4', 'Dizer o que faz', '〜をしています。(o shite imasu)'],
             ['5', 'Falar um hobby', 'しゅみは〜です。(shumi wa ~ desu)'],
@@ -230,6 +286,42 @@ export default function Apresentacao() {
           por uma palavra sua. Por exemplo, em <span className="font-jp">しゅみは〜です</span> você
           coloca seu hobby no lugar do <span className="font-jp">〜</span>.
         </p>
+        <Ex
+          jp="たなかじろうといいます。"
+          romaji="tanaka jirou to iimasu."
+          pt="Me chamo Tanaka Jiro."
+          notes="といいます — meio-termo entre です (casual) e ともうします (muito formal); serve pra quase toda situação"
+        />
+      </Section>
+
+      <Section title="Por que tantas versões da mesma frase — o que é keigo">
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">もうします</span>,{' '}
+          <span className="font-jp">まいりました</span>,{' '}
+          <span className="font-jp">おります</span> e{' '}
+          <span className="font-jp">いたします</span> não são quatro palavras soltas para
+          decorar — são a mesma peça (dizer o nome, vir, estar, fazer) trocada por uma versão{' '}
+          <strong>humilde</strong>. Esse tipo de troca de verbo tem nome:{' '}
+          <span className="font-jp">けんじょうご</span> (<em>kenjougo</em>), a parte da
+          linguagem honorífica que rebaixa quem fala para, por comparação, elevar quem ouve.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          Em português não existe esse mecanismo — polidez muda o tom da frase ("poderia me
+          dizer" em vez de "diz aí"), mas não troca o verbo inteiro por outro. Por isso, o
+          jeito mais fácil de lidar com keigo no início não é entender a regra geral (ela é
+          extensa, e fica fora do escopo desta lição), e sim memorizar os quatro pares como
+          frases prontas:
+        </p>
+        <GrammarTable
+          headers={['Comum', 'Humilde (kenjougo)', 'Uso nesta lição']}
+          jpCols={[0, 1]}
+          rows={[
+            ['いいます (dizer)', 'もうします', 'dizer o próprio nome'],
+            ['きました (vim)', 'まいりました', 'dizer de onde veio'],
+            ['います (estar, no gerúndio 〜ています)', 'おります', 'dizer o que faz atualmente (〜をしております)'],
+            ['します (fazer)', 'いたします', 'encerramento, e verbos em geral'],
+          ]}
+        />
       </Section>
 
       <Section title="Exemplo 1 — apresentação formal (escola ou trabalho)">
@@ -285,6 +377,16 @@ export default function Apresentacao() {
           pt="Sou do Brasil e moro em São Paulo."
           notes="しゅっしん = origem (de onde você é). にすんでいます = moro em (onde você vive hoje)."
         />
+        <Note>
+          <span className="font-jp">〜からきました</span> e{' '}
+          <span className="font-jp">〜しゅっしんです</span> não são sempre intercambiáveis.{' '}
+          <span className="font-jp">からきました</span> ("vim de") é mais neutro e funciona
+          bem quando você só quer situar de onde é; <span className="font-jp">しゅっしん</span>{' '}
+          ("origem/terra natal") é a palavra certa quando quer deixar claro onde nasceu ou
+          cresceu, mesmo morando em outro lugar hoje — como no exemplo acima, onde しゅっしん
+          (Brasil) e すんでいます (São Paulo) marcam duas informações diferentes na mesma
+          frase.
+        </Note>
         <Ex
           jp="にじゅうはっさいです。"
           romaji="nijuu hassai desu."
@@ -396,7 +498,7 @@ export default function Apresentacao() {
           jp="アニメやゲームがきっかけで、にほんごにきょうみをもちました。"
           romaji="anime ya geemu ga kikkake de, nihongo ni kyoumi o mochimashita."
           pt="Anime e games foram o motivo, e me interessei pela língua."
-          notes="きょうみをもつ = ter interesse por algo."
+          notes="や = lista aberta ('anime, games e outras coisas do tipo') — detalhes na lição de Partículas. きょうみをもつ = ter interesse por algo."
         />
         <Ex
           jp="まだいったことがありませんが、いつかいきたいとおもっています。"
@@ -511,6 +613,12 @@ export default function Apresentacao() {
                 soa mais apropriado.
               </>,
             ],
+            [
+              'Misturar registros na mesma apresentação',
+              'たなかです。げんざい、ITのしごとをしております。',
+              'たなかともうします。げんざい、ITのしごとをしております。 (formal) / たなかです。いま、ITのしごとをしています。 (casual)',
+              'です é casual/neutro; おります é humilde. Escolha um registro e mantenha do início ao fim.',
+            ],
           ]}
         />
       </Section>
@@ -521,9 +629,10 @@ export default function Apresentacao() {
           jpCols={[1]}
           rows={[
             ['Cumprimentar', 'はじめまして'],
-            ['Dizer o nome (neutro)', '〜です'],
-            ['Dizer o nome (formal)', '〜ともうします'],
-            ['Dizer de onde sou', '〜からきました / 〜しゅっしんです'],
+            ['Dizer o nome (casual)', '〜です'],
+            ['Dizer o nome (padrão)', '〜といいます'],
+            ['Dizer o nome (muito formal)', '〜ともうします'],
+            ['Dizer de onde veio / sua origem', '〜からきました / 〜しゅっしんです'],
             ['Falar um hobby', 'しゅみは〜です'],
             ['Encerrar', 'よろしくおねがいします'],
           ]}

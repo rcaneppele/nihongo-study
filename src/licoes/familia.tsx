@@ -137,6 +137,21 @@ export const quiz: QuizLicao = {
       correta: false,
       explicacao: 'Usam as formas respeitosas おとうさん/おかあさん, mesmo dentro de casa.',
     },
+    {
+      id: 'familia-sig5',
+      tipo: 'significado',
+      pergunta: "Qual é o jeito mais comum de perguntar 'você tem filhos?', sem saber quantos ou de que gênero?",
+      alternativas: ['おこさんはいますか', 'むすこさんはいますか', 'おじょうさんはいますか', 'むすめはいますか'],
+      correta: 0,
+      explicacao: 'おこさん é o termo geral e respeitoso para "filhos"; むすこさん/おじょうさん já presumem o gênero.',
+    },
+    {
+      id: 'familia-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'きょうだい é um termo geral e sem gênero para "irmãos", mesmo que o kanji literalmente signifique "irmãos homens".',
+      correta: true,
+      explicacao: 'きょうだい (兄弟) é usado no dia a dia como termo coletivo neutro, cobrindo qualquer combinação de irmãos e irmãs.',
+    },
   ],
 };
 
@@ -159,10 +174,40 @@ export default function Familia() {
         </p>
       </Section>
 
+      <Section title="Objetivos desta lição">
+        <p className="text-sm leading-relaxed text-ink">Ao final, você deve saber:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            Diferenciar o registro humilde (para a própria família) do respeitoso (para a família
+            de outra pessoa) e nunca misturar os dois.
+          </li>
+          <li>Nomear os parentes da família nuclear, estendida e por casamento nos dois registros.</li>
+          <li>Perguntar educadamente sobre a família de alguém, usando ご/お corretamente.</li>
+          <li>
+            Escolher entre um termo geral (<span className="font-jp">こども</span>,{' '}
+            <span className="font-jp">きょうだい</span>) e um específico (
+            <span className="font-jp">むすこ</span>, <span className="font-jp">あに</span>,{' '}
+            <span className="font-jp">いもうと</span>...) conforme a situação.
+          </li>
+          <li>Evitar os erros de prefixo e pronúncia mais comuns dessa área do vocabulário.</li>
+        </ul>
+        <Note>
+          Fora do escopo desta lição: as formas verbais de keigo que elevam ou rebaixam quem fala
+          (ex.: <span className="font-jp">いらっしゃいます</span>,{' '}
+          <span className="font-jp">もうします</span>) — isso é assunto das lições
+          Auto-apresentação e Sufixos de Respeito. Também não cobrimos aqui família por adoção ou
+          novo casamento (padrasto, madrasta, meio-irmão), que não tem um par humilde/respeitoso
+          tão estabelecido no japonês do dia a dia.
+        </Note>
+      </Section>
+
       <Section title="A ideia central: existem dois registros">
         <p className="text-sm leading-relaxed text-ink">
-          Em japonês, existem <strong>duas palavras diferentes para cada parente</strong>,
-          dependendo de quem é a família:
+          Isso aparece toda vez que você fala sobre família em japonês: apresentar seus pais a um
+          colega de trabalho, perguntar a um amigo japonês se ele tem irmãos, contar para a
+          família anfitriã de um intercâmbio quantas pessoas moram com você. Em japonês, existem{' '}
+          <strong>duas palavras diferentes para cada parente</strong>, dependendo de quem é a
+          família:
         </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
@@ -200,6 +245,14 @@ export default function Familia() {
           <span className="font-jp">ちち</span>, <span className="font-jp">はは</span>) aparecem
           só quando você fala <strong>sobre</strong> sua família com pessoas de fora.
         </Note>
+        <Note>
+          Essa troca de vocabulário é o mesmo mecanismo do keigo (linguagem honorífica) explicado
+          na lição Auto-apresentação — lá ele troca o verbo inteiro (
+          <span className="font-jp">います</span> → <span className="font-jp">おります</span>/
+          <span className="font-jp">いらっしゃいます</span>); aqui troca o substantivo de
+          parentesco inteiro. É a mesma lógica de "rebaixar quem fala, elevar quem ouve" aplicada
+          a outra classe de palavra.
+        </Note>
       </Section>
 
       <Section title="Família nuclear">
@@ -220,11 +273,13 @@ export default function Familia() {
           ]}
         />
         <Note>
-          Existem também <span className="font-jp">しゅじん</span> (<em>shujin</em>, "dono da
-          casa") para marido e <span className="font-jp">かない</span> (<em>kanai</em>, "dentro
-          da casa") para esposa. São termos antigos, com tom hierárquico, que muitos japoneses
-          hoje evitam. Para o seu vocabulário ativo, prefira <span className="font-jp">おっと</span>{' '}
-          (marido) e <span className="font-jp">つま</span> (esposa).
+          <strong>Aprofundamento:</strong> existem também{' '}
+          <span className="font-jp">しゅじん</span> (<em>shujin</em>, "dono da casa") para marido
+          e <span className="font-jp">かない</span> (<em>kanai</em>, "dentro da casa") para
+          esposa. São termos antigos, com tom hierárquico, que muitos japoneses hoje evitam — mas
+          você ainda vai ouvi-los de pessoas mais velhas. Para o seu vocabulário ativo, prefira{' '}
+          <span className="font-jp">おっと</span> (marido) e <span className="font-jp">つま</span>{' '}
+          (esposa).
         </Note>
       </Section>
 
@@ -260,6 +315,15 @@ export default function Familia() {
             quis dizer "tia" pode ser constrangedor.
           </p>
         </Note>
+        <Note>
+          <strong>Aprofundamento:</strong> no dia a dia, é comum ouvir{' '}
+          <span className="font-jp">おいっこ</span> (<em>oikko</em>) e{' '}
+          <span className="font-jp">めいっこ</span> (<em>meikko</em>) em vez de{' '}
+          <span className="font-jp">おい</span>/<span className="font-jp">めい</span> ao falar do
+          próprio sobrinho ou sobrinha — soam um pouco mais informais e afetuosos. As formas da
+          tabela (<span className="font-jp">おい</span>/<span className="font-jp">めい</span>)
+          são as corretas para o registro neutro e para reconhecer em textos.
+        </Note>
       </Section>
 
       <Section title="Família por casamento">
@@ -279,13 +343,29 @@ export default function Familia() {
         />
         <Note>
           O prefixo <span className="font-jp">義</span> (<em>gi</em>) marca "parente por
-          casamento". Não precisa decorar tudo isso agora; volte aqui quando precisar.
+          casamento". Esses termos compactos (<span className="font-jp">ぎけい</span>,{' '}
+          <span className="font-jp">ぎし</span>, <span className="font-jp">ぎてい</span>,{' '}
+          <span className="font-jp">ぎまい</span>) soam formais, quase de documento. Na fala do
+          dia a dia é mais natural dizer <span className="font-jp">ぎりの</span> + o termo de
+          sangue: <span className="font-jp">ぎりのあに</span> (<em>giri no ani</em>, "cunhado
+          mais velho"). No registro respeitoso, também é comum simplesmente usar{' '}
+          <span className="font-jp">おとうとさん</span>/<span className="font-jp">いもうとさん</span>{' '}
+          sem diferenciar se é irmão de sangue ou por casamento — a distinção importa mais para
+          quem fala da própria família. Não precisa decorar tudo isso agora; volte aqui quando
+          precisar.
         </Note>
       </Section>
 
       <Section title="Filhos por ordem de nascimento">
         <p className="text-sm leading-relaxed text-ink">
-          Estes termos aparecem em contextos formais e documentos.
+          Os termos <span className="font-jp">ちょうなん</span>/<span className="font-jp">じなん</span>/
+          <span className="font-jp">さんなん</span> (primeiro, segundo, terceiro filho homem) e{' '}
+          <span className="font-jp">ちょうじょ</span>/<span className="font-jp">じじょ</span>{' '}
+          (primeira, segunda filha) aparecem em contextos um pouco mais formais — se apresentando,
+          preenchendo um formulário, ou explicando a ordem de nascimento numa conversa mais séria.
+          Já <span className="font-jp">ひとりっこ</span> (filho único) e{' '}
+          <span className="font-jp">すえっこ</span> (caçula) são super comuns no dia a dia,
+          inclusive brincando sobre personalidade ("típico de caçula").
         </p>
         <GrammarTable
           headers={['Kanji', 'Hiragana', 'Romaji', 'Significado']}
@@ -327,17 +407,82 @@ export default function Familia() {
         />
       </Section>
 
+      <Section title="Termos gerais vs. específicos">
+        <p className="text-sm leading-relaxed text-ink">
+          Várias palavras de parentesco têm uma versão "guarda-chuva", que cobre o grupo todo sem
+          entrar em detalhe, e uma versão específica, que já entrega gênero ou posição. Isso
+          importa porque escolher a errada não é gramaticalmente incorreto, mas soa estranho — é
+          como responder "eu tenho um labrador" quando alguém só perguntou se você tem animal de
+          estimação. A regra prática: use o termo geral para perguntar ou falar de algo que ainda
+          não se sabe; use o específico quando o gênero ou a posição já são conhecidos.
+        </p>
+        <GrammarTable
+          headers={['Geral', 'Específico', 'Quando usar o geral', 'Quando usar o específico']}
+          jpCols={[0, 1]}
+          rows={[
+            [
+              'こども / おこさん',
+              'むすこ・むすめ / むすこさん・おじょうさん',
+              'Perguntando se a pessoa tem filhos, sem saber quantos ou de que gênero',
+              'Já se sabe que é filho ou filha, e quer-se falar dele/dela especificamente',
+            ],
+            [
+              'きょうだい / ごきょうだい',
+              'あに・あね・おとうと・いもうと',
+              'Perguntando se a pessoa tem irmãos, sem detalhar',
+              'Contando quantos irmãos, a ordem e o gênero de cada um',
+            ],
+          ]}
+        />
+        <Ex
+          jp="おこさんはいますか？"
+          romaji="okosan wa imasu ka?"
+          pt="Você tem filhos?"
+          notes="pergunta geral — o jeito mais comum de perguntar; não presume gênero nem quantidade"
+        />
+        <Ex
+          jp="むすこさんはおいくつですか？"
+          romaji="musukosan wa oikutsu desu ka?"
+          pt="Quantos anos tem o seu filho?"
+          notes="específico — só faz sentido depois de já saber que a pessoa tem um filho homem"
+        />
+        <Ex
+          jp="ごきょうだいはなんにんですか？"
+          romaji="gokyoudai wa nan-nin desu ka?"
+          pt="Quantos irmãos você tem?"
+          notes="pergunta geral sobre a quantidade, sem pedir detalhe ainda"
+        />
+        <Ex
+          jp="あにがひとりと、いもうとがふたりいます。"
+          romaji="ani ga hitori to, imouto ga futari imasu."
+          pt="Tenho um irmão mais velho e duas irmãs mais novas."
+          notes="resposta específica, nomeando cada um — comum ao responder essa pergunta puxando papo com alguém novo"
+        />
+      </Section>
+
       <Section title="Perguntando sobre a família">
         <p className="text-sm leading-relaxed text-ink">
           Ao perguntar sobre a família <strong>do outro</strong>, usam-se as formas respeitosas.
         </p>
+        <Note>
+          <span className="font-jp">ご</span> e <span className="font-jp">お</span> aqui são os
+          mesmos prefixos honoríficos ensinados na lição Sufixos de Respeito (
+          <span className="font-jp">ご</span> antes de palavra de origem chinesa,{' '}
+          <span className="font-jp">お</span> antes de origem japonesa) — a regra vale para
+          qualquer coisa relacionada à outra pessoa, não só parentesco.
+        </Note>
         <Ex
           jp="ごかぞくはいますか？"
           romaji="gokazoku wa imasu ka?"
           pt="Você tem família?"
           notes="ごかぞく é a forma respeitosa de かぞく. Nunca use ご para a sua própria família."
         />
-        <Ex jp="ごきょうだいはいますか？" romaji="gokyoudai wa imasu ka?" pt="Você tem irmãos?" />
+        <Ex
+          jp="ごきょうだいはいますか？"
+          romaji="gokyoudai wa imasu ka?"
+          pt="Você tem irmãos?"
+          notes="pergunta comum logo depois de conhecer alguém, puxando papo"
+        />
         <Ex
           jp="なんにんかぞくですか？"
           romaji="nan-nin kazoku desu ka?"
@@ -345,10 +490,10 @@ export default function Familia() {
           notes="なんにん = quantas pessoas."
         />
         <Ex
-          jp="おこさんはいますか？"
-          romaji="okosan wa imasu ka?"
-          pt="Você tem filhos?"
-          notes="おこさん é a forma respeitosa. Para os seus filhos, diga こども."
+          jp="ごりょうしんはおげんきですか？"
+          romaji="goryoushin wa ogenki desu ka?"
+          pt="Seus pais estão bem?"
+          notes="ごりょうしん = seus pais (respeitoso); おげんき = bem/com saúde (também com お educado)."
         />
         <Ex
           jp="おとうさんのおしごとはなんですか？"
@@ -369,7 +514,7 @@ export default function Familia() {
           jp="たなかさんのおとうさんはどんなおしごとをされていますか？"
           romaji="tanaka-san no otousan wa donna oshigoto o sarete imasu ka?"
           pt="Que tipo de trabalho o pai do sr. Tanaka faz?"
-          notes="Falando do pai de outra pessoa, usa-se おとうさん (respeitoso)."
+          notes="Falando do pai de outra pessoa, usa-se おとうさん (respeitoso). されていますか é uma forma verbal de keigo — foge do escopo desta lição; repare só na troca do substantivo."
         />
         <Ex
           jp="いもうとがふたりとおとうとがひとりいます。"
@@ -413,6 +558,12 @@ export default function Familia() {
               'わたしのかぞくは…',
               'ご é respeitoso; a sua família vai sem ele.',
             ],
+            [
+              'Usar むすめ/むすこ como se fossem "criança" em geral',
+              'むすめさんはいますか？ (tentando perguntar de forma geral)',
+              'おこさんはいますか？',
+              'むすめさん já presume que é filha (mulher); para perguntar sem saber o gênero, use おこさん.',
+            ],
           ]}
         />
       </Section>
@@ -425,6 +576,8 @@ export default function Familia() {
             ['Falo da minha família', 'humilde', 'ちち, はは, あに'],
             ['Falo da família de outra pessoa', 'respeitoso', 'おとうさん, おかあさん, おにいさん'],
             ['Dentro de casa, chamando um parente', 'respeitoso', 'おとうさん, おかあさん'],
+            ['Pergunta geral sobre filhos/irmãos', 'termo guarda-chuva', 'こども, きょうだい, おこさん, ごきょうだい'],
+            ['Já se sabe o gênero/posição', 'termo específico', 'むすこ, おじょうさん, あに, あね, おとうと, いもうと'],
           ]}
         />
       </Section>

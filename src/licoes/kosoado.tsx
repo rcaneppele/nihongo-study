@@ -94,6 +94,15 @@ export const quiz: QuizLicao = {
       ],
       pt: 'Qual dos dois você prefere?',
     },
+    {
+      id: 'kosoado-f9',
+      tokens: [
+        { texto: 'どちらさま', romaji: 'dochira-sama' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Quem é, por favor?',
+    },
   ],
   perguntas: [
     {
@@ -143,6 +152,33 @@ export const quiz: QuizLicao = {
       afirmacao: 'これ pode substituir o objeto sem precisar nomeá-lo.',
       correta: true,
     },
+    {
+      id: 'kosoado-sig4',
+      tipo: 'significado',
+      pergunta: 'O que significa どちらさまですか, perguntado educadamente ao telefone ou no interfone?',
+      alternativas: ['Quem é, por favor?', 'Onde você está?', 'Que horas são?', 'Qual você prefere?'],
+      correta: 0,
+    },
+    {
+      id: 'kosoado-vf5',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'あの, sozinho e sem substantivo depois, também funciona como uma interjeição de hesitação, algo como "hã...".',
+      correta: true,
+    },
+    {
+      id: 'kosoado-sig5',
+      tipo: 'significado',
+      pergunta: 'Entre どの, どれ e どちら, qual delas sempre precisa vir antes de um substantivo?',
+      alternativas: ['どの', 'どれ', 'どちら', 'どっち'],
+      correta: 0,
+    },
+    {
+      id: 'kosoado-vf6',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'どちら só pode ser usada quando há exatamente duas opções, nunca mais.',
+      correta: false,
+      explicacao: 'Essa é a regra clássica, mas na fala educada どちら costuma substituir どれ mesmo com três ou mais opções, por soar mais elegante.',
+    },
   ],
 };
 
@@ -151,7 +187,10 @@ export default function KoSoADo() {
     <div className="space-y-10">
       <Section title="Como ler esta lição">
         <p className="text-sm leading-relaxed text-ink">
-          As palavras deste tema quase sempre se escrevem em hiragana. Então aqui você verá:
+          As palavras deste tema (<span className="font-jp">こ</span>/<span className="font-jp">そ</span>/
+          <span className="font-jp">あ</span>/<span className="font-jp">ど</span>) quase sempre se
+          escrevem em hiragana — inclusive em textos formais, já que são palavras gramaticais, não
+          substantivos comuns. Então aqui você verá:
         </p>
         <ReadingKey
           lines={[
@@ -162,10 +201,38 @@ export default function KoSoADo() {
         />
       </Section>
 
+      <Section title="Objetivos desta lição">
+        <p className="text-sm leading-relaxed text-ink">Ao final, você deve saber:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            Reconhecer as quatro "distâncias" (こ/そ/あ/ど) e aplicá-las nas sete séries do sistema
+            (adjetivo, pronome, lugar, direção formal, direção casual, tipo, modo) — como um
+            sistema só, não como listas soltas de vocabulário.
+          </li>
+          <li>
+            Escolher entre a forma que acompanha substantivo (<span className="font-jp">この</span>
+            ) e a que fica sozinha (<span className="font-jp">これ</span>), sem misturar as duas.
+          </li>
+          <li>
+            Saber quando usar <span className="font-jp">どちら</span>/
+            <span className="font-jp">どっち</span> (duas opções), <span className="font-jp">どれ</span>{' '}
+            (três ou mais) e <span className="font-jp">どの</span> (sempre com substantivo).
+          </li>
+          <li>
+            Reconhecer usos que vão além de apontar objetos: <span className="font-jp">あの</span>{' '}
+            como hesitação, <span className="font-jp">どちらさま</span> como pergunta educada de
+            identificação, e a extensão do sistema para algo já dito na conversa.
+          </li>
+          <li>Indicar uma pessoa ou lugar com educação, sem apontar com o dedo.</li>
+        </ul>
+      </Section>
+
       <Section title="O que é o sistema Ko-So-A-Do">
         <p className="text-sm leading-relaxed text-ink">
           <strong>Ko-So-A-Do</strong> (<span className="font-jp">こそあど</span>) é o conjunto de
-          palavras que em português seriam "este, esse, aquele, aqui, aí, lá, qual".
+          palavras que em português seriam "este, esse, aquele, aqui, aí, lá, qual". Você usa esse
+          sistema o tempo todo: apontando um item no balcão de uma loja, perguntando onde fica algo
+          na rua, ou descrevendo um objeto perdido sem saber o nome exato dele.
         </p>
         <p className="text-sm leading-relaxed text-ink">
           O nome vem da primeira sílaba de cada grupo: <strong className="font-jp">こ</strong> (
@@ -175,11 +242,28 @@ export default function KoSoADo() {
         </p>
         <p className="text-sm leading-relaxed text-ink">
           A grande sacada é que <strong>cada grupo indica uma distância diferente</strong>. Uma
-          vez que você entende as quatro distâncias, entende o sistema inteiro.
+          vez que você entende as quatro distâncias, entende o sistema inteiro — o que muda de uma
+          série para outra (<span className="font-jp">これ</span>, <span className="font-jp">ここ</span>,{' '}
+          <span className="font-jp">こちら</span>...) é só a <em>função</em> (objeto, lugar,
+          direção), nunca a lógica da distância.
         </p>
+        <Note>
+          O português também distingue três distâncias — "este/esse/aquele" —, o que ajuda bastante
+          aqui. A diferença é que, na fala cotidiana do Brasil, é comum usar "esse" para tudo que
+          não é "aquele", sem separar bem "este" de "esse". O japonês mantém as três formas bem
+          separadas, sempre pela mesma régua: perto de quem fala, perto de quem ouve, ou longe dos
+          dois.
+        </Note>
       </Section>
 
       <Section title="As quatro distâncias">
+        <p className="text-sm leading-relaxed text-ink">
+          O que muda de um grupo para outro não é o tipo de palavra — todos os quatro têm um
+          pronome, um lugar, uma direção — e sim a <strong>distância</strong> entre você, a
+          pessoa com quem você fala, e a coisa da qual estão falando. Fixe essa régua uma vez só e
+          o sistema inteiro se resolve sozinho: cada palavra nova que aparecer daqui em diante é
+          só essa régua aplicada a uma função diferente (objeto, lugar, direção...).
+        </p>
         <GrammarTable
           headers={['Grupo', 'Onde está a coisa', 'Ideia em português']}
           jpCols={[0]}
@@ -211,6 +295,12 @@ export default function KoSoADo() {
             mão" e <span className="font-jp">あれ</span> vira "bem longe".
           </p>
         </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          Essa régua de distância física é o ponto de partida certo, mas não é a história
+          completa: às vezes o japonês mede distância dentro da <strong>conversa</strong>, não no
+          espaço — o que muda qual grupo soa natural mesmo com o objeto fisicamente perto. Isso
+          fica para a seção "Uso além da distância física", mais adiante.
+        </p>
       </Section>
 
       <Section title="Tabela geral">
@@ -278,13 +368,29 @@ export default function KoSoADo() {
 
       <Section title="この・その・あの・どの — vêm antes de um substantivo">
         <p className="text-sm leading-relaxed text-ink">
-          Esta série sempre acompanha um substantivo. Ela nunca fica sozinha.
+          Esta série funciona como um <strong>adjetivo</strong>: vem sempre antes de um
+          substantivo e nunca fica sozinha. É a forma que você usa para apontar algo que já está
+          à vista — um item na prateleira, uma foto na tela, o prato que acabou de chegar à mesa —
+          sem precisar levantar o dedo para ele.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          Aqui mora uma armadilha para quem vem do português: "este" serve tanto de adjetivo
+          ("este livro") quanto de pronome ("este é bom"), com a <strong>mesma palavra</strong>. O
+          japonês separa essas duas funções em palavras diferentes, que não se misturam nunca:{' '}
+          <span className="font-jp">この</span> (sempre com substantivo) e{' '}
+          <span className="font-jp">これ</span> (sempre sozinho, visto na próxima seção).
         </p>
         <Ex
           jp="このほんはおもしろいです。"
           romaji="kono hon wa omoshiroi desu."
           pt="Este livro é interessante."
           notes={`この gruda no substantivo ほん (livro): "este livro".`}
+        />
+        <Ex
+          jp="このセーターはいくらですか？"
+          romaji="kono seetaa wa ikura desu ka?"
+          pt="Quanto custa este suéter?"
+          notes="Numa loja, apontando (sem tocar) para a peça exposta perto de você."
         />
         <Ex
           jp="そのえいがをみましたか？"
@@ -311,6 +417,14 @@ export default function KoSoADo() {
           <span className="font-jp">このほん</span> ✓). <span className="font-jp">これ</span>{' '}
           fica sozinho (<span className="font-jp">これはほんです</span> ✓). Nunca diga{' '}
           <span className="font-jp line-through">このはほんです</span> ✗.
+        </Note>
+        <Note>
+          <strong>Aprofundamento:</strong> <span className="font-jp">あの</span> sozinho, sem
+          substantivo depois, também funciona como uma interjeição de hesitação — "hã...",
+          "bem..." — usada para chamar a atenção de alguém com delicadeza antes de um pedido ou
+          pergunta: <span className="font-jp">あのう、しつもんがあるんですが……</span> (
+          <em>anou, shitsumon ga aru n desu ga...</em>, "hã... eu tenho uma pergunta..."). É a
+          única exceção à regra desta seção — aqui あの não precisa de substantivo nenhum depois.
         </Note>
       </Section>
 
@@ -353,7 +467,9 @@ export default function KoSoADo() {
 
       <Section title="ここ・そこ・あそこ・どこ — indicam lugar">
         <p className="text-sm leading-relaxed text-ink">
-          Esta série aponta <strong>lugares</strong>, não objetos.
+          Esta série aponta <strong>lugares</strong>, não objetos — ela responde "onde", não "o
+          quê". É a série que mais aparece fora de casa: pedindo ou dando direção, marcando onde
+          sentar, explicando onde algo ficou.
         </p>
         <Ex jp="ここにすわってください。" romaji="koko ni suwatte kudasai." pt="Por favor, sente-se aqui." />
         <Ex
@@ -398,8 +514,25 @@ export default function KoSoADo() {
           jp="こちらはたなかさんです。"
           romaji="kochira wa tanaka-san desu."
           pt="Este é o sr. Tanaka."
-          notes="こちら também apresenta pessoas de forma educada (visto na lição de apresentação)."
+          notes="こちら também apresenta pessoas com educação — mesmo uso visto na lição de Auto-apresentação."
         />
+        <Ex
+          jp="どちらさまですか？"
+          romaji="dochira-sama desu ka?"
+          pt="Quem é, por favor?"
+          notes="Forma educada de perguntar a identidade de alguém — no interfone, ao telefone, na recepção."
+        />
+        <Note>
+          Perguntar <span className="font-jp">だれですか</span> ("quem é você?") direto soa
+          abrupto, quase uma cobrança. <span className="font-jp">どちらさま</span> —
+          literalmente "que direção", com <span className="font-jp">さま</span>, o sufixo mais
+          respeitoso (lição de Sufixos de Respeito) — trata a identidade da pessoa como algo a
+          perguntar com cuidado, não a exigir. É a forma padrão no interfone, na recepção de um
+          escritório, ou ao atender uma ligação endereçada a outra pessoa. O mecanismo de
+          polidez por trás da frase (けいご) é assunto das lições de Auto-apresentação e Sufixos
+          de Respeito; aqui basta reconhecer e usar <span className="font-jp">どちらさま</span>{' '}
+          pronta.
+        </Note>
       </Section>
 
       <Section title="こっち・そっち・あっち・どっち — direção (casual)">
@@ -424,6 +557,34 @@ export default function KoSoADo() {
             ['どちら', 'どっち', 'どちら: escolha educada entre dois'],
           ]}
         />
+      </Section>
+
+      <Section title="どの・どれ・どちら・どっち — qual delas usar">
+        <p className="text-sm leading-relaxed text-ink">
+          As quatro formas de perguntar "qual" já apareceram, espalhadas pelas seções anteriores
+          — mas nunca são sinônimos livres. Cada uma trava numa resposta diferente para três
+          perguntas: vem antes de um substantivo? quantas opções existem? e qual o registro?
+          Fixadas essas três respostas, a escolha deixa de ser intuição e vira uma conta simples.
+        </p>
+        <GrammarTable
+          headers={['Forma', 'Precisa de substantivo?', 'Quantas opções', 'Registro']}
+          jpCols={[0]}
+          rows={[
+            ['どの (dono)', 'sim — sempre antes de um substantivo', 'qualquer quantidade', 'neutro'],
+            ['どれ (dore)', 'não — fica sozinho', 'três ou mais', 'neutro'],
+            ['どちら (dochira)', 'não — fica sozinho', 'duas (regra clássica)', 'formal / educado'],
+            ['どっち (docchi)', 'não — fica sozinho', 'duas', 'casual'],
+          ]}
+        />
+        <Note>
+          Na prática, <span className="font-jp">どちら</span> costuma aparecer mesmo quando há
+          três ou mais opções — soa mais elegante do que{' '}
+          <span className="font-jp">どれ</span>, então quem atende ao público (garçom, vendedor,
+          recepcionista) tende a usá-la mesmo diante de um cardápio inteiro ou várias amostras.{' '}
+          <span className="font-jp">どれ</span> continua correto e comum fora do atendimento; a
+          troca por <span className="font-jp">どちら</span> é uma questão de polidez, não de
+          quantidade.
+        </Note>
       </Section>
 
       <Section title="こんな・そんな・あんな・どんな — tipo de coisa">
@@ -453,11 +614,13 @@ export default function KoSoADo() {
           jp="そんなことをいわないでください。"
           romaji="sonna koto o iwanaide kudasai."
           pt="Por favor, não diga coisas desse tipo."
+          notes="pedido com leve reprovação — そんな aponta para algo que a outra pessoa disse ou fez, não para um objeto físico."
         />
         <Ex
           jp="あんなひとにはなりたくない。"
           romaji="anna hito ni wa naritakunai."
           pt="Não quero me tornar uma pessoa como aquela."
+          notes="descreve um tipo de pessoa a partir de uma característica notada à distância — comum numa crítica leve sobre alguém fora da conversa."
         />
         <Ex
           jp="どんなおんがくがすきですか？"
@@ -513,8 +676,12 @@ export default function KoSoADo() {
 
       <Section title="Uso além da distância física">
         <p className="text-sm leading-relaxed text-ink">
-          O Ko-So-A-Do também funciona <strong>dentro da conversa</strong>, não só no espaço. Isto
-          é mais avançado, mas útil de conhecer.
+          O Ko-So-A-Do também funciona <strong>dentro da conversa</strong>, não só no espaço — a
+          mesma régua de distância das primeiras seções, só que medindo o quanto uma informação
+          já foi dita ou é compartilhada entre os dois, em vez de medir a distância física de um
+          objeto. É a exceção prometida lá atrás: a razão de{' '}
+          <span className="font-jp">あれ</span>/<span className="font-jp">あの</span> às vezes
+          aparecerem para algo fisicamente perto, desde que os dois já saibam do que se trata.
         </p>
         <GrammarTable
           headers={['Grupo', 'Quando usar no discurso', 'Exemplo']}
@@ -580,6 +747,12 @@ export default function KoSoADo() {
               'どれがいい？ / どちらがいい？',
               'どの precisa de substantivo; sozinho, use どれ ou どちら.',
             ],
+            [
+              'Usar どっち em atendimento educado',
+              'どっちがいいですか？ (a um cliente)',
+              'どちらがよろしいですか？',
+              'どっち é casual; em atendimento ou com desconhecidos, どちら soa apropriado.',
+            ],
           ]}
         />
       </Section>
@@ -594,6 +767,10 @@ export default function KoSoADo() {
             ['"aqui" (lugar)', 'ここ'],
             ['"por aqui" (direção formal)', 'こちら'],
             ['"por aqui" (direção casual)', 'こっち'],
+            ['"qual" (com substantivo)', 'どの'],
+            ['"qual" (sozinho, três ou mais)', 'どれ'],
+            ['"qual dos dois" (educado)', 'どちら'],
+            ['"quem é?" (educado, telefone/interfone)', 'どちらさま'],
             ['"deste tipo"', 'こんな'],
             ['"assim, desta forma"', 'こう'],
           ]}

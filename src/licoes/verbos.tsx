@@ -109,6 +109,16 @@ export const quiz: QuizLicao = {
       ],
       pt: 'Estudo japonês todo dia.',
     },
+    {
+      id: 'verbos-f11',
+      tokens: [
+        { texto: 'きのう', romaji: 'kinou' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'なにも', romaji: 'nani mo' },
+        { texto: 'たべなかった', romaji: 'tabenakatta' },
+      ],
+      pt: 'Não comi nada ontem. (casual)',
+    },
   ],
   perguntas: [
     {
@@ -158,6 +168,23 @@ export const quiz: QuizLicao = {
       correta: 0,
     },
     {
+      id: 'verbos-conj6',
+      tipo: 'significado',
+      pergunta: 'Qual é o passado negativo casual (なかった) de のむ (beber)?',
+      alternativas: ['のまなかった', 'のみなかった', 'のんでなかった', 'のまませんでした'],
+      correta: 0,
+      explicacao: 'Parte da forma ない (のまない) e troca い por かった: のまなかった.',
+    },
+    {
+      id: 'verbos-conj7',
+      tipo: 'significado',
+      pergunta: 'いる (no sentido de "precisar") é um verbo Grupo 1 disfarçado. Qual é a sua forma negativa casual (ない)?',
+      alternativas: ['いらない', 'いない', 'いんない', 'いにない'],
+      correta: 0,
+      explicacao:
+        'いる (precisar) é Grupo 1: vira いらない. Já いる (existir/estar) é Grupo 2 e vira いない — mesma grafia, verbos diferentes.',
+    },
+    {
       id: 'verbos-vf1',
       tipo: 'verdadeiro-falso',
       afirmacao: 'する e くる são os dois únicos verbos irregulares (Grupo 3) do japonês.',
@@ -176,6 +203,14 @@ export const quiz: QuizLicao = {
       afirmacao: 'A negativa de ある (haver) é あらない.',
       correta: false,
       explicacao: 'ある é irregular: a negativa é só ない.',
+    },
+    {
+      id: 'verbos-vf4',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'たべないでした é a forma correta de dizer "não comi" no passado casual.',
+      correta: false,
+      explicacao:
+        'ない funciona como um adjetivo -い: a forma correta troca い por かった — たべなかった. でした não se junta a ない.',
     },
   ],
 };
@@ -198,18 +233,35 @@ export default function Verbos() {
         />
       </Section>
 
-      <Section title="O que esta lição cobre">
+      <Section title="Objetivos desta lição">
         <p className="text-sm leading-relaxed text-ink">
-          Verbos são o coração da frase japonesa. Quase tudo (ação, estado, pedido, permissão)
-          passa por eles.
+          Verbos são o coração da frase japonesa: quase tudo (ação, estado, pedido, permissão)
+          passa por eles. É um assunto grande, e esta lição não tenta cobrir tudo de uma vez — o
+          objetivo é uma <strong>base sólida</strong> para funcionar no dia a dia: pedir algo num
+          restaurante, contar o que você fez ontem, dizer o que vai fazer amanhã.
         </p>
+        <p className="text-sm leading-relaxed text-ink">Ao final, você deve saber:</p>
+        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
+          <li>
+            Reconhecer o <strong>grupo</strong> de um verbo (1, 2 ou 3) e montar a base certa
+            para conjugá-lo — inclusive os "disfarçados" que parecem Grupo 2 mas não são.
+          </li>
+          <li>
+            Conjugar a forma <strong>ます</strong> nos quatro cenários (afirmativo/negativo,
+            presente/passado) e usar a forma <strong>て</strong> como conector — pedido, ação em
+            andamento, permissão, sequência de ações.
+          </li>
+          <li>
+            Conjugar a trilha <strong>casual completa</strong>: dicionário, ない, た e なかった.
+          </li>
+          <li>
+            Escolher entre a trilha educada e a casual sem misturar as duas na mesma frase, e
+            saber qual delas é a aposta mais segura no início.
+          </li>
+        </ul>
         <p className="text-sm leading-relaxed text-ink">
-          É um assunto grande, então esta lição não tenta cobrir tudo. O objetivo é dar uma{' '}
-          <strong>base sólida</strong>: como os verbos funcionam, os três grupos de conjugação e
-          as conjugações mais usadas no dia a dia (forma educada, forma て, negativa e passado).
-        </p>
-        <p className="text-sm leading-relaxed text-ink">
-          Formas mais avançadas (potencial, causativa, passiva, condicional) ficam para depois.
+          Formas mais avançadas (potencial, causativa, passiva, condicional) ficam para lições
+          futuras.
         </p>
       </Section>
 
@@ -327,7 +379,8 @@ export default function Verbos() {
           <span className="font-jp">はいる</span> (entrar),{' '}
           <span className="font-jp">はしる</span> (correr),{' '}
           <span className="font-jp">きる</span> (cortar),{' '}
-          <span className="font-jp">しる</span> (saber). Todos conjugam como Grupo 1. Por
+          <span className="font-jp">しる</span> (saber) e{' '}
+          <span className="font-jp">いる</span> (precisar). Todos conjugam como Grupo 1. Por
           exemplo, o presente educado de <span className="font-jp">かえる</span> é{' '}
           <span className="font-jp">かえります</span>, e não{' '}
           <span className="font-jp">かえます</span>.
@@ -355,6 +408,15 @@ export default function Verbos() {
           "conserto" em português). Por enquanto, o contexto e a partícula deixam claro qual é
           qual: <span className="font-jp">ふくをきる</span> (vestir roupa, ação) vs.{' '}
           <span className="font-jp">ねこがいる</span> (há um gato, estado).
+        </Note>
+        <Note>
+          <strong>Outro par de sons iguais:</strong>{' '}
+          <span className="font-jp">いる</span> também existe nos dois grupos. Como
+          "existir/estar" (Grupo 2, negativa <span className="font-jp">いない</span>) —{' '}
+          <span className="font-jp">へやにねこがいる</span> (há um gato no quarto). Como
+          "precisar" (Grupo 1 disfarçado, negativa <span className="font-jp">いらない</span>) —{' '}
+          <span className="font-jp">おかねがいる</span> (preciso de dinheiro). O contexto (do
+          que se fala) deixa claro qual é qual.
         </Note>
       </Section>
 
@@ -400,6 +462,18 @@ export default function Verbos() {
           romaji="mainichi, nihongo o benkyou shimasu."
           pt="Estudo japonês todo dia."
           notes="べんきょう (estudo) + する forma o verbo estudar. Aqui na forma educada, べんきょうします"
+        />
+        <Ex
+          jp="あしたうんどうする。"
+          romaji="ashita undou suru."
+          pt="Amanhã vou me exercitar. (casual)"
+          notes="mesmo verbo, registro casual — a forma de dicionário funcionando como futuro, entre amigos"
+        />
+        <Ex
+          jp="でんしゃがきました。"
+          romaji="densha ga kimashita."
+          pt="O trem chegou."
+          notes="くる na forma ました. Situação real: estação de trem, esperando alguém ou avisando que o trem chegou"
         />
       </Section>
 
@@ -530,6 +604,13 @@ export default function Verbos() {
           pt="Acordo, lavo o rosto e tomo café da manhã."
           notes="a forma て encadeia as três ações. Só o último verbo (たべます) carrega o tempo e a formalidade"
         />
+        <Note>
+          A forma て sozinha <strong>não pertence a nenhuma trilha</strong> — o registro vem do
+          que vem depois dela (ou do último verbo, numa sequência). Não pense nela como "a forma
+          casual" só porque não termina em ます:{' '}
+          <span className="font-jp">たべてください</span> é educado, e uma sequência como{' '}
+          <span className="font-jp">おきて…たべます</span> continua educada até o fim.
+        </Note>
       </Section>
 
       <Section title="Forma negativa casual (ないけい)">
@@ -568,6 +649,12 @@ export default function Verbos() {
           pt="Amanhã não vou à escola."
           notes="いく → いかない. A forma ない de いく é regular; só a forma て (いって) é exceção"
         />
+        <Ex
+          jp="きょうはうんどうしない。"
+          romaji="kyou wa undou shinai."
+          pt="Hoje não vou me exercitar."
+          notes="する (Grupo 3) na negativa casual: しない. A mesma lógica de たべない, só que irregular"
+        />
         <Note>
           O verbo <span className="font-jp">ある</span> (haver, para objetos e coisas) é uma
           exceção: sua negativa <strong>não</strong> é あらない, e sim <strong>ない</strong>{' '}
@@ -602,6 +689,49 @@ export default function Verbos() {
         />
       </Section>
 
+      <Section title="Passado negativo casual (なかった)">
+        <p className="text-sm leading-relaxed text-ink">
+          Fecha a trilha casual. Diferente das outras conjugações desta lição, aqui não existe
+          regra por grupo — a mudança parte sempre da forma <span className="font-jp">ない</span>{' '}
+          que você já sabe montar, então não há nada novo para decorar por verbo.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">ない</span> termina em い e se comporta como um adjetivo -い
+          só para este fim: troque い por かった, do mesmo jeito que{' '}
+          <span className="font-jp">たかい</span> (caro) vira{' '}
+          <span className="font-jp">たかかった</span> (era caro).
+        </p>
+        <GrammarTable
+          headers={['Dicionário', 'ない (negativa casual)', 'なかった (passado negativo casual)']}
+          jpCols={[0, 1, 2]}
+          rows={[
+            ['のむ', 'のまない', 'のまなかった'],
+            ['たべる', 'たべない', 'たべなかった'],
+            ['いく', 'いかない', 'いかなかった'],
+            ['する', 'しない', 'しなかった'],
+            ['くる', 'こない', 'こなかった'],
+            ['ある', 'ない', 'なかった'],
+          ]}
+        />
+        <Ex
+          jp="きのうはなにもたべなかった。"
+          romaji="kinou wa nani mo tabenakatta."
+          pt="Ontem não comi nada."
+          notes="par casual de けさはなにもたべませんでした, visto na forma ます"
+        />
+        <Ex
+          jp="ゆうべはよくねなかった。"
+          romaji="yuube wa yoku nenakatta."
+          pt="Ontem à noite não dormi bem."
+          notes="ねる (Grupo 2) → ねない → ねなかった. Frase comum ao falar de sono/cansaço, no trabalho ou com amigos"
+        />
+        <Note>
+          <strong>Erro comum:</strong> não se gruda でした em ない — たべないでした está errado.
+          ない já é a peça inteira que muda; a troca é só い → かった. O correto é{' '}
+          <span className="font-jp">たべなかった</span>.
+        </Note>
+      </Section>
+
       <Section title="Duas trilhas: forma ます vs. forma casual">
         <p className="text-sm leading-relaxed text-ink">
           Existem duas "trilhas" de conjugação correndo em paralelo. Nenhuma é mais correta;
@@ -624,29 +754,58 @@ export default function Verbos() {
           ]}
         />
         <Note>
-          <strong>Regra prática para iniciantes:</strong> escolha uma trilha e mantenha-a na
-          frase inteira. Não misture (por exemplo, terminar com ます mas usar uma forma casual
-          solta no meio sem necessidade).
+          <strong>Regra prática para iniciantes:</strong> comece pela trilha educada (ます) — é
+          sempre uma escolha segura com desconhecidos, no trabalho, em lojas e repartições, do
+          mesmo jeito que です (lição de Usos do です). Guarde a casual para quando a conversa já
+          for próxima, ou quando a outra pessoa relaxar o tom primeiro. E dentro de uma mesma frase,
+          escolha uma trilha e mantenha-a até o fim — não misture (por exemplo, terminar com ます
+          mas usar uma forma casual solta no meio sem necessidade).
+        </Note>
+      </Section>
+
+      <Section title="Nota cultural: a arte de não terminar a frase">
+        <p className="text-sm leading-relaxed text-ink">
+          O verbo japonês vem sempre por último — é ele quem carrega o tempo, a negação e, na
+          trilha ます, a polidez da frase inteira. Isso tem uma consequência prática: dá para
+          segurar a frase em suspenso e nunca chegar ao verbo, deixando o final subentendido.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          É assim que se recusa um convite ou pedido educadamente no dia a dia: em vez de dizer o
+          "não" por extenso, a frase para no meio, com um conectivo como{' '}
+          <span className="font-jp">けど</span> ("mas") no ar — e espera-se que quem ouve
+          complete o resto sozinho.
+        </p>
+        <Ex
+          jp="こんやはちょっと…"
+          romaji="konya wa chotto…"
+          pt="Hoje à noite… é meio complicado… (recusa educada, sem terminar a frase)"
+          notes="o verbo negativo (いけません/いけない) fica implícito — dizê-lo por extenso soaria mais brusco"
+        />
+        <Note>
+          Isso muda uma escolha real: ao recusar algo educadamente, você não precisa — e muitas
+          vezes não deve — terminar a frase com o verbo negativo por extenso.{' '}
+          <span className="font-jp">ちょっと…</span> seguido de silêncio já comunica a recusa,
+          com mais delicadeza do que apagar a frase com um いけません explícito.
         </Note>
       </Section>
 
       <Section title="Tabela de referência rápida">
         <GrammarTable
-          headers={['Dicionário', 'Grupo', 'ます', 'ない', 'て', 'た']}
-          jpCols={[0, 2, 3, 4, 5]}
+          headers={['Dicionário', 'Grupo', 'ます', 'ない', 'なかった', 'て', 'た']}
+          jpCols={[0, 2, 3, 4, 5, 6]}
           rows={[
-            ['かう (comprar)', '1', 'かいます', 'かわない', 'かって', 'かった'],
-            ['のむ (beber)', '1', 'のみます', 'のまない', 'のんで', 'のんだ'],
-            ['はなす (falar)', '1', 'はなします', 'はなさない', 'はなして', 'はなした'],
-            ['かく (escrever)', '1', 'かきます', 'かかない', 'かいて', 'かいた'],
-            ['あそぶ (brincar)', '1', 'あそびます', 'あそばない', 'あそんで', 'あそんだ'],
-            ['いく (ir)', '1 (exceção て/た)', 'いきます', 'いかない', 'いって', 'いった'],
-            ['かえる (voltar)', '1 (parece 2)', 'かえります', 'かえらない', 'かえって', 'かえった'],
-            ['たべる (comer)', '2', 'たべます', 'たべない', 'たべて', 'たべた'],
-            ['みる (ver)', '2', 'みます', 'みない', 'みて', 'みた'],
-            ['おきる (acordar)', '2', 'おきます', 'おきない', 'おきて', 'おきた'],
-            ['する (fazer)', '3', 'します', 'しない', 'して', 'した'],
-            ['くる (vir)', '3', 'きます', 'こない', 'きて', 'きた'],
+            ['かう (comprar)', '1', 'かいます', 'かわない', 'かわなかった', 'かって', 'かった'],
+            ['のむ (beber)', '1', 'のみます', 'のまない', 'のまなかった', 'のんで', 'のんだ'],
+            ['はなす (falar)', '1', 'はなします', 'はなさない', 'はなさなかった', 'はなして', 'はなした'],
+            ['かく (escrever)', '1', 'かきます', 'かかない', 'かかなかった', 'かいて', 'かいた'],
+            ['あそぶ (brincar)', '1', 'あそびます', 'あそばない', 'あそばなかった', 'あそんで', 'あそんだ'],
+            ['いく (ir)', '1 (exceção て/た)', 'いきます', 'いかない', 'いかなかった', 'いって', 'いった'],
+            ['かえる (voltar)', '1 (parece 2)', 'かえります', 'かえらない', 'かえらなかった', 'かえって', 'かえった'],
+            ['たべる (comer)', '2', 'たべます', 'たべない', 'たべなかった', 'たべて', 'たべた'],
+            ['みる (ver)', '2', 'みます', 'みない', 'みなかった', 'みて', 'みた'],
+            ['おきる (acordar)', '2', 'おきます', 'おきない', 'おきなかった', 'おきて', 'おきた'],
+            ['する (fazer)', '3', 'します', 'しない', 'しなかった', 'して', 'した'],
+            ['くる (vir)', '3', 'きます', 'こない', 'こなかった', 'きて', 'きた'],
           ]}
         />
       </Section>
@@ -660,6 +819,12 @@ export default function Verbos() {
             ['いく na forma て/た', 'いいて / いいた', 'いって / いった', 'いく é a única exceção da regra く → いて.'],
             ['Negativa de ある', 'あらない', 'ない', 'ある tem negativa irregular.'],
             ['う → あ nos verbos em -う', 'かあない', 'かわない', 'Verbos em う usam わ na forma ない, não あ.'],
+            [
+              'Passado negativo casual',
+              'たべないでした',
+              'たべなかった',
+              'ない funciona como adjetivo -い; troca-se só い por かった, não se gruda でした.',
+            ],
             [
               'Misturar as duas trilhas',
               'たべますから、いかない',
@@ -682,7 +847,8 @@ export default function Verbos() {
             Forme a <strong>base</strong> certa para aquele grupo.
           </li>
           <li>
-            Encaixe o <strong>sufixo</strong> que você quer (ます, ない, て, た).
+            Encaixe o <strong>sufixo</strong> que você quer (ます, ない, て, た — e なかった, que
+            sai direto do ない, sem regra nova por grupo).
           </li>
         </ol>
         <p className="text-sm leading-relaxed text-ink">

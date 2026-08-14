@@ -96,6 +96,23 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - Toda lição abre com uma seção **"Como ler esta lição"**, explicando o
   formato usado (normalmente via `ReadingKey`) e, quando relevante,
   pronúncias especiais de partículas/sons daquela lição.
+- **Lições (`src/licoes/*.tsx`) são a fonte primária de aprendizado novo do
+  app, não material de revisão.** Escreva como um professor de japonês que
+  também conhece cultura japonesa, a vida real no Japão e as dificuldades
+  específicas de um falante de português. Extensão é consequência de
+  profundidade, nunca meta: antes de manter um parágrafo ou exemplo,
+  verifique se cortá-lo faria o leitor perder informação nova. Cada seção
+  abre explicando o quê, o porquê e o quando — não só a mecânica antes dos
+  exemplos. Todo ponto central tem 3+ exemplos que diferem em uso, registro
+  ou contexto (não só no vocabulário), sendo ao menos um em situação real;
+  formas parecidas que o aluno vai confundir são contrastadas lado a lado;
+  há pelo menos uma nota cultural amarrada ao tema e uma seção de erros
+  comuns. Pesquisar fontes abertas é recomendado para **verificar**
+  naturalidade, registro e uso real — nunca para compilar: nenhuma frase,
+  tabela ou explicação é copiada ou traduzida de terceiros. Padrão
+  completo, com critérios de profundidade, arquétipos de lição, romanização
+  e checklist, em `docs/padrao-licoes.md` — consulte antes de criar ou
+  expandir uma lição.
 
 ## Regras de negócio
 
