@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { db, type KanaType } from '../db/schema';
+import { db, type KanaProgress, type KanaType } from '../db/schema';
 import { KANA_FAMILIES, familyPreview, getKanaByFamilies, type KanaEntry, type KanaGroup } from '../data/kana';
 import KanaCanvas from '../components/KanaCanvas';
 import AudioButton from '../components/AudioButton';
@@ -53,8 +53,10 @@ export default function Kana() {
     });
   }
 
-  function startTest() {
-    setPool(shuffle(getKanaByFamilies(script, selected)));
+  async function startTest() {
+    const entries = getKanaByFamilies(script, selected);
+    const progress = await db.kanaProgress.bulkGet(entries.map((e) => e.char));
+    setPool(shuffle(buildWeightedPool(entries, progress, mode)));
     setAnswers([]);
     setStage('test');
   }
@@ -701,6 +703,30 @@ async function updateProgress(entry: KanaEntry, correct: boolean) {
     drawBest: p?.drawBest,
     lastPracticed: Date.now(),
   });
+}
+
+// Kana com histórico de mais erros entram repetidos no pool (até
+// MAX_EXTRA_REPS vezes a mais), pra receberem mais prática dentro da sessão
+// em vez de aparecerem só uma vez igual aos que o usuário já domina.
+const MAX_EXTRA_REPS = 3;
+
+function buildWeightedPool(entries: KanaEntry[], progress: Array<KanaProgress | undefined>, mode: Mode): KanaEntry[] {
+  const pool: KanaEntry[] = [];
+  entries.forEach((entry, i) => {
+    pool.push(entry);
+    const reps = Math.round(errorRateFor(progress[i], mode) * MAX_EXTRA_REPS);
+    for (let r = 0; r < reps; r++) pool.push(entry);
+  });
+  return pool;
+}
+
+function errorRateFor(p: KanaProgress | undefined, mode: Mode): number {
+  if (!p) return 0;
+  if (mode === 'desenho') {
+    return p.drawBest === undefined ? 0 : (100 - p.drawBest) / 100;
+  }
+  const total = p.romajiCorrect + p.romajiWrong;
+  return total === 0 ? 0 : p.romajiWrong / total;
 }
 
 function shuffle<T>(arr: T[]): T[] {
