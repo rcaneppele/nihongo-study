@@ -1,13 +1,14 @@
 import type { KanaType } from '../db/schema';
 
+export type KanaGroup = 'single' | 'composite';
+
 export interface KanaEntry {
   char: string;
   romaji: string;
   type: KanaType;
   row: string; // família do gojūon: a, ka, ..., ga, za, ..., kya, sha, ...
+  group: KanaGroup;
 }
-
-export type KanaGroup = 'single' | 'composite';
 
 export interface KanaFamily {
   key: string;
@@ -72,12 +73,13 @@ function toKatakana(unit: string): string {
 export const KANA_FAMILIES: KanaFamily[] = FAMILY_DATA.map(({ key, group }) => ({ key, group }));
 
 function buildEntries(type: KanaType): KanaEntry[] {
-  return FAMILY_DATA.flatMap(({ key, kana, romaji }) =>
+  return FAMILY_DATA.flatMap(({ key, group, kana, romaji }) =>
     kana.map((unit, i) => ({
       char: type === 'hiragana' ? unit : toKatakana(unit),
       romaji: romaji[i],
       type,
       row: key,
+      group,
     }))
   );
 }
@@ -103,4 +105,35 @@ export function familyPreview(type: KanaType, key: string): string {
     .filter((k) => k.row === key)
     .map((k) => k.char)
     .join('');
+}
+
+// Grupos de kana que iniciantes costumam confundir visualmente — usados como
+// distratores prioritários no modo "múltipla escolha" (src/routes/Kana.tsx).
+// Formas parecidas dentro do mesmo script se confundem por motivos
+// diferentes em hiragana e katakana, por isso as listas são separadas (não
+// dá pra derivar uma da outra pelo deslocamento de código Unicode).
+const HIRAGANA_CONFUSABLE_GROUPS: string[][] = [
+  ['ぬ', 'め', 'ね', 'れ', 'わ'],
+  ['さ', 'ち', 'き'],
+  ['る', 'ろ'],
+  ['は', 'ほ'],
+  ['く', 'へ'],
+  ['い', 'り'],
+  ['あ', 'お'],
+];
+
+const KATAKANA_CONFUSABLE_GROUPS: string[][] = [
+  ['シ', 'ツ'],
+  ['ソ', 'ン'],
+  ['ウ', 'ワ'],
+  ['チ', 'テ'],
+  ['ル', 'レ'],
+  ['ミ', 'ニ', 'コ'],
+  ['ク', 'タ'],
+];
+
+export function getConfusables(type: KanaType, char: string): string[] {
+  const groups = type === 'hiragana' ? HIRAGANA_CONFUSABLE_GROUPS : KATAKANA_CONFUSABLE_GROUPS;
+  const group = groups.find((g) => g.includes(char));
+  return group ? group.filter((c) => c !== char) : [];
 }

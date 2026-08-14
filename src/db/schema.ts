@@ -44,6 +44,8 @@ export interface KanaProgress {
   type: KanaType;
   romajiCorrect: number;
   romajiWrong: number;
+  choiceCorrect?: number; // modo múltipla escolha (romaji → kana) — direção oposta à de romajiCorrect/Wrong
+  choiceWrong?: number;
   drawBest?: number; // melhor pontuação de caligrafia (0..100)
   lastPracticed?: number;
 }

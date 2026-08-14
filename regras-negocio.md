@@ -121,8 +121,33 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 
 ### Fluxo: teste com pontuação
 - Configuração → Teste → Resultado (`src/routes/Kana.tsx`).
-- O teste cobre todos os kana das famílias selecionadas, uma vez cada, em
-  ordem aleatória (sem repetição dentro do teste).
+- O teste cobre todos os kana das famílias selecionadas pelo menos uma vez,
+  em ordem aleatória. Kana com maior taxa de erro histórica em
+  `kanaProgress` (para o modo escolhido — `romajiWrong`/`romajiCorrect` no
+  modo "digitar romaji", `choiceWrong`/`choiceCorrect` na "múltipla
+  escolha", `drawBest` no "desenhar") entram repetidos no pool, até 3 vezes
+  a mais (`buildWeightedPool`/`errorRateFor`), pra receberem mais prática na
+  mesma sessão; kana sem histórico ou já dominados aparecem só uma vez.
+- **Atalho "Praticar pontos fracos"**: na tela de configuração, ignora a
+  seleção manual de famílias e monta a sessão com os kana de maior taxa de
+  erro no modo/escrita atuais (`getWeakKana`), até 20 (`WEAK_POOL_CAP`). Só
+  entram kana já praticados nesse modo e com pelo menos um erro; sem
+  histórico de erro, o botão fica desabilitado. O contador exibido reflete
+  só esses kana realmente errados; se houver poucos (menos que
+  `MIN_WEAK_POOL` = 4), a sessão de fato (não o contador) é completada com
+  outros kana do mesmo script — praticados e acertados primeiro, depois
+  nunca vistos — só pra dar variedade mínima à sessão (`padWeakPool`).
+  **Sem repetição ponderada** aqui (diferente do teste normal): esse pool
+  já é só os piores kana, então pesar de novo por cima inflava demais a
+  sessão (ex.: 5 kana fracos viravam 17 perguntas) — cada kana aparece uma
+  vez. "Refazer teste" no resultado repete a mesma origem (fracos ou
+  seleção normal) usada para iniciar a sessão.
+- **Sem repetição adjacente**: depois de montar o pool (com as repetições
+  extra de kana fracos), `arrangeNoAdjacent` reordena pra nunca colocar o
+  mesmo kana duas vezes seguidas, a menos que seja matematicamente
+  impossível evitar — repetição "colada" é prática massiva, não espaçada, e
+  esvazia o sentido de repetir o item. Aplica-se a toda sessão, não só ao
+  atalho de pontos fracos.
 - Depois de responder (ou verificar o desenho), o próximo kana avança
   automaticamente após um tempo fixo — maior para erro do que para acerto,
   e maior ainda no modo desenhar (dá tempo de ler o feedback de traços) —
@@ -138,6 +163,25 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   `tsu`, `fu`).
 - Resultado atualiza `kanaProgress` (`romajiCorrect` / `romajiWrong`,
   `lastPracticed`).
+
+### Modo "múltipla escolha"
+- Direção oposta ao modo "digitar romaji": mostra o romaji, o usuário toca
+  no kana correspondente entre 6 opções (`ChoiceQuestion`, `CHOICE_COUNT` em
+  `src/routes/Kana.tsx`).
+- Distratores priorizam kana visualmente confundíveis com o correto
+  (`getConfusables`, `src/data/kana.ts` — grupos como ぬ/め/ね/れ/わ ou シ/ツ,
+  distintos entre hiragana e katakana), completando com aleatórios quando
+  faltam opções. A busca por aleatórios segue em camadas: primeiro dentro
+  da seleção da sessão, depois em todo o script mas só no mesmo grupo
+  (básicos ou combinados/yōon — `KanaEntry.group`) do kana perguntado, e só
+  como último recurso (praticamente nunca acontece) em qualquer kana do
+  script — evita que um combinado tipo りゅ apareça como opção numa sessão
+  só de kana básicos, ou vice-versa. Nunca dois distratores com o mesmo
+  romaji do correto (ex.: じ/ぢ).
+- Resultado atualiza `kanaProgress` (`choiceCorrect` / `choiceWrong`,
+  `lastPracticed`) — contadores separados de `romajiCorrect`/`romajiWrong`
+  porque testam a direção oposta (reconhecer o kana a partir do romaji, não
+  o contrário).
 
 ### Modo "desenhar"
 - O app pede um kana (pelo romaji) e o usuário desenha no canvas
