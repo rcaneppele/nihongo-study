@@ -39,6 +39,8 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
   Texto Simples"); `parseCardsFile()` detecta o formato pelo nome do
   arquivo/conteúdo.
 - `src/features/flashcards/StudySession.tsx` — sessão de revisão/prática.
+- `src/features/flashcards/ProgressStats.tsx` — estatísticas de progresso
+  (aba "Progresso" em `/flashcards`), calculadas de `db.cards`/`db.reviews`.
 - `src/features/kana/strokes.ts` — captura/normalização de traços e
   `scoreDrawing()`: reconhecimento + pontuação de caligrafia contra o KanjiVG.
 - `src/components/KanaCanvas.tsx` — canvas de desenho (pointer events).
@@ -94,10 +96,6 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - Toda lição abre com uma seção **"Como ler esta lição"**, explicando o
   formato usado (normalmente via `ReadingKey`) e, quando relevante,
   pronúncias especiais de partículas/sons daquela lição.
-
-## Próximas tarefas (sugestão de ordem)
-
-1. Estatísticas de progresso (usar a tabela `reviews`).
 
 ## Regras de negócio
 

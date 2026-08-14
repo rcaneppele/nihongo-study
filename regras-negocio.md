@@ -10,6 +10,16 @@ comportamento devem ser refletidas aqui.
   categoria opcional e tags.
 - Categoria é o eixo principal de filtro na tela de estudo.
 
+### Lista de cards (aba "Estudar")
+Pra não virar uma lista infinita conforme o usuário acumula cards: chips de
+categoria filtram primeiro, depois uma busca por texto (frente/verso/leitura,
+case-insensitive) filtra mais, e só então a lista renderiza — no máximo
+`PAGE_SIZE` (20) cards por vez, com um botão "Carregar mais" pra revelar o
+próximo lote. Trocar de categoria ou de busca reseta a paginação de volta
+pro topo. Isso é só sobre exibição — os filtros de categoria/busca não
+afetam quais cards entram em "Estudar"/"Praticar" (isso usa `dueDate`/
+categoria selecionada nas telas de sessão, sem relação com a busca).
+
 ### Repetição espaçada (FSRS)
 Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
 `difficulty`, `state` (New/Learning/Review/Relearning), `reps`, `lapses`,
@@ -77,6 +87,27 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   importados (clicar "Importar selecionados" de novo, ou selecionar
   categorias sobrepostas, não duplica cards). Cards novos entram com estado
   SRS inicial, igual à importação manual.
+
+### Progresso
+Aba "Progresso" em `/flashcards` (`src/features/flashcards/ProgressStats.tsx`).
+Calcula tudo no cliente a partir de `db.cards`/`db.reviews` — nenhum dado
+novo persistido, sem lib de gráfico (divs + Tailwind).
+
+- **Taxa de acerto**: `quality > 1` conta como acerto. Funciona tanto pra
+  notas do FSRS (1..4, onde 1 = Again/erro) quanto pras antigas do SM-2
+  (0..5, onde 0 = De novo/erro) — as duas escalas têm erro em ≤1, sem overlap
+  ambíguo, então não precisa saber de qual escala veio a revisão.
+- **Estágio dos cards**: Novo (`state !== 2`), Aprendendo (`state === 2` e
+  `scheduledDays < 21`), Maduro (`state === 2` e `scheduledDays >= 21`, limiar
+  igual ao "mature" do Anki). Não há baldes de "Aprendendo"/"Reaprendendo" do
+  FSRS (`state` 1/3) porque `enable_short_term: false` faz o algoritmo pular
+  direto de Novo pra Revisão, mesmo depois de um lapso — ver
+  `src/features/srs/fsrs.ts`.
+- **Heatmap de revisões**: últimos 84 dias (12 semanas), um quadrado por dia,
+  intensidade da cor proporcional ao nº de revisões daquele dia relativo ao
+  dia mais cheio do período. Alinhado por dia da semana (estilo GitHub).
+- **Sequência atual**: dias consecutivos (contando de hoje pra trás) com pelo
+  menos uma revisão.
 
 ## 2. Treino de kana
 

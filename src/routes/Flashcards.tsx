@@ -1,14 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/fsrs';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
+import ProgressStats from '../features/flashcards/ProgressStats';
 import AudioButton from '../components/AudioButton';
 
+type TabKey = 'estudar' | 'progresso';
+
+const TABS: { key: TabKey; label: string }[] = [
+  { key: 'estudar', label: 'Estudar' },
+  { key: 'progresso', label: 'Progresso' },
+];
+
+function asTabKey(value: string | null): TabKey | null {
+  return TABS.some((t) => t.key === value) ? (value as TabKey) : null;
+}
+
+const PAGE_SIZE = 20;
+
 export default function Flashcards() {
+  const [params, setParams] = useSearchParams();
+  const tab = asTabKey(params.get('tab')) ?? 'estudar';
   const [category, setCategory] = useState<string>('todas');
+  const [search, setSearch] = useState('');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [session, setSession] = useState<{ mode: StudyMode; cards: Card[] } | null>(null);
   const [configuringPractice, setConfiguringPractice] = useState(false);
+
+  function setTab(key: TabKey) {
+    setParams(key === 'estudar' ? {} : { tab: key }, { replace: true });
+  }
 
   const cards = useLiveQuery(() => db.cards.toArray(), [], [] as Card[]);
   const categories = Array.from(
@@ -17,6 +40,22 @@ export default function Flashcards() {
 
   const filtered = (cards ?? []).filter((c) => category === 'todas' || c.category === category);
   const due = filtered.filter((c) => c.dueDate <= Date.now());
+
+  const query = search.trim().toLowerCase();
+  const searched = query
+    ? filtered.filter(
+        (c) =>
+          c.front.toLowerCase().includes(query) ||
+          c.back.toLowerCase().includes(query) ||
+          (c.reading ?? '').toLowerCase().includes(query)
+      )
+    : filtered;
+  const visible = searched.slice(0, visibleCount);
+  const remaining = searched.length - visible.length;
+
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [category, search]);
 
   function startReview() {
     setSession({ mode: 'review', cards: due });
@@ -64,50 +103,103 @@ export default function Flashcards() {
         </div>
       </div>
 
-      {categories.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          <Chip active={category === 'todas'} onClick={() => setCategory('todas')}>
-            Todas
-          </Chip>
-          {categories.map((c) => (
-            <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
-              {c}
-            </Chip>
-          ))}
-        </div>
-      )}
-
-      <AddCardForm />
-
-      <ul className="space-y-2">
-        {filtered.map((card) => (
-          <li key={card.id} className="card-surface flex items-center justify-between gap-4">
-            <div className="flex items-center">
-              <span className="font-jp text-lg">{card.front}</span>
-              <AudioButton text={card.front} size="sm" />
-              <span className="mx-2 text-line">·</span>
-              <span className="text-sm">{card.back}</span>
-              {card.category && (
-                <span className="ml-2 rounded bg-line/60 px-2 py-0.5 text-xs text-sage">
-                  {card.category}
-                </span>
-              )}
-            </div>
-            <button
-              className="text-sm text-sage hover:text-hanko"
-              onClick={() => db.cards.delete(card.id)}
-              aria-label={`Excluir ${card.front}`}
-            >
-              Excluir
-            </button>
-          </li>
+      <div role="tablist" aria-label="Seções de flash cards" className="flex gap-1 border-b border-line">
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.key}
+            onClick={() => setTab(t.key)}
+            className={[
+              'rounded-t-lg px-4 py-2 text-sm font-medium transition-colors',
+              tab === t.key ? 'border border-b-0 border-line bg-surface text-indigo' : 'text-sage hover:text-ink',
+            ].join(' ')}
+          >
+            {t.label}
+          </button>
         ))}
-        {filtered.length === 0 && (
-          <li className="card-surface text-center text-sage">
-            Nenhum card ainda. Adicione acima ou importe na tela de dados.
-          </li>
+      </div>
+
+      <div role="tabpanel">
+        {tab === 'progresso' ? (
+          <ProgressStats />
+        ) : (
+          <div className="space-y-6">
+            {categories.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                <Chip active={category === 'todas'} onClick={() => setCategory('todas')}>
+                  Todas
+                </Chip>
+                {categories.map((c) => (
+                  <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
+                    {c}
+                  </Chip>
+                ))}
+              </div>
+            )}
+
+            <AddCardForm />
+
+            {filtered.length > 0 && (
+              <div>
+                <input
+                  type="search"
+                  className="field"
+                  placeholder="Buscar por frente, verso ou leitura…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  aria-label="Buscar cards"
+                />
+                {query && (
+                  <p className="mt-1 text-xs text-sage">
+                    {searched.length} de {filtered.length} card(s)
+                  </p>
+                )}
+              </div>
+            )}
+
+            <ul className="space-y-2">
+              {visible.map((card) => (
+                <li key={card.id} className="card-surface flex items-center justify-between gap-4">
+                  <div className="flex items-center">
+                    <span className="font-jp text-lg">{card.front}</span>
+                    <AudioButton text={card.front} size="sm" />
+                    <span className="mx-2 text-line">·</span>
+                    <span className="text-sm">{card.back}</span>
+                    {card.category && (
+                      <span className="ml-2 rounded bg-line/60 px-2 py-0.5 text-xs text-sage">
+                        {card.category}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    className="text-sm text-sage hover:text-hanko"
+                    onClick={() => db.cards.delete(card.id)}
+                    aria-label={`Excluir ${card.front}`}
+                  >
+                    Excluir
+                  </button>
+                </li>
+              ))}
+              {filtered.length === 0 && (
+                <li className="card-surface text-center text-sage">
+                  Nenhum card ainda. Adicione acima ou importe na tela de dados.
+                </li>
+              )}
+              {filtered.length > 0 && searched.length === 0 && (
+                <li className="card-surface text-center text-sage">Nenhum card encontrado para "{search}".</li>
+              )}
+            </ul>
+
+            {remaining > 0 && (
+              <button className="btn-ghost w-full" onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}>
+                Carregar mais ({remaining} restante{remaining === 1 ? '' : 's'})
+              </button>
+            )}
+          </div>
         )}
-      </ul>
+      </div>
     </div>
   );
 }
