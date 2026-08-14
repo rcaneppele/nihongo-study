@@ -43,7 +43,11 @@ export function parseCardsJson(text: string): Card[] {
   if (!Array.isArray(data)) throw new Error('JSON de cards deve ser um array.');
   const now = Date.now();
   return data.map((raw: Partial<Card>) => ({
-    id: raw.id ?? newId(),
+    // Sempre gera um id novo, mesmo se o JSON trouxer um: preservar o id
+    // do arquivo só criaria risco de colidir com um card existente (o
+    // bulkAdd falha pra tudo no lote) sem nenhum ganho — essa importação
+    // sempre insere cards novos, nunca faz merge por id (isso é o backup).
+    id: newId(),
     front: raw.front ?? '',
     back: raw.back ?? '',
     reading: raw.reading,

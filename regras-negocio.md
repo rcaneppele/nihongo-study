@@ -19,6 +19,10 @@ próximo lote. Trocar de categoria ou de busca reseta a paginação de volta
 pro topo. Isso é só sobre exibição — os filtros de categoria/busca não
 afetam quais cards entram em "Estudar"/"Praticar" (isso usa `dueDate`/
 categoria selecionada nas telas de sessão, sem relação com a busca).
+- Se a categoria selecionada deixa de existir (ex.: apagou o último card
+  dela), a seleção volta pra "Todas" sozinha — senão a lista ficaria presa
+  filtrada por uma categoria vazia, sem chip visível pra sair desse estado
+  (a fileira de chips só aparece se houver pelo menos uma categoria).
 
 ### Repetição espaçada (FSRS)
 Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
@@ -29,8 +33,16 @@ Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
 
 - Card novo: `freshSrs()` cria um card FSRS vazio (`createEmptyCard`), que
   vence imediatamente.
-- A sessão de estudo só inclui cards com `dueDate <= agora`, respeitando o filtro
-  de categoria selecionado.
+- A sessão de estudo ("Estudar") inclui **todos** os cards com
+  `dueDate <= agora`, de qualquer categoria — o chip de categoria da lista
+  em `/flashcards` é só filtro de exibição, não afeta essa seleção (ver
+  seção "Lista de cards" acima). Quem quer estudar restrito a uma categoria
+  usa "Praticar" (`PracticeConfigScreen`, seleção de categoria própria),
+  que não grava no SRS.
+- A ordem de entrega dos cards na sessão é embaralhada (`shuffle`,
+  `src/routes/Flashcards.tsx`), tanto em "Estudar" quanto em "Praticar" —
+  senão a ordem seria sempre a de inserção no banco, e o usuário acaba
+  decorando a sequência em vez de lembrar cada card de forma independente.
 - O usuário avalia cada revisão com uma nota do FSRS (`Rating`). Botões:
   - **De novo** → `Rating.Again` (1)
   - **Difícil** → `Rating.Hard` (2)
@@ -40,7 +52,10 @@ Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
   então o menor intervalo possível é 1 dia — sem passos de aprendizado em
   minutos, já que cada card só é revisado uma vez por sessão) e devolve o
   novo `stability/difficulty/state/reps/lapses/scheduledDays/dueDate`.
-- Cada revisão grava uma linha em `reviews` (para estatísticas futuras).
+- Cada revisão grava uma linha em `reviews` (para estatísticas futuras). O
+  botão de nota fica desabilitado enquanto a gravação está em andamento
+  (`StudySession.tsx`), pra um clique duplo não gravar duas revisões do
+  mesmo card e pular o próximo sem revisar.
 
 **Migração do SM-2** (schemaVersion 1 → 2): não há conversão exata entre os
 modelos de estado do SM-2 (`ef/interval/repetitions`) e do FSRS
@@ -64,7 +79,10 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   `back/meaning/significado/verso/defini`, `reading/leitura/kana/furigana`)
   ou, sem cabeçalho de colunas, pela ordem. Também serve de fallback
   genérico para qualquer TSV.
-- Cards importados entram como novos (estado SRS inicial), com novo UUID.
+- Cards importados entram como novos (estado SRS inicial), sempre com novo
+  UUID gerado na hora — mesmo se o JSON trouxer um `id`, ele é ignorado
+  (evita colidir com um card já existente e derrubar o `bulkAdd` inteiro;
+  essa importação nunca faz merge por id, isso é o backup — ver seção 4).
 
 ### Deck de vocabulário N5
 - `n5.json` traz ~700 palavras do vocabulário N5 (JLPT), traduzidas e

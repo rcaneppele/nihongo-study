@@ -22,6 +22,7 @@ export default function StudySession({
 }) {
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
+  const [grading, setGrading] = useState(false);
 
   const card = cards[index];
   if (!card) {
@@ -41,6 +42,11 @@ export default function StudySession({
   }
 
   async function grade(rating: Grade) {
+    // Sem essa trava, um segundo clique durante a gravação (dedo trêmulo,
+    // duplo clique) registraria uma revisão duplicada no histórico e pularia
+    // o próximo card sem revisar (advance() chamado duas vezes).
+    if (grading) return;
+    setGrading(true);
     const result = applyFsrs(card, rating);
     await db.transaction('rw', db.cards, db.reviews, async () => {
       await db.cards.update(card.id, {
@@ -55,6 +61,7 @@ export default function StudySession({
         intervalAfter: result.scheduledDays,
       });
     });
+    setGrading(false);
     advance();
   }
 
@@ -96,7 +103,7 @@ export default function StudySession({
       ) : mode === 'review' ? (
         <div className="grid grid-cols-4 gap-2">
           {REVIEW_GRADES.map((g) => (
-            <button key={g.label} className="btn-ghost" onClick={() => grade(g.grade)}>
+            <button key={g.label} className="btn-ghost" disabled={grading} onClick={() => grade(g.grade)}>
               {g.label}
             </button>
           ))}

@@ -38,8 +38,14 @@ export default function Flashcards() {
     new Set((cards ?? []).map((c) => c.category).filter(Boolean) as string[])
   ).sort();
 
-  const filtered = (cards ?? []).filter((c) => category === 'todas' || c.category === category);
-  const due = filtered.filter((c) => c.dueDate <= Date.now());
+  const all = cards ?? [];
+  const filtered = all.filter((c) => category === 'todas' || c.category === category);
+  // due é sempre sobre TODOS os cards, não sobre `filtered` — o chip de
+  // categoria é só um filtro de exibição da lista abaixo (ver
+  // regras-negocio.md), não deve reduzir silenciosamente o que "Estudar"
+  // revisa. Quem quer estudar por categoria usa "Praticar" (tem seleção de
+  // categoria própria e explícita, sem afetar o SRS).
+  const due = all.filter((c) => c.dueDate <= Date.now());
 
   const query = search.trim().toLowerCase();
   const searched = query
@@ -57,8 +63,19 @@ export default function Flashcards() {
     setVisibleCount(PAGE_SIZE);
   }, [category, search]);
 
+  // Se a categoria selecionada deixou de existir (ex.: apagou o último card
+  // dela), volta pra "todas" — senão a lista fica presa vazia, sem chip
+  // visível pra sair desse filtro (a fileira de chips só aparece se houver
+  // categoria).
+  useEffect(() => {
+    if (category !== 'todas' && !categories.includes(category)) setCategory('todas');
+  }, [category, categories]);
+
   function startReview() {
-    setSession({ mode: 'review', cards: due });
+    // Embaralha, igual à prática — senão a ordem de revisão é sempre a
+    // mesma (ordem de inserção no banco), e o usuário pode acabar
+    // decorando a sequência dos cards em vez de lembrar cada um sozinho.
+    setSession({ mode: 'review', cards: shuffle(due) });
   }
 
   function startPractice(pool: Card[]) {
@@ -86,7 +103,7 @@ export default function Flashcards() {
         <div>
           <h1 className="font-display text-2xl font-semibold">Flash cards</h1>
           <p className="text-sm text-sage">
-            {filtered.length} cards · {due.length} para revisar
+            {all.length} cards · {due.length} para revisar
           </p>
         </div>
         <div className="flex gap-2">
