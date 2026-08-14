@@ -49,7 +49,7 @@ src/
 ├── routes/        páginas (Início, Flash cards, Kana, Lições, Quiz, Config)
 ├── components/    UI reutilizável (Layout, KanaCanvas, componentes de lição)
 ├── features/
-│   ├── srs/       algoritmo SM-2
+│   ├── srs/       algoritmo FSRS
 │   ├── flashcards/ importação CSV/JSON, sessão de revisão
 │   └── kana/      captura de traços e scoreDrawing() (reconhecimento + pontuação)
 ├── licoes/        uma lição de gramática/vocabulário por arquivo + registro central
@@ -59,10 +59,11 @@ src/
 
 ## Estado atual
 
-Funciona: cadastro/listagem/filtro de cards, sessão de revisão com SM-2,
+Funciona: cadastro/listagem/filtro de cards, sessão de revisão com FSRS,
 drill de kana por romaji, canvas de desenho com reconhecimento e pontuação de
-caligrafia contra o KanjiVG, export/import de backup e de cards, e 10 lições de
-gramática/vocabulário com quiz de fixação.
+caligrafia contra o KanjiVG, export/import de backup e de cards (CSV, JSON ou
+texto exportado do Anki), tema claro/escuro, e 10 lições de gramática/
+vocabulário com quiz de fixação.
 
 A implementar: animação da ordem de traço correta no canvas de kana, deck N5
 completo (hoje há só um CSV de exemplo em `src/data/seed/`) e estatísticas de

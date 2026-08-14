@@ -41,9 +41,19 @@ usam a escala antiga do SM-2 (0..5); não é relido pelo algoritmo, só fica
 como registro histórico.
 
 ### Importação
+`parseCardsFile()` (`src/features/flashcards/importCards.ts`) detecta o
+formato pelo nome do arquivo/conteúdo e chama o parser certo:
 - CSV: `front,back,reading,category,tags` (com ou sem cabeçalho; tags separadas
   por `;`). Parser simples — não cobre vírgulas dentro de aspas.
 - JSON: array de objetos de card.
+- Texto do Anki ("Notas em Texto Simples" ou "Cartões em Texto Simples"):
+  lê cabeçalho `#separator`/`#html`/`#notetype column`/`#deck column`/
+  `#tags column`/`#columns` quando presente (senão detecta separador por
+  conteúdo); remove tags HTML e `[sound:...]`; localiza frente/verso/leitura
+  por nome de coluna (`front/expression/frente/palavra/termo`,
+  `back/meaning/significado/verso/defini`, `reading/leitura/kana/furigana`)
+  ou, sem cabeçalho de colunas, pela ordem. Também serve de fallback
+  genérico para qualquer TSV.
 - Cards importados entram como novos (estado SRS inicial), com novo UUID.
 
 ## 2. Treino de kana
@@ -60,6 +70,12 @@ como registro histórico.
 - Configuração → Teste → Resultado (`src/routes/Kana.tsx`).
 - O teste cobre todos os kana das famílias selecionadas, uma vez cada, em
   ordem aleatória (sem repetição dentro do teste).
+- Depois de responder (ou verificar o desenho), o próximo kana avança
+  automaticamente após um tempo fixo — maior para erro do que para acerto,
+  e maior ainda no modo desenhar (dá tempo de ler o feedback de traços) —
+  com uma barra de progresso indicando a contagem
+  (`useHoldToPauseAdvance`, `src/lib/useHoldToPauseAdvance.ts`). Segurar o
+  dedo/clique na tela pausa a contagem, para o usuário poder ler com calma.
 - Ao final, mostra percentual de acerto, contagem e lista dos kana errados
   para revisão. Pode repetir o mesmo teste ou voltar à seleção.
 
@@ -85,9 +101,9 @@ como registro histórico.
   - direção de cada traço (ângulo do ponto inicial ao final).
   - pontuação 0–100; ≥ `DRAW_PASS_THRESHOLD` (65) conta como acerto no teste.
     A melhor pontuação de cada kana é gravada em `kanaProgress.drawBest`.
-- Após verificar, mostra os traços corretos numerados e coloridos por ordem
-  (`KanaReferenceFigure`) como feedback — não há animação ainda (ver
-  CLAUDE.md, próximas tarefas).
+- Após verificar, `KanaReferenceFigure`/`KanaStrokeAnimation` anima o
+  traçado correto na ordem certa (com botão de repetir a animação) como
+  feedback; o avanço automático só é liberado depois que a animação termina.
 
 ## 3. Lições de estudo
 

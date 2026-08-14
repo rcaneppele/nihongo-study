@@ -34,10 +34,19 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
   `regras-negocio.md`).
-- `src/features/flashcards/` — importação CSV/JSON e sessão de revisão.
+- `src/features/flashcards/importCards.ts` — importação de cards via CSV,
+  JSON ou texto exportado do Anki ("Notas em Texto Simples"/"Cartões em
+  Texto Simples"); `parseCardsFile()` detecta o formato pelo nome do
+  arquivo/conteúdo.
+- `src/features/flashcards/StudySession.tsx` — sessão de revisão/prática.
 - `src/features/kana/strokes.ts` — captura/normalização de traços e
   `scoreDrawing()`: reconhecimento + pontuação de caligrafia contra o KanjiVG.
 - `src/components/KanaCanvas.tsx` — canvas de desenho (pointer events).
+- `src/lib/useHoldToPauseAdvance.ts` — hook do auto-avanço cronometrado do
+  treino de kana (barra de progresso; segurar a tela pausa a contagem).
+- `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/
+  sistema, persistido em `db.meta` (entra no backup) e cacheado em
+  `localStorage` só para aplicar antes do primeiro paint.
 - `src/data/kana.ts` — kana (seion, dakuten/handakuten, yōon) com romaji e
   famílias para o seletor de treino.
 - `src/data/kanjivg/kana-strokes.json` — dados de traço (ordem/forma) do
@@ -61,6 +70,9 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - Estilização só com Tailwind + as classes utilitárias em `src/index.css`
   (`btn-primary`, `card-surface`, `field`, `label`, etc.). Cores pelos tokens
   (`indigo`, `hanko`, `paper`, `ink`, `sage`, `line`) — não cravar hex solto.
+  O modo escuro é resolvido nesses mesmos tokens (redefinidos sob `:root.dark`
+  em `src/index.css`), não com variantes `dark:` espalhadas pelos componentes
+  — então usar os tokens já garante suporte a claro/escuro de graça.
 - Acesso a dados sempre via `db` (Dexie); em componentes, preferir `useLiveQuery`
   para reatividade.
 - Comentários e textos de UI em português (pt-BR).
@@ -82,11 +94,8 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 
 ## Próximas tarefas (sugestão de ordem)
 
-1. Animação da ordem de traço correta no `KanaCanvas` (hoje a referência só
-   aparece como figura estática após "Verificar", em `KanaReferenceFigure`
-   em `src/routes/Kana.tsx`).
-2. Deck N5 completo em `src/data/seed/` + importação com um clique.
-3. Estatísticas de progresso (usar a tabela `reviews`).
+1. Deck N5 completo em `src/data/seed/` + importação com um clique.
+2. Estatísticas de progresso (usar a tabela `reviews`).
 
 ## Regras de negócio
 
