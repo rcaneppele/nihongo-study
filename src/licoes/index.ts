@@ -7,6 +7,8 @@ export interface LicaoMeta {
   subtitle: string;
   emoji: string;
   tags: string[];
+  /** Habilita o botão "Ouvir lição" (narração via Web Speech API). Piloto: só `desu` por ora. */
+  audio?: boolean;
 }
 
 export interface LicaoEntry {
