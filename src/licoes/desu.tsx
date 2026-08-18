@@ -7,7 +7,6 @@ export const meta = {
   subtitle: 'Presente, passado, afirmativo e negativo',
   emoji: '🟰',
   tags: ['gramática', 'n5'],
-  audio: true,
 };
 
 export const quiz: QuizLicao = {

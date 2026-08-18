@@ -29,11 +29,7 @@ export function Ex({
         <p className="break-words font-jp text-lg leading-snug text-ink">{jp}</p>
         <AudioButton text={jp} size="sm" />
       </div>
-      {romaji && (
-        <p data-audio-skip className="mt-0.5 break-words text-sm italic text-sage">
-          {romaji}
-        </p>
-      )}
+      {romaji && <p className="mt-0.5 break-words text-sm italic text-sage">{romaji}</p>}
       <p className="mt-1 break-words text-sm text-ink/80">{pt}</p>
       {notes && <p className="mt-1 break-words text-xs italic text-sage">→ {notes}</p>}
     </div>
@@ -42,10 +38,7 @@ export function Ex({
 
 export function ReadingKey({ lines }: { lines: { text: string; desc: string }[] }) {
   return (
-    <div
-      data-audio-skip
-      className="w-fit min-w-0 max-w-full rounded-lg border border-line bg-paper/60 px-4 py-3 font-mono text-sm text-ink"
-    >
+    <div className="w-fit min-w-0 max-w-full rounded-lg border border-line bg-paper/60 px-4 py-3 font-mono text-sm text-ink">
       {lines.map((l, i) => (
         <div key={i} className="flex flex-wrap items-baseline gap-x-3">
           <span>{l.text}</span>
@@ -58,10 +51,7 @@ export function ReadingKey({ lines }: { lines: { text: string; desc: string }[] 
 
 export function Note({ children }: { children: ReactNode }) {
   return (
-    <div
-      data-audio-block
-      className="min-w-0 rounded-lg border border-indigo/20 bg-indigo/5 px-4 py-3 text-sm leading-relaxed text-ink"
-    >
+    <div className="min-w-0 rounded-lg border border-indigo/20 bg-indigo/5 px-4 py-3 text-sm leading-relaxed text-ink">
       <span className="font-semibold text-indigo">Nota: </span>
       {children}
     </div>

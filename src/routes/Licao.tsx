@@ -1,12 +1,9 @@
-import { useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { LICOES } from '../licoes';
-import LessonAudioBar from '../components/LessonAudioBar';
 
 export default function Licao() {
   const { id } = useParams<{ id: string }>();
   const entry = LICOES.find((l) => l.meta.id === id);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   if (!entry) {
     return (
@@ -36,16 +33,9 @@ export default function Licao() {
             <p className="mt-0.5 text-sm text-sage">{meta.subtitle}</p>
           </div>
         </div>
-        {meta.audio && (
-          <div className="mt-4">
-            <LessonAudioBar containerRef={contentRef} />
-          </div>
-        )}
       </div>
 
-      <div ref={contentRef}>
-        <Component />
-      </div>
+      <Component />
     </div>
   );
 }
