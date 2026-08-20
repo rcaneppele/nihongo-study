@@ -25,6 +25,7 @@ import Sufixos, { meta as metaSufixos, quiz as quizSufixos } from './sufixos';
 import Pronomes, { meta as metaPronomes, quiz as quizPronomes } from './pronomes';
 import Verbos, { meta as metaVerbos, quiz as quizVerbos } from './verbos';
 import Desu, { meta as metaDesu, quiz as quizDesu } from './desu';
+import Kanji, { meta as metaKanji, quiz as quizKanji } from './kanji';
 
 export const LICOES: LicaoEntry[] = [
   { meta: metaKana, Component: Kana, quiz: quizKana },
@@ -37,4 +38,5 @@ export const LICOES: LicaoEntry[] = [
   { meta: metaParticulas, Component: Particulas, quiz: quizParticulas },
   { meta: metaVerbos, Component: Verbos, quiz: quizVerbos },
   { meta: metaDesu, Component: Desu, quiz: quizDesu },
+  { meta: metaKanji, Component: Kanji, quiz: quizKanji },
 ];
