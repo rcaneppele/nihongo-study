@@ -4,9 +4,10 @@ import type { QuizLicao } from '../data/quiz/types';
 export const meta = {
   id: 'kanji',
   title: 'Kanji — Primeiros Passos',
-  subtitle: 'O terceiro sistema de escrita: como ele funciona e os kanji dos números',
+  subtitle:
+    'O terceiro sistema de escrita: como ele funciona, os kanji dos números, os dias da semana e como dizer as horas',
   emoji: '🔢',
-  tags: ['escrita', 'kanji', 'n5'],
+  tags: ['escrita', 'kanji', 'n5', 'tempo', 'calendario'],
 };
 
 export const quiz: QuizLicao = {
@@ -68,6 +69,122 @@ export const quiz: QuizLicao = {
         { texto: 'です', romaji: 'desu' },
       ],
       pt: 'Tenho onze anos.',
+    },
+    {
+      id: 'kanji-f7',
+      tokens: [
+        { texto: 'なんじ', romaji: 'nanji' },
+        { texto: 'です', romaji: 'desu' },
+        { texto: 'か', romaji: 'ka' },
+      ],
+      pt: 'Que horas são?',
+    },
+    {
+      id: 'kanji-f8',
+      tokens: [
+        { texto: 'かいぎ', romaji: 'kaigi' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'さんじ', romaji: 'sanji' },
+        { texto: 'から', romaji: 'kara', particula: true },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'A reunião é a partir das 3 horas.',
+    },
+    {
+      id: 'kanji-f9',
+      tokens: [
+        { texto: 'しちじ', romaji: 'shichiji' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'おきます', romaji: 'okimasu' },
+      ],
+      pt: 'Acordo às 7 horas.',
+    },
+    {
+      id: 'kanji-f10',
+      tokens: [
+        { texto: 'くじ', romaji: 'kuji' },
+        { texto: 'はん', romaji: 'han' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'ねます', romaji: 'nemasu' },
+      ],
+      pt: 'Durmo às 9h30.',
+    },
+    {
+      id: 'kanji-f11',
+      tokens: [
+        { texto: 'よじ', romaji: 'yoji' },
+        { texto: 'じゅっぷん', romaji: 'juppun' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'でかけます', romaji: 'dekakemasu' },
+      ],
+      pt: 'Saio às 4h10.',
+    },
+    {
+      id: 'kanji-f12',
+      tokens: [
+        { texto: 'ピザ', romaji: 'piza' },
+        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'はんぶん', romaji: 'hanbun' },
+        { texto: 'たべました', romaji: 'tabemashita' },
+      ],
+      pt: 'Comi metade da pizza.',
+    },
+    {
+      id: 'kanji-f13',
+      tokens: [
+        { texto: 'げつようび', romaji: 'getsuyoubi' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'やすみ', romaji: 'yasumi' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Segunda-feira é folga.',
+    },
+    {
+      id: 'kanji-f14',
+      tokens: [
+        { texto: 'すいようび', romaji: 'suiyoubi' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'よる', romaji: 'yoru' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'ジム', romaji: 'jimu' },
+        { texto: 'へ', romaji: 'e', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Vou à academia na quarta à noite.',
+    },
+    {
+      id: 'kanji-f15',
+      tokens: [
+        { texto: 'きんようび', romaji: "kin'youbi" },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'よる', romaji: 'yoru' },
+        { texto: 'ともだち', romaji: 'tomodachi' },
+        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'のみます', romaji: 'nomimasu' },
+      ],
+      pt: 'Sexta à noite, bebo com amigos.',
+    },
+    {
+      id: 'kanji-f16',
+      tokens: [
+        { texto: 'どようび', romaji: 'doyoubi' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'かいもの', romaji: 'kaimono' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Sábado vou às compras.',
+    },
+    {
+      id: 'kanji-f17',
+      tokens: [
+        { texto: 'にちようび', romaji: 'nichiyoubi' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'かぞく', romaji: 'kazoku' },
+        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'すごします', romaji: 'sugoshimasu' },
+      ],
+      pt: 'Domingo passo com a família.',
     },
   ],
   perguntas: [
@@ -148,6 +265,57 @@ export const quiz: QuizLicao = {
       afirmacao: '九 (9) tem duas leituras comuns de origem chinesa, く e きゅう, e きゅう é a mais usada hoje em dia para contar idade, por exemplo.',
       correta: true,
     },
+    {
+      id: 'kanji-sig6',
+      tipo: 'significado',
+      pergunta: 'Qual é a leitura de 七時 (7 horas)?',
+      alternativas: ['しちじ (shichiji)', 'ななじ (nanaji)', 'なのじ (nanoji)', 'しちどき (shichidoki)'],
+      correta: 0,
+    },
+    {
+      id: 'kanji-sig7',
+      tipo: 'significado',
+      pergunta: 'O que 半 sozinho significa depois de uma hora, como em 三時半 (さんじはん)?',
+      alternativas: [
+        '"e meia" — 30 minutos depois da hora cheia',
+        'metade de qualquer quantidade, como uma fruta ou um bolo',
+        'meio-dia, independente da hora dita antes',
+        'meia-noite, independente da hora dita antes',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-sig8',
+      tipo: 'significado',
+      pergunta: 'Por que 火 (fogo) e 日 (dia/sol) podem confundir quem está começando?',
+      alternativas: [
+        'os dois têm a mesma leitura kun\'yomi ひ, embora signifiquem coisas diferentes',
+        'os dois têm exatamente o mesmo traço (ひつじゅん)',
+        'os dois significam a mesma coisa em contextos formais',
+        'não têm nenhuma relação — a pergunta não faz sentido',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf5',
+      tipo: 'verdadeiro-falso',
+      afirmacao: '4時 (4 horas) se lê よんじ, seguindo a mesma preferência por よん explicada na seção dos números.',
+      correta: false,
+      explicacao: 'Ao dizer a hora, 4 é uma exceção nova: lê-se よじ, não よんじ. O mesmo acontece com 7時 (しちじ, não ななじ) e 9時 (くじ, não きゅうじ) — dizer a hora tem suas próprias irregularidades, diferentes das da contagem genérica.',
+    },
+    {
+      id: 'kanji-vf6',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Os dias da semana em japonês (月・火・水・木・金・土・日) seguem uma lógica de nomeação parecida com a de muitos dias da semana em português e inglês, ligada a corpos celestes ou elementos.',
+      correta: true,
+    },
+    {
+      id: 'kanji-vf7',
+      tipo: 'verdadeiro-falso',
+      afirmacao: '半分 (metade) e o 半 usado depois da hora (como em 三時半) significam exatamente a mesma coisa e podem substituir um ao outro em qualquer frase.',
+      correta: false,
+      explicacao: '半 depois da hora indica "e meia" (30 minutos daquela hora); 半分 é a palavra para "metade" de algo em geral (comida, tempo, quantidade). Não são intercambiáveis — não existe "三時半分" com o sentido de 3h30.',
+    },
   ],
 };
 
@@ -192,13 +360,24 @@ export default function Kanji() {
           </li>
           <li>Saber quais leituras alternativas (4, 7, 9) são as mais naturais no dia a dia.</li>
           <li>Entender por que japoneses evitam certos números em determinadas situações.</li>
+          <li>Reconhecer de vista os sete kanji usados nos dias da semana (月火水木金土日) e montar
+            月曜日 a 日曜日.</li>
+          <li>
+            Dizer as horas com <span className="font-jp">時</span>, <span className="font-jp">分</span>{' '}
+            e <span className="font-jp">半</span>, incluindo as leituras irregulares de 4, 7 e 9
+            horas.
+          </li>
+          <li>
+            Diferenciar <span className="font-jp">半</span> (e meia, depois de uma hora) de{' '}
+            <span className="font-jp">半分</span> (metade de algo em geral).
+          </li>
         </ul>
         <Note>
           Fora do escopo desta lição: o sistema completo de radicais para consulta em dicionário,
           prática detalhada de ordem de traço, como contar acima de 10, contadores específicos
-          (para objetos compridos, chatos, animais...) e como ler datas, meses ou preços. Esses
-          temas ficam para lições futuras, conforme o curso avança — aqui o objetivo é só a base
-          que a primeira aula do sensei cobriu.
+          (para objetos compridos, chatos, animais...), como ler datas do calendário (dia do mês,
+          mês do ano) e preços. Esses temas ficam para lições futuras, conforme o curso avança —
+          aqui o objetivo é só a base que as duas primeiras aulas do sensei cobriram.
         </Note>
       </Section>
 
@@ -369,6 +548,157 @@ export default function Kanji() {
         />
       </Section>
 
+      <Section title="Os sete elementos e os dias da semana">
+        <p className="text-sm leading-relaxed text-ink">
+          A segunda aula do sensei trouxe sete kanji que, sozinhos, são coisas do dia a dia — lua,
+          fogo, água, árvore, dinheiro, terra, sol — mas que juntos formam algo mais útil ainda: os
+          sete dias da semana. Cada dia é um desses kanji seguido de{' '}
+          <span className="font-jp">曜日</span> (<span className="font-jp">ようび</span>,{' '}
+          <em>youbi</em>, "dia da semana"), sempre lido pelo on'yomi do kanji.
+        </p>
+        <GrammarTable
+          headers={['Kanji', 'Kun\'yomi', 'On\'yomi', 'Romaji', 'Significado']}
+          jpCols={[0, 1, 2]}
+          rows={[
+            ['月', 'つき', 'ゲツ', 'getsu', 'lua, mês'],
+            ['火', 'ひ', 'カ', 'ka', 'fogo'],
+            ['水', 'みず', 'スイ', 'sui', 'água'],
+            ['木', 'き', 'モク', 'moku', 'árvore, madeira'],
+            ['金', 'かね', 'キン', 'kin', 'ouro, dinheiro'],
+            ['土', 'つち', 'ド', 'do', 'terra, solo'],
+            ['日', 'ひ', 'ニチ', 'nichi', 'dia, sol'],
+          ]}
+        />
+        <Note>
+          <strong className="font-jp">火</strong> e <strong className="font-jp">日</strong> têm a
+          mesma leitura kun'yomi, <span className="font-jp">ひ</span> — mas significam coisas
+          diferentes (fogo vs. dia/sol) e só o contexto separa uma da outra. Isso não atrapalha nos
+          nomes dos dias da semana, porque ali as duas usam a leitura on'yomi (
+          <span className="font-jp">か</span> e <span className="font-jp">にち</span>) — a
+          confusão só existe quando os kanji aparecem sozinhos.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          Juntando cada elemento a <span className="font-jp">曜日</span>, chega-se aos sete dias:
+        </p>
+        <GrammarTable
+          headers={['Dia', 'Kanji', 'Romaji']}
+          jpCols={[1]}
+          rows={[
+            ['segunda', '月曜日', 'getsuyoubi'],
+            ['terça', '火曜日', 'kayoubi'],
+            ['quarta', '水曜日', 'suiyoubi'],
+            ['quinta', '木曜日', 'mokuyoubi'],
+            ['sexta', '金曜日', "kin'youbi"],
+            ['sábado', '土曜日', 'doyoubi'],
+            ['domingo', '日曜日', 'nichiyoubi'],
+          ]}
+        />
+        <Ex
+          jp="げつようびはやすみです。"
+          romaji="getsuyoubi wa yasumi desu."
+          pt="Segunda-feira é folga."
+          notes="dia da semana como tema da frase, registro neutro do dia a dia."
+        />
+        <Ex
+          jp="すいようびのよるにジムへいきます。"
+          romaji="suiyoubi no yoru ni jimu e ikimasu."
+          pt="Vou à academia na quarta à noite."
+          notes="rotina fixa semanal; の liga o dia ao período do dia (よる, noite)."
+        />
+        <Ex
+          jp="きんようびのよる、ともだちとのみます。"
+          romaji="kin'youbi no yoru, tomodachi to nomimasu."
+          pt="Sexta à noite, bebo com amigos."
+          notes="situação real: sexta à noite é quando muita gente sai para o izakaya no Japão."
+        />
+        <Ex
+          jp="にちようびはかぞくとすごします。"
+          romaji="nichiyoubi wa kazoku to sugoshimasu."
+          pt="Domingo passo com a família."
+          notes="domingo como dia de família — contraste de uso com sexta (social) e quarta (rotina pessoal)."
+        />
+        <Note>
+          <strong>Nota cultural:</strong> nomear dias da semana por astros e elementos não é
+          exclusividade japonesa — em português, sábado e domingo têm origem religiosa e os dias
+          úteis são só numerados, mas em inglês <em>Sunday</em> (sol), <em>Monday</em> (lua) e{' '}
+          <em>Saturday</em> (Saturno) vêm da mesma tradição astrológica antiga que gerou o sistema
+          japonês (herdado da China). É uma ponte de memorização útil para quem já associa esses
+          nomes em inglês. Na prática, isso também aparece em calendários, agendas e documentos
+          japoneses: a data costuma vir com o dia da semana abreviado só pelo kanji entre parênteses,
+          como <span className="font-jp">8/25（火）</span> — vale reconhecer os sete kanji sozinhos,
+          não só dentro de <span className="font-jp">曜日</span>.
+        </Note>
+      </Section>
+
+      <Section title="As horas: 時、分、半">
+        <p className="text-sm leading-relaxed text-ink">
+          Três kanji resolvem praticamente toda frase sobre horário: <span className="font-jp text-base">時</span>{' '}
+          marca a hora cheia, <span className="font-jp text-base">分</span> marca os minutos e{' '}
+          <span className="font-jp text-base">半</span> marca a meia hora. Diferente dos kanji
+          anteriores, o sensei ensinou os três só pela leitura on'yomi — é essa a leitura usada para
+          dizer as horas no dia a dia.
+        </p>
+        <GrammarTable
+          headers={['Kanji', "On'yomi", 'Romaji', 'Uso']}
+          jpCols={[0, 1]}
+          rows={[
+            ['時', 'ジ', 'ji', 'sufixo de hora: 三時 (さんじ, 3 horas)'],
+            ['分', 'フン/プン', 'fun/pun', 'sufixo de minuto: 三分 (さんぷん, 3 minutos)'],
+            ['半', 'ハン', 'han', '"e meia": 三時半 (さんじはん, 3h30)'],
+          ]}
+        />
+        <Note>
+          <strong>Aprofundamento:</strong> <span className="font-jp">時</span> e{' '}
+          <span className="font-jp">半</span> também têm leitura kun'yomi (
+          <span className="font-jp">とき</span> e <span className="font-jp">なかば</span>,
+          respectivamente), usadas em palavras como "aquele momento" ou "no meio de" — fora do
+          escopo desta lição, que trata só do uso para dizer horas. A leitura de{' '}
+          <span className="font-jp">分</span> também muda entre ふん, ぷん e ぶん conforme o número
+          anterior (一分 いっぷん, 二分 にふん, 三分 さんぷん...), por uma regra de eufonia —
+          assunto de uma lição futura; por ora, reconhecer フン/プン já basta.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          A maior armadilha aqui não é o kanji, é a leitura do número junto de{' '}
+          <span className="font-jp">時</span>: 4, 7 e 9 horas quebram a preferência por{' '}
+          <span className="font-jp">よん</span> e <span className="font-jp">なな</span> que você
+          acabou de aprender na seção dos números.
+        </p>
+        <GrammarTable
+          headers={['Hora', 'Leitura correta', 'Errado (mas tentador)']}
+          jpCols={[1, 2]}
+          rows={[
+            ['4時', 'よじ', 'よんじ'],
+            ['7時', 'しちじ', 'ななじ'],
+            ['9時', 'くじ', 'きゅうじ'],
+          ]}
+        />
+        <Ex jp="なんじですか。" romaji="nanji desu ka." pt="Que horas são?" notes="pergunta básica de horário, cabe em qualquer registro." />
+        <Ex
+          jp="かいぎはさんじからです。"
+          romaji="kaigi wa sanji kara desu."
+          pt="A reunião é a partir das 3 horas."
+          notes="situação real de trabalho; から marca o ponto de início."
+        />
+        <Ex
+          jp="しちじにおきます。"
+          romaji="shichiji ni okimasu."
+          pt="Acordo às 7 horas."
+          notes="7時 é しちじ, não ななじ — exceção específica de dizer a hora."
+        />
+        <Ex
+          jp="くじはんにねます。"
+          romaji="kuji han ni nemasu."
+          pt="Durmo às 9h30."
+          notes="9時 é くじ, não きゅうじ; はん acrescenta a meia hora depois da hora cheia."
+        />
+        <Ex
+          jp="ピザをはんぶんたべました。"
+          romaji="piza o hanbun tabemashita."
+          pt="Comi metade da pizza."
+          notes="contraste: 半分 (metade de algo) não é o mesmo 半 usado depois da hora — não existe '三時半分' para 3h30."
+        />
+      </Section>
+
       <Section title="Erros comuns">
         <GrammarTable
           headers={['Erro', 'Incorreto', 'Correto', 'Por quê']}
@@ -397,6 +727,24 @@ export default function Kanji() {
               'く-さい (tentando dizer "9 anos")',
               'きゅうさい',
               'きゅう é a leitura mais usada hoje para idade, preço e contagem em geral; く aparece mais em palavras fixas.',
+            ],
+            [
+              'Aplicar よん/なな/きゅう ao dizer a hora',
+              'よんじ, ななじ, きゅうじ',
+              'よじ, しちじ, くじ',
+              '4, 7 e 9 horas têm leitura própria, diferente da preferência usada ao contar objetos ou ler números soltos.',
+            ],
+            [
+              'Confundir 半 (depois da hora) com 半分',
+              '"三時半分" para dizer 3h30',
+              '三時半 (さんじはん)',
+              '半 sozinho depois de uma hora já significa "e meia"; 半分 é a palavra separada para "metade" de algo em geral.',
+            ],
+            [
+              'Ler 火 e 日 sozinhos sem prestar atenção ao contexto',
+              'confundir 火 (fogo) com 日 (dia/sol) porque os dois soam ひ',
+              'カ/ひ para fogo, ニチ/ひ・にち para dia — o contexto ou o on\'yomi desfazem a ambiguidade',
+              'Dois kanji diferentes podem compartilhar kun\'yomi; dentro de 曜日 o problema some, porque aí se usa o on\'yomi.',
             ],
           ]}
         />
@@ -443,6 +791,28 @@ export default function Kanji() {
           <span className="font-jp">よん</span> e <span className="font-jp">なな</span> a{' '}
           <span className="font-jp">し</span> e <span className="font-jp">しち</span>.
         </p>
+        <GrammarTable
+          headers={['Dia', 'Kanji', 'Romaji']}
+          jpCols={[1]}
+          rows={[
+            ['segunda', '月曜日', 'getsuyoubi'],
+            ['terça', '火曜日', 'kayoubi'],
+            ['quarta', '水曜日', 'suiyoubi'],
+            ['quinta', '木曜日', 'mokuyoubi'],
+            ['sexta', '金曜日', "kin'youbi"],
+            ['sábado', '土曜日', 'doyoubi'],
+            ['domingo', '日曜日', 'nichiyoubi'],
+          ]}
+        />
+        <GrammarTable
+          headers={['Kanji', "On'yomi", 'Uso']}
+          jpCols={[0, 1]}
+          rows={[
+            ['時', 'ジ', 'hora cheia (よじ・しちじ・くじ são exceções)'],
+            ['分', 'フン/プン', 'minuto'],
+            ['半', 'ハン', '"e meia", só depois de uma hora — não confundir com 半分 (metade)'],
+          ]}
+        />
       </Section>
     </div>
   );
