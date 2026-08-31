@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { ItemKakitoriFonte, GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'kanji',
@@ -318,6 +319,55 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+const DIGITO_KANJI = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+const DIGITO_HIRAGANA = ['', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう'];
+const DIGITO_ROMAJI = ['', 'ichi', 'ni', 'san', 'yon', 'go', 'roku', 'nana', 'hachi', 'kyuu'];
+
+/** Formação padrão dos números de 1 a 99 em kanji: dezena (十, com o dígito na frente a partir de
+ * 20) + unidade — mesmo padrão da tabela de 1-10 desta lição, só estendido. */
+function numeroKanji(n: number): { texto: string; hiragana: string; romaji: string } {
+  if (n < 10) {
+    return { texto: DIGITO_KANJI[n], hiragana: DIGITO_HIRAGANA[n], romaji: DIGITO_ROMAJI[n] };
+  }
+  if (n === 10) {
+    return { texto: '十', hiragana: 'じゅう', romaji: 'juu' };
+  }
+
+  const dezena = Math.floor(n / 10);
+  const unidade = n % 10;
+  const prefixo = dezena === 1 ? ['', '', ''] : [DIGITO_KANJI[dezena], DIGITO_HIRAGANA[dezena], DIGITO_ROMAJI[dezena]];
+  const sufixo = unidade === 0 ? ['', '', ''] : [DIGITO_KANJI[unidade], DIGITO_HIRAGANA[unidade], DIGITO_ROMAJI[unidade]];
+
+  return {
+    texto: `${prefixo[0]}十${sufixo[0]}`,
+    hiragana: `${prefixo[1]}じゅう${sufixo[1]}`,
+    romaji: `${prefixo[2]}juu${sufixo[2]}`,
+  };
+}
+
+const NUMEROS_1_99: ItemKakitoriFonte[] = Array.from({ length: 99 }, (_, i) => i + 1).map((n) => {
+  const { texto, hiragana, romaji } = numeroKanji(n);
+  return { id: `kanji-num-${n}`, jp: texto, kana: hiragana, romaji, pt: String(n) };
+});
+
+const DIAS_SEMANA: ItemKakitoriFonte[] = [
+  { id: 'kanji-dia-seg', jp: '月曜日', kana: 'げつようび', romaji: 'getsuyoubi', pt: 'segunda-feira' },
+  { id: 'kanji-dia-ter', jp: '火曜日', kana: 'かようび', romaji: 'kayoubi', pt: 'terça-feira' },
+  { id: 'kanji-dia-qua', jp: '水曜日', kana: 'すいようび', romaji: 'suiyoubi', pt: 'quarta-feira' },
+  { id: 'kanji-dia-qui', jp: '木曜日', kana: 'もくようび', romaji: 'mokuyoubi', pt: 'quinta-feira' },
+  { id: 'kanji-dia-sex', jp: '金曜日', kana: 'きんようび', romaji: "kin'youbi", pt: 'sexta-feira' },
+  { id: 'kanji-dia-sab', jp: '土曜日', kana: 'どようび', romaji: 'doyoubi', pt: 'sábado' },
+  { id: 'kanji-dia-dom', jp: '日曜日', kana: 'にちようび', romaji: 'nichiyoubi', pt: 'domingo' },
+];
+
+// As frases do quiz acima são só kana (regra do projeto) e não treinam a escrita dos kanji
+// ensinados aqui — por isso o ditado desta lição usa só os kanji isolados (números e dias da
+// semana), não as frases.
+export const kakitori: GrupoKakitori[] = [
+  { id: 'kanji-numeros', label: 'Kanji - Números', itens: NUMEROS_1_99 },
+  { id: 'kanji-dias', label: 'Kanji - Dias da semana', itens: DIAS_SEMANA },
+];
 
 export default function Kanji() {
   return (

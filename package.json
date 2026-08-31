@@ -1,7 +1,7 @@
 {
   "name": "nihongo-study",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "description": "App pessoal de estudo de japonês: flash cards (SRS) e treino de hiragana/katakana.",
   "license": "MIT",

@@ -215,6 +215,9 @@ export const quiz: QuizLicao = {
   ],
 };
 
+// Sem `kakitori`: um verbo conjugado sozinho, fora de contexto, não é um item de vocabulário útil
+// pra memorizar de ouvido — é só uma forma gramatical. O ditado desta lição foi removido.
+
 export default function Verbos() {
   return (
     <div className="space-y-10">

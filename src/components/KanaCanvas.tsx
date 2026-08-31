@@ -49,7 +49,11 @@ export default function KanaCanvas({
   function end() {
     if (!drawing.current) return;
     drawing.current = false;
-    if (current.current.length > 1) setStrokes((s) => [...s, current.current]);
+    // Captura o traço numa constante antes do reset: a função de atualização pode ser invocada
+    // pelo React mais de uma vez (Strict Mode/otimizações internas) — se ela lesse `current.current`
+    // diretamente, uma reinvocação tardia pegaria a ref já resetada para [] pela linha seguinte.
+    const finishedStroke = current.current;
+    if (finishedStroke.length > 1) setStrokes((s) => [...s, finishedStroke]);
     current.current = [];
   }
 

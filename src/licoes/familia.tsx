@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'familia',
@@ -154,6 +155,38 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+// Termos curtos de parentesco pro ditado — em vez das `frases` do quiz acima (perguntas completas,
+// longas demais pro Kakitori). Vocabulário puro, com kanji de referência (tabelas de família são
+// uma das exceções à regra de "sem kanji" — ver CLAUDE.md), nas formas humilde e respeitosa.
+export const kakitori: GrupoKakitori[] = [
+  {
+    id: 'familia-termos',
+    label: meta.title,
+    itens: [
+      { id: 'familia-1', jp: '父', kana: 'ちち', romaji: 'chichi', pt: 'pai (minha família, humilde)' },
+      { id: 'familia-2', jp: 'おとうさん', kana: 'おとうさん', romaji: 'otousan', pt: 'pai (de alguém, respeitoso)' },
+      { id: 'familia-3', jp: '母', kana: 'はは', romaji: 'haha', pt: 'mãe (minha família, humilde)' },
+      { id: 'familia-4', jp: 'おかあさん', kana: 'おかあさん', romaji: 'okaasan', pt: 'mãe (de alguém, respeitoso)' },
+      { id: 'familia-5', jp: '兄', kana: 'あに', romaji: 'ani', pt: 'irmão mais velho (humilde)' },
+      { id: 'familia-6', jp: 'おにいさん', kana: 'おにいさん', romaji: 'oniisan', pt: 'irmão mais velho (respeitoso)' },
+      { id: 'familia-7', jp: '姉', kana: 'あね', romaji: 'ane', pt: 'irmã mais velha (humilde)' },
+      { id: 'familia-8', jp: 'おねえさん', kana: 'おねえさん', romaji: 'oneesan', pt: 'irmã mais velha (respeitoso)' },
+      { id: 'familia-9', jp: '弟', kana: 'おとうと', romaji: 'otouto', pt: 'irmão mais novo' },
+      { id: 'familia-10', jp: '妹', kana: 'いもうと', romaji: 'imouto', pt: 'irmã mais nova' },
+      { id: 'familia-11', jp: '息子', kana: 'むすこ', romaji: 'musuko', pt: 'filho' },
+      { id: 'familia-12', jp: '娘', kana: 'むすめ', romaji: 'musume', pt: 'filha' },
+      { id: 'familia-13', jp: '祖父', kana: 'そふ', romaji: 'sofu', pt: 'avô (humilde)' },
+      { id: 'familia-14', jp: 'おじいさん', kana: 'おじいさん', romaji: 'ojiisan', pt: 'avô (respeitoso)' },
+      { id: 'familia-15', jp: '祖母', kana: 'そぼ', romaji: 'sobo', pt: 'avó (humilde)' },
+      { id: 'familia-16', jp: 'おばあさん', kana: 'おばあさん', romaji: 'obaasan', pt: 'avó (respeitoso)' },
+      { id: 'familia-17', jp: '叔父', kana: 'おじ', romaji: 'oji', pt: 'tio (humilde)' },
+      { id: 'familia-18', jp: 'おじさん', kana: 'おじさん', romaji: 'ojisan', pt: 'tio (respeitoso)' },
+      { id: 'familia-19', jp: '叔母', kana: 'おば', romaji: 'oba', pt: 'tia (humilde)' },
+      { id: 'familia-20', jp: 'おばさん', kana: 'おばさん', romaji: 'obasan', pt: 'tia (respeitoso)' },
+    ],
+  },
+];
 
 export default function Familia() {
   return (

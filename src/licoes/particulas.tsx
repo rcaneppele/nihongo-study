@@ -218,6 +218,10 @@ export const quiz: QuizLicao = {
   ],
 };
 
+// Sem `kakitori`: partículas são morfemas gramaticais presos (は, が, を, に...), sem significado
+// isolado — não fazem sentido como item de ditado, nem mesmo encurtadas. O ditado desta lição foi
+// removido (fica só o quiz de "escolher partícula" acima).
+
 export default function Particulas() {
   return (
     <div className="space-y-10">

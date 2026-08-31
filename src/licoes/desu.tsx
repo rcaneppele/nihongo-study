@@ -249,6 +249,10 @@ export const quiz: QuizLicao = {
   ],
 };
 
+// Sem `kakitori`: esta lição ensina o sistema de conjugação da cópula (afirmativa/negativa/
+// passado), não vocabulário próprio — os "itens" seriam substantivos/adjetivos já vistos em
+// outras lições, só com です grudado. O ditado desta lição foi removido.
+
 export default function Desu() {
   return (
     <div className="space-y-10">

@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'sufixos',
@@ -159,6 +160,31 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+// Termos curtos pro ditado — em vez das `frases` do quiz acima (frases completas, longas demais
+// pro Kakitori). Mistura formas de tratamento "nome + sufixo" com os cargos/títulos que já
+// funcionam sozinhos, sem precisar de nome junto (ver tabela de cargos da lição).
+export const kakitori: GrupoKakitori[] = [
+  {
+    id: 'sufixos-termos',
+    label: meta.title,
+    itens: [
+      { id: 'sufixos-1', jp: 'たなかさん', kana: 'たなかさん', romaji: 'tanaka-san', pt: 'sr./sra. Tanaka (padrão, neutro)' },
+      { id: 'sufixos-2', jp: 'やまだくん', kana: 'やまだくん', romaji: 'yamada-kun', pt: 'Yamada (menino ou subordinado jovem)' },
+      { id: 'sufixos-3', jp: 'はなこちゃん', kana: 'はなこちゃん', romaji: 'hanako-chan', pt: 'Hanako (carinhoso, criança/íntimo)' },
+      { id: 'sufixos-4', jp: 'たなかさま', kana: 'たなかさま', romaji: 'tanaka-sama', pt: 'sr./sra. Tanaka (muito formal)' },
+      { id: 'sufixos-5', jp: 'おきゃくさま', kana: 'おきゃくさま', romaji: 'okyaku-sama', pt: 'prezado(a) cliente' },
+      { id: 'sufixos-6', jp: 'せんせい', kana: 'せんせい', romaji: 'sensei', pt: 'professor(a), médico(a), mestre' },
+      { id: 'sufixos-7', jp: 'せんぱい', kana: 'せんぱい', romaji: 'senpai', pt: 'veterano no grupo (mais experiente)' },
+      { id: 'sufixos-8', jp: 'こうはい', kana: 'こうはい', romaji: 'kouhai', pt: 'novato no grupo (menos experiente)' },
+      { id: 'sufixos-9', jp: '社長', kana: 'しゃちょう', romaji: 'shachou', pt: 'presidente / CEO' },
+      { id: 'sufixos-10', jp: '部長', kana: 'ぶちょう', romaji: 'buchou', pt: 'diretor de departamento' },
+      { id: 'sufixos-11', jp: '課長', kana: 'かちょう', romaji: 'kachou', pt: 'gerente de seção' },
+      { id: 'sufixos-12', jp: '主任', kana: 'しゅにん', romaji: 'shunin', pt: 'líder / responsável' },
+      { id: 'sufixos-13', jp: '同僚', kana: 'どうりょう', romaji: 'douryou', pt: 'colega (mesmo nível)' },
+    ],
+  },
+];
 
 export default function Sufixos() {
   return (

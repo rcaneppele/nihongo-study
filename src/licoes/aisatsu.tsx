@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'aisatsu',
@@ -156,6 +157,30 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+// Termos e frases curtas desta lição, prontos pro ditado — em vez das `frases` do quiz acima
+// (que concatenam vários tokens numa frase completa, longa demais pro Kakitori).
+export const kakitori: GrupoKakitori[] = [
+  {
+    id: 'aisatsu-termos',
+    label: meta.title,
+    itens: [
+      { id: 'aisatsu-1', jp: 'おはよう！', kana: 'おはよう！', romaji: 'ohayou!', pt: 'Bom dia! (em casa, informal)' },
+      { id: 'aisatsu-2', jp: 'おはようございます。', kana: 'おはようございます。', romaji: 'ohayou gozaimasu.', pt: 'Bom dia. (educado)' },
+      { id: 'aisatsu-3', jp: 'ただいま！', kana: 'ただいま！', romaji: 'tadaima!', pt: 'Cheguei!' },
+      { id: 'aisatsu-4', jp: 'いってきます！', kana: 'いってきます！', romaji: 'itte kimasu!', pt: 'Vou saindo! (dito por quem sai)' },
+      { id: 'aisatsu-5', jp: 'いただきます！', kana: 'いただきます！', romaji: 'itadakimasu!', pt: 'Vou comer! (antes da refeição)' },
+      { id: 'aisatsu-6', jp: 'ごちそうさまでした。', kana: 'ごちそうさまでした。', romaji: 'gochisousama deshita.', pt: 'Obrigado pela comida. (ao terminar)' },
+      { id: 'aisatsu-7', jp: 'どういたしまして。', kana: 'どういたしまして。', romaji: 'dou itashimashite.', pt: 'De nada.' },
+      { id: 'aisatsu-8', jp: 'おつかれさまでした！', kana: 'おつかれさまでした！', romaji: 'otsukaresama deshita!', pt: 'Bom trabalho hoje! (resposta de quem fica)' },
+      { id: 'aisatsu-9', jp: 'しつれいします。', kana: 'しつれいします。', romaji: 'shitsurei shimasu.', pt: 'Com licença. (ao entrar numa sala)' },
+      { id: 'aisatsu-10', jp: 'おさきにしつれいします。', kana: 'おさきにしつれいします。', romaji: 'osaki ni shitsurei shimasu.', pt: 'Vou saindo primeiro, com licença.' },
+      { id: 'aisatsu-11', jp: 'こんにちは、たなかさん。', kana: 'こんにちは、たなかさん。', romaji: 'konnichiwa, tanaka-san.', pt: 'Boa tarde, sr. Tanaka.' },
+      { id: 'aisatsu-12', jp: 'こんばんは。おげんきですか。', kana: 'こんばんは。おげんきですか。', romaji: 'konbanwa. ogenki desu ka.', pt: 'Boa noite. Como vai?' },
+      { id: 'aisatsu-13', jp: 'ごめん！おくれちゃった。', kana: 'ごめん！おくれちゃった。', romaji: 'gomen! okurechatta.', pt: 'Desculpa! Acabei me atrasando.' },
+    ],
+  },
+];
 
 export default function Aisatsu() {
   return (

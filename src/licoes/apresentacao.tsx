@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'apresentacao',
@@ -147,6 +148,26 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+// Termos e frases curtas desta lição, prontos pro ditado — as `frases` do quiz acima concatenam
+// vários tokens numa frase completa, longa demais pro Kakitori (ver conversa sobre a lição de
+// aisatsu). Aqui reaproveita os mesmos exemplos curtos já usados no corpo da lição.
+export const kakitori: GrupoKakitori[] = [
+  {
+    id: 'apresentacao-termos',
+    label: meta.title,
+    itens: [
+      { id: 'apresentacao-1', jp: 'はじめまして。', kana: 'はじめまして。', romaji: 'hajimemashite.', pt: 'Prazer em conhecê-lo.' },
+      { id: 'apresentacao-2', jp: 'たなかじろうといいます。', kana: 'たなかじろうといいます。', romaji: 'tanaka jirou to iimasu.', pt: 'Me chamo Tanaka Jiro.' },
+      { id: 'apresentacao-3', jp: 'たなかじろうともうします。', kana: 'たなかじろうともうします。', romaji: 'tanaka jirou to moushimasu.', pt: 'Meu nome é Tanaka Jiro. (humilde)' },
+      { id: 'apresentacao-4', jp: 'はじめまして！たなかです。', kana: 'はじめまして！たなかです。', romaji: 'hajimemashite! tanaka desu.', pt: 'Prazer! Sou Tanaka.' },
+      { id: 'apresentacao-5', jp: 'よろしくおねがいします！', kana: 'よろしくおねがいします！', romaji: 'yoroshiku onegaishimasu!', pt: 'Muito prazer!' },
+      { id: 'apresentacao-6', jp: 'にじゅうはっさいです。', kana: 'にじゅうはっさいです。', romaji: 'nijuu hassai desu.', pt: 'Tenho 28 anos.' },
+      { id: 'apresentacao-7', jp: 'こちらはたなかさんです。', kana: 'こちらはたなかさんです。', romaji: 'kochira wa tanaka-san desu.', pt: 'Este é o sr. Tanaka.' },
+      { id: 'apresentacao-8', jp: 'たなかさんをごしょうかいします。', kana: 'たなかさんをごしょうかいします。', romaji: 'tanaka-san o goshoukai shimasu.', pt: 'Vou apresentar o sr. Tanaka.' },
+    ],
+  },
+];
 
 export default function Apresentacao() {
   return (

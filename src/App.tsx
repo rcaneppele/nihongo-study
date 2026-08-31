@@ -7,6 +7,7 @@ import Kana from './routes/Kana';
 import Licoes from './routes/Licoes';
 import Licao from './routes/Licao';
 import Quiz from './routes/Quiz';
+import Kakitori from './routes/Kakitori';
 import Config from './routes/Config';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/kana" element={<Kana />} />
         <Route path="/licoes" element={<Licoes />} />
         <Route path="/licoes/quiz" element={<Quiz />} />
+        <Route path="/licoes/kakitori" element={<Kakitori />} />
         <Route path="/licoes/:id" element={<Licao />} />
         <Route path="/config" element={<Config />} />
       </Routes>

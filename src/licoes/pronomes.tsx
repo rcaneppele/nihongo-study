@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'pronomes',
@@ -179,6 +180,35 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+// Pronomes isolados pro ditado — em vez das `frases` do quiz acima (frases completas, longas
+// demais pro Kakitori). O pronome sozinho já é a unidade de vocabulário desta lição.
+export const kakitori: GrupoKakitori[] = [
+  {
+    id: 'pronomes-termos',
+    label: meta.title,
+    itens: [
+      { id: 'pronomes-1', jp: 'わたし', kana: 'わたし', romaji: 'watashi', pt: 'eu (neutro, padrão)' },
+      { id: 'pronomes-2', jp: 'わたくし', kana: 'わたくし', romaji: 'watakushi', pt: 'eu (muito formal)' },
+      { id: 'pronomes-3', jp: 'ぼく', kana: 'ぼく', romaji: 'boku', pt: 'eu (masculino, casual a semiformal)' },
+      { id: 'pronomes-4', jp: 'おれ', kana: 'おれ', romaji: 'ore', pt: 'eu (masculino, bem casual)' },
+      { id: 'pronomes-5', jp: 'あたし', kana: 'あたし', romaji: 'atashi', pt: 'eu (feminino, casual)' },
+      { id: 'pronomes-6', jp: 'うち', kana: 'うち', romaji: 'uchi', pt: 'eu (feminino, bem casual)' },
+      { id: 'pronomes-7', jp: 'じぶん', kana: 'じぶん', romaji: 'jibun', pt: 'eu mesmo / si próprio' },
+      { id: 'pronomes-8', jp: 'わたしたち', kana: 'わたしたち', romaji: 'watashitachi', pt: 'nós (neutro)' },
+      { id: 'pronomes-9', jp: 'ぼくら', kana: 'ぼくら', romaji: 'bokura', pt: 'nós (masculino, casual)' },
+      { id: 'pronomes-10', jp: 'あなた', kana: 'あなた', romaji: 'anata', pt: 'você (neutro/formal)' },
+      { id: 'pronomes-11', jp: 'きみ', kana: 'きみ', romaji: 'kimi', pt: 'você (casual, de superior pra inferior)' },
+      { id: 'pronomes-12', jp: 'おまえ', kana: 'おまえ', romaji: 'omae', pt: 'você (muito casual, pode soar rude)' },
+      { id: 'pronomes-13', jp: 'あんた', kana: 'あんた', romaji: 'anta', pt: 'você (casual, meio rude)' },
+      { id: 'pronomes-14', jp: 'かれ', kana: 'かれ', romaji: 'kare', pt: 'ele / namorado' },
+      { id: 'pronomes-15', jp: 'かのじょ', kana: 'かのじょ', romaji: 'kanojo', pt: 'ela / namorada' },
+      { id: 'pronomes-16', jp: 'あのひと', kana: 'あのひと', romaji: 'ano hito', pt: 'aquela pessoa (neutro)' },
+      { id: 'pronomes-17', jp: 'あのかた', kana: 'あのかた', romaji: 'ano kata', pt: 'aquela pessoa (respeitoso)' },
+      { id: 'pronomes-18', jp: 'みなさん', kana: 'みなさん', romaji: 'minasan', pt: 'pessoal / todos' },
+    ],
+  },
+];
 
 export default function Pronomes() {
   return (

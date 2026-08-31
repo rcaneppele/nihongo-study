@@ -1,5 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { QuizLicao } from '../data/quiz/types';
+import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
   id: 'kosoado',
@@ -181,6 +182,40 @@ export const quiz: QuizLicao = {
     },
   ],
 };
+
+// Palavras demonstrativas isoladas pro ditado — em vez das `frases` do quiz acima (frases
+// completas, longas demais pro Kakitori). Cobre as quatro séries ko/so/a/do em cada uma das
+// formas (pronome, lugar, direção formal/casual, tipo, modo) — a própria palavra já é a unidade
+// de vocabulário desta lição, sem precisar de frase ao redor.
+export const kakitori: GrupoKakitori[] = [
+  {
+    id: 'kosoado-termos',
+    label: meta.title,
+    itens: [
+      { id: 'kosoado-1', jp: 'これ', kana: 'これ', romaji: 'kore', pt: 'isto (perto de quem fala)' },
+      { id: 'kosoado-2', jp: 'それ', kana: 'それ', romaji: 'sore', pt: 'isso (perto de quem ouve)' },
+      { id: 'kosoado-3', jp: 'あれ', kana: 'あれ', romaji: 'are', pt: 'aquilo (longe dos dois)' },
+      { id: 'kosoado-4', jp: 'どれ', kana: 'どれ', romaji: 'dore', pt: 'qual (dentre 3 ou mais)' },
+      { id: 'kosoado-5', jp: 'ここ', kana: 'ここ', romaji: 'koko', pt: 'aqui' },
+      { id: 'kosoado-6', jp: 'そこ', kana: 'そこ', romaji: 'soko', pt: 'aí' },
+      { id: 'kosoado-7', jp: 'あそこ', kana: 'あそこ', romaji: 'asoko', pt: 'lá (longe dos dois)' },
+      { id: 'kosoado-8', jp: 'どこ', kana: 'どこ', romaji: 'doko', pt: 'onde' },
+      { id: 'kosoado-9', jp: 'こちら', kana: 'こちら', romaji: 'kochira', pt: 'aqui / este lado (formal)' },
+      { id: 'kosoado-10', jp: 'あちら', kana: 'あちら', romaji: 'achira', pt: 'lá / aquele lado (formal)' },
+      { id: 'kosoado-11', jp: 'どちら', kana: 'どちら', romaji: 'dochira', pt: 'onde / qual dos dois (formal)' },
+      { id: 'kosoado-12', jp: 'こっち', kana: 'こっち', romaji: 'kocchi', pt: 'aqui / pra cá (casual)' },
+      { id: 'kosoado-13', jp: 'あっち', kana: 'あっち', romaji: 'acchi', pt: 'lá / pra lá (casual)' },
+      { id: 'kosoado-14', jp: 'どっち', kana: 'どっち', romaji: 'docchi', pt: 'qual dos dois (casual)' },
+      { id: 'kosoado-15', jp: 'こんな', kana: 'こんな', romaji: 'konna', pt: 'desse tipo (assim, perto de quem fala)' },
+      { id: 'kosoado-16', jp: 'そんな', kana: 'そんな', romaji: 'sonna', pt: 'desse tipo (que você disse)' },
+      { id: 'kosoado-17', jp: 'あんな', kana: 'あんな', romaji: 'anna', pt: 'daquele tipo (mais distante)' },
+      { id: 'kosoado-18', jp: 'どんな', kana: 'どんな', romaji: 'donna', pt: 'que tipo de' },
+      { id: 'kosoado-19', jp: 'こう', kana: 'こう', romaji: 'kou', pt: 'assim (deste jeito)' },
+      { id: 'kosoado-20', jp: 'そう', kana: 'そう', romaji: 'sou', pt: 'assim (desse jeito) / sim, é isso' },
+      { id: 'kosoado-21', jp: 'どう', kana: 'どう', romaji: 'dou', pt: 'como' },
+    ],
+  },
+];
 
 export default function KoSoADo() {
   return (
