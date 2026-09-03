@@ -6,9 +6,9 @@ export const meta = {
   id: 'kanji',
   title: 'Kanji — Primeiros Passos',
   subtitle:
-    'O terceiro sistema de escrita: como ele funciona, os kanji dos números, os dias da semana e como dizer as horas',
+    'O terceiro sistema de escrita: como ele funciona, os kanji dos números, os dias da semana, como dizer as horas e ler um número de telefone',
   emoji: '🔢',
-  tags: ['escrita', 'kanji', 'n5', 'tempo', 'calendario'],
+  tags: ['escrita', 'kanji', 'n5', 'tempo', 'calendario', 'telefone'],
 };
 
 export const quiz: QuizLicao = {
@@ -187,6 +187,57 @@ export const quiz: QuizLicao = {
       ],
       pt: 'Domingo passo com a família.',
     },
+    {
+      id: 'kanji-f18',
+      tokens: [
+        { texto: 'でんわばんごう', romaji: 'denwa bangou' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'なんばん', romaji: 'nanban' },
+        { texto: 'ですか', romaji: 'desu ka' },
+      ],
+      pt: 'Qual é o número de telefone?',
+    },
+    {
+      id: 'kanji-f19',
+      tokens: [
+        { texto: 'わたしの', romaji: 'watashi no' },
+        { texto: 'けいたいばんごう', romaji: 'keitai bangou' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'ぜろきゅうぜろの', romaji: 'zero kyuu zero no' },
+        { texto: 'いちにさんよんです', romaji: 'ichi ni san yon desu' },
+      ],
+      pt: 'Meu número de celular é 090-1234.',
+    },
+    {
+      id: 'kanji-f20',
+      tokens: [
+        { texto: 'くじ', romaji: 'kuji' },
+        { texto: 'じゅっぷん', romaji: 'juppun' },
+        { texto: 'まえです', romaji: 'mae desu' },
+      ],
+      pt: 'Faltam dez minutos para as nove (8h50).',
+    },
+    {
+      id: 'kanji-f21',
+      tokens: [
+        { texto: 'かいぎ', romaji: 'kaigi' },
+        { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'くじ', romaji: 'kuji' },
+        { texto: 'ごふん', romaji: 'gofun' },
+        { texto: 'まえに', romaji: 'mae ni' },
+        { texto: 'はじまります', romaji: 'hajimarimasu' },
+      ],
+      pt: 'A reunião começa cinco para as nove.',
+    },
+    {
+      id: 'kanji-f22',
+      tokens: [
+        { texto: 'かくにんします', romaji: 'kakunin shimasu' },
+        { texto: 'ぜろさんの', romaji: 'zero san no' },
+        { texto: 'きゅうにいさんよんです', romaji: 'kyuu nii san yon desu' },
+      ],
+      pt: 'Vou confirmar: 03-9234.',
+    },
   ],
   perguntas: [
     {
@@ -317,6 +368,49 @@ export const quiz: QuizLicao = {
       correta: false,
       explicacao: '半 depois da hora indica "e meia" (30 minutos daquela hora); 半分 é a palavra para "metade" de algo em geral (comida, tempo, quantidade). Não são intercambiáveis — não existe "三時半分" com o sentido de 3h30.',
     },
+    {
+      id: 'kanji-sig9',
+      tipo: 'significado',
+      pergunta: 'O que significa 九時十分前 (くじじゅっぷんまえ)?',
+      alternativas: [
+        '8h50 — faltam dez minutos para as nove',
+        '9h10 — dez minutos depois das nove',
+        '9h50, uma hora depois das nove',
+        '8h10, uma hora antes das nove',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf8',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Sem o 前 no final, 九時十分 muda de sentido e passa a significar "dez minutos depois das nove".',
+      correta: true,
+    },
+    {
+      id: 'kanji-sig10',
+      tipo: 'significado',
+      pergunta: 'Por que um número de telefone em japonês é lido dígito a dígito (さん・に・ぜろ...) em vez de como um número composto?',
+      alternativas: [
+        'para evitar erro de quem ouve — repetir um dígito solto é mais confiável do que calcular uma dezena de cabeça',
+        'porque números compostos não existem em japonês',
+        'só por tradição, sem nenhuma vantagem prática',
+        'porque dígitos de telefone não têm leitura em kanji',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf9',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'ゼロ e れい são a mesma coisa (o dígito 0) e diferem só em registro — れい soa mais formal.',
+      correta: true,
+    },
+    {
+      id: 'kanji-sig11',
+      tipo: 'significado',
+      pergunta: 'O que substitui o hífen ao ditar um número de telefone em japonês?',
+      alternativas: ['の', 'と', 'に', 'nada — o hífen simplesmente é ignorado'],
+      correta: 0,
+    },
   ],
 };
 
@@ -420,6 +514,15 @@ export default function Kanji() {
           <li>
             Diferenciar <span className="font-jp">半</span> (e meia, depois de uma hora) de{' '}
             <span className="font-jp">半分</span> (metade de algo em geral).
+          </li>
+          <li>
+            Dizer quantos minutos faltam para a próxima hora com{' '}
+            <span className="font-jp">前</span> (三時十分前, "dez para as três").
+          </li>
+          <li>
+            Ler um número de telefone dígito a dígito, usando{' '}
+            <span className="font-jp">の</span> para o hífen e reconhecendo as duas leituras de 0
+            (<span className="font-jp">ゼロ</span>／<span className="font-jp">れい</span>).
           </li>
         </ul>
         <Note>
@@ -747,6 +850,143 @@ export default function Kanji() {
           pt="Comi metade da pizza."
           notes="contraste: 半分 (metade de algo) não é o mesmo 半 usado depois da hora — não existe '三時半分' para 3h30."
         />
+        <p className="text-sm leading-relaxed text-ink">
+          Até aqui, toda hora foi contada "para a frente" a partir da hora cheia — de{' '}
+          <span className="font-jp">三時</span> até <span className="font-jp">三時五十九分</span>.
+          Mas faltando poucos minutos para a próxima hora, é mais natural dizer quanto falta do que
+          somar os minutos da hora anterior — como em português "dez para as três" em vez de "duas
+          e cinquenta". É para isso que serve{' '}
+          <span className="font-jp text-base">前</span> depois de uma hora com minutos.
+        </p>
+        <GrammarTable
+          headers={['Kanji', 'Leitura aqui', 'Romaji', 'Uso']}
+          jpCols={[0, 1]}
+          rows={[
+            [
+              '前',
+              'まえ',
+              'mae',
+              '"faltam ... para ...": X時Y分前 = faltam Y minutos para X horas',
+            ],
+          ]}
+        />
+        <Note>
+          Diferente de <span className="font-jp">時</span>, <span className="font-jp">分</span> e{' '}
+          <span className="font-jp">半</span> (todos on'yomi nesta lição),{' '}
+          <span className="font-jp">前</span> aqui usa o kun'yomi{' '}
+          <span className="font-jp">まえ</span> — o mesmo padrão da seção sobre kun'yomi/on'yomi:
+          um kanji sozinho no fim da expressão tende a puxar a leitura japonesa nativa.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          A armadilha é que a mesma combinação de hora e minuto muda de sentido com e sem{' '}
+          <span className="font-jp">前</span>: <span className="font-jp">九時十分</span> (
+          <span className="font-jp">くじじゅっぷん</span>) são 9h10 — dez minutos{' '}
+          <strong>depois</strong> das nove; <span className="font-jp">九時十分前</span> (
+          <span className="font-jp">くじじゅっぷんまえ</span>) é 8h50 — dez minutos{' '}
+          <strong>antes</strong> das nove. O número de minutos é o mesmo; só{' '}
+          <span className="font-jp">前</span> no fim inverte a direção.
+        </p>
+        <Ex
+          jp="はちじごじゅっぷんに、いえをでます。"
+          romaji="hachiji gojuppun ni, ie o demasu."
+          pt="Saio de casa às 8h50."
+          notes="contando adiante da hora anterior (8) — uma forma tão válida quanto a de baixo, para o mesmo horário."
+        />
+        <Ex
+          jp="くじじゅっぷんまえに、いえをでます。"
+          romaji="kuji juppun mae ni, ie o demasu."
+          pt="Saio de casa dez para as nove."
+          notes="mesmo horário (8h50), agora contado para trás a partir da próxima hora — mais natural quando faltam poucos minutos."
+        />
+        <Ex
+          jp="かいぎはくじごふんまえにはじまります。"
+          romaji="kaigi wa kuji gofun mae ni hajimarimasu."
+          pt="A reunião começa cinco para as nove."
+          notes="situação real de trabalho, horário apertado — contexto típico onde 前 aparece na fala do dia a dia."
+        />
+      </Section>
+
+      <Section title="Números de telefone: dígito por dígito">
+        <p className="text-sm leading-relaxed text-ink">
+          Até aqui, todo número apareceu inteiro: <span className="font-jp">十一</span> é "onze",
+          uma unidade só. Telefone quebra esse padrão — assim como em português, um número de
+          telefone não é lido como quantidade, e sim como uma sequência de dígitos separados, um a
+          um. <span className="font-jp">三二〇九</span> não vira "trezentos e vinte e nove"; vira{' '}
+          <span className="font-jp">さん・に・ぜろ・きゅう</span>, quatro sons distintos.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          Essa separação existe para evitar erro de quem ouve: um número composto ("trinta e
+          dois"?) obriga quem escuta a calcular a dezena de cabeça, enquanto dígitos soltos só
+          exigem repetir o que se ouviu — essencial ao telefone, onde não dá para checar
+          visualmente, ou ao ditar um número que a outra pessoa vai anotar. A mesma lógica vale
+          para qualquer sequência que funciona como código, não como quantidade: CEP, placa de
+          carro, número de quarto de hotel.
+        </p>
+        <Note>
+          Isso não contradiz o <span className="font-jp">なんばん</span>/
+          <span className="font-jp">ろくばん</span> da seção anterior: um identificador{' '}
+          <strong>curto</strong>, como o número de um ônibus, continua lido como número composto
+          (<span className="font-jp">ろくばん</span>, não{' '}
+          <span className="font-jp">ろく・ばん</span>). A leitura dígito a dígito entra quando a
+          sequência é <strong>longa</strong> — telefone, CEP, código — e separar em números
+          compostos ficaria confuso demais para quem ouve.
+        </Note>
+        <GrammarTable
+          headers={['Dígito', 'Leitura', 'Romaji']}
+          jpCols={[1]}
+          rows={[
+            ['0', 'ゼロ・れい', 'zero / rei'],
+            ['1', 'いち', 'ichi'],
+            ['2', 'に', 'ni'],
+            ['3', 'さん', 'san'],
+            ['4', 'よん', 'yon'],
+            ['5', 'ご', 'go'],
+            ['6', 'ろく', 'roku'],
+            ['7', 'なな', 'nana'],
+            ['8', 'はち', 'hachi'],
+            ['9', 'きゅう', 'kyuu'],
+            ['- (hífen)', 'の', 'no'],
+          ]}
+        />
+        <Note>
+          4 e 7 aqui são <span className="font-jp">よん</span> e <span className="font-jp">なな</span>,
+          nunca <span className="font-jp">し</span> ou <span className="font-jp">しち</span> — a
+          mesma preferência da seção de números, e é justamente ao telefone que ela mais importa:{' '}
+          <span className="font-jp">しち</span> (7) se confunde com{' '}
+          <span className="font-jp">いち</span> (1) do outro lado da linha.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          O 0 tem duas leituras: <span className="font-jp">ゼロ</span> é a mais comum no dia a dia;{' '}
+          <span className="font-jp">れい</span> soa mais formal, comum em atendimento telefônico de
+          empresa e ao confirmar um número de volta para o cliente. As duas estão corretas — a
+          diferença é só de registro, não de significado.
+        </p>
+        <Ex
+          jp="すみません、としょかんのでんわばんごうはなんばんですか。"
+          romaji="sumimasen, toshokan no denwa bangou wa nanban desu ka."
+          pt="Com licença, qual é o telefone da biblioteca?"
+          notes="なんばん você já viu perguntando o número do ônibus — aqui é a mesma pergunta, sobre telefone."
+        />
+        <Ex
+          jp="わたしのけいたいばんごうは、ぜろきゅうぜろの、いちにさんよんの、ごろくななはちです。"
+          romaji="watashi no keitai bangou wa, zero kyuu zero no, ichi ni san yon no, go roku nana hachi desu."
+          pt="Meu número de celular é 090-1234-5678."
+          notes="dígito a dígito, com の marcando cada hífen — pausa natural a cada bloco, como no português."
+        />
+        <Note>
+          <strong>Aprofundamento:</strong> ao ditar um número em voz alta (não só escrever), é
+          comum alongar levemente <span className="font-jp">に</span> (2) para{' '}
+          <span className="font-jp">にー</span> e <span className="font-jp">ご</span> (5) para{' '}
+          <span className="font-jp">ごー</span> — puro recurso de clareza na fala, sem mudar a
+          escrita nem o significado. Não é obrigatório; é só um hábito comum de quem dita números
+          por telefone.
+        </Note>
+        <Ex
+          jp="かくにんします。れいさんの、きゅう、にー、さん、よんですね。"
+          romaji="kakunin shimasu. rei san no, kyuu, nii, san, yon desu ne."
+          pt="Vou confirmar: 03-9234, certo?"
+          notes="atendente confirmando o número em voz alta — れい para o 0 e にー alongado são mais comuns nesse registro cuidadoso do que na fala casual do dia a dia."
+        />
       </Section>
 
       <Section title="Erros comuns">
@@ -796,6 +1036,18 @@ export default function Kanji() {
               'カ/ひ para fogo, ニチ/ひ・にち para dia — o contexto ou o on\'yomi desfazem a ambiguidade',
               'Dois kanji diferentes podem compartilhar kun\'yomi; dentro de 曜日 o problema some, porque aí se usa o on\'yomi.',
             ],
+            [
+              'Esquecer o 前 e inverter o sentido da hora',
+              'くじじゅっぷん para dizer "dez para as nove" (8h50)',
+              'くじじゅっぷんまえ',
+              'Sem 前, くじじゅっぷん significa 9h10 — dez minutos depois das nove, o oposto do pretendido.',
+            ],
+            [
+              'Combinar dígitos de telefone como se fossem um número composto',
+              'さんじゅうに (para o trecho "32" de um telefone)',
+              'さん、に (dois dígitos separados)',
+              'Telefone e outros códigos (CEP, placa) sempre leem um dígito de cada vez — mesmo quando dois dígitos juntos formariam um número "normal" como 32.',
+            ],
           ]}
         />
       </Section>
@@ -815,6 +1067,14 @@ export default function Kanji() {
           alguém no Japão (doces, toalhas, copos), evite conjuntos de 4 ou 9 — prefira 3, 5 ou um
           número par "neutro" como 6 ou 8.
         </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          A mesma superstição aparece nas placas de carro: no sistema de sorteio de placas do
+          Japão, números considerados "de sorte" — como 8, associado a prosperidade crescente pela
+          forma do kanji <span className="font-jp">八</span>, que se abre para baixo — são
+          disputados, enquanto 4 e 9 raramente aparecem por escolha própria. Empresas às vezes
+          buscam um número de telefone comercial "bonito" pelo mesmo motivo: sem 4 nem 9, e
+          terminando em número redondo.
+        </p>
       </Section>
 
       <Section title="Resumo rápido">
@@ -863,6 +1123,13 @@ export default function Kanji() {
             ['半', 'ハン', '"e meia", só depois de uma hora — não confundir com 半分 (metade)'],
           ]}
         />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">X時Y分前</span> = faltam Y minutos para X horas (ex.:{' '}
+          <span className="font-jp">九時十分前</span> = 8h50). Para telefone e outros códigos, cada
+          dígito é lido separado — nunca combinado — com <span className="font-jp">の</span> no
+          lugar do hífen e <span className="font-jp">ゼロ</span>／<span className="font-jp">れい</span>{' '}
+          para 0.
+        </p>
       </Section>
     </div>
   );
