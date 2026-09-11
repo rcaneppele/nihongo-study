@@ -669,13 +669,103 @@ const PERGUNTAS_E_LUGARES: ItemKakitoriFonte[] = [
   { id: 'kanji-nakata', jp: '中田', kana: 'なかた', romaji: 'nakata', pt: 'Nakata (sobrenome)' },
 ];
 
+// Horas cheias (1-12), incluindo as três leituras irregulares (4, 7, 9) que quebram a preferência
+// por よん/なな ensinada na seção de números — por isso valem um item próprio de ditado cada uma.
+const HORAS: ItemKakitoriFonte[] = [
+  { id: 'kanji-hora-1', jp: '一時', kana: 'いちじ', romaji: 'ichiji', pt: '1 hora' },
+  { id: 'kanji-hora-2', jp: '二時', kana: 'にじ', romaji: 'niji', pt: '2 horas' },
+  { id: 'kanji-hora-3', jp: '三時', kana: 'さんじ', romaji: 'sanji', pt: '3 horas' },
+  { id: 'kanji-hora-4', jp: '四時', kana: 'よじ', romaji: 'yoji', pt: '4 horas' },
+  { id: 'kanji-hora-5', jp: '五時', kana: 'ごじ', romaji: 'goji', pt: '5 horas' },
+  { id: 'kanji-hora-6', jp: '六時', kana: 'ろくじ', romaji: 'rokuji', pt: '6 horas' },
+  { id: 'kanji-hora-7', jp: '七時', kana: 'しちじ', romaji: 'shichiji', pt: '7 horas' },
+  { id: 'kanji-hora-8', jp: '八時', kana: 'はちじ', romaji: 'hachiji', pt: '8 horas' },
+  { id: 'kanji-hora-9', jp: '九時', kana: 'くじ', romaji: 'kuji', pt: '9 horas' },
+  { id: 'kanji-hora-10', jp: '十時', kana: 'じゅうじ', romaji: 'juuji', pt: '10 horas' },
+  { id: 'kanji-hora-11', jp: '十一時', kana: 'じゅういちじ', romaji: 'juuichiji', pt: '11 horas' },
+  { id: 'kanji-hora-12', jp: '十二時', kana: 'じゅうにじ', romaji: 'juuniji', pt: '12 horas' },
+  { id: 'kanji-hora-nanji', jp: '何時', kana: 'なんじ', romaji: 'nanji', pt: 'que horas' },
+  { id: 'kanji-hora-3-han', jp: '三時半', kana: 'さんじはん', romaji: 'sanjihan', pt: '3h30' },
+  { id: 'kanji-hora-9-han', jp: '九時半', kana: 'くじはん', romaji: 'kujihan', pt: '9h30' },
+  { id: 'kanji-min-1', jp: '一分', kana: 'いっぷん', romaji: 'ippun', pt: '1 minuto' },
+  { id: 'kanji-min-2', jp: '二分', kana: 'にふん', romaji: 'nifun', pt: '2 minutos' },
+  { id: 'kanji-min-3', jp: '三分', kana: 'さんぷん', romaji: 'sanpun', pt: '3 minutos' },
+  { id: 'kanji-min-4', jp: '四分', kana: 'よんぷん', romaji: 'yonpun', pt: '4 minutos' },
+  { id: 'kanji-min-5', jp: '五分', kana: 'ごふん', romaji: 'gofun', pt: '5 minutos' },
+  { id: 'kanji-min-6', jp: '六分', kana: 'ろっぷん', romaji: 'roppun', pt: '6 minutos' },
+  { id: 'kanji-min-7', jp: '七分', kana: 'ななふん', romaji: 'nanafun', pt: '7 minutos' },
+  { id: 'kanji-min-8', jp: '八分', kana: 'はっぷん', romaji: 'happun', pt: '8 minutos' },
+  { id: 'kanji-min-9', jp: '九分', kana: 'きゅうふん', romaji: 'kyuufun', pt: '9 minutos' },
+  { id: 'kanji-min-10', jp: '十分', kana: 'じゅっぷん', romaji: 'juppun', pt: '10 minutos' },
+  { id: 'kanji-hora-9-10', jp: '九時十分', kana: 'くじじゅっぷん', romaji: 'kuji juppun', pt: '9h10' },
+  {
+    id: 'kanji-hora-9-10-mae',
+    jp: '九時十分前',
+    kana: 'くじじゅっぷんまえ',
+    romaji: 'kuji juppun mae',
+    pt: 'dez para as nove (8h50)',
+  },
+  {
+    id: 'kanji-hora-5-5-mae',
+    jp: '五時五分前',
+    kana: 'ごじごふんまえ',
+    romaji: 'goji gofun mae',
+    pt: 'cinco para as cinco (4h55)',
+  },
+];
+
+const DIGITO_TEL_KANA = ['ぜろ', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう'];
+const DIGITO_TEL_ROMAJI = ['zero', 'ichi', 'ni', 'san', 'yon', 'go', 'roku', 'nana', 'hachi', 'kyuu'];
+
+/** Lê um bloco de dígitos um a um (nunca como quantidade — ver seção "Números de telefone"),
+ * com れい em vez de ぜろ pro 0 quando `rei` for true (registro formal de atendimento). */
+function lerBlocoTelefone(bloco: string, rei: boolean): { kana: string; romaji: string } {
+  const digitos = bloco.split('').map(Number);
+  return {
+    kana: digitos.map((d) => (rei && d === 0 ? 'れい' : DIGITO_TEL_KANA[d])).join(''),
+    romaji: digitos.map((d) => (rei && d === 0 ? 'rei' : DIGITO_TEL_ROMAJI[d])).join(' '),
+  };
+}
+
+/** Monta um item de ditado a partir dos blocos de um número (telefone, CEP, código de quarto...),
+ * lendo cada bloco dígito a dígito e usando の pra marcar cada hífen — o padrão da seção "Números
+ * de telefone". `jp` e `kana` ficam iguais de propósito: esses números não têm forma em kanji, são
+ * sempre escritos em algarismos, então não faz sentido exibir uma coluna "kanji" na resposta. */
+function numeroTelefone(id: string, blocos: string[], opts?: { rei?: boolean; pt?: string }): ItemKakitoriFonte {
+  const lidos = blocos.map((b) => lerBlocoTelefone(b, opts?.rei ?? false));
+  const kana = lidos.map((l) => l.kana).join('の');
+  return {
+    id,
+    jp: kana,
+    kana,
+    romaji: lidos.map((l) => l.romaji).join(' no '),
+    pt: opts?.pt ?? blocos.join('-'),
+  };
+}
+
+// Padrões variados de tamanho de bloco (2, 3 e 4 dígitos) — o número de dígitos por bloco muda
+// conforme o tipo de linha/número, e o objetivo aqui é treinar o ouvido pra qualquer combinação,
+// não decorar um formato fixo. As duas últimas usam れい, o registro formal de atendimento.
+const TELEFONE: ItemKakitoriFonte[] = [
+  numeroTelefone('kanji-tel-1', ['90', '2318']),
+  numeroTelefone('kanji-tel-2', ['145', '9809']),
+  numeroTelefone('kanji-tel-3', ['9812', '8910']),
+  numeroTelefone('kanji-tel-4', ['03', '1234']),
+  numeroTelefone('kanji-tel-5', ['090', '1234', '5678'], { pt: '090-1234-5678 (celular)' }),
+  numeroTelefone('kanji-tel-6', ['080', '5567', '2201'], { pt: '080-5567-2201 (celular)' }),
+  numeroTelefone('kanji-tel-7', ['03', '9234'], { rei: true, pt: '03-9234 (leitura formal, com れい)' }),
+  numeroTelefone('kanji-tel-8', ['06', '8820'], { rei: true, pt: '06-8820 (leitura formal, com れい)' }),
+];
+
 // As frases do quiz acima são só kana (regra do projeto) e não treinam a escrita dos kanji
 // ensinados aqui — por isso o ditado desta lição usa só os kanji isolados (números, dias da
-// semana, números grandes/preços e perguntas/lugares), não as frases.
+// semana, números grandes/preços, horas, telefone e perguntas/lugares), não as frases.
 export const kakitori: GrupoKakitori[] = [
   { id: 'kanji-numeros', label: 'Kanji - Números', itens: NUMEROS_1_99 },
   { id: 'kanji-dias', label: 'Kanji - Dias da semana', itens: DIAS_SEMANA },
   { id: 'kanji-numeros-grandes', label: 'Kanji - Números grandes e preços', itens: NUMEROS_GRANDES },
+  { id: 'kanji-horas', label: 'Kanji - Horas', itens: HORAS },
+  { id: 'kanji-telefone', label: 'Kanji - Números de telefone', itens: TELEFONE },
   { id: 'kanji-perguntas-lugares', label: 'Kanji - Perguntas e lugares', itens: PERGUNTAS_E_LUGARES },
 ];
 
@@ -725,7 +815,8 @@ export default function Kanji() {
           <li>
             Dizer as horas com <span className="font-jp">時</span>, <span className="font-jp">分</span>{' '}
             e <span className="font-jp">半</span>, incluindo as leituras irregulares de 4, 7 e 9
-            horas.
+            horas e a alternância <span className="font-jp">ふん</span>/
+            <span className="font-jp">っぷん</span> dos minutos de 1 a 10.
           </li>
           <li>
             Diferenciar <span className="font-jp">半</span> (e meia, depois de uma hora) de{' '}
@@ -1142,10 +1233,42 @@ export default function Kanji() {
           <span className="font-jp">半</span> também têm leitura kun'yomi (
           <span className="font-jp">とき</span> e <span className="font-jp">なかば</span>,
           respectivamente), usadas em palavras como "aquele momento" ou "no meio de" — fora do
-          escopo desta lição, que trata só do uso para dizer horas. A leitura de{' '}
-          <span className="font-jp">分</span> também muda entre ふん, ぷん e ぶん conforme o número
-          anterior (一分 いっぷん, 二分 にふん, 三分 さんぷん...), por uma regra de eufonia —
-          assunto de uma lição futura; por ora, reconhecer フン/プン já basta.
+          escopo desta lição, que trata só do uso para dizer horas.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp text-base">分</span> é o kanji mais traiçoeiro dos três: a
+          leitura muda conforme o número que vem antes, alternando entre{' '}
+          <span className="font-jp">ふん</span> e <span className="font-jp">っぷん</span>. Não há
+          uma regra fonética simples para prever qual delas cai em cada número — o jeito prático é
+          memorizar a tabela, como qualquer irregularidade de idioma.
+        </p>
+        <GrammarTable
+          headers={['Minuto', 'Leitura', 'Romaji']}
+          jpCols={[1]}
+          rows={[
+            ['1', 'いっぷん', 'ippun'],
+            ['2', 'にふん', 'nifun'],
+            ['3', 'さんぷん', 'sanpun'],
+            ['4', 'よんぷん', 'yonpun'],
+            ['5', 'ごふん', 'gofun'],
+            ['6', 'ろっぷん', 'roppun'],
+            ['7', 'ななふん', 'nanafun'],
+            ['8', 'はっぷん', 'happun'],
+            ['9', 'きゅうふん', 'kyuufun'],
+            ['10', 'じゅっぷん', 'juppun'],
+          ]}
+        />
+        <Note>
+          <strong>Truque para decorar:</strong> conte nos dedos de uma mão, dobrando um dedo a cada
+          minuto — 1 a 5 numa "volta", depois solte a mão e conte 6 a 10 numa segunda volta pelos
+          mesmos cinco dedos. Repare que os três primeiros dedos repetem exatamente o mesmo padrão
+          nas duas voltas (<span className="font-jp">っぷん・ふん・っぷん</span>, ou seja 1º e 6º
+          iguais, 2º e 7º iguais, 3º e 8º iguais) — só os dois últimos dedos invertem: o 4º dedo é{' '}
+          <span className="font-jp">っぷん</span> na primeira volta mas{' '}
+          <span className="font-jp">ふん</span> na segunda (4 vs. 9), e o 5º é o contrário (
+          <span className="font-jp">ふん</span> na primeira, <span className="font-jp">っぷん</span>{' '}
+          na segunda — 5 vs. 10). É essa reviravolta nos dois últimos dedos que costuma pegar quem
+          está decorando de ouvido, então vale prestar atenção especial nela.
         </Note>
         <p className="text-sm leading-relaxed text-ink">
           A maior armadilha aqui não é o kanji, é a leitura do número junto de{' '}
