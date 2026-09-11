@@ -484,6 +484,25 @@ export const quiz: QuizLicao = {
       correta: true,
     },
     {
+      id: 'kanji-sig9b',
+      tipo: 'significado',
+      pergunta: 'O que 午前 e 午後 acrescentam a um horário como 七時?',
+      alternativas: [
+        'se é antes (manhã) ou depois (tarde/noite) do meio-dia',
+        'se a hora é exata ou aproximada',
+        'se a hora é falada ou escrita',
+        'nada — são só sinônimos enfáticos de より',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf8b',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Dentro de 午前, o kanji 前 é lido まえ, a mesma leitura usada em 九時十分前.',
+      correta: false,
+      explicacao: '前 dentro de 午前 usa a leitura on\'yomi ぜん (ごぜん); a leitura まえ só aparece quando 前 vem sozinho depois de hora+minuto, como em 九時十分前.',
+    },
+    {
       id: 'kanji-sig10',
       tipo: 'significado',
       pergunta: 'Por que um número de telefone em japonês é lido dígito a dígito (さん・に・ぜろ...) em vez de como um número composto?',
@@ -669,48 +688,136 @@ const PERGUNTAS_E_LUGARES: ItemKakitoriFonte[] = [
   { id: 'kanji-nakata', jp: '中田', kana: 'なかた', romaji: 'nakata', pt: 'Nakata (sobrenome)' },
 ];
 
-// Horas cheias (1-12), incluindo as três leituras irregulares (4, 7, 9) que quebram a preferência
-// por よん/なな ensinada na seção de números — por isso valem um item próprio de ditado cada uma.
+// Leitura de 分 (minuto): o dígito das unidades decide entre ふん/っぷん (mesma tabela ensinada na
+// lição); em dezenas fechadas (10, 20...) o 十 contrai para じゅっ antes de ぷん — mesmo padrão de
+// contração de ろく/はち/いち com outros contadores, só que aplicado ao próprio 十.
+const MINUTO_SUFIXO: Record<number, { kana: string; romaji: string }> = {
+  1: { kana: 'いっぷん', romaji: 'ippun' },
+  2: { kana: 'にふん', romaji: 'nifun' },
+  3: { kana: 'さんぷん', romaji: 'sanpun' },
+  4: { kana: 'よんぷん', romaji: 'yonpun' },
+  5: { kana: 'ごふん', romaji: 'gofun' },
+  6: { kana: 'ろっぷん', romaji: 'roppun' },
+  7: { kana: 'ななふん', romaji: 'nanafun' },
+  8: { kana: 'はっぷん', romaji: 'happun' },
+  9: { kana: 'きゅうふん', romaji: 'kyuufun' },
+};
+
+function minutoLeitura(n: number): { texto: string; kana: string; romaji: string } {
+  const dezena = Math.floor(n / 10);
+  const unidade = n % 10;
+  if (dezena === 0) {
+    const { kana, romaji } = MINUTO_SUFIXO[unidade];
+    return { texto: `${DIGITO_KANJI[unidade]}分`, kana, romaji };
+  }
+  const prefixoKanji = dezena === 1 ? '' : DIGITO_KANJI[dezena];
+  const prefixoHiragana = dezena === 1 ? '' : DIGITO_HIRAGANA[dezena];
+  const prefixoRomaji = dezena === 1 ? '' : DIGITO_ROMAJI[dezena];
+  if (unidade === 0) {
+    return {
+      texto: `${prefixoKanji}十分`,
+      kana: `${prefixoHiragana}じゅっぷん`,
+      romaji: `${prefixoRomaji}juppun`,
+    };
+  }
+  const sufixo = MINUTO_SUFIXO[unidade];
+  return {
+    texto: `${prefixoKanji}十${DIGITO_KANJI[unidade]}分`,
+    kana: `${prefixoHiragana}じゅう${sufixo.kana}`,
+    romaji: `${prefixoRomaji}juu${sufixo.romaji}`,
+  };
+}
+
+const HORA_KANJI = ['', '一時', '二時', '三時', '四時', '五時', '六時', '七時', '八時', '九時', '十時', '十一時', '十二時'];
+const HORA_KANA = ['', 'いちじ', 'にじ', 'さんじ', 'よじ', 'ごじ', 'ろくじ', 'しちじ', 'はちじ', 'くじ', 'じゅうじ', 'じゅういちじ', 'じゅうにじ'];
+const HORA_ROMAJI = ['', 'ichiji', 'niji', 'sanji', 'yoji', 'goji', 'rokuji', 'shichiji', 'hachiji', 'kuji', 'juuji', 'juuichiji', 'juuniji'];
+
+const PERIODO_DIA = {
+  gozen: { kanji: '午前', kana: 'ごぜん', romaji: 'gozen' },
+  gogo: { kanji: '午後', kana: 'ごご', romaji: 'gogo' },
+} as const;
+
+/** Monta um item de ditado de horário completo — período (午前/午後) + hora + minuto —, o formato
+ * que o sensei realmente fala (nunca uma hora ou um minuto soltos). `hora` vai de 1 a 11 (12 fica
+ * de fora de propósito: 午前12時/午後12時 são ambíguos no uso real, que prefere 正午/meia-noite —
+ * fora do escopo desta lição). `pt` mostra o relógio de 24h correspondente, para treinar a
+ * conversão 午前/午後 → hora real. */
+function horarioCompleto(
+  id: string,
+  periodo: keyof typeof PERIODO_DIA,
+  hora: number,
+  minuto: number,
+): ItemKakitoriFonte {
+  const p = PERIODO_DIA[periodo];
+  const hora24 = periodo === 'gozen' ? hora : hora + 12;
+  const pt = `${String(hora24).padStart(2, '0')}:${String(minuto).padStart(2, '0')}`;
+  if (minuto === 30) {
+    return {
+      id,
+      jp: `${p.kanji}${HORA_KANJI[hora]}半`,
+      kana: `${p.kana}${HORA_KANA[hora]}はん`,
+      romaji: `${p.romaji} ${HORA_ROMAJI[hora]}han`,
+      pt,
+    };
+  }
+  if (minuto === 0) {
+    return {
+      id,
+      jp: `${p.kanji}${HORA_KANJI[hora]}`,
+      kana: `${p.kana}${HORA_KANA[hora]}`,
+      romaji: `${p.romaji} ${HORA_ROMAJI[hora]}`,
+      pt,
+    };
+  }
+  const min = minutoLeitura(minuto);
+  return {
+    id,
+    jp: `${p.kanji}${HORA_KANJI[hora]}${min.texto}`,
+    kana: `${p.kana}${HORA_KANA[hora]}${min.kana}`,
+    romaji: `${p.romaji} ${HORA_ROMAJI[hora]} ${min.romaji}`,
+    pt,
+  };
+}
+
+// Horários completos (período + hora + minuto) cobrindo: as três horas irregulares (4, 7, 9), meia
+// hora (半), minutos de dezena fechada (10, 20, 30, 40, 50) e minutos "compostos" (12, 15, 27, 45,
+// 55) — tanto de manhã (午前) quanto à tarde/noite (午後).
+const HORARIOS: Array<{ id: string; periodo: keyof typeof PERIODO_DIA; hora: number; minuto: number }> = [
+  { id: 'kanji-horario-1', periodo: 'gozen', hora: 7, minuto: 0 },
+  { id: 'kanji-horario-2', periodo: 'gozen', hora: 6, minuto: 30 },
+  { id: 'kanji-horario-3', periodo: 'gozen', hora: 9, minuto: 15 },
+  { id: 'kanji-horario-4', periodo: 'gozen', hora: 4, minuto: 50 },
+  { id: 'kanji-horario-5', periodo: 'gozen', hora: 7, minuto: 1 },
+  { id: 'kanji-horario-6', periodo: 'gozen', hora: 11, minuto: 45 },
+  { id: 'kanji-horario-7', periodo: 'gozen', hora: 8, minuto: 12 },
+  { id: 'kanji-horario-8', periodo: 'gozen', hora: 9, minuto: 30 },
+  { id: 'kanji-horario-9', periodo: 'gogo', hora: 1, minuto: 0 },
+  { id: 'kanji-horario-10', periodo: 'gogo', hora: 3, minuto: 30 },
+  { id: 'kanji-horario-11', periodo: 'gogo', hora: 5, minuto: 40 },
+  { id: 'kanji-horario-12', periodo: 'gogo', hora: 7, minuto: 55 },
+  { id: 'kanji-horario-13', periodo: 'gogo', hora: 9, minuto: 8 },
+  { id: 'kanji-horario-14', periodo: 'gogo', hora: 10, minuto: 20 },
+  { id: 'kanji-horario-15', periodo: 'gogo', hora: 2, minuto: 3 },
+  { id: 'kanji-horario-16', periodo: 'gogo', hora: 6, minuto: 27 },
+  { id: 'kanji-horario-17', periodo: 'gogo', hora: 9, minuto: 10 },
+];
+
 const HORAS: ItemKakitoriFonte[] = [
-  { id: 'kanji-hora-1', jp: '一時', kana: 'いちじ', romaji: 'ichiji', pt: '1 hora' },
-  { id: 'kanji-hora-2', jp: '二時', kana: 'にじ', romaji: 'niji', pt: '2 horas' },
-  { id: 'kanji-hora-3', jp: '三時', kana: 'さんじ', romaji: 'sanji', pt: '3 horas' },
-  { id: 'kanji-hora-4', jp: '四時', kana: 'よじ', romaji: 'yoji', pt: '4 horas' },
-  { id: 'kanji-hora-5', jp: '五時', kana: 'ごじ', romaji: 'goji', pt: '5 horas' },
-  { id: 'kanji-hora-6', jp: '六時', kana: 'ろくじ', romaji: 'rokuji', pt: '6 horas' },
-  { id: 'kanji-hora-7', jp: '七時', kana: 'しちじ', romaji: 'shichiji', pt: '7 horas' },
-  { id: 'kanji-hora-8', jp: '八時', kana: 'はちじ', romaji: 'hachiji', pt: '8 horas' },
-  { id: 'kanji-hora-9', jp: '九時', kana: 'くじ', romaji: 'kuji', pt: '9 horas' },
-  { id: 'kanji-hora-10', jp: '十時', kana: 'じゅうじ', romaji: 'juuji', pt: '10 horas' },
-  { id: 'kanji-hora-11', jp: '十一時', kana: 'じゅういちじ', romaji: 'juuichiji', pt: '11 horas' },
-  { id: 'kanji-hora-12', jp: '十二時', kana: 'じゅうにじ', romaji: 'juuniji', pt: '12 horas' },
   { id: 'kanji-hora-nanji', jp: '何時', kana: 'なんじ', romaji: 'nanji', pt: 'que horas' },
-  { id: 'kanji-hora-3-han', jp: '三時半', kana: 'さんじはん', romaji: 'sanjihan', pt: '3h30' },
-  { id: 'kanji-hora-9-han', jp: '九時半', kana: 'くじはん', romaji: 'kujihan', pt: '9h30' },
-  { id: 'kanji-min-1', jp: '一分', kana: 'いっぷん', romaji: 'ippun', pt: '1 minuto' },
-  { id: 'kanji-min-2', jp: '二分', kana: 'にふん', romaji: 'nifun', pt: '2 minutos' },
-  { id: 'kanji-min-3', jp: '三分', kana: 'さんぷん', romaji: 'sanpun', pt: '3 minutos' },
-  { id: 'kanji-min-4', jp: '四分', kana: 'よんぷん', romaji: 'yonpun', pt: '4 minutos' },
-  { id: 'kanji-min-5', jp: '五分', kana: 'ごふん', romaji: 'gofun', pt: '5 minutos' },
-  { id: 'kanji-min-6', jp: '六分', kana: 'ろっぷん', romaji: 'roppun', pt: '6 minutos' },
-  { id: 'kanji-min-7', jp: '七分', kana: 'ななふん', romaji: 'nanafun', pt: '7 minutos' },
-  { id: 'kanji-min-8', jp: '八分', kana: 'はっぷん', romaji: 'happun', pt: '8 minutos' },
-  { id: 'kanji-min-9', jp: '九分', kana: 'きゅうふん', romaji: 'kyuufun', pt: '9 minutos' },
-  { id: 'kanji-min-10', jp: '十分', kana: 'じゅっぷん', romaji: 'juppun', pt: '10 minutos' },
-  { id: 'kanji-hora-9-10', jp: '九時十分', kana: 'くじじゅっぷん', romaji: 'kuji juppun', pt: '9h10' },
+  ...HORARIOS.map(({ id, periodo, hora, minuto }) => horarioCompleto(id, periodo, hora, minuto)),
   {
-    id: 'kanji-hora-9-10-mae',
-    jp: '九時十分前',
-    kana: 'くじじゅっぷんまえ',
-    romaji: 'kuji juppun mae',
-    pt: 'dez para as nove (8h50)',
+    id: 'kanji-hora-gozen-5-mae',
+    jp: '午前五時五分前',
+    kana: 'ごぜんごじごふんまえ',
+    romaji: 'gozen goji gofun mae',
+    pt: 'cinco para as cinco da manhã (04:55)',
   },
   {
-    id: 'kanji-hora-5-5-mae',
-    jp: '五時五分前',
-    kana: 'ごじごふんまえ',
-    romaji: 'goji gofun mae',
-    pt: 'cinco para as cinco (4h55)',
+    id: 'kanji-hora-gogo-9-mae',
+    jp: '午後九時十分前',
+    kana: 'ごごくじじゅっぷんまえ',
+    romaji: 'gogo kuji juppun mae',
+    pt: 'dez para as nove da noite (20:50)',
   },
 ];
 
@@ -1364,6 +1471,60 @@ export default function Kanji() {
           pt="A reunião começa cinco para as nove."
           notes="situação real de trabalho, horário apertado — contexto típico onde 前 aparece na fala do dia a dia."
         />
+        <p className="text-sm leading-relaxed text-ink">
+          Até aqui, cada hora foi dita sem dizer se é de manhã, tarde ou noite — sozinho,{' '}
+          <span className="font-jp text-base">時</span> não diferencia 3 da madrugada de 3 da
+          tarde, igual "são três horas" em português também precisa de contexto para não ficar
+          ambíguo. Quando o contexto não resolve — ou numa informação que precisa ser exata, como
+          horário de voo ou de consulta médica — acrescenta-se{' '}
+          <span className="font-jp text-base">午前</span> ou{' '}
+          <span className="font-jp text-base">午後</span> antes da hora.
+        </p>
+        <GrammarTable
+          headers={['Kanji', 'Leitura', 'Romaji', 'Uso']}
+          jpCols={[0, 1]}
+          rows={[
+            ['午前', 'ごぜん', 'gozen', '"da manhã": 午前七時 (ごぜんしちじ, 7h da manhã)'],
+            ['午後', 'ごご', 'gogo', '"da tarde/noite": 午後七時 (ごごしちじ, 7h da noite, 19h)'],
+          ]}
+        />
+        <Note>
+          <strong>Armadilha:</strong> o mesmo kanji <span className="font-jp">前</span> tem duas
+          leituras bem diferentes nesta seção. Sozinho depois de hora+minuto (
+          <span className="font-jp">九時十分前</span>) é o kun'yomi{' '}
+          <span className="font-jp">まえ</span> ("antes de", "faltam"); grudado em{' '}
+          <span className="font-jp">午</span> (<span className="font-jp">午前</span>) é o on'yomi{' '}
+          <span className="font-jp">ぜん</span>, parte fixa da palavra "antes do meio-dia" — não dá
+          para trocar um pelo outro. Só o contexto (前 solto depois de um horário, ou grudado em
+          午) diz qual leitura usar.
+        </Note>
+        <Ex
+          jp="ごぜんしちじにおきます。"
+          romaji="gozen shichiji ni okimasu."
+          pt="Acordo às 7h da manhã."
+          notes="mesma frase de 七時におきます, agora com 午前 deixando explícito que não são 7 da noite."
+        />
+        <Ex
+          jp="びょういんのよやくはごごさんじです。"
+          romaji="byouin no yoyaku wa gogo sanji desu."
+          pt="A consulta no hospital é às 15h (3 da tarde)."
+          notes="situação real — marcar horário em clínica/hospital, onde a ambiguidade sem 午前/午後 seria um problema sério."
+        />
+        <Ex
+          jp="ともだちとごごくじにあいます。"
+          romaji="tomodachi to gogo kuji ni aimasu."
+          pt="Vou encontrar um amigo às 21h (9 da noite)."
+          notes="九時 sozinho (くじ) poderia ser 9 da manhã; 午後 tira a ambiguidade num convite marcado com antecedência."
+        />
+        <Note>
+          <strong>Nota cultural:</strong> horários oficiais no Japão — tabela de trem, grade de TV,
+          cardápio de happy hour — costumam usar o relógio de 24 horas puro em vez de 午前/午後
+          (19時 em vez de 午後七時), a mesma lógica de "13h" vs. "1 da tarde" em português. É comum
+          também ver o dia "esticado" além da meia-noite nesses horários oficiais: um programa de
+          TV às 25時 significa 1h da manhã do dia seguinte, ainda contado como parte da noite
+          anterior — prática comum em grades de TV e cartazes de bar/karaokê que funcionam virada a
+          madrugada.
+        </Note>
       </Section>
 
       <Section title="Números de telefone: dígito por dígito">
@@ -1646,6 +1807,12 @@ export default function Kanji() {
               'くじじゅっぷん para dizer "dez para as nove" (8h50)',
               'くじじゅっぷんまえ',
               'Sem 前, くじじゅっぷん significa 9h10 — dez minutos depois das nove, o oposto do pretendido.',
+            ],
+            [
+              'Ler o 前 de 午前 como まえ',
+              'tentar ler 午前 como "gomae"',
+              '午前 = ごぜん (前 aqui é o on\'yomi ぜん)',
+              'まえ só aparece quando 前 vem sozinho depois de hora+minuto (九時十分前); grudado em 午 ele é sempre ぜん.',
             ],
             [
               'Combinar dígitos de telefone como se fossem um número composto',
