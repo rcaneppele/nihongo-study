@@ -6,9 +6,9 @@ export const meta = {
   id: 'kanji',
   title: 'Kanji — Primeiros Passos',
   subtitle:
-    'O terceiro sistema de escrita: como ele funciona, os kanji dos números, os dias da semana, como dizer as horas e ler um número de telefone',
+    'O terceiro sistema de escrita: como ele funciona, os kanji dos números (até 10.000), os dias da semana, as horas, preços, números de telefone, perguntas e os kanji que viram sobrenome',
   emoji: '🔢',
-  tags: ['escrita', 'kanji', 'n5', 'tempo', 'calendario', 'telefone'],
+  tags: ['escrita', 'kanji', 'n5', 'tempo', 'calendario', 'telefone', 'dinheiro', 'sobrenomes'],
 };
 
 export const quiz: QuizLicao = {
@@ -238,6 +238,103 @@ export const quiz: QuizLicao = {
       ],
       pt: 'Vou confirmar: 03-9234.',
     },
+    {
+      id: 'kanji-f23',
+      tokens: [
+        { texto: 'これは', romaji: 'kore wa', particula: true },
+        { texto: 'ひゃくえん', romaji: 'hyakuen' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Isto custa cem ienes.',
+    },
+    {
+      id: 'kanji-f24',
+      tokens: [
+        { texto: 'すみません', romaji: 'sumimasen' },
+        { texto: 'これは', romaji: 'kore wa', particula: true },
+        { texto: 'いくら', romaji: 'ikura' },
+        { texto: 'ですか', romaji: 'desu ka' },
+      ],
+      pt: 'Com licença, quanto custa isto?',
+    },
+    {
+      id: 'kanji-f25',
+      tokens: [
+        { texto: 'このほんは', romaji: 'kono hon wa', particula: true },
+        { texto: 'さんぜんえん', romaji: "sanzen'en" },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'Este livro custa três mil ienes.',
+    },
+    {
+      id: 'kanji-f26',
+      tokens: [
+        { texto: 'あたらしいじてんしゃは', romaji: 'atarashii jitensha wa', particula: true },
+        { texto: 'いちまんえん', romaji: "ichiman'en" },
+        { texto: 'でした', romaji: 'deshita' },
+      ],
+      pt: 'A bicicleta nova custou dez mil ienes.',
+    },
+    {
+      id: 'kanji-f27',
+      tokens: [
+        { texto: 'ひゃくえんショップは', romaji: 'hyakuen shoppu wa', particula: true },
+        { texto: 'べんり', romaji: 'benri' },
+        { texto: 'です', romaji: 'desu' },
+      ],
+      pt: 'A loja de 100 ienes é conveniente.',
+    },
+    {
+      id: 'kanji-f28',
+      tokens: [
+        { texto: 'なにを', romaji: 'nani o', particula: true },
+        { texto: 'たべますか', romaji: 'tabemasu ka' },
+      ],
+      pt: 'O que você vai comer?',
+    },
+    {
+      id: 'kanji-f29',
+      tokens: [
+        { texto: 'いま', romaji: 'ima' },
+        { texto: 'なんじですか', romaji: 'nanji desu ka' },
+      ],
+      pt: 'Que horas são agora?',
+    },
+    {
+      id: 'kanji-f30',
+      tokens: [
+        { texto: 'きょうは', romaji: 'kyou wa', particula: true },
+        { texto: 'なんようびですか', romaji: "nan'youbi desu ka" },
+      ],
+      pt: 'Que dia da semana é hoje?',
+    },
+    {
+      id: 'kanji-f31',
+      tokens: [
+        { texto: 'にちようびに', romaji: 'nichiyoubi ni', particula: true },
+        { texto: 'やまへ', romaji: 'yama e', particula: true },
+        { texto: 'いきます', romaji: 'ikimasu' },
+      ],
+      pt: 'Domingo eu vou à montanha.',
+    },
+    {
+      id: 'kanji-f32',
+      tokens: [
+        { texto: 'ふじさんの', romaji: 'fujisan no', particula: true },
+        { texto: 'しゃしんを', romaji: 'shashin o', particula: true },
+        { texto: 'とりました', romaji: 'torimashita' },
+      ],
+      pt: 'Tirei uma foto do Monte Fuji.',
+    },
+    {
+      id: 'kanji-f33',
+      tokens: [
+        { texto: 'たなかさんと', romaji: 'tanaka-san to', particula: true },
+        { texto: 'なかたさんは', romaji: 'nakata-san wa', particula: true },
+        { texto: 'どうりょうです', romaji: 'douryou desu' },
+      ],
+      pt: 'Tanaka e Nakata são colegas de trabalho.',
+    },
   ],
   perguntas: [
     {
@@ -411,6 +508,94 @@ export const quiz: QuizLicao = {
       alternativas: ['の', 'と', 'に', 'nada — o hífen simplesmente é ignorado'],
       correta: 0,
     },
+    {
+      id: 'kanji-sig12',
+      tipo: 'significado',
+      pergunta: 'Como se lê 三百 (300)?',
+      alternativas: ['さんびゃく (sanbyaku)', 'さんひゃく (sanhyaku)', 'みひゃく (mihyaku)', 'さんぴゃく (sanpyaku)'],
+      correta: 0,
+      explicacao: '百 muda de ひゃく para びゃく depois de さん (300), ろく (600) e はち (800) — leitura irregular fixa, não segue o padrão dos outros múltiplos.',
+    },
+    {
+      id: 'kanji-sig13',
+      tipo: 'significado',
+      pergunta: 'Como se lê 八千 (8.000)?',
+      alternativas: ['はっせん (hassen)', 'はちせん (hachisen)', 'やっせん (yassen)', 'はちぜん (hachizen)'],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf10',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'Para dizer "dez mil" (10.000), basta dizer 万 sozinho, sem nenhum número na frente.',
+      correta: false,
+      explicacao: '万 precisa do 一 na frente (一万, いちまん) — diferente de 百 e 千, que ficam sozinhos para dizer "cem" e "mil".',
+    },
+    {
+      id: 'kanji-vf11',
+      tipo: 'verdadeiro-falso',
+      afirmacao: '百円ショップ é um tipo de loja popular no Japão onde a maior parte dos produtos custa 100 ienes.',
+      correta: true,
+    },
+    {
+      id: 'kanji-sig14',
+      tipo: 'significado',
+      pergunta: 'Qual é a leitura de 何 na frase 何を食べますか (o que você vai comer)?',
+      alternativas: ['なに (nani)', 'なん (nan)', 'だれ (dare)', 'どこ (doko)'],
+      correta: 0,
+      explicacao: '何 antes da partícula を (ou sozinho) costuma se ler なに.',
+    },
+    {
+      id: 'kanji-sig15',
+      tipo: 'significado',
+      pergunta: 'Qual é a leitura de 何 na frase 何時ですか (que horas são)?',
+      alternativas: ['なん (nan)', 'なに (nani)', 'いつ (itsu)', 'どこ (doko)'],
+      correta: 0,
+      explicacao: '何 antes de です ou de um contador como 時、人、分 costuma se ler なん.',
+    },
+    {
+      id: 'kanji-vf12',
+      tipo: 'verdadeiro-falso',
+      afirmacao: '今日 (hoje) se lê こんにち, juntando as leituras separadas de 今 (いま) e 日 (ひ).',
+      correta: false,
+      explicacao: '今日 tem leitura irregular, きょう — não é a soma das leituras separadas de 今 e 日.',
+    },
+    {
+      id: 'kanji-sig16',
+      tipo: 'significado',
+      pergunta: 'Por que 富士山 (Monte Fuji) usa a leitura さん em vez de やま para 山?',
+      alternativas: [
+        'nomes de montanhas famosas geralmente usam a leitura on\'yomi さん',
+        'やま está errado e nunca deveria ser usado',
+        'さん é uma exceção usada só para o Monte Fuji',
+        'não existe regra, é aleatório',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf13',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'O さん no final de 田中さん (Tanaka-san) é o mesmo さん do kanji 山 (montanha), lido em 富士山.',
+      correta: false,
+      explicacao: 'São coisas diferentes que soam igual por coincidência: さん depois de um nome de pessoa é o sufixo honorífico, sempre em hiragana; さん como leitura de 山 é on\'yomi do próprio kanji, usado em nomes de montanha.',
+    },
+    {
+      id: 'kanji-sig17',
+      tipo: 'significado',
+      pergunta: 'Por que 川 pode se ler がわ em vez de かわ, como em nomes de rio (ex.: チエテ川)?',
+      alternativas: [
+        'é rendaku: a leitura "sonoriza" quando o kanji vem depois de outra palavra, formando um nome composto',
+        'がわ é a leitura formal e かわ a informal, sem relação com composição',
+        'depende só do tamanho do rio',
+        'é um erro comum; o correto é sempre かわ',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'kanji-vf14',
+      tipo: 'verdadeiro-falso',
+      afirmacao: '田 também sofre essa mudança de som: sozinho é た, mas como segundo elemento de um sobrenome, como em 中田 (Nakata), vira だ.',
+      correta: true,
+    },
   ],
 };
 
@@ -455,12 +640,43 @@ const DIAS_SEMANA: ItemKakitoriFonte[] = [
   { id: 'kanji-dia-dom', jp: '日曜日', kana: 'にちようび', romaji: 'nichiyoubi', pt: 'domingo' },
 ];
 
+const NUMEROS_GRANDES: ItemKakitoriFonte[] = [
+  { id: 'kanji-grande-100', jp: '百', kana: 'ひゃく', romaji: 'hyaku', pt: '100' },
+  { id: 'kanji-grande-200', jp: '二百', kana: 'にひゃく', romaji: 'nihyaku', pt: '200' },
+  { id: 'kanji-grande-300', jp: '三百', kana: 'さんびゃく', romaji: 'sanbyaku', pt: '300' },
+  { id: 'kanji-grande-600', jp: '六百', kana: 'ろっぴゃく', romaji: 'roppyaku', pt: '600' },
+  { id: 'kanji-grande-800', jp: '八百', kana: 'はっぴゃく', romaji: 'happyaku', pt: '800' },
+  { id: 'kanji-grande-1000', jp: '千', kana: 'せん', romaji: 'sen', pt: '1.000' },
+  { id: 'kanji-grande-3000', jp: '三千', kana: 'さんぜん', romaji: 'sanzen', pt: '3.000' },
+  { id: 'kanji-grande-8000', jp: '八千', kana: 'はっせん', romaji: 'hassen', pt: '8.000' },
+  { id: 'kanji-grande-10000', jp: '一万', kana: 'いちまん', romaji: 'ichiman', pt: '10.000' },
+  { id: 'kanji-grande-50000', jp: '五万', kana: 'ごまん', romaji: 'goman', pt: '50.000' },
+  { id: 'kanji-ien-100', jp: '百円', kana: 'ひゃくえん', romaji: 'hyakuen', pt: '100 ienes' },
+  { id: 'kanji-ien-1000', jp: '千円', kana: 'せんえん', romaji: "sen'en", pt: '1.000 ienes' },
+  { id: 'kanji-ien-10000', jp: '一万円', kana: 'いちまんえん', romaji: "ichiman'en", pt: '10.000 ienes' },
+];
+
+const PERGUNTAS_E_LUGARES: ItemKakitoriFonte[] = [
+  { id: 'kanji-nani', jp: '何', kana: 'なに', romaji: 'nani', pt: 'o quê' },
+  { id: 'kanji-nan', jp: '何', kana: 'なん', romaji: 'nan', pt: 'o quê (antes de です/contador)' },
+  { id: 'kanji-ima', jp: '今', kana: 'いま', romaji: 'ima', pt: 'agora' },
+  { id: 'kanji-kyou', jp: '今日', kana: 'きょう', romaji: 'kyou', pt: 'hoje' },
+  { id: 'kanji-yama', jp: '山', kana: 'やま', romaji: 'yama', pt: 'montanha' },
+  { id: 'kanji-fujisan', jp: '富士山', kana: 'ふじさん', romaji: 'fujisan', pt: 'Monte Fuji' },
+  { id: 'kanji-kawa', jp: '川', kana: 'かわ', romaji: 'kawa', pt: 'rio' },
+  { id: 'kanji-ta', jp: '田', kana: 'た', romaji: 'ta', pt: 'arrozal' },
+  { id: 'kanji-tanaka', jp: '田中', kana: 'たなか', romaji: 'tanaka', pt: 'Tanaka (sobrenome)' },
+  { id: 'kanji-nakata', jp: '中田', kana: 'なかた', romaji: 'nakata', pt: 'Nakata (sobrenome)' },
+];
+
 // As frases do quiz acima são só kana (regra do projeto) e não treinam a escrita dos kanji
-// ensinados aqui — por isso o ditado desta lição usa só os kanji isolados (números e dias da
-// semana), não as frases.
+// ensinados aqui — por isso o ditado desta lição usa só os kanji isolados (números, dias da
+// semana, números grandes/preços e perguntas/lugares), não as frases.
 export const kakitori: GrupoKakitori[] = [
   { id: 'kanji-numeros', label: 'Kanji - Números', itens: NUMEROS_1_99 },
   { id: 'kanji-dias', label: 'Kanji - Dias da semana', itens: DIAS_SEMANA },
+  { id: 'kanji-numeros-grandes', label: 'Kanji - Números grandes e preços', itens: NUMEROS_GRANDES },
+  { id: 'kanji-perguntas-lugares', label: 'Kanji - Perguntas e lugares', itens: PERGUNTAS_E_LUGARES },
 ];
 
 export default function Kanji() {
@@ -524,13 +740,35 @@ export default function Kanji() {
             <span className="font-jp">の</span> para o hífen e reconhecendo as duas leituras de 0
             (<span className="font-jp">ゼロ</span>／<span className="font-jp">れい</span>).
           </li>
+          <li>
+            Ler e formar números até <span className="font-jp">万</span> (10.000), incluindo as
+            leituras irregulares de 300, 600, 800, 3.000 e 8.000.
+          </li>
+          <li>
+            Dizer e perguntar preços em ienes com <span className="font-jp">円</span> e{' '}
+            <span className="font-jp">いくらですか</span>.
+          </li>
+          <li>
+            Diferenciar as leituras <span className="font-jp">なに</span> e{' '}
+            <span className="font-jp">なん</span> de <span className="font-jp">何</span>, e usar{' '}
+            <span className="font-jp">今</span> — incluindo a leitura irregular de{' '}
+            <span className="font-jp">今日</span>.
+          </li>
+          <li>
+            Reconhecer <span className="font-jp">山</span>, <span className="font-jp">川</span> e{' '}
+            <span className="font-jp">田</span> como palavra comum e como parte de sobrenomes
+            japoneses comuns, incluindo a mudança de som que{' '}
+            <span className="font-jp">川</span> e <span className="font-jp">田</span> sofrem em
+            alguns nomes compostos.
+          </li>
         </ul>
         <Note>
           Fora do escopo desta lição: o sistema completo de radicais para consulta em dicionário,
-          prática detalhada de ordem de traço, como contar acima de 10, contadores específicos
-          (para objetos compridos, chatos, animais...), como ler datas do calendário (dia do mês,
-          mês do ano) e preços. Esses temas ficam para lições futuras, conforme o curso avança —
-          aqui o objetivo é só a base que as duas primeiras aulas do sensei cobriram.
+          prática detalhada de ordem de traço, contadores específicos (para objetos compridos,
+          chatos, animais...), como ler datas do calendário (dia do mês, mês do ano), números
+          acima de 10.000 e o sistema completo de leitura de nomes próprios japoneses (que tem
+          muito mais exceções do que os poucos sobrenomes citados aqui). Esses temas ficam para
+          lições futuras, conforme o curso avança.
         </Note>
       </Section>
 
@@ -698,6 +936,105 @@ export default function Kanji() {
           romaji="juuissai desu."
           pt="Tenho onze anos."
           notes="十一 (じゅういち) + さい (idade) vira じゅういっさい — on'yomi combinado, exatamente como em 十一 sozinho."
+        />
+      </Section>
+
+      <Section title="Números grandes e preços: 百・千・万・円">
+        <p className="text-sm leading-relaxed text-ink">
+          Os números de 1 a 10 bastam para contar objetos na mão, mas não para dizer um preço, uma
+          distância ou uma população — para isso, o japonês usa três kanji de{' '}
+          <strong>unidade</strong>, do mesmo jeito que <span className="font-jp">十</span> vira
+          unidade de dezena: <span className="font-jp text-base">百</span> (centena),{' '}
+          <span className="font-jp text-base">千</span> (milhar) e{' '}
+          <span className="font-jp text-base">万</span> (dezena de milhar). É o uso mais imediato
+          deles que faz valer a pena aprender agora: ler o preço de qualquer coisa numa loja,
+          cardápio ou recibo japonês.
+        </p>
+        <GrammarTable
+          headers={['Unidade', 'Kanji', "On'yomi", 'Romaji', 'Valor']}
+          jpCols={[1, 2]}
+          rows={[
+            ['centena', '百', 'ひゃく', 'hyaku', '100'],
+            ['milhar', '千', 'せん', 'sen', '1.000'],
+            ['dezena de milhar', '万', 'まん', 'man', '10.000'],
+          ]}
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          A formação segue o mesmo padrão de <span className="font-jp">十</span>: dígito
+          multiplicador na frente da unidade. <span className="font-jp">二百</span> (
+          <span className="font-jp">にひゃく</span>) é 200, <span className="font-jp">五千</span>{' '}
+          (<span className="font-jp">ごせん</span>) é 5.000 — regular, sem surpresa. A armadilha
+          aparece em alguns múltiplos específicos, onde o som do início da unidade muda:
+        </p>
+        <GrammarTable
+          headers={['Múltiplo', 'Kanji', 'Leitura', 'Romaji', 'Padrão regular (para comparar)']}
+          jpCols={[1, 2]}
+          rows={[
+            ['3 ×', '三百', 'さんびゃく', 'sanbyaku', 'não é さんひゃく'],
+            ['6 ×', '六百', 'ろっぴゃく', 'roppyaku', 'não é ろくひゃく'],
+            ['8 ×', '八百', 'はっぴゃく', 'happyaku', 'não é はちひゃく'],
+            ['3 ×', '三千', 'さんぜん', 'sanzen', 'não é さんせん'],
+            ['8 ×', '八千', 'はっせん', 'hassen', 'não é はちせん'],
+          ]}
+        />
+        <Note>
+          <strong>Armadilha:</strong> <span className="font-jp">万</span> se comporta diferente de{' '}
+          <span className="font-jp">百</span> e <span className="font-jp">千</span> num ponto
+          importante: para dizer só "cem" ou "mil", o kanji fica sozinho (
+          <span className="font-jp">百</span>, <span className="font-jp">千</span> — nunca{' '}
+          <span className="font-jp">一百</span> ou <span className="font-jp">一千</span> no dia a
+          dia); mas para dizer "dez mil", <span className="font-jp">万</span> sozinho não basta —
+          precisa do <span className="font-jp">一</span> na frente:{' '}
+          <span className="font-jp">一万</span> (<span className="font-jp">いちまん</span>).
+          Aprender esse contraste evita os dois erros mais comuns aqui.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp text-base">円</span> (<span className="font-jp">えん</span>,{' '}
+          <em>en</em>) é o kanji do iene, a moeda japonesa — funciona como um contador que gruda
+          direto depois do número, sem partícula no meio: número + 円. Para perguntar um preço que
+          você ainda não sabe, usa-se <span className="font-jp">いくらですか</span> ("quanto
+          custa?"), não um número — é uma palavra de pergunta própria, assim como{' '}
+          <span className="font-jp">なんばん</span> pergunta por um número-identificador.
+        </p>
+        <Ex
+          jp="これはひゃくえんです。"
+          romaji="kore wa hyakuen desu."
+          pt="Isto custa cem ienes."
+          notes="preço simples e redondo — situação real de balcão de loja ou conbini."
+        />
+        <Ex
+          jp="すみません、これはいくらですか。"
+          romaji="sumimasen, kore wa ikura desu ka."
+          pt="Com licença, quanto custa isto?"
+          notes="pergunta de preço, uma das frases mais úteis em qualquer loja no Japão."
+        />
+        <Ex
+          jp="このほんはさんぜんえんです。"
+          romaji="kono hon wa sanzen'en desu."
+          pt="Este livro custa três mil ienes."
+          notes="さんぜん é a leitura irregular de 3.000 — não さんせん."
+        />
+        <Ex
+          jp="あたらしいじてんしゃはいちまんえんでした。"
+          romaji="atarashii jitensha wa ichiman'en deshita."
+          pt="A bicicleta nova custou dez mil ienes."
+          notes="いちまん confirma a regra: diferente de 百 e 千, 万 nunca fica sozinho."
+        />
+        <Note>
+          <strong>Nota cultural:</strong> <span className="font-jp">百円ショップ</span> (
+          <span className="font-jp">ひゃくえんショップ</span>, "loja de 100 ienes") é um tipo de
+          loja extremamente comum no Japão — de utensílios domésticos a papelaria e cozinha, quase
+          tudo ali custa exatamente 100 ienes (mais imposto). Redes como Daiso, Seria e Can Do têm
+          milhares de lojas pelo país; é parecida com as lojas de "tudo por um preço" no Brasil,
+          mas muito mais comum e com produtos de qualidade surpreendentemente boa — vale de
+          referência de "preço barato" no dia a dia japonês, útil para calibrar se um preço que
+          você ouve é caro ou barato.
+        </Note>
+        <Ex
+          jp="ひゃくえんショップはべんりです。"
+          romaji="hyakuen shoppu wa benri desu."
+          pt="A loja de 100 ienes é conveniente."
+          notes="vocabulário cultural acima numa frase real, registro neutro do dia a dia."
         />
       </Section>
 
@@ -989,6 +1326,151 @@ export default function Kanji() {
         />
       </Section>
 
+      <Section title={'何 e 今: perguntar "o quê" e falar de "agora"'}>
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp text-base">何</span> é o kanji da pergunta "o quê" — igual
+          a "quem" e "onde" em português, é uma palavra que você vai usar toda hora. A armadilha é
+          que ele tem duas leituras, <span className="font-jp">なに</span> e{' '}
+          <span className="font-jp">なん</span>, e a escolha entre elas segue um padrão bem
+          definido pelo que vem <strong>depois</strong> do kanji, não é livre nem aleatória.
+        </p>
+        <GrammarTable
+          headers={['O que vem depois', 'Leitura', 'Exemplo', 'Romaji']}
+          jpCols={[2]}
+          rows={[
+            ['partícula を／が, ou sozinho', 'なに', '何を、何が、何？', 'nani o, nani ga, nani?'],
+            ['です／だ, ou contador (時、人、分...)', 'なん', '何ですか、何時、何人', 'nan desu ka, nanji, nannin'],
+          ]}
+        />
+        <Note>
+          <strong>Aprofundamento:</strong> essa regra cobre a grande maioria dos casos do dia a
+          dia, mas não é absoluta — há contadores e combinações que fogem desse padrão simples.
+          Por ora, essas duas situações (antes de を／が／sozinho → なに; antes de です／contador →
+          なん) resolvem quase toda frase comum.
+        </Note>
+        <Ex
+          jp="なにをたべますか。"
+          romaji="nani o tabemasu ka."
+          pt="O que você vai comer?"
+          notes="なに antes da partícula を — situação real: pedindo comida num restaurante."
+        />
+        <Ex
+          jp="いま、なんじですか。"
+          romaji="ima, nanji desu ka."
+          pt="Que horas são agora?"
+          notes="なん antes do contador de hora 時, já visto na seção de horas."
+        />
+        <Ex
+          jp="きょうはなんようびですか。"
+          romaji="kyou wa nan'youbi desu ka."
+          pt="Que dia da semana é hoje?"
+          notes="なん antes de 曜日 — combina 今 (via きょう) e 何 na mesma pergunta cotidiana."
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp text-base">今</span> (<span className="font-jp">いま</span>,{' '}
+          <em>ima</em>, "agora") é mais simples: uma leitura só, geralmente sozinho no início da
+          frase, descrevendo o momento presente. A complicação aparece só quando ele entra numa
+          palavra composta.
+        </p>
+        <Ex
+          jp="いま、くじです。"
+          romaji="ima, kuji desu."
+          pt="Agora são nove horas."
+          notes="今 sozinho, abrindo a frase — o uso mais comum do kanji."
+        />
+        <Note>
+          <strong>Aprofundamento:</strong> <span className="font-jp">今日</span> ("hoje") combina{' '}
+          <span className="font-jp">今</span> + <span className="font-jp">日</span>, mas não se lê{' '}
+          <span className="font-jp">こんにち</span> (a soma das duas leituras separadas) — a
+          leitura correta é <span className="font-jp">きょう</span>, totalmente irregular. É uma
+          das palavras mais usadas do idioma, então vale reconhecer de vista mesmo sem seguir a
+          lógica normal de composição que o resto da lição ensinou.
+        </Note>
+      </Section>
+
+      <Section title="山・川・田: natureza que virou sobrenome">
+        <p className="text-sm leading-relaxed text-ink">
+          Três kanji de elementos da paisagem — montanha, rio, arrozal — que aparecem tanto como
+          palavra comum quanto, combinados entre si ou com outros kanji, em alguns dos sobrenomes
+          mais comuns do Japão. É por isso que vale aprendê-los juntos: reconhecer esses três
+          abre a porta para "decodificar" um nome próprio japonês de vista, mesmo sem saber ler o
+          nome inteiro — útil ao ler um crachá, um cartão de visita ou uma placa de rua.
+        </p>
+        <GrammarTable
+          headers={['Kanji', "Kun'yomi", "On'yomi", 'Romaji', 'Significado']}
+          jpCols={[0, 1, 2]}
+          rows={[
+            ['山', 'やま', 'サン', 'yama / san', 'montanha'],
+            ['川', 'かわ（がわ）', '—', 'kawa (gawa)', 'rio'],
+            ['田', 'た（だ）', '—', 'ta (da)', 'arrozal, campo de arroz'],
+          ]}
+        />
+        <Note>
+          <span className="font-jp">川</span> e <span className="font-jp">田</span> mudam de som
+          quando vêm depois de outra palavra formando um nome composto (sobrenome ou lugar):{' '}
+          <span className="font-jp">かわ</span>→<span className="font-jp">がわ</span>,{' '}
+          <span className="font-jp">た</span>→<span className="font-jp">だ</span>. Esse fenômeno
+          se chama <em>rendaku</em> ("sonorização sequencial") e aparece em muitas palavras
+          compostas do japonês, não só nesses dois kanji — repare em{' '}
+          <span className="font-jp">チエテがわ</span> (rio Tietê) e{' '}
+          <span className="font-jp">なかた</span> (Nakata, sobrenome), comparados com{' '}
+          <span className="font-jp">かわ</span> e <span className="font-jp">た</span> sozinhos.
+        </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp text-base">山</span> tem ainda uma segunda leitura, on'yomi{' '}
+          <span className="font-jp">サン</span>, usada especialmente em nomes de montanhas
+          famosas — a mais conhecida sendo <span className="font-jp">富士山</span> (
+          <span className="font-jp">ふじさん</span>, Monte Fuji).
+        </p>
+        <Note>
+          <strong>Armadilha:</strong> <span className="font-jp">さん</span> como leitura de{' '}
+          <span className="font-jp">山</span> (em <span className="font-jp">富士山</span>) soa
+          idêntico ao <span className="font-jp">さん</span> que vem depois de um nome de pessoa (
+          <span className="font-jp">田中さん</span>, Tanaka-san) — mas são coisas completamente
+          diferentes. O <span className="font-jp">さん</span> de{' '}
+          <span className="font-jp">田中さん</span> é um sufixo honorífico, sempre escrito em
+          hiragana, sem nenhuma relação com o kanji <span className="font-jp">山</span>; o{' '}
+          <span className="font-jp">さん</span> de <span className="font-jp">富士山</span> é a
+          leitura on'yomi do próprio kanji montanha. Só o contexto — depois de um nome de pessoa
+          ou depois de um nome de lugar — separa os dois.
+        </Note>
+        <Ex
+          jp="にちようびにやまへいきます。"
+          romaji="nichiyoubi ni yama e ikimasu."
+          pt="Domingo eu vou à montanha."
+          notes="山 como palavra comum, kun'yomi やま — situação real de lazer de fim de semana."
+        />
+        <Ex
+          jp="ふじさんのしゃしんをとりました。"
+          romaji="fujisan no shashin o torimashita."
+          pt="Tirei uma foto do Monte Fuji."
+          notes="山 como on'yomi さん, dentro do nome próprio de uma montanha famosa."
+        />
+        <Ex
+          jp="これはかわのしゃしんです。"
+          romaji="kore wa kawa no shashin desu."
+          pt="Esta é a foto de um rio."
+          notes="川 sozinho, leitura kun'yomi かわ, sem a sonorização de がわ."
+        />
+        <Ex
+          jp="たなかさんとなかたさんはどうりょうです。"
+          romaji="tanaka-san to nakata-san wa douryou desu."
+          pt="Tanaka e Nakata são colegas de trabalho."
+          notes="dois sobrenomes com 田: た em 田中 (primeiro elemento) vs. だ em 中田 (segundo elemento) — mesma regra da nota acima."
+        />
+        <Note>
+          <strong>Nota cultural:</strong> sobrenomes formados por esses três kanji — sozinhos ou
+          combinados — estão entre os mais comuns do Japão:{' '}
+          <span className="font-jp">山田</span> (Yamada), <span className="font-jp">田中</span>{' '}
+          (Tanaka), <span className="font-jp">中川</span> (Nakagawa),{' '}
+          <span className="font-jp">川田</span> (Kawada). Isso remonta ao século 19, quando o
+          governo da era Meiji passou a exigir que todo cidadão japonês tivesse um sobrenome —
+          muitas famílias que até então não tinham um escolheram algo que descrevia onde moravam:
+          perto de uma montanha, de um rio, de um arrozal. Não é preciso decorar sobrenomes agora —
+          só vale saber por que esses três kanji específicos aparecem tanto em nomes próprios.
+        </Note>
+      </Section>
+
       <Section title="Erros comuns">
         <GrammarTable
           headers={['Erro', 'Incorreto', 'Correto', 'Por quê']}
@@ -1047,6 +1529,30 @@ export default function Kanji() {
               'さんじゅうに (para o trecho "32" de um telefone)',
               'さん、に (dois dígitos separados)',
               'Telefone e outros códigos (CEP, placa) sempre leem um dígito de cada vez — mesmo quando dois dígitos juntos formariam um número "normal" como 32.',
+            ],
+            [
+              'Esquecer o 一 antes de 万',
+              '万円 sozinho para "10 mil ienes" (まんえん)',
+              '一万円 (いちまんえん)',
+              '万 nunca fica sozinho como 百 e 千 ficam — sempre precisa de um número (geralmente 一) na frente.',
+            ],
+            [
+              'Não aplicar a mudança de som em múltiplos de 百/千 com 3, 6 ou 8',
+              'さんひゃく, はちせん (como se não houvesse mudança)',
+              'さんびゃく, はっせん',
+              '300, 600, 800, 3.000 e 8.000 têm leitura irregular fixa — não seguem o padrão regular dos outros múltiplos.',
+            ],
+            [
+              'Trocar なに por なん (ou vice-versa)',
+              'なんを食べますか, なにじですか',
+              'なにを食べますか, なんじですか',
+              'なに antes de partícula (を、が) ou sozinho; なん antes de です／だ e de contadores como 時、人、分.',
+            ],
+            [
+              'Confundir o さん honorífico com o さん de 山',
+              'achar que 田中さん usa o kanji 山, ou que 富士山 tem um "Sr. Fuji" escondido',
+              'さん em 田中さん é sufixo em hiragana; さん em 富士山 é on\'yomi do kanji 山',
+              'Os dois sons são idênticos por coincidência — vêm de origens completamente diferentes.',
             ],
           ]}
         />
@@ -1129,6 +1635,38 @@ export default function Kanji() {
           dígito é lido separado — nunca combinado — com <span className="font-jp">の</span> no
           lugar do hífen e <span className="font-jp">ゼロ</span>／<span className="font-jp">れい</span>{' '}
           para 0.
+        </p>
+        <GrammarTable
+          headers={['Kanji', "On'yomi", 'Romaji', 'Valor / uso']}
+          jpCols={[0]}
+          rows={[
+            ['百', 'ひゃく', 'hyaku', '100 (300/600/800 mudam de som: さんびゃく／ろっぴゃく／はっぴゃく)'],
+            ['千', 'せん', 'sen', '1.000 (3.000/8.000 mudam de som: さんぜん／はっせん)'],
+            ['万', 'まん', 'man', '10.000 — nunca fica sozinho, sempre 一万 (いちまん)'],
+            ['円', 'えん', 'en', 'iene — número + 円, sem partícula; pergunta-se com いくらですか'],
+          ]}
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">何</span> = なに antes de partícula (を／が) ou sozinho; なん
+          antes de です／だ ou de um contador (時、人、分...). <span className="font-jp">今</span>{' '}
+          (いま) é "agora", mas <span className="font-jp">今日</span> se lê{' '}
+          <span className="font-jp">きょう</span> — irregular.
+        </p>
+        <GrammarTable
+          headers={['Kanji', "Kun'yomi", "On'yomi", 'Significado']}
+          jpCols={[0, 1, 2]}
+          rows={[
+            ['山', 'やま', 'サン (ex.: 富士山)', 'montanha'],
+            ['川', 'かわ（がわ em composto）', '—', 'rio'],
+            ['田', 'た（だ em composto）', '—', 'arrozal'],
+          ]}
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          Combinados, <span className="font-jp">山・川・田</span> formam alguns dos sobrenomes mais
+          comuns do Japão (<span className="font-jp">山田</span>, <span className="font-jp">田中</span>
+          , <span className="font-jp">中川</span>...) — e o <span className="font-jp">さん</span>{' '}
+          depois de um nome de pessoa nunca é o kanji <span className="font-jp">山</span>, mesmo
+          soando igual.
         </p>
       </Section>
     </div>
