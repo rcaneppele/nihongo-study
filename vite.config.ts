@@ -16,7 +16,7 @@ export default defineConfig({
       manifest: {
         name: 'Nihongo Study',
         short_name: 'Nihongo',
-        description: 'Estudo de japonês: flash cards e treino de kana.',
+        description: 'Estudo de japonês: flash cards, kana, kanji e leitura.',
         lang: 'pt-BR',
         theme_color: '#1E3A5F',
         background_color: '#F7F5F0',

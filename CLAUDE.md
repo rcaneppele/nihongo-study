@@ -30,6 +30,31 @@ estudo (conteúdo estático de gramática e vocabulário).
 - Vite + React + TypeScript + Tailwind + Dexie + vite-plugin-pwa.
 - `npm run dev` (desenvolvimento), `npm run build` (produção), `npm run lint`.
 
+## Versionamento
+
+Ao final de qualquer tarefa que implemente uma funcionalidade nova ou faça um
+ajuste relevante, **verifique se a versão em `package.json` (campo
+`version`) precisa subir** — é a fonte única (`vite.config.ts` expõe
+`__APP_VERSION__` a partir dela, exibido no rodapé do app; nenhum outro
+arquivo precisa ser sincronizado à mão). Isso vale como uma checagem final,
+no mesmo espírito de rodar `npm run build`/`npm run lint` antes de
+considerar a tarefa pronta — avalie e aplique sem precisar perguntar. Nem
+toda mudança pede bump; julgue pelo impacto:
+
+- **Minor** (`2.1.0` → `2.2.0`): funcionalidade nova (uma tela, um modo, um
+  módulo), mesmo que grande — desde que não quebre nem resete dados já
+  salvos do usuário. É o caso mais comum (ex.: módulo de Kanji, leitura
+  extensiva, Kakitori).
+- **Major** (`2.x.x` → `3.0.0`): mudança que quebra ou reseta dados já
+  salvos do usuário (ex.: a troca de algoritmo de SM-2 para FSRS, que
+  resetou o progresso de repetição espaçada de todo card existente). Rara —
+  só quando a migração de schema não é 100% aditiva/retrocompatível.
+- **Patch** (`2.1.0` → `2.1.1`): correção de bug, ajuste de UI/UX pequeno,
+  conteúdo de lição sem mudar estrutura de dados — nada que o usuário
+  chamaria de "funcionalidade nova".
+- Mudança só de documentação (`CLAUDE.md`, `regras-negocio.md`,
+  `docs/*.md`) não pede bump de versão.
+
 ## Mapa do código
 
 - `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`,

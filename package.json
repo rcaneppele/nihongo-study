@@ -1,9 +1,9 @@
 {
   "name": "nihongo-study",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "module",
-  "description": "App pessoal de estudo de japonês: flash cards (SRS) e treino de hiragana/katakana.",
+  "description": "App pessoal de estudo de japonês: flash cards (SRS), treino de hiragana/katakana, módulo de Kanji e leitura extensiva.",
   "license": "MIT",
   "author": "Rodrigo da Silva Ferreira Caneppele <r.caneppele@gmail.com>",
   "repository": {
