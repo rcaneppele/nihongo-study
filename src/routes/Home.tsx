@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/schema';
 import { ALL_KANA } from '../data/kana';
+import { KANJI_N5 } from '../data/kanji';
 import { LICOES } from '../licoes';
 
 export default function Home() {
@@ -12,6 +13,12 @@ export default function Home() {
     0
   );
   const kanaPracticed = useLiveQuery(() => db.kanaProgress.count(), [], 0);
+  const kanjiDue = useLiveQuery(
+    () => db.kanjiProgress.where('dueDate').belowOrEqual(Date.now()).count(),
+    [],
+    0
+  );
+  const kanjiLearned = useLiveQuery(() => db.kanjiProgress.count(), [], 0);
 
   return (
     <div className="space-y-6">
@@ -19,19 +26,25 @@ export default function Home() {
         <h1 className="font-display text-3xl font-semibold text-center">こんにちは</h1>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Para revisar hoje" value={dueCards} accent />
         <Stat label="Cards no total" value={totalCards} />
         <Stat label="Kana praticados" value={`${kanaPracticed}/${ALL_KANA.length}`} />
+        <Stat label="Kanji aprendidos" value={`${kanjiLearned}/${KANJI_N5.length}`} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Action
           to="/flashcards"
           title="Revisar flash cards"
           desc={dueCards > 0 ? `${dueCards} esperando por você` : 'Nada pendente agora'}
         />
         <Action to="/kana" title="Treinar kana" desc="Hiragana e katakana" />
+        <Action
+          to="/kanji"
+          title="Estudar kanji"
+          desc={kanjiDue > 0 ? `${kanjiDue} para revisar` : 'N5 · significado, leitura e traço'}
+        />
         <Action to="/licoes" title="Lições" desc={`${LICOES.length} assuntos disponíveis`} />
       </div>
     </div>

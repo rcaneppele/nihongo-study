@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Point, Stroke } from '../features/kana/strokes';
+import type { Point, Stroke } from '../features/handwriting/strokes';
 import { useTheme } from '../lib/useTheme';
 
 /**
  * Canvas de desenho de kana. Captura traços via pointer events (funciona com
  * dedo, mouse e Apple Pencil) e os entrega via onStrokesChange.
  * O reconhecimento/feedback (KanjiVG) ainda não está implementado — ver
- * src/features/kana/strokes.ts.
+ * src/features/handwriting/strokes.ts.
  */
 export default function KanaCanvas({
   size = 280,

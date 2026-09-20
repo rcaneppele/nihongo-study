@@ -1,12 +1,17 @@
 import kanaStrokesData from '../../data/kanjivg/kana-strokes.json';
+import kanjiStrokesData from '../../data/kanjivg/kanji-strokes.json';
 
 /**
- * Captura de traços do modo desenho.
+ * Captura de traços do modo desenho — compartilhada entre o treino de kana
+ * (src/routes/Kana.tsx) e o módulo de kanji (src/features/kanji/): nada aqui
+ * é específico de kana, funciona com qualquer caractere presente nos dados
+ * de referência (ver REFERENCE_DATA, mesclando kana-strokes.json e
+ * kanji-strokes.json).
  *
  * Um traço (Stroke) é a sequência de pontos entre apertar e soltar (pointerdown
  * → pointerup). Guardamos x, y e t (timestamp) — t é útil para analisar ritmo e
  * direção. Esses dados são a base para:
- *   1) reconhecer qual kana foi desenhado;
+ *   1) reconhecer qual kana/kanji foi desenhado;
  *   2) dar feedback de caligrafia comparando com a ordem/direção do KanjiVG.
  */
 
@@ -103,7 +108,10 @@ export const DRAW_PASS_THRESHOLD = 60;
 
 export type ReferenceStrokes = number[][][]; // [traço][ponto][x, y], normalizado em [0,1]
 
-const REFERENCE_DATA = kanaStrokesData as Record<string, { strokes: ReferenceStrokes }>;
+const REFERENCE_DATA: Record<string, { strokes: ReferenceStrokes }> = {
+  ...(kanaStrokesData as Record<string, { strokes: ReferenceStrokes }>),
+  ...(kanjiStrokesData as Record<string, { strokes: ReferenceStrokes }>),
+};
 
 export function hasReference(char: string): boolean {
   return char in REFERENCE_DATA;

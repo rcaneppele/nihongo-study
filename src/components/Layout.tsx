@@ -2,10 +2,15 @@ import type { ReactNode, SVGProps } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTheme } from '../lib/useTheme';
 
+// `shortLabel` é o rótulo usado na barra inferior do mobile — com 5 itens
+// numa tela estreita, "Flash cards" (o mais longo) quebra linha e desalinha
+// os ícones dos outros itens. Cai pra "Cards" só ali; a barra lateral do
+// desktop (mais espaço) sempre usa `label`.
 const NAV = [
   { to: '/', label: 'Início', end: true, icon: IconHome },
-  { to: '/flashcards', label: 'Flash cards', end: false, icon: IconCards },
+  { to: '/flashcards', label: 'Flash cards', shortLabel: 'Cards', end: false, icon: IconCards },
   { to: '/kana', label: 'Kana', end: false, icon: IconKana },
+  { to: '/kanji', label: 'Kanji', end: false, icon: IconKanji },
   { to: '/licoes', label: 'Lições', end: false, icon: IconBook },
 ];
 
@@ -87,7 +92,7 @@ function BottomNav() {
       {NAV.map((item) => (
         <NavLink key={item.to} to={item.to} end={item.end} className={bottomNavLinkClass}>
           <item.icon className="h-5 w-5" />
-          {item.label}
+          {item.shortLabel ?? item.label}
         </NavLink>
       ))}
     </nav>
@@ -96,7 +101,7 @@ function BottomNav() {
 
 function bottomNavLinkClass({ isActive }: { isActive: boolean }) {
   return [
-    'flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors',
+    'flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors whitespace-nowrap',
     isActive ? 'text-indigo' : 'text-sage',
   ].join(' ');
 }
@@ -123,6 +128,14 @@ function IconKana({ className }: { className?: string }) {
   return (
     <span aria-hidden className={`grid place-items-center font-jp text-[0.95rem] leading-none ${className ?? ''}`}>
       あ
+    </span>
+  );
+}
+
+function IconKanji({ className }: { className?: string }) {
+  return (
+    <span aria-hidden className={`grid place-items-center font-jp text-[0.95rem] leading-none ${className ?? ''}`}>
+      字
     </span>
   );
 }

@@ -15,7 +15,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "build:kana-strokes": "node scripts/build-kana-strokes.mjs"
+    "build:kana-strokes": "node scripts/build-kana-strokes.mjs",
+    "build:kanji-strokes": "node scripts/build-kanji-strokes.mjs"
   },
   "dependencies": {
     "dexie": "^4.0.10",

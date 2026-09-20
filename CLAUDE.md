@@ -6,9 +6,11 @@ implementar mudanças.
 ## O que é
 
 App pessoal de estudo de japonês para um único usuário, uso doméstico, sem fins
-comerciais. Três funcionalidades centrais: flash cards com repetição espaçada,
+comerciais. Quatro funcionalidades centrais: flash cards com repetição espaçada,
 treino de hiragana/katakana (modo digitar romaji e modo desenhar com feedback de
-caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulário).
+caligrafia), módulo de Kanji (repetição espaçada com radical/mnemônico + a
+mesma caligrafia do treino de kana) e lições de estudo (conteúdo estático de
+gramática e vocabulário).
 
 ## Princípios de arquitetura (não quebrar sem combinar)
 
@@ -29,11 +31,14 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 
 ## Mapa do código
 
-- `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`, `meta`.
-- `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`.
+- `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`,
+  `kanjiProgress`, `meta`.
+- `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`;
+  migrações incrementais por versão em `migrateBackup`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
-  `regras-negocio.md`).
+  `regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo
+  módulo de Kanji.
 - `src/features/flashcards/importCards.ts` — importação de cards via CSV,
   JSON ou texto exportado do Anki ("Notas em Texto Simples"/"Cartões em
   Texto Simples"); `parseCardsFile()` detecta o formato pelo nome do
@@ -41,9 +46,24 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - `src/features/flashcards/StudySession.tsx` — sessão de revisão/prática.
 - `src/features/flashcards/ProgressStats.tsx` — estatísticas de progresso
   (aba "Progresso" em `/flashcards`), calculadas de `db.cards`/`db.reviews`.
-- `src/features/kana/strokes.ts` — captura/normalização de traços e
-  `scoreDrawing()`: reconhecimento + pontuação de caligrafia contra o KanjiVG.
-- `src/components/KanaCanvas.tsx` — canvas de desenho (pointer events).
+- `src/features/handwriting/strokes.ts` — captura/normalização de traços e
+  `scoreDrawing()`: reconhecimento + pontuação de caligrafia contra o
+  KanjiVG. Compartilhado entre o treino de kana e o módulo de Kanji (mescla
+  `kana-strokes.json` + `kanji-strokes.json` num só `REFERENCE_DATA`).
+- `src/features/handwriting/StrokeReferenceFigure.tsx` — animação do
+  traçado de referência (ordem/direção correta) usada como feedback depois
+  do modo desenho, em kana e kanji.
+- `src/components/KanaCanvas.tsx` — canvas de desenho (pointer events),
+  também usado pelo módulo de Kanji.
+- `src/data/kanji.ts` — dataset `KANJI_N5` (~110 kanji): leituras,
+  radicais/mnemônico, exemplos e ordem pedagógica de introdução.
+- `src/features/kanji/kanjiQueue.ts` — consultas de fila (kanji devidos,
+  disponíveis para aprender, já iniciados).
+- `src/features/kanji/KanjiLearn.tsx`, `KanjiReviewSession.tsx`,
+  `KanjiDrawSession.tsx` — telas de aprender/revisar/praticar caligrafia do
+  módulo de Kanji (`/kanji`).
+- `src/components/Furigana.tsx` — kanji com leitura em cima via
+  `<ruby>/<rt>`; usado no módulo de Kanji (ainda não nas lições).
 - `src/lib/useHoldToPauseAdvance.ts` — hook do auto-avanço cronometrado do
   treino de kana (barra de progresso; segurar a tela pausa a contagem).
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/
@@ -54,9 +74,11 @@ caligrafia) e lições de estudo (conteúdo estático de gramática e vocabulár
 - `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 completo
   (~700 palavras, pt-BR), importável por categoria em Config > Dados >
   "Vocabulário N5".
-- `src/data/kanjivg/kana-strokes.json` — dados de traço (ordem/forma) do
-  KanjiVG, gerado por `scripts/build-kana-strokes.mjs`
-  (`npm run build:kana-strokes` para regenerar).
+- `src/data/kanjivg/kana-strokes.json` / `kanji-strokes.json` — dados de
+  traço (ordem/forma) do KanjiVG, gerados por `scripts/build-kana-strokes.mjs`
+  / `scripts/build-kanji-strokes.mjs` (`npm run build:kana-strokes` /
+  `build:kanji-strokes` para regenerar; lógica de busca/parse do SVG
+  compartilhada em `scripts/lib/kanjivg.mjs`).
 - `src/licoes/index.ts` — registro central das lições (`LICOES`): cada entrada
   tem `meta` (id, título, subtítulo, emoji, tags) e um `Component` React.
 - `src/licoes/*.tsx` — uma lição por arquivo (ex.: `kosoado.tsx`,

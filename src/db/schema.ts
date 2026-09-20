@@ -55,10 +55,33 @@ export interface Meta {
   value: unknown;
 }
 
+/**
+ * Progresso de SRS (FSRS) de um kanji do módulo de Kanji (ver
+ * src/data/kanji.ts e src/features/kanji/). Chave primária é o próprio
+ * caractere, igual ao padrão de KanaProgress — só existe uma linha aqui
+ * depois que o usuário "aprende" aquele kanji pela primeira vez (não é
+ * pré-populada para todo o dataset).
+ */
+export interface KanjiProgress {
+  char: string;
+  stability: number;
+  difficulty: number;
+  state: number;
+  reps: number;
+  lapses: number;
+  scheduledDays: number;
+  dueDate: number;
+  lastReviewedAt?: number;
+  drawBest?: number; // melhor nota de caligrafia (0..100) — independente do ciclo de FSRS, mesmo padrão de KanaProgress.drawBest
+  createdAt: number;
+  updatedAt: number; // usado na mesclagem de backup, igual a Card.updatedAt
+}
+
 export class NihongoDB extends Dexie {
   cards!: Table<Card, string>;
   reviews!: Table<Review, string>;
   kanaProgress!: Table<KanaProgress, string>;
+  kanjiProgress!: Table<KanjiProgress, string>;
   meta!: Table<Meta, string>;
 
   constructor() {
@@ -89,6 +112,12 @@ export class NihongoDB extends Dexie {
             Object.assign(card, freshSrs(now));
           });
       });
+    // v3: nova tabela para o progresso de SRS do módulo de Kanji. `dueDate`
+    // precisa ser indexado (igual a `cards`) para as consultas de fila
+    // (`db.kanjiProgress.where('dueDate')...`) funcionarem.
+    this.version(3).stores({
+      kanjiProgress: 'char, dueDate',
+    });
   }
 }
 

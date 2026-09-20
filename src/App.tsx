@@ -4,6 +4,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Home from './routes/Home';
 import Flashcards from './routes/Flashcards';
 import Kana from './routes/Kana';
+import Kanji from './routes/Kanji';
 import Licoes from './routes/Licoes';
 import Licao from './routes/Licao';
 import Quiz from './routes/Quiz';
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/flashcards" element={<Flashcards />} />
         <Route path="/kana" element={<Kana />} />
+        <Route path="/kanji" element={<Kanji />} />
         <Route path="/licoes" element={<Licoes />} />
         <Route path="/licoes/quiz" element={<Quiz />} />
         <Route path="/licoes/kakitori" element={<Kakitori />} />

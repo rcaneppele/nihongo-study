@@ -12,11 +12,11 @@ import {
 } from '../data/kana';
 import KanaCanvas from '../components/KanaCanvas';
 import AudioButton from '../components/AudioButton';
-import { getReferenceStrokes, scoreDrawing, type DrawScore, type ReferenceStrokes, type Stroke } from '../features/kana/strokes';
+import { scoreDrawing, type DrawScore, type Stroke } from '../features/handwriting/strokes';
+import StrokeReferenceFigure from '../features/handwriting/StrokeReferenceFigure';
 import { useHoldToPauseAdvance } from '../lib/useHoldToPauseAdvance';
 
 const CANVAS_SIZE = 280;
-const STROKE_COLORS = ['text-indigo', 'text-hanko', 'text-sage', 'text-indigo-soft', 'text-ink'];
 /** Tempo até avançar sozinho pra próxima pergunta após responder (o usuário pode tocar "Próximo" a qualquer momento pra pular a espera). Errar dá mais tempo pra ler a resposta certa. */
 const AUTO_ADVANCE_RIGHT_MS = 1100;
 const AUTO_ADVANCE_WRONG_MS = 2600;
@@ -621,7 +621,7 @@ function DrawQuestion({
 
           <div className="flex flex-col items-center gap-1">
             <p className="text-xs text-sage">Traço correto:</p>
-            <KanaReferenceFigure
+            <StrokeReferenceFigure
               char={entry.char}
               onDone={() => setAnimationDone(true)}
               onReplayStart={() => setAnimationDone(false)}
@@ -647,164 +647,6 @@ function DrawQuestion({
             )}
           </div>
         </div>
-      )}
-    </div>
-  );
-}
-
-function KanaReferenceFigure({
-  char,
-  size = 96,
-  onDone,
-  onReplayStart,
-}: {
-  char: string;
-  size?: number;
-  onDone?: () => void;
-  onReplayStart?: () => void;
-}) {
-  const refStrokes = getReferenceStrokes(char);
-  const [replayKey, setReplayKey] = useState(0);
-  const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
-
-  useEffect(() => {
-    // Sem dados de traço pra esse kana: não há animação a esperar, libera o avanço na hora.
-    if (!refStrokes) onDoneRef.current?.();
-  }, [refStrokes]);
-
-  if (!refStrokes) return null;
-
-  function handleReplay() {
-    onReplayStart?.();
-    setReplayKey((k) => k + 1);
-  }
-
-  return (
-    <KanaStrokeAnimation key={replayKey} strokes={refStrokes} size={size} onDone={onDone} onReplay={handleReplay} />
-  );
-}
-
-function KanaStrokeAnimation({
-  strokes,
-  size,
-  onReplay,
-  onDone,
-}: {
-  strokes: ReferenceStrokes;
-  size: number;
-  onReplay: () => void;
-  onDone?: () => void;
-}) {
-  const [visiblePoints, setVisiblePoints] = useState<number[]>(() => strokes.map(() => 0));
-  const [currentStroke, setCurrentStroke] = useState(0);
-  const [done, setDone] = useState(false);
-  const onDoneRef = useRef(onDone);
-  onDoneRef.current = onDone;
-
-  useEffect(() => {
-    let strokeIdx = 0;
-    let pointIdx = 0;
-    let pauseFrames = 0;
-    let rafId: number;
-    const PAUSE_FRAMES = 18; // ~300ms de pausa entre traços
-
-    function tick() {
-      if (pauseFrames > 0) {
-        pauseFrames--;
-        rafId = requestAnimationFrame(tick);
-        return;
-      }
-
-      pointIdx++;
-      const maxPoints = strokes[strokeIdx].length;
-
-      if (pointIdx >= maxPoints) {
-        const si = strokeIdx;
-        const mp = maxPoints;
-        setVisiblePoints((prev) => {
-          const next = [...prev];
-          next[si] = mp;
-          return next;
-        });
-
-        strokeIdx++;
-        if (strokeIdx >= strokes.length) {
-          setCurrentStroke(strokes.length);
-          setDone(true);
-          onDoneRef.current?.();
-          return;
-        }
-        pointIdx = 0;
-        pauseFrames = PAUSE_FRAMES;
-        setCurrentStroke(strokeIdx);
-      } else {
-        const si = strokeIdx;
-        const pi = pointIdx;
-        setVisiblePoints((prev) => {
-          const next = [...prev];
-          next[si] = pi;
-          return next;
-        });
-      }
-
-      rafId = requestAnimationFrame(tick);
-    }
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [strokes]);
-
-  return (
-    <div className="flex flex-col items-center gap-1.5">
-      <svg width={size} height={size} viewBox="0 0 1 1" className="rounded-xl border border-line bg-surface">
-        {strokes.map((stroke, i) => {
-          const pts = visiblePoints[i];
-          if (pts === 0) return null;
-
-          const isActive = i === currentStroke && !done;
-          const color = STROKE_COLORS[i % STROKE_COLORS.length];
-
-          return (
-            <g key={i} className={color}>
-              {pts >= 2 && (
-                <polyline
-                  points={stroke.slice(0, pts).map(([x, y]) => `${x},${y}`).join(' ')}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={0.045}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              )}
-              <circle cx={stroke[0][0]} cy={stroke[0][1]} r={0.05} fill="currentColor" />
-              <text
-                x={stroke[0][0]}
-                y={stroke[0][1]}
-                fontSize={0.06}
-                fill="white"
-                textAnchor="middle"
-                dominantBaseline="central"
-              >
-                {i + 1}
-              </text>
-              {isActive && pts > 0 && pts < stroke.length && (
-                <circle
-                  cx={stroke[pts - 1][0]}
-                  cy={stroke[pts - 1][1]}
-                  r={0.035}
-                  fill="currentColor"
-                  opacity={0.5}
-                />
-              )}
-            </g>
-          );
-        })}
-      </svg>
-      {done && (
-        <button className="btn-ghost gap-1.5 px-3 py-1.5 text-xs" onClick={onReplay}>
-          <span aria-hidden="true">↺</span> Repetir animação
-        </button>
       )}
     </div>
   );

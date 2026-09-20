@@ -205,8 +205,9 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - O app pede um kana (pelo romaji) e o usuário desenha no canvas
   (`src/components/KanaCanvas.tsx`); os traços são capturados como
   sequências de pontos `{x, y, t}`.
-- Ao clicar "Verificar", `scoreDrawing()` (`src/features/kana/strokes.ts`)
-  compara com os dados de traço do KanjiVG
+- Ao clicar "Verificar", `scoreDrawing()`
+  (`src/features/handwriting/strokes.ts` — motor compartilhado com o módulo
+  de Kanji, ver seção 3) compara com os dados de traço do KanjiVG
   (`src/data/kanjivg/kana-strokes.json`, gerado por
   `scripts/build-kana-strokes.mjs`):
   - nº de traços (esperado x feito) — penaliza por diferença;
@@ -216,11 +217,57 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   - direção de cada traço (ângulo do ponto inicial ao final).
   - pontuação 0–100; ≥ `DRAW_PASS_THRESHOLD` (65) conta como acerto no teste.
     A melhor pontuação de cada kana é gravada em `kanaProgress.drawBest`.
-- Após verificar, `KanaReferenceFigure`/`KanaStrokeAnimation` anima o
-  traçado correto na ordem certa (com botão de repetir a animação) como
-  feedback; o avanço automático só é liberado depois que a animação termina.
+- Após verificar, `StrokeReferenceFigure`
+  (`src/features/handwriting/StrokeReferenceFigure.tsx`) anima o traçado
+  correto na ordem certa (com botão de repetir a animação) como feedback; o
+  avanço automático só é liberado depois que a animação termina.
 
-## 3. Lições de estudo
+## 3. Módulo de Kanji
+
+- Trilha de repetição espaçada dos kanji do **N5** (~110 kanji,
+  `KANJI_N5` em `src/data/kanji.ts`), no estilo radical → mnemônico → kanji.
+  N4/N3 ficam para uma fase futura, mesma estrutura de dados.
+- Cada `KanjiEntry` traz `meaning`, `onyomi`/`kunyomi` (pares kana+romaji, no
+  mesmo estilo de leitura já usado na lição `src/licoes/kanji.tsx`),
+  `radicals` (componentes visuais com nome simples em pt-BR),  `mnemonic`
+  (texto original, nunca copiado de terceiros — mesmo princípio de
+  originalidade das lições, ver `docs/padrao-licoes.md`), `strokeCount`,
+  `order` (progressão pedagógica de introdução) e `examples` (2-3 palavras
+  reais de uso).
+- **Progresso** fica em `db.kanjiProgress` (chave primária = caractere,
+  schemaVersion 3 — ver `src/db/schema.ts`), reaproveitando o **mesmo FSRS**
+  dos flash cards (`src/features/srs/fsrs.ts`, `freshSrs()`/`applyFsrs()`).
+  Uma linha só existe depois que o usuário "aprende" aquele kanji — não é
+  pré-populada para os ~110 de uma vez (mesmo padrão lazy de
+  `kanaProgress`).
+- **Fluxo** (`src/routes/Kanji.tsx`):
+  - **Aprender** (`KanjiLearn.tsx`) — apresenta kanji ainda não iniciados,
+    em lote (5/10/20 por vez, na ordem de `order`), mostrando radicais,
+    mnemônico, leituras e exemplos de uma vez (diferente da revisão). Ao
+    confirmar, cria a linha em `kanjiProgress` com `freshSrs()` — o kanji
+    entra na fila de revisão imediatamente (`dueDate` = agora).
+  - **Revisar** (`KanjiReviewSession.tsx`) — mesmo padrão auto-graded de
+    `StudySession.tsx` (flash cards): mostra o kanji, "Mostrar resposta"
+    revela leituras/significado/exemplos, as 4 notas do FSRS
+    (`REVIEW_GRADES`) atualizam `kanjiProgress`. Fila = kanji com `dueDate`
+    vencido (`getDueKanji`, `src/features/kanji/kanjiQueue.ts`).
+  - **Caligrafia** (`KanjiDrawSession.tsx`) — mesmo motor do modo "desenhar"
+    de kana (`KanaCanvas` + `scoreDrawing()` + `StrokeReferenceFigure`),
+    sobre os kanji já aprendidos (`getStartedKanji`). Grava `drawBest` em
+    `kanjiProgress`, **independente** do ciclo de FSRS — não afeta
+    agendamento de revisão, mesmo padrão de `kanaProgress.drawBest`.
+- **Dados de traço**: `src/data/kanjivg/kanji-strokes.json`, gerado por
+  `scripts/build-kanji-strokes.mjs` — mesma lógica de busca/parse do
+  KanjiVG usada para kana, extraída para `scripts/lib/kanjivg.mjs` e
+  compartilhada entre os dois scripts. `src/features/handwriting/strokes.ts`
+  mescla os dois JSONs (kana + kanji) num único `REFERENCE_DATA` — o motor
+  de pontuação (`scoreDrawing`) é agnóstico de caractere.
+- **Furigana**: `src/components/Furigana.tsx` renderiza kanji com a leitura
+  pequena em cima via `<ruby>/<rt>`, usado nos exemplos e leituras deste
+  módulo. Ainda não é usado nas lições (`src/licoes/*.tsx`) — essa é uma
+  revisão de conteúdo à parte, lição por lição.
+
+## 4. Lições de estudo
 
 ### Estrutura
 - Cada lição é definida em `src/licoes/<id>.tsx` e exporta um `meta`
@@ -250,20 +297,25 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 2. Importe e registre no array `LICOES` em `src/licoes/index.ts`.
 3. Não é necessário alterar rotas — o roteamento é dinâmico pelo `id`.
 
-## 4. Dados e sincronização
+## 5. Dados e sincronização
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
-- **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress` e
-  `meta`. Serve de sincronização e de backup.
+- **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress`,
+  `kanjiProgress` e `meta`. Serve de sincronização e de backup.
 - **Importar**, dois modos:
   - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e previsível.
-  - **Mesclar**: por `id` (UUID); em conflito, vence o registro com `updatedAt`
-    (cards) ou `lastPracticed` (kana) mais recente. `reviews` são idempotentes
-    pelo `id`.
+  - **Mesclar**: por `id` (UUID) ou pela chave primária da tabela; em conflito,
+    vence o registro com `updatedAt` mais recente (cards, kanjiProgress) ou
+    `lastPracticed` mais recente (kana). `reviews` são idempotentes pelo `id`.
 - **UUID como chave** é obrigatório para a mesclagem funcionar sem colisão.
-- `schemaVersion` no backup permite migração futura na importação.
+- `schemaVersion` no backup permite migração futura na importação —
+  migrações são incrementais por versão em `migrateBackup`
+  (`src/db/backup.ts`): cada passo só roda se o backup ainda não chegou lá
+  (checagem pela versão de origem do backup, não só pela versão atual), pra
+  um backup já em v2 não ser reprocessado pela migração de v1→v2 sempre que
+  `SCHEMA_VERSION` sobe de novo.
 
-## 5. Privacidade
+## 6. Privacidade
 
 - Nenhum dado sai do dispositivo automaticamente. Não há telemetria, conta nem
   envio para servidores. A única saída de dados é o arquivo de backup que o

@@ -150,7 +150,13 @@ function DadosTab() {
 
   async function resetAll() {
     if (!confirm('Apagar TODOS os dados deste dispositivo? Esta ação não pode ser desfeita.')) return;
-    await Promise.all([db.cards.clear(), db.reviews.clear(), db.kanaProgress.clear(), db.meta.clear()]);
+    await Promise.all([
+      db.cards.clear(),
+      db.reviews.clear(),
+      db.kanaProgress.clear(),
+      db.kanjiProgress.clear(),
+      db.meta.clear(),
+    ]);
     setMsg('Todos os dados foram apagados.');
   }
 
@@ -167,8 +173,8 @@ function DadosTab() {
           <HelpButton label="Ajuda: como funciona o backup completo" onClick={() => setBackupHelpOpen(true)} />
         </div>
         <p className="text-sm text-sage">
-          Cards, histórico de revisões e progresso de kana num único arquivo JSON — serve tanto pra
-          sincronizar entre aparelhos quanto pra manter uma cópia de segurança.
+          Cards, histórico de revisões e progresso de kana e kanji num único arquivo JSON — serve
+          tanto pra sincronizar entre aparelhos quanto pra manter uma cópia de segurança.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 sm:divide-x sm:divide-line">
@@ -292,7 +298,8 @@ function DadosTab() {
             <h3 className="text-sm font-medium">O que entra no arquivo</h3>
             <p className="text-sm text-sage">
               Todos os cards (e o progresso de SRS de cada um), o histórico de revisões e o
-              progresso de treino de kana. Um snapshot completo do aparelho, sem nada de fora.
+              progresso de treino de kana e do módulo de kanji. Um snapshot completo do aparelho,
+              sem nada de fora.
             </p>
           </div>
 

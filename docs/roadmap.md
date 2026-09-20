@@ -59,7 +59,7 @@ extensiva**.
 Ordenadas por impacto: cobrem lacunas que nenhuma feature atual toca e são
 100% viáveis offline reaproveitando infraestrutura que o app já tem.
 
-### 3.1 Módulo de Kanji com SRS dedicado
+### 3.1 Módulo de Kanji com SRS dedicado — ✅ implementado (2026-09)
 **O quê:** trilha própria (separada das lições de gramática) no formato
 radical → kanji → vocabulário, com mnemônicos e progressão por SRS, usando o
 FSRS que o app já tem em `src/features/srs/fsrs.ts`.
@@ -71,6 +71,11 @@ maior lacuna do app e o recurso mais citado como diferencial nos concorrentes
 KanjiVG (`src/data/kanjivg/`) para a caligrafia (ver 3.8).
 **Esforço:** alto — é uma trilha de conteúdo nova (radicais, mnemônicos,
 ordenação pedagógica), mas de baixo risco técnico.
+**Status:** feito — `/kanji`, ~110 kanji do N5 (`src/data/kanji.ts`),
+tabela `kanjiProgress` (schemaVersion 3), fluxo aprender/revisar reaproveitando
+o FSRS. Furigana (`src/components/Furigana.tsx`) saiu como componente novo
+junto — ver seção 6 sobre aplicá-lo nas lições. N4/N3 seguem como extensão
+futura, mesma estrutura.
 
 ### 3.2 Leitura extensiva com textos graduados
 **O quê:** biblioteca de textos curtos em hiragana/katakana (kanji com
@@ -86,17 +91,24 @@ importado para o dicionário pop-up.
 **Esforço:** médio para a primeira leva de textos (nível inicial); cresce
 conforme os níveis avançam.
 
-### 3.3 Listening via Web Speech API (SpeechSynthesis)
+### 3.3 Listening via Web Speech API (SpeechSynthesis) — ✅ já existia
+**Correção (2026-09):** essa pesquisa listou isso como pendência, mas o app
+**já tinha** TTS via `SpeechSynthesis` (`src/features/audio/speech.ts` +
+`AudioButton`, usado em `Kana.tsx` e nas lições) antes desta pesquisa —
+descoberto ao explorar o código durante a implementação de 3.1. Reaproveitado
+diretamente no módulo de Kanji para pronúncia de exemplos.
 **O quê:** sintetizar em áudio os exemplos japoneses das lições (`<Ex jp=
 "...">`) e dos futuros textos de leitura, usando `SpeechSynthesis` do
 navegador — síntese **local, offline, sem custo e sem servidor**.
-**Por quê:** o app não tem nenhum recurso de áudio hoje; listening é uma das
-quatro habilidades e fica completamente descoberta.
+**Por quê:** listening é uma das quatro habilidades e ainda fica pouco
+coberta fora do botão de áudio pontual — shadowing/ditado (3.4/3.5) seguem
+como lacuna real.
 **Viabilidade técnica:** suportado nativamente em Chrome/Edge/Firefox/
 Safari. Ressalva: qualidade de voz varia por sistema operacional, e
 utterances muito longas (200+ caracteres) podem cortar — mitigar quebrando o
 texto em sentenças.
-**Esforço:** baixo — é a base (pré-requisito) para 3.4 e 3.5.
+**Esforço:** já pago — é a base (pré-requisito) para 3.4 e 3.5, que continuam
+pendentes.
 
 ### 3.4 Shadowing
 **O quê:** ouvir um trecho de áudio (via TTS do item 3.3) e repetir junto,
@@ -140,7 +152,7 @@ leitura (3.2) e listening (3.3–3.5) num formato só.
 **Esforço:** médio, e cresce em valor conforme 3.2/3.3 avançam (mais
 conteúdo para sortear).
 
-### 3.8 Stroke order expandido para kanji
+### 3.8 Stroke order expandido para kanji — ✅ implementado (2026-09), junto com 3.1
 **O quê:** estender o `KanaCanvas`/`scoreDrawing()` (hoje usado só para kana)
 para os kanji do módulo de 3.1, usando o KanjiVG (que já cobre os ~2.136
 kanji jōyō, não só kana).
@@ -151,6 +163,14 @@ KanaCanvas.tsx`, `scripts/build-kana-strokes.mjs` (adaptar para gerar dados
 de kanji além de kana).
 **Esforço:** baixo-médio — a engine já existe, o trabalho é de dados e
 geração de traços.
+**Status:** feito — a pasta virou `src/features/handwriting/` (nome
+"kana" não fazia mais sentido com kanji reaproveitando o mesmo motor);
+`scoreDrawing()`/`getReferenceStrokes()` agora leem um `REFERENCE_DATA`
+mesclado de `kana-strokes.json` + `kanji-strokes.json`; a lógica de
+busca/parse do KanjiVG foi extraída para `scripts/lib/kanjivg.mjs`,
+compartilhada pelos dois scripts geradores. Escopo inicial: só os ~110
+kanji do N5 (mesmo escopo do módulo) — cobertura de N4/N3/jōyō completo
+é a mesma extensão futura de 3.1.
 
 ### 3.9 Sentence mining / vocabulário com contexto
 **O quê:** permitir criar um flashcard a partir de uma frase das lições ou
@@ -191,7 +211,13 @@ roadmap.
 - **Toggle de furigana** (mostrar/ocultar) nos textos de leitura e nas
   tabelas de kanji das lições, para treinar a transição de "com apoio" para
   "sem apoio" — coerente com a convenção atual de kanji sempre acompanhado
-  de leitura.
+  de leitura. O componente (`src/components/Furigana.tsx`, `<ruby>/<rt>`)
+  já existe desde a implementação de 3.1 — falta só aplicá-lo aqui. Isso
+  inclui trocar a coluna "Kanji" simples que `familia.tsx`, `pronomes.tsx`
+  e `sufixos.tsx` já têm hoje pelo mesmo componente, e considerar adicionar
+  referência de kanji nas lições que ainda não têm nenhuma (só onde o
+  kanji é realmente comum no uso real, ex.: verbos básicos). Trabalho de
+  conteúdo, lição por lição — não mecânico.
 
 ### Vocabulário e gramática
 - **Exercício de gramática em contexto**: sortear de um banco maior de
