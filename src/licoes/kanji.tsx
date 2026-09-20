@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import { FuriganaWord } from '../components/Furigana';
 import type { QuizLicao } from '../data/quiz/types';
 import type { ItemKakitoriFonte, GrupoKakitori } from '../data/kakitori/types';
 
@@ -961,12 +962,15 @@ export default function Kanji() {
           </li>
         </ul>
         <Note>
-          Fora do escopo desta lição: o sistema completo de radicais para consulta em dicionário,
-          prática detalhada de ordem de traço, contadores específicos (para objetos compridos,
-          chatos, animais...), como ler datas do calendário (dia do mês, mês do ano), números
-          acima de 10.000 e o sistema completo de leitura de nomes próprios japoneses (que tem
-          muito mais exceções do que os poucos sobrenomes citados aqui). Esses temas ficam para
-          lições futuras, conforme o curso avança.
+          Fora do escopo desta lição: contadores específicos (para objetos compridos, chatos,
+          animais...), como ler datas do calendário (dia do mês, mês do ano), números acima de
+          10.000 e o sistema completo de leitura de nomes próprios japoneses (que tem muito mais
+          exceções do que os poucos sobrenomes citados aqui). Esses temas ficam para lições
+          futuras, conforme o curso avança. Já a prática de <strong>radical/mnemônico</strong> e
+          de <strong>ordem de traço/caligrafia</strong> para os kanji desta lição (números, dias
+          da semana, 時・分・半 etc.) você encontra no <strong>módulo de Kanji</strong> do app
+          (menu "Kanji") — esta lição foca no uso desses kanji em contexto (números, horas,
+          telefone), o módulo foca em memorizar cada kanji individualmente com repetição espaçada.
         </Note>
       </Section>
 
@@ -1269,16 +1273,16 @@ export default function Kanji() {
           Juntando cada elemento a <span className="font-jp">曜日</span>, chega-se aos sete dias:
         </p>
         <GrammarTable
-          headers={['Dia', 'Kanji', 'Romaji']}
+          headers={['Dia', 'Kanji (furigana)', 'Romaji']}
           jpCols={[1]}
           rows={[
-            ['segunda', '月曜日', 'getsuyoubi'],
-            ['terça', '火曜日', 'kayoubi'],
-            ['quarta', '水曜日', 'suiyoubi'],
-            ['quinta', '木曜日', 'mokuyoubi'],
-            ['sexta', '金曜日', "kin'youbi"],
-            ['sábado', '土曜日', 'doyoubi'],
-            ['domingo', '日曜日', 'nichiyoubi'],
+            ['segunda', <FuriganaWord kanji="月曜日" reading="げつようび" />, 'getsuyoubi'],
+            ['terça', <FuriganaWord kanji="火曜日" reading="かようび" />, 'kayoubi'],
+            ['quarta', <FuriganaWord kanji="水曜日" reading="すいようび" />, 'suiyoubi'],
+            ['quinta', <FuriganaWord kanji="木曜日" reading="もくようび" />, 'mokuyoubi'],
+            ['sexta', <FuriganaWord kanji="金曜日" reading="きんようび" />, "kin'youbi"],
+            ['sábado', <FuriganaWord kanji="土曜日" reading="どようび" />, 'doyoubi'],
+            ['domingo', <FuriganaWord kanji="日曜日" reading="にちようび" />, 'nichiyoubi'],
           ]}
         />
         <Ex
@@ -1898,16 +1902,16 @@ export default function Kanji() {
           <span className="font-jp">し</span> e <span className="font-jp">しち</span>.
         </p>
         <GrammarTable
-          headers={['Dia', 'Kanji', 'Romaji']}
+          headers={['Dia', 'Kanji (furigana)', 'Romaji']}
           jpCols={[1]}
           rows={[
-            ['segunda', '月曜日', 'getsuyoubi'],
-            ['terça', '火曜日', 'kayoubi'],
-            ['quarta', '水曜日', 'suiyoubi'],
-            ['quinta', '木曜日', 'mokuyoubi'],
-            ['sexta', '金曜日', "kin'youbi"],
-            ['sábado', '土曜日', 'doyoubi'],
-            ['domingo', '日曜日', 'nichiyoubi'],
+            ['segunda', <FuriganaWord kanji="月曜日" reading="げつようび" />, 'getsuyoubi'],
+            ['terça', <FuriganaWord kanji="火曜日" reading="かようび" />, 'kayoubi'],
+            ['quarta', <FuriganaWord kanji="水曜日" reading="すいようび" />, 'suiyoubi'],
+            ['quinta', <FuriganaWord kanji="木曜日" reading="もくようび" />, 'mokuyoubi'],
+            ['sexta', <FuriganaWord kanji="金曜日" reading="きんようび" />, "kin'youbi"],
+            ['sábado', <FuriganaWord kanji="土曜日" reading="どようび" />, 'doyoubi'],
+            ['domingo', <FuriganaWord kanji="日曜日" reading="にちようび" />, 'nichiyoubi'],
           ]}
         />
         <GrammarTable

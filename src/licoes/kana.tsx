@@ -144,10 +144,13 @@ export default function Kana() {
         </p>
         <Note>
           Esta lição ensina a <strong>reconhecer e ler</strong> hiragana e katakana. Ela não cobre
-          kanji (fica para lições futuras) nem ordem de traços/caligrafia — para treinar a mão,
-          use o <strong>treino de kana</strong> do app (menu "Kana"), que tem um modo de desenho
-          com feedback de caligrafia. O uso de partículas como は, を e へ dentro de frases é
-          assunto da lição de Partículas; aqui o foco é só a leitura correta delas.
+          kanji — isso é assunto da lição <strong>Kanji — Primeiros Passos</strong> e do{' '}
+          <strong>módulo de Kanji</strong> do app (menu "Kanji"), que ensina os kanji do N5 com
+          repetição espaçada, radical/mnemônico e caligrafia. Para treinar a mão com hiragana/
+          katakana especificamente, use o <strong>treino de kana</strong> do app (menu "Kana"),
+          que tem um modo de desenho com feedback de caligrafia. O uso de partículas como は, を e
+          へ dentro de frases é assunto da lição de Partículas; aqui o foco é só a leitura correta
+          delas.
         </Note>
       </Section>
 

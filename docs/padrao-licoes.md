@@ -369,9 +369,13 @@ escolher a versão mais conveniente e seguir em frente.
 ## 10. Convenções técnicas
 
 - Exemplos de frase (`<Ex jp="..." romaji="..." pt="..." />`) **nunca usam kanji** —
-  só hiragana/katakana com romaji. Kanji só como coluna de referência opcional em
-  tabelas de vocabulário, sempre explicado em "Como ler esta lição" como algo que
-  pode ser ignorado por enquanto.
+  só hiragana/katakana com romaji. Kanji só como referência opcional em tabelas de
+  vocabulário, via `<FuriganaWord kanji="..." reading="..." />`
+  (`src/components/Furigana.tsx`) — a leitura em hiragana pequena em cima do kanji,
+  numa única coluna "Kanji (furigana)" — sempre explicado em "Como ler esta lição"
+  como algo que pode ser ignorado por enquanto. Palavras sem kanji ficam como
+  string simples na mesma coluna, sem `FuriganaWord`. Já aplicado em `familia.tsx`,
+  `pronomes.tsx` e `sufixos.tsx`.
 - Reusar os componentes de `src/components/Licao.tsx` (`Section`, `Ex`, `Note`,
   `GrammarTable`, `ReadingKey`). Não introduzir padrões visuais novos sem
   necessidade; se um tema realmente pedir um componente novo, ele entra em
@@ -385,9 +389,9 @@ escolher a versão mais conveniente e seguir em frente.
 
 ## 11. Revisão de lição existente
 
-As dez lições atuais (`aisatsu`, `apresentacao`, `desu`, `familia`, `kana`,
-`kosoado`, `particulas`, `pronomes`, `sufixos`, `verbos`) têm base sólida. Aplicar
-este padrão a elas é expansão pontual, não reescrita. Procedimento:
+As onze lições atuais (`aisatsu`, `apresentacao`, `desu`, `familia`, `kana`,
+`kanji`, `kosoado`, `particulas`, `pronomes`, `sufixos`, `verbos`) têm base sólida.
+Aplicar este padrão a elas é expansão pontual, não reescrita. Procedimento:
 
 1. Rodar o checklist (seção 12) sobre a lição e listar só o que falta.
 2. Expandir os pontos faltantes, preservando o texto que já passa no critério.
