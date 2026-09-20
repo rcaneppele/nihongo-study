@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import { FuriganaWord } from '../components/Furigana';
 import type { QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
@@ -215,15 +216,14 @@ export default function Pronomes() {
     <div className="space-y-10">
       <Section title="Como ler esta lição">
         <p className="text-sm leading-relaxed text-ink">
-          Cada pronome aparece com kanji (referência), leitura e romaji. As tabelas de
-          vocabulário trazem o kanji como coluna extra — pode ignorá-la por enquanto. Como
-          em toda lição, as frases de exemplo (<span className="font-jp">jp</span>) usam só
+          Cada pronome aparece com o kanji (quando existe) e a leitura em hiragana pequena em
+          cima dele — furigana, do jeito que aparece em texto japonês real —, seguido do romaji.
+          Como em toda lição, as frases de exemplo (<span className="font-jp">jp</span>) usam só
           hiragana/katakana, nunca kanji.
         </p>
         <ReadingKey
           lines={[
-            { text: '私', desc: 'kanji (pode ignorar no começo)' },
-            { text: 'わたし', desc: 'hiragana' },
+            { text: '私', desc: 'kanji com furigana em cima — pode ignorar o kanji por enquanto' },
             { text: 'watashi', desc: 'romaji' },
             { text: 'eu', desc: 'significado' },
           ]}
@@ -301,15 +301,15 @@ export default function Pronomes() {
 
       <Section title="Primeira pessoa — 'eu'">
         <GrammarTable
-          headers={['Kanji', 'Hiragana', 'Romaji', 'Gênero / registro', 'Quando usar']}
-          jpCols={[0, 1]}
+          headers={['Kanji (furigana)', 'Romaji', 'Gênero / registro', 'Quando usar']}
+          jpCols={[0]}
           rows={[
-            ['私', 'わたし', 'watashi', 'neutro / padrão', 'O mais versátil. Seguro em qualquer situação.'],
-            ['私', 'わたくし', 'watakushi', 'neutro / muito formal', 'Discursos, negócios de alto nível.'],
-            ['僕', 'ぼく', 'boku', 'masculino / casual a semiformal', 'Homens, situações informais ou semiformais.'],
-            ['俺', 'おれ', 'ore', 'masculino / casual, pode soar rude', 'Entre amigos próximos. Evite em contexto formal.'],
-            ['—', 'あたし', 'atashi', 'feminino / casual', 'Mulheres em conversa informal.'],
-            ['—', 'うち', 'uchi', 'feminino / bem casual', 'Dialeto de Kansai e cultura pop.'],
+            [<FuriganaWord kanji="私" reading="わたし" />, 'watashi', 'neutro / padrão', 'O mais versátil. Seguro em qualquer situação.'],
+            [<FuriganaWord kanji="私" reading="わたくし" />, 'watakushi', 'neutro / muito formal', 'Discursos, negócios de alto nível.'],
+            [<FuriganaWord kanji="僕" reading="ぼく" />, 'boku', 'masculino / casual a semiformal', 'Homens, situações informais ou semiformais.'],
+            [<FuriganaWord kanji="俺" reading="おれ" />, 'ore', 'masculino / casual, pode soar rude', 'Entre amigos próximos. Evite em contexto formal.'],
+            ['あたし', 'atashi', 'feminino / casual', 'Mulheres em conversa informal.'],
+            ['うち', 'uchi', 'feminino / bem casual', 'Dialeto de Kansai e cultura pop.'],
           ]}
         />
         <Ex
@@ -384,20 +384,24 @@ export default function Pronomes() {
           que você realmente precisa de um.
         </p>
         <GrammarTable
-          headers={['Kanji', 'Hiragana', 'Romaji', 'Registro', 'Atenção']}
-          jpCols={[0, 1]}
+          headers={['Kanji (furigana)', 'Romaji', 'Registro', 'Atenção']}
+          jpCols={[0]}
           rows={[
             [
-              '貴方',
-              'あなた',
+              <FuriganaWord kanji="貴方" reading="あなた" />,
               'anata',
               'neutro / formal',
               'Correto, mas raro entre iguais; pode soar distante. Tem usos legítimos restritos — veja nota abaixo.',
             ],
-            ['君', 'きみ', 'kimi', 'casual, de superior para inferior', 'Professor com aluno, chefe com subordinado. Comum em músicas.'],
-            ['—', 'おまえ', 'omae', 'muito casual, rude', 'Entre íntimos. Pode ofender se mal usado.'],
-            ['—', 'あんた', 'anta', 'casual, meio rude', 'Versão informal de あなた. Pode soar brusco.'],
-            ['—', 'そちら', 'sochira', 'muito formal', '"Você" educado, em atendimento formal.'],
+            [
+              <FuriganaWord kanji="君" reading="きみ" />,
+              'kimi',
+              'casual, de superior para inferior',
+              'Professor com aluno, chefe com subordinado. Comum em músicas.',
+            ],
+            ['おまえ', 'omae', 'muito casual, rude', 'Entre íntimos. Pode ofender se mal usado.'],
+            ['あんた', 'anta', 'casual, meio rude', 'Versão informal de あなた. Pode soar brusco.'],
+            ['そちら', 'sochira', 'muito formal', '"Você" educado, em atendimento formal.'],
           ]}
         />
         <Note>
@@ -476,14 +480,14 @@ export default function Pronomes() {
           o japonês prefere <span className="font-jp">あのひと</span>.
         </p>
         <GrammarTable
-          headers={['Kanji', 'Hiragana', 'Romaji', 'Significado', 'Atenção']}
-          jpCols={[0, 1]}
+          headers={['Kanji (furigana)', 'Romaji', 'Significado', 'Atenção']}
+          jpCols={[0]}
           rows={[
-            ['彼', 'かれ', 'kare', 'ele', 'Também significa "namorado". Cuidado com a ambiguidade.'],
-            ['彼女', 'かのじょ', 'kanojo', 'ela', 'Também significa "namorada".'],
-            ['—', 'あのひと', 'ano hito', 'aquela pessoa', 'Neutro e natural. Não indica gênero.'],
-            ['—', 'あのかた', 'ano kata', 'aquela pessoa (respeitoso)', 'Versão formal de あのひと.'],
-            ['—', 'あいつ', 'aitsu', 'aquele (rude)', 'Informal, meio depreciativo.'],
+            [<FuriganaWord kanji="彼" reading="かれ" />, 'kare', 'ele', 'Também significa "namorado". Cuidado com a ambiguidade.'],
+            [<FuriganaWord kanji="彼女" reading="かのじょ" />, 'kanojo', 'ela', 'Também significa "namorada".'],
+            ['あのひと', 'ano hito', 'aquela pessoa', 'Neutro e natural. Não indica gênero.'],
+            ['あのかた', 'ano kata', 'aquela pessoa (respeitoso)', 'Versão formal de あのひと.'],
+            ['あいつ', 'aitsu', 'aquele (rude)', 'Informal, meio depreciativo.'],
           ]}
         />
         <Ex

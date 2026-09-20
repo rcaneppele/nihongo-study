@@ -30,3 +30,21 @@ export default function Furigana({ segments, className }: { segments: FuriganaSe
     </span>
   );
 }
+
+/**
+ * Atalho para o caso comum de uma palavra inteira com uma leitura só (ex.:
+ * colunas de kanji de referência nas tabelas de vocabulário das lições —
+ * família, pronomes, sufixos). Para palavras com okurigana (leitura só numa
+ * parte, ex. 食べる), use `Furigana` com `segments` diretamente.
+ */
+export function FuriganaWord({
+  kanji,
+  reading,
+  className,
+}: {
+  kanji: string;
+  reading: string;
+  className?: string;
+}) {
+  return <Furigana segments={[{ text: kanji, reading }]} className={className} />;
+}

@@ -264,9 +264,13 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   de pontuação (`scoreDrawing`) é agnóstico de caractere.
 - **Furigana**: `src/components/Furigana.tsx` renderiza kanji com a leitura
   pequena em cima via `<ruby>/<rt>`, usado nos exemplos e leituras deste
-  módulo (e também na leitura extensiva — ver seção 4). Ainda não é usado
-  nas lições (`src/licoes/*.tsx`) — essa é uma revisão de conteúdo à parte,
-  lição por lição.
+  módulo e na leitura extensiva (seção 4). `FuriganaWord` (mesmo arquivo) é
+  o atalho para o caso comum de uma palavra inteira com uma leitura só —
+  usado nas tabelas de vocabulário das lições (`familia.tsx`, `pronomes.tsx`,
+  `sufixos.tsx`) no lugar da antiga coluna "Kanji" separada da coluna
+  "Hiragana": agora é uma única coluna "Kanji (furigana)", com a leitura em
+  cima do kanji. Palavras sem kanji continuam como string simples na mesma
+  coluna (ex.: あたし, おまえ), sem `FuriganaWord`.
 
 ## 4. Leitura extensiva
 

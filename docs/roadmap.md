@@ -54,7 +54,7 @@ extensiva**.
 
 ---
 
-## 3. Top 10 prioritárias
+## 3. Top 7 prioritárias
 
 Ordenadas por impacto: cobrem lacunas que nenhuma feature atual toca e são
 100% viáveis offline reaproveitando infraestrutura que o app já tem.
@@ -68,7 +68,7 @@ das lições (ver convenção "kanji nunca dentro de `<Ex />`" no CLAUDE.md). É
 maior lacuna do app e o recurso mais citado como diferencial nos concorrentes
 (WaniKani é a referência do setor).
 **Reaproveita:** engine FSRS, tabela `cards`/`reviews`, dados de traço
-KanjiVG (`src/data/kanjivg/`) para a caligrafia (ver 3.8).
+KanjiVG (`src/data/kanjivg/`) para a caligrafia (ver 3.5).
 **Esforço:** alto — é uma trilha de conteúdo nova (radicais, mnemônicos,
 ordenação pedagógica), mas de baixo risco técnico.
 **Status:** feito — `/kanji`, ~110 kanji do N5 (`src/data/kanji.ts`),
@@ -108,59 +108,28 @@ diretamente no módulo de Kanji para pronúncia de exemplos.
 **O quê:** sintetizar em áudio os exemplos japoneses das lições (`<Ex jp=
 "...">`) e dos futuros textos de leitura, usando `SpeechSynthesis` do
 navegador — síntese **local, offline, sem custo e sem servidor**.
-**Por quê:** listening é uma das quatro habilidades e ainda fica pouco
-coberta fora do botão de áudio pontual — shadowing/ditado (3.4/3.5) seguem
-como lacuna real.
+**Por quê:** listening é uma das quatro habilidades e ainda tem espaço pra
+crescer além do botão de áudio pontual — o app já tem ditado guiado por
+áudio em `/licoes/kakitori` (descoberto durante a implementação de 3.1,
+não fazia parte desta pesquisa original).
 **Viabilidade técnica:** suportado nativamente em Chrome/Edge/Firefox/
 Safari. Ressalva: qualidade de voz varia por sistema operacional, e
 utterances muito longas (200+ caracteres) podem cortar — mitigar quebrando o
 texto em sentenças.
-**Esforço:** já pago — é a base (pré-requisito) para 3.4 e 3.5, que continuam
-pendentes.
+**Esforço:** já pago — reaproveitado no módulo de Kanji e na leitura
+extensiva.
 
-### 3.4 Shadowing
-**O quê:** ouvir um trecho de áudio (via TTS do item 3.3) e repetir junto,
-1–2 segundos atrás, com controle de velocidade e replay.
-**Por quê:** técnica com respaldo forte em treino de pronúncia/fluência
-(citada por praticantes de imersão e treino de intérpretes).
-**Reaproveita:** TTS de 3.3; não exige gravação nem upload de áudio do
-usuário (sem processamento de voz no servidor).
-**Esforço:** baixo, depende apenas de 3.3.
-
-### 3.5 Ditado / Kikitori (dictation)
-**O quê:** ouvir um áudio (TTS) e digitar o que foi ouvido, comparando com o
-texto-fonte com destaque de acertos/erros por palavra.
-**Por quê:** treina listening e escrita ao mesmo tempo; é a extensão natural
-do kakitori que já existe hoje para escrita a partir de texto.
-**Reaproveita:** TTS de 3.3, padrão de exercício do kakitori atual em
-`src/licoes`.
-**Esforço:** baixo-médio, depende de 3.3.
-
-### 3.6 Treino de pitch accent (アクセント)
-**O quê:** exercícios de reconhecimento/produção do padrão de altura tonal
-(alto/baixo por mora) de palavras — por exemplo, modo "escute e escolha o
-padrão certo entre 4 variações".
-**Por quê:** pouquíssimos apps cobrem isso bem (Migaku Pitch Trainer é a
-referência); professores apontam pitch accent como causa comum de "sotaque
-estrangeiro" mesmo em alunos avançados, e é raramente ensinado explicitamente.
-**Viabilidade técnica:** alta — o padrão de pitch é dado simbólico (uma
-sequência de alto/baixo por mora), não exige áudio gravado; o áudio de
-exemplo pode vir do TTS de 3.3 (com a limitação de que TTS nem sempre acerta
-o pitch nativo — vale avisar isso na UI).
-**Esforço:** médio — principal custo é levantar/anotar os dados de pitch por
-palavra.
-
-### 3.7 Simulados estilo JLPT
+### 3.4 Simulados estilo JLPT
 **O quê:** provas cronometradas por seção (vocabulário, gramática, leitura,
 listening), geradas a partir do próprio banco de conteúdo do app (lições,
 vocabulário, textos de leitura).
 **Por quê:** dá um objetivo mensurável e concreto, e integra as features de
-leitura (3.2) e listening (3.3–3.5) num formato só.
+leitura (3.2) e listening (3.3) num formato só.
 **Reaproveita:** banco de vocabulário/gramática existente.
 **Esforço:** médio, e cresce em valor conforme 3.2/3.3 avançam (mais
 conteúdo para sortear).
 
-### 3.8 Stroke order expandido para kanji — ✅ implementado (2026-09), junto com 3.1
+### 3.5 Stroke order expandido para kanji — ✅ implementado (2026-09), junto com 3.1
 **O quê:** estender o `KanaCanvas`/`scoreDrawing()` (hoje usado só para kana)
 para os kanji do módulo de 3.1, usando o KanjiVG (que já cobre os ~2.136
 kanji jōyō, não só kana).
@@ -180,7 +149,7 @@ compartilhada pelos dois scripts geradores. Escopo inicial: só os ~110
 kanji do N5 (mesmo escopo do módulo) — cobertura de N4/N3/jōyō completo
 é a mesma extensão futura de 3.1.
 
-### 3.9 Sentence mining / vocabulário com contexto
+### 3.6 Sentence mining / vocabulário com contexto
 **O quê:** permitir criar um flashcard a partir de uma frase das lições ou
 da leitura extensiva, marcando a palavra-alvo desconhecida na frase (em vez
 de só importar decks prontos).
@@ -192,7 +161,7 @@ existente — é essencialmente um novo fluxo de criação de card, não uma
 tabela nova.
 **Esforço:** baixo-médio, é CRUD local sobre o schema já existente.
 
-### 3.10 Gamificação alinhada ao SRS
+### 3.7 Gamificação alinhada ao SRS
 **O quê:** streaks de estudo, heatmap de revisões (estilo "contribution
 graph"), conquistas locais (ex.: "100 kanji dominados", "7 dias seguidos",
 "N5 completo").
@@ -210,7 +179,7 @@ usuário").
 
 ## 4. Outras features por categoria
 
-Features de prioridade menor que as do Top 10, mas que valem constar no
+Features de prioridade menor que as do Top 7, mas que valem constar no
 roadmap.
 
 ### Leitura
@@ -225,13 +194,17 @@ roadmap.
   "Vocabulário e gramática" abaixo).
 - **Toggle de furigana nos textos de leitura** — ✅ feito (3.2),
   `src/routes/LeituraTexto.tsx`, ligado por padrão.
-- **Toggle de furigana nas tabelas de kanji das lições** — continua
-  pendente. Isso inclui trocar a coluna "Kanji" simples que `familia.tsx`,
-  `pronomes.tsx` e `sufixos.tsx` já têm hoje pelo componente
-  `src/components/Furigana.tsx` (`<ruby>/<rt>`, já existe desde 3.1), e
-  considerar adicionar referência de kanji nas lições que ainda não têm
-  nenhuma (só onde o kanji é realmente comum no uso real, ex.: verbos
-  básicos). Trabalho de conteúdo, lição por lição — não mecânico.
+- **Furigana nas tabelas de kanji das lições** — ✅ feito (2026-09). A
+  coluna "Kanji" simples de `familia.tsx`, `pronomes.tsx` e `sufixos.tsx`
+  virou uma única coluna "Kanji (furigana)", usando o novo
+  `FuriganaWord` (`src/components/Furigana.tsx`) — atalho de `Furigana`
+  para o caso de uma palavra inteira com uma leitura só. Não é um toggle
+  interativo (mostrar/ocultar) como na leitura extensiva — é a mesma coluna
+  de referência opcional de sempre, só que renderizada como furigana em vez
+  de kanji+hiragana em colunas separadas. Continua pendente: considerar
+  adicionar referência de kanji nas lições que ainda não têm nenhuma (só
+  onde o kanji é realmente comum no uso real, ex.: verbos básicos) —
+  trabalho de conteúdo, lição por lição, não mecânico.
 
 ### Vocabulário e gramática
 - **Exercício de gramática em contexto**: sortear de um banco maior de
@@ -262,19 +235,16 @@ real depende do que o usuário quiser estudar primeiro.
 
 **Fase 1 — maior impacto, menor dependência entre si**
 1. Módulo de Kanji com SRS (3.1)
-2. Web Speech API / TTS (3.3) — desbloqueia 3.4 e 3.5
+2. Web Speech API / TTS (3.3)
 3. Leitura extensiva, nível inicial (3.2)
 
 **Fase 2 — depende da Fase 1**
-4. Shadowing (3.4)
-5. Ditado/Kikitori (3.5)
-6. Stroke order de kanji (3.8) — depende de 3.1
-7. Sentence mining (3.9) — mais valioso com leitura (3.2) disponível
+4. Stroke order de kanji (3.5) — depende de 3.1
+5. Sentence mining (3.6) — mais valioso com leitura (3.2) disponível
 
 **Fase 3 — consolidação**
-8. Pitch accent (3.6)
-9. Simulados JLPT (3.7) — mais valioso com 3.2/3.3 maduros
-10. Gamificação (3.10) — pode entrar a qualquer momento, é independente
+6. Simulados JLPT (3.4) — mais valioso com 3.2/3.3 maduros
+7. Gamificação (3.7) — pode entrar a qualquer momento, é independente
 
 ---
 

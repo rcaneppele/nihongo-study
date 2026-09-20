@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import { FuriganaWord } from '../components/Furigana';
 import type { QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
@@ -195,15 +196,14 @@ export default function Familia() {
         <p className="text-sm leading-relaxed text-ink">Cada palavra aparece assim:</p>
         <ReadingKey
           lines={[
-            { text: '父', desc: 'kanji (você pode ignorar por enquanto)' },
-            { text: 'ちち', desc: 'leitura em hiragana' },
+            { text: '父', desc: 'kanji, com a leitura em hiragana pequena em cima (furigana)' },
             { text: 'chichi', desc: 'romaji' },
             { text: 'meu pai', desc: 'significado' },
           ]}
         />
         <p className="text-sm leading-relaxed text-ink">
-          O kanji está aí só como referência, para você começar a reconhecer com o tempo. No
-          início, foque na leitura (hiragana e romaji).
+          O kanji vem sempre com a leitura em cima dele, do jeito que aparece em texto japonês
+          real — não precisa decorar o kanji agora, só ler a furigana já basta.
         </p>
       </Section>
 
@@ -290,19 +290,19 @@ export default function Familia() {
 
       <Section title="Família nuclear">
         <GrammarTable
-          headers={['Grau', 'Kanji', 'Minha família (humilde)', 'Romaji', 'Família de outros (respeitosa)', 'Romaji']}
-          jpCols={[1, 2, 4]}
+          headers={['Grau', 'Minha família (humilde)', 'Romaji', 'Família de outros (respeitosa)', 'Romaji']}
+          jpCols={[1, 3]}
           rows={[
-            ['Pai', '父', 'ちち', 'chichi', 'おとうさん', 'otousan'],
-            ['Mãe', '母', 'はは', 'haha', 'おかあさん', 'okaasan'],
-            ['Irmão mais velho', '兄', 'あに', 'ani', 'おにいさん', 'oniisan'],
-            ['Irmã mais velha', '姉', 'あね', 'ane', 'おねえさん', 'oneesan'],
-            ['Irmão mais novo', '弟', 'おとうと', 'otouto', 'おとうとさん', 'otoutosan'],
-            ['Irmã mais nova', '妹', 'いもうと', 'imouto', 'いもうとさん', 'imoutosan'],
-            ['Marido', '夫', 'おっと', 'otto', 'ごしゅじん', 'goshujin'],
-            ['Esposa', '妻', 'つま', 'tsuma', 'おくさん', 'okusan'],
-            ['Filho', '息子', 'むすこ', 'musuko', 'むすこさん', 'musukosan'],
-            ['Filha', '娘', 'むすめ', 'musume', 'おじょうさん', 'ojousan'],
+            ['Pai', <FuriganaWord kanji="父" reading="ちち" />, 'chichi', 'おとうさん', 'otousan'],
+            ['Mãe', <FuriganaWord kanji="母" reading="はは" />, 'haha', 'おかあさん', 'okaasan'],
+            ['Irmão mais velho', <FuriganaWord kanji="兄" reading="あに" />, 'ani', 'おにいさん', 'oniisan'],
+            ['Irmã mais velha', <FuriganaWord kanji="姉" reading="あね" />, 'ane', 'おねえさん', 'oneesan'],
+            ['Irmão mais novo', <FuriganaWord kanji="弟" reading="おとうと" />, 'otouto', 'おとうとさん', 'otoutosan'],
+            ['Irmã mais nova', <FuriganaWord kanji="妹" reading="いもうと" />, 'imouto', 'いもうとさん', 'imoutosan'],
+            ['Marido', <FuriganaWord kanji="夫" reading="おっと" />, 'otto', 'ごしゅじん', 'goshujin'],
+            ['Esposa', <FuriganaWord kanji="妻" reading="つま" />, 'tsuma', 'おくさん', 'okusan'],
+            ['Filho', <FuriganaWord kanji="息子" reading="むすこ" />, 'musuko', 'むすこさん', 'musukosan'],
+            ['Filha', <FuriganaWord kanji="娘" reading="むすめ" />, 'musume', 'おじょうさん', 'ojousan'],
           ]}
         />
         <Note>
@@ -318,16 +318,16 @@ export default function Familia() {
 
       <Section title="Família estendida">
         <GrammarTable
-          headers={['Grau', 'Kanji', 'Minha família', 'Romaji', 'Família de outros', 'Romaji']}
-          jpCols={[1, 2, 4]}
+          headers={['Grau', 'Minha família', 'Romaji', 'Família de outros', 'Romaji']}
+          jpCols={[1, 3]}
           rows={[
-            ['Avô', '祖父', 'そふ', 'sofu', 'おじいさん', 'ojiisan'],
-            ['Avó', '祖母', 'そぼ', 'sobo', 'おばあさん', 'obaasan'],
-            ['Tio', '叔父', 'おじ', 'oji', 'おじさん', 'ojisan'],
-            ['Tia', '叔母', 'おば', 'oba', 'おばさん', 'obasan'],
-            ['Primo(a)', '従兄弟', 'いとこ', 'itoko', 'いとこさん', 'itokosan'],
-            ['Sobrinho', '甥', 'おい', 'oi', 'おいごさん', 'oigosan'],
-            ['Sobrinha', '姪', 'めい', 'mei', 'めいごさん', 'meigosan'],
+            ['Avô', <FuriganaWord kanji="祖父" reading="そふ" />, 'sofu', 'おじいさん', 'ojiisan'],
+            ['Avó', <FuriganaWord kanji="祖母" reading="そぼ" />, 'sobo', 'おばあさん', 'obaasan'],
+            ['Tio', <FuriganaWord kanji="叔父" reading="おじ" />, 'oji', 'おじさん', 'ojisan'],
+            ['Tia', <FuriganaWord kanji="叔母" reading="おば" />, 'oba', 'おばさん', 'obasan'],
+            ['Primo(a)', <FuriganaWord kanji="従兄弟" reading="いとこ" />, 'itoko', 'いとこさん', 'itokosan'],
+            ['Sobrinho', <FuriganaWord kanji="甥" reading="おい" />, 'oi', 'おいごさん', 'oigosan'],
+            ['Sobrinha', <FuriganaWord kanji="姪" reading="めい" />, 'mei', 'めいごさん', 'meigosan'],
           ]}
         />
         <Note>
@@ -361,17 +361,17 @@ export default function Familia() {
 
       <Section title="Família por casamento">
         <GrammarTable
-          headers={['Grau', 'Kanji', 'Minha família', 'Romaji', 'Uso respeitoso']}
-          jpCols={[1, 2, 4]}
+          headers={['Grau', 'Minha família', 'Romaji', 'Uso respeitoso']}
+          jpCols={[1, 3]}
           rows={[
-            ['Sogro', '義父', 'ぎふ', 'gifu', 'おとうさん'],
-            ['Sogra', '義母', 'ぎぼ', 'gibo', 'おかあさん'],
-            ['Cunhado mais velho', '義兄', 'ぎけい', 'gikei', 'おにいさん'],
-            ['Cunhada mais velha', '義姉', 'ぎし', 'gishi', 'おねえさん'],
-            ['Cunhado mais novo', '義弟', 'ぎてい', 'gitei', 'ぎていさん'],
-            ['Cunhada mais nova', '義妹', 'ぎまい', 'gimai', 'ぎまいさん'],
-            ['Genro', '婿', 'むこ', 'muko', 'むこさん'],
-            ['Nora', '嫁', 'よめ', 'yome', 'およめさん'],
+            ['Sogro', <FuriganaWord kanji="義父" reading="ぎふ" />, 'gifu', 'おとうさん'],
+            ['Sogra', <FuriganaWord kanji="義母" reading="ぎぼ" />, 'gibo', 'おかあさん'],
+            ['Cunhado mais velho', <FuriganaWord kanji="義兄" reading="ぎけい" />, 'gikei', 'おにいさん'],
+            ['Cunhada mais velha', <FuriganaWord kanji="義姉" reading="ぎし" />, 'gishi', 'おねえさん'],
+            ['Cunhado mais novo', <FuriganaWord kanji="義弟" reading="ぎてい" />, 'gitei', 'ぎていさん'],
+            ['Cunhada mais nova', <FuriganaWord kanji="義妹" reading="ぎまい" />, 'gimai', 'ぎまいさん'],
+            ['Genro', <FuriganaWord kanji="婿" reading="むこ" />, 'muko', 'むこさん'],
+            ['Nora', <FuriganaWord kanji="嫁" reading="よめ" />, 'yome', 'およめさん'],
           ]}
         />
         <Note>
@@ -401,16 +401,16 @@ export default function Familia() {
           inclusive brincando sobre personalidade ("típico de caçula").
         </p>
         <GrammarTable
-          headers={['Kanji', 'Hiragana', 'Romaji', 'Significado']}
-          jpCols={[0, 1]}
+          headers={['Kanji (furigana)', 'Romaji', 'Significado']}
+          jpCols={[0]}
           rows={[
-            ['長男', 'ちょうなん', 'chounan', 'primogênito (homem)'],
-            ['次男', 'じなん', 'jinan', 'segundo filho homem'],
-            ['三男', 'さんなん', 'sannan', 'terceiro filho homem'],
-            ['長女', 'ちょうじょ', 'choujo', 'primogênita (mulher)'],
-            ['次女', 'じじょ', 'jijo', 'segunda filha mulher'],
-            ['末っ子', 'すえっこ', 'suekko', 'o caçula (mais novo)'],
-            ['一人っ子', 'ひとりっこ', 'hitorikko', 'filho único'],
+            [<FuriganaWord kanji="長男" reading="ちょうなん" />, 'chounan', 'primogênito (homem)'],
+            [<FuriganaWord kanji="次男" reading="じなん" />, 'jinan', 'segundo filho homem'],
+            [<FuriganaWord kanji="三男" reading="さんなん" />, 'sannan', 'terceiro filho homem'],
+            [<FuriganaWord kanji="長女" reading="ちょうじょ" />, 'choujo', 'primogênita (mulher)'],
+            [<FuriganaWord kanji="次女" reading="じじょ" />, 'jijo', 'segunda filha mulher'],
+            [<FuriganaWord kanji="末っ子" reading="すえっこ" />, 'suekko', 'o caçula (mais novo)'],
+            [<FuriganaWord kanji="一人っ子" reading="ひとりっこ" />, 'hitorikko', 'filho único'],
           ]}
         />
         <Ex
@@ -423,19 +423,19 @@ export default function Familia() {
 
       <Section title="Outros termos úteis">
         <GrammarTable
-          headers={['Kanji', 'Hiragana', 'Romaji', 'Significado']}
-          jpCols={[0, 1]}
+          headers={['Kanji (furigana)', 'Romaji', 'Significado']}
+          jpCols={[0]}
           rows={[
-            ['家族', 'かぞく', 'kazoku', 'família (em geral)'],
-            ['両親', 'りょうしん', 'ryoushin', 'os pais (pai e mãe juntos)'],
-            ['兄弟', 'きょうだい', 'kyoudai', 'irmãos (geral)'],
-            ['姉妹', 'しまい', 'shimai', 'irmãs'],
-            ['子供', 'こども', 'kodomo', 'criança / filho(s)'],
-            ['孫', 'まご', 'mago', 'neto / neta'],
-            ['親戚', 'しんせき', 'shinseki', 'parentes em geral'],
-            ['独身', 'どくしん', 'dokushin', 'solteiro(a)'],
-            ['既婚', 'きこん', 'kikon', 'casado(a)'],
-            ['離婚', 'りこん', 'rikon', 'divórcio / divorciado(a)'],
+            [<FuriganaWord kanji="家族" reading="かぞく" />, 'kazoku', 'família (em geral)'],
+            [<FuriganaWord kanji="両親" reading="りょうしん" />, 'ryoushin', 'os pais (pai e mãe juntos)'],
+            [<FuriganaWord kanji="兄弟" reading="きょうだい" />, 'kyoudai', 'irmãos (geral)'],
+            [<FuriganaWord kanji="姉妹" reading="しまい" />, 'shimai', 'irmãs'],
+            [<FuriganaWord kanji="子供" reading="こども" />, 'kodomo', 'criança / filho(s)'],
+            [<FuriganaWord kanji="孫" reading="まご" />, 'mago', 'neto / neta'],
+            [<FuriganaWord kanji="親戚" reading="しんせき" />, 'shinseki', 'parentes em geral'],
+            [<FuriganaWord kanji="独身" reading="どくしん" />, 'dokushin', 'solteiro(a)'],
+            [<FuriganaWord kanji="既婚" reading="きこん" />, 'kikon', 'casado(a)'],
+            [<FuriganaWord kanji="離婚" reading="りこん" />, 'rikon', 'divórcio / divorciado(a)'],
           ]}
         />
       </Section>

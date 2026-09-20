@@ -1,4 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
+import { FuriganaWord } from '../components/Furigana';
 import type { QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
@@ -192,8 +193,9 @@ export default function Sufixos() {
       <Section title="Como ler esta lição">
         <p className="text-sm leading-relaxed text-ink">
           Os sufixos se escrevem em hiragana. Você verá cada um em hiragana e romaji, com exemplos
-          explicados. Algumas tabelas de vocabulário (cargos de trabalho) trazem uma coluna extra
-          com o kanji, só como referência — você pode ignorá-la por enquanto.
+          explicados. A tabela de cargos de trabalho traz o kanji de cada um com a leitura em
+          hiragana pequena em cima (furigana) — só como referência, pode ignorar o kanji por
+          enquanto.
         </p>
         <ReadingKey
           lines={[
@@ -502,14 +504,14 @@ export default function Sufixos() {
           <span className="font-jp">さん</span> ao falar com um superior.
         </p>
         <GrammarTable
-          headers={['Kanji', 'Hiragana', 'Romaji', 'Cargo']}
-          jpCols={[0, 1]}
+          headers={['Kanji (furigana)', 'Romaji', 'Cargo']}
+          jpCols={[0]}
           rows={[
-            ['社長', 'しゃちょう', 'shachou', 'presidente / CEO'],
-            ['部長', 'ぶちょう', 'buchou', 'diretor de departamento'],
-            ['課長', 'かちょう', 'kachou', 'gerente de seção'],
-            ['主任', 'しゅにん', 'shunin', 'líder / responsável'],
-            ['同僚', 'どうりょう', 'douryou', 'colega (mesmo nível)'],
+            [<FuriganaWord kanji="社長" reading="しゃちょう" />, 'shachou', 'presidente / CEO'],
+            [<FuriganaWord kanji="部長" reading="ぶちょう" />, 'buchou', 'diretor de departamento'],
+            [<FuriganaWord kanji="課長" reading="かちょう" />, 'kachou', 'gerente de seção'],
+            [<FuriganaWord kanji="主任" reading="しゅにん" />, 'shunin', 'líder / responsável'],
+            [<FuriganaWord kanji="同僚" reading="どうりょう" />, 'douryou', 'colega (mesmo nível)'],
           ]}
         />
         <Ex
