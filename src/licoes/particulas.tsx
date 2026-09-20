@@ -128,6 +128,38 @@ export const quiz: QuizLicao = {
       ],
       pt: 'Mesmo tendo me esforçado, fracassei.',
     },
+    {
+      id: 'particulas-f13',
+      tokens: [
+        { texto: 'いぬ', romaji: 'inu' },
+        { texto: 'や', romaji: 'ya', particula: true },
+        { texto: 'ねこ', romaji: 'neko' },
+        { texto: 'が', romaji: 'ga' },
+        { texto: 'います', romaji: 'imasu' },
+      ],
+      pt: 'Há cachorros, gatos e outros animais.',
+    },
+    {
+      id: 'particulas-f14',
+      tokens: [
+        { texto: 'さんじ', romaji: 'san-ji' },
+        { texto: 'ごろ', romaji: 'goro', particula: true },
+        { texto: 'かえります', romaji: 'kaerimasu' },
+      ],
+      pt: 'Volto por volta das 3 horas.',
+    },
+    {
+      id: 'particulas-f15',
+      tokens: [
+        { texto: 'パン', romaji: 'pan' },
+        { texto: 'や', romaji: 'ya' },
+        { texto: 'ミルク', romaji: 'miruku' },
+        { texto: 'など', romaji: 'nado', particula: true },
+        { texto: 'を', romaji: 'o' },
+        { texto: 'かいました', romaji: 'kaimashita' },
+      ],
+      pt: 'Comprei pão, leite e outras coisas.',
+    },
   ],
   perguntas: [
     {
@@ -215,6 +247,40 @@ export const quiz: QuizLicao = {
       correta: false,
       explicacao: 'わかります pede が, não を — assim como すきです e きらいです: にほんごがわかります。',
     },
+    {
+      id: 'particulas-sig7',
+      tipo: 'significado',
+      pergunta: 'Qual partícula marca um horário aproximado, em vez de exato?',
+      alternativas: ['ごろ', 'に', 'から', 'まで'],
+      correta: 0,
+    },
+    {
+      id: 'particulas-vf6',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'ごろ pode ser usada para dizer "umas três horas de duração", como em さんじかんごろ。',
+      correta: false,
+      explicacao:
+        'ごろ marca um ponto aproximado no tempo (uma hora, um dia, um mês); para duração ou quantidade aproximada, usa-se ぐらい/くらい: さんじかんぐらい。',
+    },
+    {
+      id: 'particulas-sig8',
+      tipo: 'significado',
+      pergunta: 'O que a partícula など costuma fazer numa lista com や?',
+      alternativas: [
+        'reforçar que a lista está incompleta, tipo "etc."',
+        'fechar a lista, dizendo que não há mais nada',
+        'transformar a lista em pergunta',
+        'indicar contraste entre os itens',
+      ],
+      correta: 0,
+    },
+    {
+      id: 'particulas-vf7',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'や sempre precisa vir acompanhada de など no final da lista.',
+      correta: false,
+      explicacao: 'など reforça a ideia de lista aberta, mas não é obrigatório — や sozinha já deixa a lista aberta.',
+    },
   ],
 };
 
@@ -256,7 +322,13 @@ export default function Particulas() {
           </li>
           <li>
             Escolher corretamente entre os pares que mais confundem: は/が, に/で, と/や, だけ/
-            しか, ので/から e のに (contraste) vs. から (razão).
+            しか, ので/から, のに (contraste) vs. から (razão), e ごろ (tempo aproximado) vs.
+            ぐらい (quantidade/duração aproximada).
+          </li>
+          <li>
+            Usar <span className="font-jp">ごろ</span> para aproximar um horário e{' '}
+            <span className="font-jp">など</span> para reforçar que uma lista com{' '}
+            <span className="font-jp">や</span> está incompleta.
           </li>
           <li>
             Saber quais verbos e adjetivos (すきです, きらいです, わかります) exigem が em vez de
@@ -311,11 +383,13 @@ export default function Particulas() {
             ['は', 'wa', 'marca o tópico', 'わたしはがくせいです'],
             ['が', 'ga', 'marca o sujeito', 'ねこがいます'],
             ['を', 'o', 'marca o objeto direto', 'りんごをたべます'],
-            ['に', 'ni', 'destino, tempo, lugar onde algo existe', 'がっこうにいきます'],
+            ['に', 'ni', 'destino, tempo exato, lugar onde algo existe, destinatário', 'がっこうにいきます'],
+            ['ごろ', 'goro', 'tempo aproximado (ponto no tempo)', 'さんじごろ'],
             ['で', 'de', 'lugar da ação, meio', 'バスできます'],
             ['の', 'no', 'posse / liga dois substantivos', 'わたしのほん'],
             ['と', 'to', '"e" (lista fechada) / "com"', 'パンとバター'],
             ['や', 'ya', '"e" (lista aberta, exemplos)', 'りんごやみかん'],
+            ['など', 'nado', '"etc." (reforça lista aberta com や)', 'りんごやみかんなど'],
             ['も', 'mo', 'também / nem', 'わたしもいきます'],
             ['へ', 'e', 'direção (formal) / destinatário', 'とうきょうへいきます'],
             ['から', 'kara', 'de (origem)', 'くじから'],
@@ -486,6 +560,22 @@ export default function Particulas() {
           pt="Há crianças no parque."
           notes="existência: lugar+に, sujeito+が. Guarde esta frase — ela volta contrastada na próxima seção"
         />
+        <p className="text-sm leading-relaxed text-ink">
+          Repare também na função "Destinatário" da tabela acima — funciona como o nosso{' '}
+          <strong>objeto indireto</strong> ("para quem"), muito comum com verbos de dar e enviar:
+        </p>
+        <Ex
+          jp="ともだちにたんじょうびのプレゼントをあげました。"
+          romaji="tomodachi ni tanjoubi no purezento o agemashita."
+          pt="Dei um presente de aniversário para um amigo."
+          notes="に marca quem recebe — o alvo que ganha o presente, diferente de を (o presente em si)"
+        />
+        <Ex
+          jp="せんせいにしゅくだいをおくりました。"
+          romaji="sensei ni shukudai o okurimashita."
+          pt="Enviei a lição de casa para o professor."
+          notes="mesma lógica: に = para quem, を = o que é enviado"
+        />
         <Note>
           <span className="font-jp">に</span> <strong>não</strong> aparece com dias relativos
           como <span className="font-jp">きょう</span> (hoje),{' '}
@@ -494,6 +584,50 @@ export default function Particulas() {
           <span className="font-jp">まいにち</span> (todo dia). Nesses casos, não se usa
           partícula: <span className="font-jp">きょうきます</span> (venho hoje), e não{' '}
           <span className="font-jp">きょうにきます</span>.
+        </Note>
+      </Section>
+
+      <Section title="ごろ — tempo aproximado (vs. に)">
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">ごろ</span> vem depois de uma expressão de tempo e marca esse
+          horário como <strong>aproximado</strong> — "por volta de", "mais ou menos". É o par
+          natural de <span className="font-jp">に</span>: に marca um horário exato, ごろ marca um
+          horário aproximado, e os dois nunca aparecem juntos na mesma expressão.
+        </p>
+        <Ex
+          jp="さんじにおきます。"
+          romaji="san-ji ni okimasu."
+          pt="Acordo às 3 horas. (exatamente)"
+          notes="に — horário exato, sem espaço para aproximação"
+        />
+        <Ex
+          jp="さんじごろおきます。"
+          romaji="san-ji goro okimasu."
+          pt="Acordo por volta das 3 horas."
+          notes="ごろ — mesma frase, agora aproximada. Só a partícula muda"
+        />
+        <Ex
+          jp="なんじごろかえりますか？"
+          romaji="nan-ji goro kaerimasu ka?"
+          pt="Mais ou menos que horas você volta?"
+          notes="pergunta comum para combinar horário sem exigir precisão — saindo do trabalho, chegando em casa"
+        />
+        <Ex
+          jp="らいねんのはるごろ、にほんへいくよていです。"
+          romaji="rainen no haru goro, nihon e iku yotei desu."
+          pt="Tenho planos de ir ao Japão por volta da primavera do ano que vem."
+          notes="ごろ não se limita a hora do relógio — também aproxima datas, meses e estações"
+        />
+        <Note>
+          <strong>Não confunda ごろ com ぐらい/くらい.</strong> Os dois traduzem "mais ou menos",
+          mas aproximam coisas diferentes: <span className="font-jp">ごろ</span> aproxima um{' '}
+          <strong>ponto no tempo</strong> (uma hora, um dia, um mês); <span className="font-jp">
+            ぐらい
+          </span>{' '}
+          aproxima uma <strong>quantidade ou duração</strong> (quanto tempo, quantas pessoas,
+          quanto custa). Compare: <span className="font-jp">さんじごろ</span> (por volta das 3
+          horas — um ponto) vs. <span className="font-jp">さんじかんぐらい</span> (umas três horas
+          — uma duração). Trocar um pelo outro é um erro comum de quem está aprendendo.
         </Note>
       </Section>
 
@@ -565,7 +699,7 @@ export default function Particulas() {
         />
       </Section>
 
-      <Section title="と e や — listas fechadas e abertas">
+      <Section title="と, や e など — listas fechadas e abertas">
         <p className="text-sm leading-relaxed text-ink">
           <span className="font-jp">と</span> junta substantivos em uma lista{' '}
           <strong>completa</strong> ("A e B, só esses") ou indica <strong>companhia</strong>.
@@ -594,6 +728,32 @@ export default function Particulas() {
           pt="Comprei salgadinhos, suco e outras coisas no konbini."
           notes="や deixa claro que a lista não é exaustiva — comprou mais coisas além dessas duas"
         />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">など</span> ("etc.", "coisas do tipo") reforça essa ideia de
+          lista aberta — geralmente aparece <strong>depois</strong> de uma lista com や, no fim,
+          deixando ainda mais claro que existem outros itens não mencionados.
+        </p>
+        <Ex
+          jp="スーパーでパンやミルクなどをかいました。"
+          romaji="suupaa de pan ya miruku nado o kaimashita."
+          pt="Comprei pão, leite e outras coisas no supermercado."
+          notes="や...など juntos deixam a lista claramente incompleta, ainda mais do que や sozinho"
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-jp">など</span> também aparece sozinho, sem や, suavizando uma
+          afirmação sobre um único item — "esse tipo de coisa", em vez de apontar direto para ele:
+        </p>
+        <Ex
+          jp="べんきょうなどはたのしいです。"
+          romaji="benkyou nado wa tanoshii desu."
+          pt="Estudar e coisas do tipo são divertidas."
+          notes="など sozinho suaviza a afirmação, como quem evita soar categórico demais sobre só べんきょう"
+        />
+        <Note>
+          Usar <span className="font-jp">や</span> sem <span className="font-jp">など</span> no
+          fim não muda o sentido de forma relevante — a lista já fica aberta só com や. など
+          reforça essa ideia, mas não é obrigatório.
+        </Note>
       </Section>
 
       <Section title="も — também / nem">
@@ -858,6 +1018,12 @@ export default function Particulas() {
             ['しか sem verbo negativo', 'これしかあります', 'これしかありません', 'しか sempre pede verbo negativo.'],
             ['と para lista aberta', 'りんごとオレンジとなど…', 'りんごやオレンジなど', 'と é lista fechada; や é lista aberta.'],
             [
+              'ごろ com duração',
+              'さんじかんごろべんきょうしました',
+              'さんじかんぐらいべんきょうしました',
+              'ごろ marca ponto no tempo; para duração/quantidade aproximada, use ぐらい/くらい.',
+            ],
+            [
               'のに no lugar de から/ので',
               'べんきょうしたから、テストができませんでした',
               'べんきょうしたのに、テストができませんでした',
@@ -875,11 +1041,13 @@ export default function Particulas() {
             ['o tópico ("quanto a...")', 'は'],
             ['quem faz / o sujeito em destaque', 'が'],
             ['o alvo da ação (objeto)', 'を'],
-            ['destino, horário, onde algo existe', 'に'],
+            ['destino, horário exato, onde algo existe, destinatário', 'に'],
+            ['tempo aproximado', 'ごろ'],
             ['onde a ação acontece, o meio', 'で'],
             ['posse, ligação entre substantivos', 'の'],
             ['lista fechada ("e", só esses) / companhia', 'と'],
             ['lista aberta ("e outras coisas")', 'や'],
+            ['"etc.", reforça lista aberta com や', 'など'],
             ['também / nem (com negativo)', 'も'],
             ['direção formal / destinatário de carta', 'へ'],
             ['ponto de partida ("de")', 'から'],

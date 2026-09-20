@@ -9,7 +9,9 @@ import type {
   Token,
 } from './types';
 
-const PARTICULAS_COMUNS = ['は', 'が', 'を', 'に', 'で', 'の', 'と', 'も', 'へ', 'から', 'まで', 'しか', 'だけ'];
+const PARTICULAS_COMUNS = [
+  'は', 'が', 'を', 'に', 'で', 'の', 'と', 'や', 'など', 'も', 'へ', 'から', 'まで', 'しか', 'だけ', 'ごろ', 'ぐらい',
+];
 
 function shuffle<T>(arr: T[]): T[] {
   const copy = [...arr];
