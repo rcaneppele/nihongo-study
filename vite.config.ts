@@ -12,6 +12,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Registro manual em src/lib/pwaUpdate.ts — precisa de `updateViaCache: 'none'` e checagem
+      // periódica/on-focus, que o script auto-injetado (`injectRegister: 'auto'`) não oferece.
+      injectRegister: false,
       includeAssets: ['icons/apple-touch-icon.png', 'favicon.png', 'logo.png', 'logo-dark.png'],
       manifest: {
         name: 'Nihongo Study',

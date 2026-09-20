@@ -353,7 +353,37 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   um backup já em v2 não ser reprocessado pela migração de v1→v2 sempre que
   `SCHEMA_VERSION` sobe de novo.
 
-## 7. Privacidade
+## 7. Atualização do app (PWA)
+
+- **Deploy**: push na `main` dispara o GitHub Actions, que builda e publica
+  no GitHub Pages. Como é hospedagem estática, não dá pra configurar
+  `Cache-Control` por arquivo — o navegador pode cachear `sw.js` por conta
+  própria, o que atrasa a detecção de uma versão nova.
+- **Registro do service worker**: manual, em `src/lib/pwaUpdate.ts` (chamado
+  em `src/main.tsx`) — `injectRegister: false` em `vite.config.ts` desliga o
+  script que o vite-plugin-pwa injetaria sozinho, que é só um `register()`
+  puro e nunca fazia o worker novo assumir sozinho (o worker gerado só troca
+  de versão ao receber a mensagem `SKIP_WAITING` — ninguém mandava essa
+  mensagem antes). O registro manual resolve isso em 4 partes:
+  1. `updateViaCache: 'none'` — nunca usa cache HTTP pra buscar o próprio
+     `sw.js`, sempre confere a versão real do servidor.
+  2. Checagem de atualização periódica (a cada 1h) e sempre que o app volta
+     ao primeiro plano (`visibilitychange`) — não depende mais do usuário
+     abrir/recarregar manualmente pra notar uma versão nova.
+  3. Ao detectar um worker novo instalado, manda `postMessage({ type:
+     'SKIP_WAITING' })` pra ele assumir — sem isso, o worker novo fica
+     esperando todas as abas fecharem (comportamento padrão do navegador).
+  4. Quando o controller troca (o worker novo assumiu), recarrega a página
+     uma única vez — troca os arquivos estáticos (JS/CSS) já carregados na
+     aba pelos novos, sem precisar de outro recarregamento manual. Um guard
+     (`hadController`) evita recarregar sozinho na primeiríssima instalação
+     do PWA, quando ainda não existe nenhum controller anterior pra trocar.
+- **Antes desta correção**: o app dependia inteiramente do comportamento
+  padrão do navegador (só ativa um worker novo depois que todas as
+  abas/instâncias fecham), por isso o usuário precisava puxar pra atualizar
+  manualmente, às vezes mais de uma vez.
+
+## 8. Privacidade
 
 - Nenhum dado sai do dispositivo automaticamente. Não há telemetria, conta nem
   envio para servidores. A única saída de dados é o arquivo de backup que o

@@ -104,6 +104,10 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/
   sistema, persistido em `db.meta` (entra no backup) e cacheado em
   `localStorage` só para aplicar antes do primeiro paint.
+- `src/lib/pwaUpdate.ts` — registro manual do service worker
+  (`setupPWAUpdate()`, chamado em `main.tsx`); checa atualização
+  periodicamente e ao voltar o foco, e ativa/recarrega sozinho sem precisar
+  de recarregamento manual (ver `regras-negocio.md`).
 - `src/data/kana.ts` — kana (seion, dakuten/handakuten, yōon) com romaji e
   famílias para o seletor de treino.
 - `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 completo

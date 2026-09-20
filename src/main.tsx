@@ -3,7 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ThemeProvider } from './lib/useTheme';
+import { setupPWAUpdate } from './lib/pwaUpdate';
 import './index.css';
+
+setupPWAUpdate();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
