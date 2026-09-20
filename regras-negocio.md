@@ -264,10 +264,44 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   de pontuação (`scoreDrawing`) é agnóstico de caractere.
 - **Furigana**: `src/components/Furigana.tsx` renderiza kanji com a leitura
   pequena em cima via `<ruby>/<rt>`, usado nos exemplos e leituras deste
-  módulo. Ainda não é usado nas lições (`src/licoes/*.tsx`) — essa é uma
-  revisão de conteúdo à parte, lição por lição.
+  módulo (e também na leitura extensiva — ver seção 4). Ainda não é usado
+  nas lições (`src/licoes/*.tsx`) — essa é uma revisão de conteúdo à parte,
+  lição por lição.
 
-## 4. Lições de estudo
+## 4. Leitura extensiva
+
+- **Dados**: `src/data/leitura/types.ts` define `ReadingWord` (`{ text,
+  reading?, meaning? }` — uma palavra, com furigana e significado
+  individuais), `ReadingLine` (`ReadingWord[]`, uma frase) e `ReadingText`
+  (`{ id, title, level, wordCount, summaryPt, lines }`). Conteúdo em
+  `src/data/leitura/textos.ts` (`LEITURA_TEXTOS`), escrito à mão — **sem
+  tokenizador/parser morfológico de japonês em runtime**: cada palavra do
+  texto já vem pré-segmentada com sua leitura e significado no próprio
+  dado, ao contrário de tentar decompor uma string corrida em tempo real.
+  Pontuação fica grudada no texto da última palavra da frase (ex.:
+  `"です。"`), sem token próprio.
+- **Por que não reaproveitar `Token` (quiz) ou `ItemKakitoriFonte`
+  (kakitori)**: nenhum dos dois cobre o caso — `Token` não tem leitura de
+  kanji nem significado por palavra; `ItemKakitoriFonte` é por item isolado,
+  não uma sequência de palavras formando um texto corrido.
+- **Níveis**: 1 (bem iniciante, só hiragana/katakana — mesma regra de "sem
+  kanji em frase corrida" das lições, aqui estendida ao texto inteiro) e 2
+  (kanji comuns já com furigana em cada palavra que os contém). Sem
+  restrição a só os kanji do módulo de Kanji (seção 3) — a furigana cobre
+  qualquer kanji, é conteúdo de leitura, não de memorização de um dataset
+  fechado.
+- **Fluxo** (`src/routes/Leitura.tsx` + `LeituraTexto.tsx`): listagem
+  agrupada por nível → tela de leitura com toggle de furigana (ligado por
+  padrão), um cartão fixo que mostra texto/leitura/significado da última
+  palavra tocada (em vez de tooltip flutuante — mais simples e robusto no
+  mobile, sem matemática de posicionamento), e `AudioButton` por linha
+  (reaproveita `speakJapanese` de `src/features/audio/speech.ts`, texto
+  puro sem ruby).
+- **Sem progresso persistido** nesta entrega — mesmo estado das lições
+  ("não há progresso rastreado por lição, por ora"): é conteúdo estático,
+  sem tabela nova no Dexie.
+
+## 5. Lições de estudo
 
 ### Estrutura
 - Cada lição é definida em `src/licoes/<id>.tsx` e exporta um `meta`
@@ -297,7 +331,7 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 2. Importe e registre no array `LICOES` em `src/licoes/index.ts`.
 3. Não é necessário alterar rotas — o roteamento é dinâmico pelo `id`.
 
-## 5. Dados e sincronização
+## 6. Dados e sincronização
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
 - **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress`,
@@ -315,7 +349,7 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   um backup já em v2 não ser reprocessado pela migração de v1→v2 sempre que
   `SCHEMA_VERSION` sobe de novo.
 
-## 6. Privacidade
+## 7. Privacidade
 
 - Nenhum dado sai do dispositivo automaticamente. Não há telemetria, conta nem
   envio para servidores. A única saída de dados é o arquivo de backup que o

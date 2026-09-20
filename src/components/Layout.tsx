@@ -11,6 +11,7 @@ const NAV = [
   { to: '/flashcards', label: 'Flash cards', shortLabel: 'Cards', end: false, icon: IconCards },
   { to: '/kana', label: 'Kana', end: false, icon: IconKana },
   { to: '/kanji', label: 'Kanji', end: false, icon: IconKanji },
+  { to: '/leitura', label: 'Leitura', shortLabel: 'Ler', end: false, icon: IconLeitura },
   { to: '/licoes', label: 'Lições', end: false, icon: IconBook },
 ];
 
@@ -137,6 +138,17 @@ function IconKanji({ className }: { className?: string }) {
     <span aria-hidden className={`grid place-items-center font-jp text-[0.95rem] leading-none ${className ?? ''}`}>
       字
     </span>
+  );
+}
+
+function IconLeitura(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M5.5 3h10L20 7.5V21H5.5z" />
+      <path d="M15.5 3v4.5H20" />
+      <path d="M8.5 12.5h7" />
+      <path d="M8.5 16h7" />
+    </svg>
   );
 }
 

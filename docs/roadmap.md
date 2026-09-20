@@ -77,7 +77,7 @@ o FSRS. Furigana (`src/components/Furigana.tsx`) saiu como componente novo
 junto — ver seção 6 sobre aplicá-lo nas lições. N4/N3 seguem como extensão
 futura, mesma estrutura.
 
-### 3.2 Leitura extensiva com textos graduados
+### 3.2 Leitura extensiva com textos graduados — ✅ implementado (2026-09), nível inicial
 **O quê:** biblioteca de textos curtos em hiragana/katakana (kanji com
 furigana opcional), organizados por nível de dificuldade (inspirado nos
 níveis 0–5 do Tadoku: de ~20-50 palavras únicas a textos de milhares de
@@ -90,6 +90,14 @@ leitura livre, só exemplos pontuais dentro das lições.
 importado para o dicionário pop-up.
 **Esforço:** médio para a primeira leva de textos (nível inicial); cresce
 conforme os níveis avançam.
+**Status:** feito — `/leitura`, 2 níveis × 15 textos (30 no total,
+`src/data/leitura/`),
+furigana (`Furigana.tsx`) com toggle, cartão de palavra tocada em vez de
+dicionário pop-up flutuante (mais simples e robusto no mobile — não puxa do
+vocabulário N5 importado, cada palavra já vem com significado embutido no
+próprio texto, pré-segmentada à mão em vez de tokenizada em runtime). Mais
+níveis/textos e um toggle de nível 0 (zero kanji, ainda mais básico que o
+Nível 1 atual) ficam como extensão futura, mesma estrutura de dados.
 
 ### 3.3 Listening via Web Speech API (SpeechSynthesis) — ✅ já existia
 **Correção (2026-09):** essa pesquisa listou isso como pendência, mas o app
@@ -206,18 +214,24 @@ Features de prioridade menor que as do Top 10, mas que valem constar no
 roadmap.
 
 ### Leitura
-- **Dicionário pop-up** ao tocar/clicar numa palavra do texto de leitura,
-  puxando do vocabulário já importado (N5 e futuros decks).
-- **Toggle de furigana** (mostrar/ocultar) nos textos de leitura e nas
-  tabelas de kanji das lições, para treinar a transição de "com apoio" para
-  "sem apoio" — coerente com a convenção atual de kanji sempre acompanhado
-  de leitura. O componente (`src/components/Furigana.tsx`, `<ruby>/<rt>`)
-  já existe desde a implementação de 3.1 — falta só aplicá-lo aqui. Isso
-  inclui trocar a coluna "Kanji" simples que `familia.tsx`, `pronomes.tsx`
-  e `sufixos.tsx` já têm hoje pelo mesmo componente, e considerar adicionar
-  referência de kanji nas lições que ainda não têm nenhuma (só onde o
-  kanji é realmente comum no uso real, ex.: verbos básicos). Trabalho de
-  conteúdo, lição por lição — não mecânico.
+- **Dicionário pop-up ao tocar numa palavra** — ✅ feito na implementação de
+  3.2, mas de forma diferente do que estava planejado aqui: em vez de puxar
+  do vocabulário N5 já importado (que não cobre todo o vocabulário que um
+  texto pode usar, e exigiria lookup difuso), cada palavra do texto já vem
+  pré-anotada com sua própria leitura+significado no dado
+  (`ReadingWord.meaning`, `src/data/leitura/types.ts`) — mais simples e sem
+  depender de tokenização em runtime. Puxar do vocabulário N5 continua
+  válido como ideia pra outra feature (ex.: sentence mining, seção
+  "Vocabulário e gramática" abaixo).
+- **Toggle de furigana nos textos de leitura** — ✅ feito (3.2),
+  `src/routes/LeituraTexto.tsx`, ligado por padrão.
+- **Toggle de furigana nas tabelas de kanji das lições** — continua
+  pendente. Isso inclui trocar a coluna "Kanji" simples que `familia.tsx`,
+  `pronomes.tsx` e `sufixos.tsx` já têm hoje pelo componente
+  `src/components/Furigana.tsx` (`<ruby>/<rt>`, já existe desde 3.1), e
+  considerar adicionar referência de kanji nas lições que ainda não têm
+  nenhuma (só onde o kanji é realmente comum no uso real, ex.: verbos
+  básicos). Trabalho de conteúdo, lição por lição — não mecânico.
 
 ### Vocabulário e gramática
 - **Exercício de gramática em contexto**: sortear de um banco maior de

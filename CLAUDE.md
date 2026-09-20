@@ -6,11 +6,12 @@ implementar mudanças.
 ## O que é
 
 App pessoal de estudo de japonês para um único usuário, uso doméstico, sem fins
-comerciais. Quatro funcionalidades centrais: flash cards com repetição espaçada,
+comerciais. Cinco funcionalidades centrais: flash cards com repetição espaçada,
 treino de hiragana/katakana (modo digitar romaji e modo desenhar com feedback de
 caligrafia), módulo de Kanji (repetição espaçada com radical/mnemônico + a
-mesma caligrafia do treino de kana) e lições de estudo (conteúdo estático de
-gramática e vocabulário).
+mesma caligrafia do treino de kana), leitura extensiva (textos curtos
+graduados por nível, com furigana e significado por palavra) e lições de
+estudo (conteúdo estático de gramática e vocabulário).
 
 ## Princípios de arquitetura (não quebrar sem combinar)
 
@@ -63,7 +64,16 @@ gramática e vocabulário).
   `KanjiDrawSession.tsx` — telas de aprender/revisar/praticar caligrafia do
   módulo de Kanji (`/kanji`).
 - `src/components/Furigana.tsx` — kanji com leitura em cima via
-  `<ruby>/<rt>`; usado no módulo de Kanji (ainda não nas lições).
+  `<ruby>/<rt>`; usado no módulo de Kanji e na leitura extensiva (ainda não
+  nas lições).
+- `src/data/leitura/types.ts` — tipos da leitura extensiva (`ReadingWord`,
+  `ReadingLine`, `ReadingText`); `src/data/leitura/textos.ts`
+  (`LEITURA_TEXTOS`) — textos originais por nível (1: só kana; 2: kanji com
+  furigana), pré-segmentados palavra a palavra (leitura+significado por
+  palavra), sem tokenizador em runtime.
+- `src/routes/Leitura.tsx` / `LeituraTexto.tsx` — listagem por nível e tela
+  de leitura (`/leitura`, `/leitura/:id`): toggle de furigana, cartão de
+  palavra selecionada, `AudioButton` por linha.
 - `src/lib/useHoldToPauseAdvance.ts` — hook do auto-avanço cronometrado do
   treino de kana (barra de progresso; segurar a tela pausa a contagem).
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/
