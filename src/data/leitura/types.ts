@@ -11,7 +11,13 @@ export interface ReadingWord {
 }
 
 /** Uma frase/linha do texto. */
-export type ReadingLine = ReadingWord[];
+export interface ReadingLine {
+  words: ReadingWord[];
+  /** Tradução natural em pt-BR da frase inteira, escrita à mão — não é a
+   * concatenação dos `meaning` de cada palavra. Exibida sob demanda (botão
+   * "ver tradução"), como complemento ao significado por palavra. */
+  translation: string;
+}
 
 export interface ReadingText {
   id: string;
