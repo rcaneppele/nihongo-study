@@ -270,7 +270,7 @@ export const quiz: QuizLicao = {
       tipo: 'verdadeiro-falso',
       afirmacao: 'しちじにごろおきます é a forma de dizer "acordo por volta das sete".',
       correta: false,
-      explicacao: 'に (horário exato) e ごろ (horário aproximado) não aparecem juntos: しちじごろおきます.',
+      explicacao: 'ごろ vem colado à hora: しちじごろおきます (ou しちじごろにおきます). に antes de ごろ não existe.',
     },
     {
       id: 'seikatsu-vf8',
@@ -608,7 +608,7 @@ export default function Seikatsu() {
           jpCols={[2]}
           rows={[
             ['Horário exato', 'に', 'しちじにおきます'],
-            ['Horário aproximado', 'ごろ (sem に)', 'しちじごろおきます'],
+            ['Horário aproximado', 'ごろ (ou ごろに)', 'しちじごろおきます / しちじごろにおきます'],
             ['Palavra relativa (まいにち, あさ, しゅうまつ…)', 'nenhuma', 'まいにちおきます'],
             ['Palavra relativa como tópico / contraste', 'は', 'しゅうまつは…'],
             ['Dia da semana', 'に (opcional na fala)', 'どようび(に)いきます'],
@@ -1153,7 +1153,8 @@ export default function Seikatsu() {
         />
         <p className="text-sm leading-relaxed text-ink">
           Quem ouve alguém contar a rotina não fica calado: reage. Essas reações curtas (
-          <span className="font-jp">あいづち</span>) mostram que você está acompanhando, e são
+          <span className="font-jp">あいづち</span>, <em>aizuchi</em>) mostram que você está
+          acompanhando, e são
           esperadas numa conversa japonesa.
         </p>
         <Ex
@@ -1221,7 +1222,7 @@ export default function Seikatsu() {
           <span className="font-jp">ぜんぜん</span>.
         </p>
         <Ex jp="しゅうまつは、たいていくじごろおきます。" romaji="shuumatsu wa, taitei ku-ji goro okimasu." pt="No fim de semana, geralmente acordo por volta das nove." />
-        <Ex jp="どようびのあさは、よくこうえんでジョギングをします。" romaji="doyoubi no asa wa, yoku kouen de jogingu o shimasu." pt="Nas manhãs de sábado, corro bastante no parque." notes="どようびのあさ = manhã de sábado; の liga as duas palavras de tempo" />
+        <Ex jp="どようびのあさは、よくこうえんでジョギングをします。" romaji="doyoubi no asa wa, yoku kouen de jogingu o shimasu." pt="Nas manhãs de sábado, costumo correr no parque." notes="どようびのあさ = manhã de sábado; の liga as duas palavras de tempo" />
         <Ex jp="ごごは、ときどきともだちとかいものにいきます。" romaji="gogo wa, tokidoki tomodachi to kaimono ni ikimasu." pt="À tarde, às vezes vou fazer compras com amigos." notes="かいものにいく = ir fazer compras (a atividade como destino)" />
         <Ex jp="にちようびは、そうじをして、せんたくをします。" romaji="nichiyoubi wa, souji o shite, sentaku o shimasu." pt="No domingo, limpo a casa e lavo a roupa." />
         <Ex jp="たまに、ケーキもつくります。" romaji="tama ni, keeki mo tsukurimasu." pt="De vez em quando, também faço bolo." notes="も = também, no lugar de を" />
@@ -1237,7 +1238,7 @@ export default function Seikatsu() {
         <Ex jp="きのうは、たいへんないちにちでした。" romaji="kinou wa, taihen na ichinichi deshita." pt="Ontem foi um dia difícil." notes="でした: passado de です (lição de Usos do です)" />
         <Ex jp="あさ、ねぼうしました。" romaji="asa, nebou shimashita." pt="De manhã, perdi a hora." notes="ねぼうする = dormir demais, perder a hora" />
         <Ex jp="しちじにおきて、あさごはんはたべませんでした。" romaji="shichi-ji ni okite, asagohan wa tabemasen deshita." pt="Acordei às sete e não tomei café da manhã." notes="おきて fica no passado por causa do último verbo" />
-        <Ex jp="でんしゃもおくれましたから、かいしゃにはくじじゅっぷんにつきました。" romaji="densha mo okuremashita kara, kaisha ni wa ku-ji jup-pun ni tsukimashita." pt="O trem também atrasou, então cheguei à empresa às nove e dez." notes="つく = chegar; おくれる = atrasar. se o trem atrasa, a ferrovia emite um comprovante (ちえんしょうめいしょ) para mostrar no trabalho" />
+        <Ex jp="でんしゃもおくれましたから、かいしゃにはくじじゅっぷんにつきました。" romaji="densha mo okuremashita kara, kaisha ni wa ku-ji jup-pun ni tsukimashita." pt="O trem também atrasou, então cheguei à empresa às nove e dez." notes="つく = chegar; おくれる = atrasar. Se o trem atrasa, a ferrovia emite um comprovante (ちえんしょうめいしょ) para mostrar no trabalho" />
         <Ex jp="ひるごはんは、つくえでおにぎりをたべました。" romaji="hirugohan wa, tsukue de onigiri o tabemashita." pt="No almoço, comi um onigiri na mesa de trabalho." />
         <Ex jp="はちじまでざんぎょうしました。" romaji="hachi-ji made zangyou shimashita." pt="Fiz hora extra até as oito." />
         <Ex jp="ジムには、いきませんでした。" romaji="jimu ni wa, ikimasen deshita." pt="Na academia, não fui." notes="には = に + は: contraste com o costume (ときどきいきます)" />
@@ -1347,7 +1348,12 @@ export default function Seikatsu() {
             ['Minutos sempre com ふん', 'じゅうふん / さんふん', 'じゅっぷん / さんぷん', 'Depois de 1, 3, 4, 6, 8 e 10, ふん vira ぷん.'],
             ['に com palavra relativa', 'まいにちにおきます', 'まいにちおきます', 'まいにち, あさ, きのう, しゅうまつ não levam に.'],
             ['Horário sem partícula', 'ろくじおきます', 'ろくじにおきます / ろくじごろおきます', 'Horário de relógio pede に (exato) ou ごろ (aproximado).'],
-            ['に e ごろ juntos', 'ろくじにごろおきます', 'ろくじごろおきます', 'ごろ já substitui に.'],
+            [
+              'に antes de ごろ',
+              'ろくじにごろおきます',
+              'ろくじごろおきます / ろくじごろにおきます',
+              'ごろ vem colado à hora; se quiser usar に, ela vem depois (ごろに). にごろ não existe.',
+            ],
             ['ごご com relógio de 24h', 'ごごじゅうしちじ', 'ごごごじ / じゅうしちじ', 'ごご/ごぜん só com o relógio de 12 horas, e antes da hora.'],
             ['"Nunca" com verbo afirmativo', 'ぜんぜんたべます', 'ぜんぜんたべません', 'A negação mora no verbo; ぜんぜん e あまり só medem o quanto.'],
             ['"Tomar café da manhã" com のむ', 'あさごはんをのみます', 'あさごはんをたべます', 'Refeição se come; のむ é só para bebida.'],
@@ -1371,7 +1377,7 @@ export default function Seikatsu() {
             ['Meia hora', 'はん', 'ろくじはん'],
             ['Manhã / tarde', 'ごぜん / ごご antes da hora (relógio de 12h)', 'ごごさんじ'],
             ['Ponto × duração', 'じ = no relógio; じかん = quanto tempo', 'にじ / にじかん'],
-            ['Horário exato / aproximado', 'に / ごろ (nunca juntos)', 'しちじに / しちじごろ'],
+            ['Horário exato / aproximado', 'に / ごろ (ou ごろに; nunca にごろ)', 'しちじに / しちじごろ'],
             ['Palavras relativas', 'sem に (ou は para contraste)', 'まいにち / しゅうまつは'],
             ['Ordem da frase', 'quando → frequência → hora → com quem → onde → o quê → verbo', 'へいじつは、よくじゅうにじにどうりょうとしょくどうでたべます'],
             ['Frequência (afirmativa)', 'いつも > よく > ときどき > たまに', 'よくみます'],

@@ -208,7 +208,7 @@ export default function Apresentacao() {
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>Montar uma auto-apresentação completa, seguindo a ordem que os japoneses esperam.</li>
           <li>
-            Escolher o registro certo — casual, padrão ou muito formal — para nome, origem e
+            Escolher o registro certo — simples, padrão ou muito formal — para nome, origem e
             encerramento, conforme a situação.
           </li>
           <li>
@@ -259,7 +259,7 @@ export default function Apresentacao() {
             [
               '2',
               'Dizer o nome',
-              '〜です (casual) / 〜といいます (padrão) / 〜ともうします (muito formal)',
+              '〜です (simples) / 〜といいます (padrão) / 〜ともうします (muito formal)',
             ],
             ['3', 'Dizer de onde é', '〜からきました。(kara kimashita)'],
             ['4', 'Dizer o que faz', '〜をしています。(o shite imasu)'],
@@ -293,11 +293,11 @@ export default function Apresentacao() {
             ['〜にすんでいます', '~ ni sunde imasu', 'moro em ~', 'neutro'],
             ['〜さいです', '~ sai desu', 'tenho ~ anos', 'neutro'],
             ['〜をしています', '~ o shite imasu', 'trabalho como ~', 'neutro'],
-            ['〜のがくせいです', '~ no gakusei desu', 'sou estudante de ~', 'neutro'],
+            ['〜のがくせいです', '~ no gakusei desu', 'sou estudante de ~ (escola, faculdade)', 'neutro'],
             ['しゅみは〜です', 'shumi wa ~ desu', 'meu hobby é ~', 'neutro'],
             ['〜がすきです', '~ ga suki desu', 'gosto de ~', 'neutro'],
             ['〜をべんきょうしています', '~ o benkyou shite imasu', 'estou estudando ~', 'neutro'],
-            ['よろしくおねがいします', 'yoroshiku onegaishimasu', 'muito prazer / às ordens', 'neutro'],
+            ['よろしくおねがいします', 'yoroshiku onegaishimasu', 'muito prazer / conto com você', 'neutro'],
             ['どうぞよろしくおねがいします', 'douzo yoroshiku onegaishimasu', 'muito prazer (mais formal)', 'formal'],
             ['よろしく', 'yoroshiku', 'prazer (informal)', 'casual'],
           ]}
@@ -307,11 +307,21 @@ export default function Apresentacao() {
           por uma palavra sua. Por exemplo, em <span className="font-jp">しゅみは〜です</span> você
           coloca seu hobby no lugar do <span className="font-jp">〜</span>.
         </p>
+        <Note>
+          Todas as frases desta tabela — inclusive <span className="font-jp">〜です</span> — já são{' '}
+          <strong>educadas</strong> (a trilha educada, com <span className="font-jp">です</span> e{' '}
+          <span className="font-jp">ます</span>). O que muda entre <span className="font-jp">です</span>,{' '}
+          <span className="font-jp">といいます</span> e <span className="font-jp">ともうします</span> é
+          só o grau de formalidade <em>dentro</em> do educado: <span className="font-jp">です</span> é
+          o jeito simples e neutro, <span className="font-jp">といいます</span> é um pouco mais
+          cerimonioso, <span className="font-jp">ともうします</span> é o mais formal. A fala realmente
+          casual, entre amigos, usa outras formas, que ficam fora desta lição.
+        </Note>
         <Ex
           jp="たなかじろうといいます。"
           romaji="tanaka jirou to iimasu."
           pt="Me chamo Tanaka Jiro."
-          notes="といいます — meio-termo entre です (casual) e ともうします (muito formal); serve pra quase toda situação"
+          notes="といいます — meio-termo entre です (simples) e ともうします (muito formal); serve para quase toda situação"
         />
       </Section>
 
@@ -343,6 +353,14 @@ export default function Apresentacao() {
             ['します (fazer)', 'いたします', 'encerramento, e verbos em geral'],
           ]}
         />
+        <Note>
+          <strong>Armadilha:</strong> a forma humilde serve só para falar de{' '}
+          <strong>você mesmo</strong> (e das suas ações). Nunca use{' '}
+          <span className="font-jp">もうします</span>, <span className="font-jp">まいりました</span>{' '}
+          ou <span className="font-jp">おります</span> para descrever a pessoa com quem fala ou alguém
+          que você está apresentando — isso a "rebaixaria". Para apresentar outra pessoa, use a forma
+          simples: <span className="font-jp">こちらはたなかさんです</span> (veja mais abaixo).
+        </Note>
       </Section>
 
       <Section title="Exemplo 1 — apresentação formal (escola ou trabalho)">
@@ -377,26 +395,29 @@ export default function Apresentacao() {
         <Ex
           jp="にほんごはまだべんきょうちゅうですが、よろしくおねがいいたします。"
           romaji="nihongo wa mada benkyouchuu desu ga, yoroshiku onegai itashimasu."
-          pt="Ainda estou estudando japonês, mas muito prazer."
-          notes="いたします é a forma ainda mais educada de します. Encerramento formal."
+          pt="Ainda estou estudando japonês, mas conto com vocês."
+          notes="いたします é a versão humilde de します: よろしくおねがいいたします é o encerramento mais formal."
         />
       </Section>
 
-      <Section title="Exemplo 2 — apresentação casual (turma ou grupo de hobby)">
+      <Section title="Exemplo 2 — apresentação descontraída (turma ou grupo de hobby)">
         <p className="text-sm leading-relaxed text-ink">
-          Aqui o tom é leve, para colegas de curso ou pessoas da sua idade.
+          Aqui o tom é leve, para colegas de curso ou pessoas da sua idade. Repare que continua
+          sendo educado (<span className="font-jp">です</span>, <span className="font-jp">ます</span>):
+          numa primeira apresentação, mesmo entre jovens, o japonês começa pela trilha educada. Só
+          não usa as formas humildes.
         </p>
         <Ex
           jp="はじめまして！たなかです。"
           romaji="hajimemashite! tanaka desu."
           pt="Prazer! Sou Tanaka."
-          notes="No casual, basta o sobrenome + です. Sem ともうします."
+          notes="Em tom descontraído, basta o sobrenome + です. Sem ともうします."
         />
         <Ex
-          jp="ブラジルしゅっしんで、サンパウロにすんでいます。"
-          romaji="burajiru shusshin de, san pauro ni sunde imasu."
-          pt="Sou do Brasil e moro em São Paulo."
-          notes="しゅっしん = origem (de onde você é). にすんでいます = moro em (onde você vive hoje)."
+          jp="ブラジルしゅっしんで、いまはとうきょうにすんでいます。"
+          romaji="burajiru shusshin de, ima wa toukyou ni sunde imasu."
+          pt="Sou do Brasil e agora moro em Tóquio."
+          notes={'しゅっしん = origem (onde nasceu/cresceu); すんでいます = onde mora hoje. で liga as duas partes ("sou de... e...")'}
         />
         <Note>
           <span className="font-jp">〜からきました</span> e{' '}
@@ -405,14 +426,16 @@ export default function Apresentacao() {
           bem quando você só quer situar de onde é; <span className="font-jp">しゅっしん</span>{' '}
           ("origem/terra natal") é a palavra certa quando quer deixar claro onde nasceu ou
           cresceu, mesmo morando em outro lugar hoje — como no exemplo acima, onde しゅっしん
-          (Brasil) e すんでいます (São Paulo) marcam duas informações diferentes na mesma
-          frase.
+          (Brasil) e すんでいます (Tóquio) marcam duas informações diferentes na mesma frase.
+          Morando no Japão, <span className="font-jp">ブラジルからきました</span> também é natural;
+          mas se você já mora lá há anos, <span className="font-jp">ブラジルしゅっしんです</span>{' '}
+          deixa mais claro que o Brasil é a sua origem, e não o lugar de onde acabou de chegar.
         </Note>
         <Ex
           jp="にじゅうはっさいです。"
           romaji="nijuu hassai desu."
           pt="Tenho 28 anos."
-          notes="Atenção: 8 anos é はっさい (hassai), com som dobrado, e não はちさい. É uma leitura irregular comum."
+          notes="Atenção: 8 anos é はっさい (hassai), com som dobrado, e não はちさい. Também mudam: いっさい (1), じゅっさい (10) e はたち (20 anos)"
         />
         <Ex
           jp="いま、にほんごをべんきょうしています。アニメがきっかけではじめました。"
@@ -468,7 +491,7 @@ export default function Apresentacao() {
           jp="こちらはたなかさんです。"
           romaji="kochira wa tanaka-san desu."
           pt="Este é o sr. Tanaka."
-          notes={'こちら é a forma educada de apontar uma pessoa ("este aqui"). Nunca aponte com o dedo; use こちら.'}
+          notes={'こちら é a forma educada de indicar uma pessoa ("este aqui"). Indique com a mão aberta, nunca com o dedo'}
         />
         <Ex
           jp="たなかさんをごしょうかいします。"
@@ -483,10 +506,10 @@ export default function Apresentacao() {
           notes="どうりょう = colega do mesmo nível no trabalho."
         />
         <Ex
-          jp="こちらのかたがやまだせんせいです。"
-          romaji="kochira no kata ga yamada-sensei desu."
+          jp="こちらのかたは、やまだせんせいです。"
+          romaji="kochira no kata wa, yamada-sensei desu."
           pt="Esta pessoa é a professora Yamada."
-          notes={'かた = forma respeitosa de "pessoa". せんせい = professor(a).'}
+          notes={'かた = forma respeitosa de "pessoa". せんせい = professor(a), usado como título depois do nome'}
         />
       </Section>
 
@@ -501,7 +524,7 @@ export default function Apresentacao() {
             ['にほんごはどのくらいべんきょうしていますか？', 'nihongo wa dono kurai benkyou shite imasu ka?', 'Há quanto tempo estuda japonês?'],
             ['どうしてにほんごをべんきょうしていますか？', 'doushite nihongo o benkyou shite imasu ka?', 'Por que estuda japonês?'],
             ['にほんにきたことがありますか？', 'nihon ni kita koto ga arimasu ka?', 'Já veio ao Japão?'],
-            ['すきなにほんしょくはなんですか？', 'suki na nihonshoku wa nan desu ka?', 'Que comida japonesa você gosta?'],
+            ['すきなにほんしょくはなんですか？', 'suki na nihonshoku wa nan desu ka?', 'De que comida japonesa você gosta?'],
             ['しゅみはなんですか？', 'shumi wa nan desu ka?', 'Qual é o seu hobby?'],
             ['おしごとはなにをされていますか？', 'oshigoto wa nani o sarete imasu ka?', 'O que você faz de trabalho?'],
           ]}
@@ -518,13 +541,14 @@ export default function Apresentacao() {
         <Ex
           jp="アニメやゲームがきっかけで、にほんごにきょうみをもちました。"
           romaji="anime ya geemu ga kikkake de, nihongo ni kyoumi o mochimashita."
-          pt="Anime e games foram o motivo, e me interessei pela língua."
+          pt="Me interessei por japonês por causa de anime e games."
           notes="や = lista aberta ('anime, games e outras coisas do tipo') — detalhes na lição de Partículas. きょうみをもつ = ter interesse por algo."
         />
         <Ex
           jp="まだいったことがありませんが、いつかいきたいとおもっています。"
           romaji="mada itta koto ga arimasen ga, itsuka ikitai to omotte imasu."
           pt="Ainda não fui, mas pretendo ir algum dia."
+          notes={'resposta a にほんにきたことがありますか; いきたいとおもっています ("penso em ir") soa mais suave que いきたいです'}
         />
         <Ex
           jp="にほんごはまだあまりじょうずじゃないですが、がんばっています。"
@@ -553,6 +577,14 @@ export default function Apresentacao() {
             ['ハイキング', 'haikingu', 'trilha / caminhada'],
           ]}
         />
+        <p className="text-sm leading-relaxed text-ink">
+          Com <span className="font-jp">しゅみは〜です</span>, os substantivos entram direto (
+          <span className="font-jp">しゅみはりょこうです</span>). Já os itens com verbo (
+          <span className="font-jp">おんがくをきく</span>, <span className="font-jp">えいがをみる</span>
+          ...) precisam de <span className="font-jp">こと</span> no fim:{' '}
+          <span className="font-jp">しゅみはえいがをみることです</span> — "meu hobby é assistir a
+          filmes".
+        </p>
       </Section>
 
       <Section title="Vocabulário de ocupações">
@@ -563,7 +595,7 @@ export default function Apresentacao() {
             ['がくせい', 'gakusei', 'estudante'],
             ['かいしゃいん', 'kaishain', 'funcionário de empresa'],
             ['エンジニア', 'enjinia', 'engenheiro / desenvolvedor'],
-            ['デザイナー', 'dezaina', 'designer'],
+            ['デザイナー', 'dezainaa', 'designer'],
             ['せんせい', 'sensei', 'professor(a)'],
             ['いしゃ', 'isha', 'médico(a)'],
             ['かんごし', 'kangoshi', 'enfermeiro(a)'],
@@ -572,6 +604,20 @@ export default function Apresentacao() {
             ['こうむいん', 'koumuin', 'servidor público'],
           ]}
         />
+        <Note>
+          Para dizer a profissão, use <span className="font-jp">〜です</span> (
+          <span className="font-jp">がくせいです</span>) ou <span className="font-jp">〜をしています</span>{' '}
+          (<span className="font-jp">エンジニアをしています</span>).{' '}
+          <strong>
+            Sobre <span className="font-jp">せんせい</span>:
+          </strong>{' '}
+          ela é, antes de tudo, um título de respeito que os <em>outros</em> usam para o professor ou
+          o médico — por isso nunca vai depois do próprio nome. Já{' '}
+          <span className="font-jp">がっこうのせんせいです</span> ("sou professor de escola") é comum
+          na conversa do dia a dia; numa situação formal (entrevista, apresentação profissional), soa
+          melhor o termo neutro <span className="font-jp">きょうし</span> (<em>kyoushi</em>):{' '}
+          <span className="font-jp">きょうしをしています</span>.
+        </Note>
       </Section>
 
       <Section title="Dicas culturais">
@@ -626,19 +672,45 @@ export default function Apresentacao() {
               </>,
             ],
             [
-              'Dizer só o sobrenome em contexto muito formal',
+              'Dizer só o sobrenome numa entrevista ou cerimônia',
               'たなかともうします。',
               'たなかじろうともうします。',
               <>
-                Com <span className="font-jp">ともうします</span> (bem formal), o nome completo
-                soa mais apropriado.
+                Nesses momentos espera-se o nome completo. No dia a dia do trabalho, só o sobrenome
+                com <span className="font-jp">ともうします</span> é comum e não está errado.
               </>,
             ],
             [
-              'Misturar registros na mesma apresentação',
-              'たなかです。げんざい、ITのしごとをしております。',
-              'たなかともうします。げんざい、ITのしごとをしております。 (formal) / たなかです。いま、ITのしごとをしています。 (casual)',
-              'です é casual/neutro; おります é humilde. Escolha um registro e mantenha do início ao fim.',
+              <>
+                Usar <span className="font-jp">さん</span> no próprio nome
+              </>,
+              'わたしはたなかさんです。',
+              'わたしはたなかです。',
+              <>
+                <span className="font-jp">さん</span> é um tratamento de respeito para os outros;
+                usá-lo em si mesmo soa estranho ou até cômico.
+              </>,
+            ],
+            [
+              'Usar forma humilde para outra pessoa',
+              'こちらはたなかさんともうします。',
+              'こちらはたなかさんです。',
+              <>
+                <span className="font-jp">もうします</span>, <span className="font-jp">まいります</span>,{' '}
+                <span className="font-jp">おります</span> só valem para você mesmo; aplicadas a outra
+                pessoa, a rebaixam.
+              </>,
+            ],
+            [
+              <>
+                Pôr <span className="font-jp">せんせい</span> no próprio nome
+              </>,
+              'やまだせんせいです。 (apresentando a si mesmo)',
+              'やまだです。',
+              <>
+                <span className="font-jp">せんせい</span> é um título que os outros dão a você; como{' '}
+                <span className="font-jp">さん</span>, nunca vai no próprio nome.
+              </>,
             ],
           ]}
         />
@@ -650,12 +722,14 @@ export default function Apresentacao() {
           jpCols={[1]}
           rows={[
             ['Cumprimentar', 'はじめまして'],
-            ['Dizer o nome (casual)', '〜です'],
+            ['Dizer o nome (simples)', '〜です'],
             ['Dizer o nome (padrão)', '〜といいます'],
             ['Dizer o nome (muito formal)', '〜ともうします'],
             ['Dizer de onde veio / sua origem', '〜からきました / 〜しゅっしんです'],
             ['Falar um hobby', 'しゅみは〜です'],
             ['Encerrar', 'よろしくおねがいします'],
+            ['Encerrar (muito formal)', 'どうぞよろしくおねがいいたします'],
+            ['Apresentar outra pessoa', 'こちらは〜さんです'],
           ]}
         />
       </Section>

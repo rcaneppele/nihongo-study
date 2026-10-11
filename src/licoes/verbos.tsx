@@ -368,13 +368,13 @@ export default function Verbos() {
         <Ex jp="たべませんでした。" romaji="tabemasen deshita." pt="Não comi. (passado negativo)" />
       </Section>
 
-      <Section title="A forma de dicionário (じしょけい)">
+      <Section title="A forma de dicionário (じしょけい, jishokei)">
         <p className="text-sm leading-relaxed text-ink">
           É a forma "crua" do verbo, a que aparece nos dicionários. Daí o nome.
         </p>
         <p className="text-sm leading-relaxed text-ink">
-          Todo verbo nessa forma termina em um dos nove sons da <strong>coluna う</strong>: う,
-          く, ぐ, す, つ, ぬ, ぶ, む, る. Nenhum outro som é possível no final.
+          Todo verbo nessa forma termina em um dos nove sons terminados em <strong>u</strong> (a
+          linha do う na tabela de kana): う, く, ぐ, す, つ, ぬ, ぶ, む, る. Nenhum outro som é possível no final.
         </p>
         <p className="text-sm leading-relaxed text-ink">Essa forma tem duas funções:</p>
         <ol className="list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
@@ -415,8 +415,8 @@ export default function Verbos() {
       <Section title="Grupo 1 em detalhe — ごだんどうし">
         <p className="text-sm leading-relaxed text-ink">
           <span className="font-jp">ごだん</span> significa "cinco degraus". O nome descreve o
-          que acontece: a última sílaba do verbo "sobe e desce" por cinco vogais (あ・い・う・え・
-          お), conforme a conjugação.
+          que acontece: a última sílaba do verbo "sobe e desce" por cinco vogais
+          (あ・い・う・え・お), conforme a conjugação.
         </p>
         <p className="text-sm leading-relaxed text-ink">
           Por exemplo, <span className="font-jp">のむ</span> (<em>nomu</em>) pode virar のま,
@@ -555,8 +555,8 @@ export default function Verbos() {
             Simples e sempre igual.
           </li>
           <li>
-            <strong>Grupo 1:</strong> troque o som -u final pela sílaba da coluna い daquela
-            consoante. <span className="font-jp">のむ → のみ</span> (む → み).
+            <strong>Grupo 1:</strong> troque o som -u final pela sílaba da mesma consoante
+            terminada em <strong>i</strong>. <span className="font-jp">のむ → のみ</span> (む → み).
           </li>
           <li>
             <strong>Grupo 3:</strong> irregular. <span className="font-jp">する → し</span>,{' '}
@@ -627,9 +627,15 @@ export default function Verbos() {
           <strong>Regra prática para iniciantes:</strong> comece pela trilha educada (ます) — é
           sempre uma escolha segura com desconhecidos, no trabalho, em lojas e repartições, do
           mesmo jeito que です (lição de Usos do です). Guarde a casual para quando a conversa já
-          for próxima, ou quando a outra pessoa relaxar o tom primeiro. E dentro de uma mesma frase,
-          escolha uma trilha e mantenha-a até o fim — não misture (por exemplo, terminar com ます
-          mas usar uma forma casual solta no meio sem necessidade).
+          for próxima, ou quando a outra pessoa relaxar o tom primeiro.
+          <p className="mt-2">
+            Quem define a trilha de uma frase é o <strong>verbo do final</strong>. Dentro de uma
+            frase educada, é normal aparecer forma simples no meio, antes de partículas como{' '}
+            <span className="font-jp">ので</span> ou <span className="font-jp">から</span> (
+            <span className="font-jp">でんしゃがおくれたので、おくれます</span> — "o trem atrasou,
+            então vou me atrasar"). O que soa incoerente é o contrário: ます no meio e final casual (
+            <span className="font-jp line-through">たべますから、いかない</span>).
+          </p>
         </Note>
       </Section>
 
@@ -743,7 +749,8 @@ export default function Verbos() {
         </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
-            <strong>Grupo 1:</strong> troque o -u final pela sílaba da coluna あ e acrescente ない.{' '}
+            <strong>Grupo 1:</strong> troque o -u final pela sílaba da mesma consoante terminada
+            em <strong>a</strong> e acrescente ない.{' '}
             <span className="font-jp">のむ → のまない</span>. Verbos em う viram わ (não あ):{' '}
             <span className="font-jp">かう → かわない</span>.
           </li>
@@ -794,8 +801,8 @@ export default function Verbos() {
         <Note>
           <strong>ません ou ないです?</strong> As duas são educadas e corretas. ません é a forma
           de referência: é a que aparece em avisos, anúncios, e-mails de trabalho e situações
-          formais. Na conversa educada do dia a dia, ないです é muito ouvido — levantamentos
-          com conversas gravadas já o encontraram mais vezes que ません. A diferença em relação a
+          formais. Na conversa educada do dia a dia, ないです é muito ouvido e vem ganhando
+          espaço. A diferença em relação a
           です: lá, じゃないです é a escolha natural na fala; aqui, ません continua sendo a aposta
           mais segura quando a situação for formal. Na dúvida, ません.
         </Note>
@@ -895,8 +902,8 @@ export default function Verbos() {
         <Note>
           <strong>Exceção importante:</strong> <span className="font-jp">いく</span> (ir) não
           segue a regra de く → いた. O certo é <span className="font-jp">いった</span> (
-          <em>itta</em>), não いいた. É a única exceção dessa regra em todo o japonês — e vale
-          igual para a forma て, mais adiante.
+          <em>itta</em>), não いいた. É a única exceção comum dessa regra — e vale igual para a
+          forma て, mais adiante.
         </Note>
         <Ex
           jp="きのう、こうえんまではしりました。"
@@ -951,7 +958,8 @@ export default function Verbos() {
           <span className="font-jp">ない</span> termina em い e se comporta como um adjetivo -い
           só para este fim: troque い por かった, do mesmo jeito que{' '}
           <span className="font-jp">たかい</span> (caro) vira{' '}
-          <span className="font-jp">たかかった</span> (era caro).
+          <span className="font-jp">たかかった</span> (era caro) — regra que você verá de novo com os
+          adjetivos -い.
         </p>
         <GrammarTable
           headers={['Dicionário', 'ない (negativa casual)', 'なかった (passado negativo casual)']}
@@ -984,10 +992,10 @@ export default function Verbos() {
           notes="なかったです — educado em tom de conversa, resposta natural ao しゅうまつ、なにをしましたか？"
         />
         <Ex
-          jp="ゆうべはよくねなかった。"
-          romaji="yuube wa yoku nenakatta."
-          pt="Ontem à noite não dormi bem."
-          notes="casual. ねる (Grupo 2) → ねない → ねなかった"
+          jp="ゆうべはあまりねなかった。"
+          romaji="yuube wa amari nenakatta."
+          pt="Ontem à noite não dormi muito."
+          notes={`casual. ねる (Grupo 2) → ねない → ねなかった. あまり + negativo = "não muito"`}
         />
         <Note>
           <strong>"Não fiz" ≠ "ainda não fiz".</strong> Se um colega pergunta{' '}
@@ -1111,10 +1119,10 @@ export default function Verbos() {
               'ませんでした diz que não aconteceu (e a ocasião passou); "ainda não" pede まだ.',
             ],
             [
-              'Misturar as duas trilhas',
+              'Educado no meio, casual no fim',
               'たべますから、いかない',
-              'たべるから、いかない (casual) / たべますから、いきません (educado)',
-              'Mantenha a mesma trilha na frase.',
+              'たべるから、いかない (casual) / たべるから、いきません ou たべますから、いきません (educado)',
+              'Quem define a trilha é o final da frase. Forma simples no meio de frase educada é normal; ます no meio com final casual soa incoerente.',
             ],
           ]}
         />

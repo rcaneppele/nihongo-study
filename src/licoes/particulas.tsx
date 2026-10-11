@@ -281,6 +281,20 @@ export const quiz: QuizLicao = {
       correta: false,
       explicacao: 'など reforça a ideia de lista aberta, mas não é obrigatório — や sozinha já deixa a lista aberta.',
     },
+    {
+      id: 'particulas-vf8',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'だれはきましたか？ é a forma correta de perguntar "quem veio?".',
+      correta: false,
+      explicacao: 'Palavra interrogativa como sujeito sempre leva が: だれがきましたか？',
+    },
+    {
+      id: 'particulas-vf9',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'さんじごろにおきます é uma frase errada, porque ごろ e に nunca aparecem juntas.',
+      correta: false,
+      explicacao: 'さんじごろおきます e さんじごろにおきます são ambas corretas. O que ごろ não faz é marcar duração (para isso, ぐらい).',
+    },
   ],
 };
 
@@ -309,7 +323,8 @@ export default function Particulas() {
         />
         <p className="text-sm leading-relaxed text-ink">
           Isso vale só quando essas três sílabas funcionam como partícula. Como parte de uma
-          palavra comum (ですはち, por exemplo), leem-se normalmente.
+          palavra comum (<span className="font-jp">はな</span>, <em>hana</em>, flor;{' '}
+          <span className="font-jp">へや</span>, <em>heya</em>, quarto), leem-se normalmente.
         </p>
       </Section>
 
@@ -321,8 +336,8 @@ export default function Particulas() {
             por preposição — em japonês a lógica é outra.
           </li>
           <li>
-            Escolher corretamente entre os pares que mais confundem: は/が, に/で, と/や, だけ/
-            しか, ので/から, のに (contraste) vs. から (razão), e ごろ (tempo aproximado) vs.
+            Escolher corretamente entre os pares que mais confundem: は/が, に/で, と/や,
+            だけ/しか, ので/から, のに (contraste) vs. から (razão), e ごろ (tempo aproximado) vs.
             ぐらい (quantidade/duração aproximada).
           </li>
           <li>
@@ -474,8 +489,14 @@ export default function Particulas() {
             </li>
           </ul>
           <p className="mt-2">
-            Regra prática: em respostas a perguntas com <span className="font-jp">だれ</span>{' '}
-            (quem) ou <span className="font-jp">なに</span> (o quê), use が.
+            Regra prática: quando a palavra interrogativa é o sujeito (
+            <span className="font-jp">だれ</span>, <span className="font-jp">なに</span>,{' '}
+            <span className="font-jp">どれ</span>), ela vem sempre com が — nunca{' '}
+            <span className="font-jp line-through">だれは</span> — e a resposta também usa が:{' '}
+            <span className="font-jp">だれがきましたか？</span> →{' '}
+            <span className="font-jp">たなかさんがきました。</span> (Atenção: isso vale para o
+            sujeito. Em <span className="font-jp">なにをたべましたか</span>, なに é objeto, e a
+            resposta usa を.)
           </p>
         </Note>
       </Section>
@@ -506,7 +527,7 @@ export default function Particulas() {
           jp="はしをわたります。"
           romaji="hashi o watarimasu."
           pt="Atravesso a ponte."
-          notes="aqui を não é objeto, mas o percurso atravessado"
+          notes={`aqui を não é objeto, mas o percurso atravessado. (はし aqui é "ponte"; mais adiante, em はしでたべます, はし são os pauzinhos (hashi) — mesma escrita e mesmo som, palavras diferentes)`}
         />
         <Note>
           Nem todo predicado que soa como "objeto" em português usa を. Verbos como{' '}
@@ -531,7 +552,7 @@ export default function Particulas() {
               'tsukue no ue ni hon ga arimasu',
               'Há um livro sobre a mesa.',
             ],
-            ['Horário exato', 'さんじにおきます', 'san-ji ni okimasu', 'Acordo às 3 horas.'],
+            ['Horário exato', 'ろくじにおきます', 'roku-ji ni okimasu', 'Acordo às 6 horas.'],
             ['Dia / data', 'げつようびにきてください', 'getsuyoubi ni kite kudasai', 'Venha na segunda-feira.'],
             ['Frequência', 'しゅうにさんかい', 'shuu ni san-kai', '3 vezes por semana'],
             ['Destinatário', 'ともだちにでんわします', 'tomodachi ni denwa shimasu', 'Ligo para meu amigo.'],
@@ -592,19 +613,20 @@ export default function Particulas() {
           <span className="font-jp">ごろ</span> vem depois de uma expressão de tempo e marca esse
           horário como <strong>aproximado</strong> — "por volta de", "mais ou menos". É o par
           natural de <span className="font-jp">に</span>: に marca um horário exato, ごろ marca um
-          horário aproximado, e os dois nunca aparecem juntos na mesma expressão.
+          horário aproximado. (Tecnicamente, ごろ é um sufixo e não uma partícula, mas para o uso
+          prático pode tratá-la junto com elas.)
         </p>
         <Ex
-          jp="さんじにおきます。"
-          romaji="san-ji ni okimasu."
-          pt="Acordo às 3 horas. (exatamente)"
+          jp="ろくじにおきます。"
+          romaji="roku-ji ni okimasu."
+          pt="Acordo às 6 horas. (exatamente)"
           notes="に — horário exato, sem espaço para aproximação"
         />
         <Ex
-          jp="さんじごろおきます。"
-          romaji="san-ji goro okimasu."
-          pt="Acordo por volta das 3 horas."
-          notes="ごろ — mesma frase, agora aproximada. Só a partícula muda"
+          jp="ろくじごろおきます。"
+          romaji="roku-ji goro okimasu."
+          pt="Acordo por volta das 6 horas."
+          notes="ごろ — mesma frase, agora aproximada. Também é correto ろくじごろにおきます, com に depois"
         />
         <Ex
           jp="なんじごろかえりますか？"
@@ -619,15 +641,26 @@ export default function Particulas() {
           notes="ごろ não se limita a hora do relógio — também aproxima datas, meses e estações"
         />
         <Note>
-          <strong>Não confunda ごろ com ぐらい/くらい.</strong> Os dois traduzem "mais ou menos",
-          mas aproximam coisas diferentes: <span className="font-jp">ごろ</span> aproxima um{' '}
-          <strong>ponto no tempo</strong> (uma hora, um dia, um mês); <span className="font-jp">
-            ぐらい
-          </span>{' '}
-          aproxima uma <strong>quantidade ou duração</strong> (quanto tempo, quantas pessoas,
-          quanto custa). Compare: <span className="font-jp">さんじごろ</span> (por volta das 3
-          horas — um ponto) vs. <span className="font-jp">さんじかんぐらい</span> (umas três horas
-          — uma duração). Trocar um pelo outro é um erro comum de quem está aprendendo.
+          <p>
+            <strong>
+              <span className="font-jp">ごろ</span> e <span className="font-jp">に</span> podem andar
+              juntas:
+            </strong>{' '}
+            <span className="font-jp">さんじごろおきます</span> e{' '}
+            <span className="font-jp">さんじごろにおきます</span> são ambas corretas e significam o
+            mesmo. O que nunca acontece é ごろ marcar uma duração — veja a seguir.
+          </p>
+          <p className="mt-2">
+            <strong>Não confunda ごろ com ぐらい/くらい.</strong> Os dois traduzem "mais ou menos",
+            mas aproximam coisas diferentes: <span className="font-jp">ごろ</span> aproxima um{' '}
+            <strong>ponto no tempo</strong> (uma hora, um dia, um mês); <span className="font-jp">
+              ぐらい
+            </span>{' '}
+            aproxima uma <strong>quantidade ou duração</strong> (quanto tempo, quantas pessoas,
+            quanto custa). Compare: <span className="font-jp">さんじごろ</span> (por volta das 3
+            horas — um ponto) vs. <span className="font-jp">さんじかんぐらい</span> (umas três horas
+            — uma duração). Trocar um pelo outro é um erro comum de quem está aprendendo.
+          </p>
         </Note>
       </Section>
 
@@ -725,7 +758,7 @@ export default function Particulas() {
         <Ex
           jp="コンビニでおかしやジュースをかいました。"
           romaji="konbini de okashi ya juusu o kaimashita."
-          pt="Comprei salgadinhos, suco e outras coisas no konbini."
+          pt="Comprei doces, suco e outras coisas no konbini."
           notes="や deixa claro que a lista não é exaustiva — comprou mais coisas além dessas duas"
         />
         <p className="text-sm leading-relaxed text-ink">
@@ -740,14 +773,15 @@ export default function Particulas() {
           notes="や...など juntos deixam a lista claramente incompleta, ainda mais do que や sozinho"
         />
         <p className="text-sm leading-relaxed text-ink">
-          <span className="font-jp">など</span> também aparece sozinho, sem や, suavizando uma
-          afirmação sobre um único item — "esse tipo de coisa", em vez de apontar direto para ele:
+          <span className="font-jp">など</span> também aparece sozinho, sem や, depois de um único
+          item — "algo como...", em vez de apontar direto para ele. É um jeito de suavizar ofertas
+          e sugestões:
         </p>
         <Ex
-          jp="べんきょうなどはたのしいです。"
-          romaji="benkyou nado wa tanoshii desu."
-          pt="Estudar e coisas do tipo são divertidas."
-          notes="など sozinho suaviza a afirmação, como quem evita soar categórico demais sobre só べんきょう"
+          jp="おちゃなどいかがですか？"
+          romaji="ocha nado ikaga desu ka?"
+          pt="Aceita um chá, ou algo assim?"
+          notes={`ao receber uma visita: など deixa a oferta aberta, sem impor o chá. いかがですか = "que tal?" (educado)`}
         />
         <Note>
           Usar <span className="font-jp">や</span> sem <span className="font-jp">など</span> no
@@ -771,7 +805,8 @@ export default function Particulas() {
           notes="pedido num restaurante ou loja, acrescentando mais um item ao pedido"
         />
         <Note>
-          <span className="font-jp">も</span> substitui は e が diretamente, mas se combina com
+          <span className="font-jp">も</span> substitui は, が e を diretamente (
+          <span className="font-jp">りんごもたべます</span>, "como maçã também"), mas se combina com
           に, で e outras partículas em vez de substituí-las: にも, でも. Essas combinações
           aparecem na seção "Combinações de partículas", mais adiante.
         </Note>
@@ -782,7 +817,13 @@ export default function Particulas() {
           <span className="font-jp">へ</span> indica direção, parecido com{' '}
           <span className="font-jp">に</span>. A diferença é sutil: へ enfatiza o{' '}
           <strong>trajeto</strong>; に enfatiza a <strong>chegada</strong>. Na prática, costumam
-          ser intercambiáveis, mas へ soa mais formal.
+          ser intercambiáveis para destino, mas へ soa um pouco mais formal/escrito.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          <strong>Armadilha:</strong> へ só substitui に no sentido de <strong>destino</strong> (e
+          de destinatário de carta). Para horário ou para o lugar onde algo existe, só に:{' '}
+          <span className="font-jp line-through">ろくじへおきます</span>,{' '}
+          <span className="font-jp line-through">こうえんへこどもがいます</span>.
         </p>
         <Ex jp="にほんへようこそ。" romaji="nihon e youkoso." pt="Bem-vindo ao Japão." notes="へ aqui se lê e" />
         <Ex jp="とうきょうへいきます。" romaji="toukyou e ikimasu." pt="Vou para Tóquio." />
@@ -849,6 +890,14 @@ export default function Particulas() {
           só que colada depois de uma frase inteira em vez de um substantivo — não é uma
           coincidência de escrita, é a mesma peça fazendo um trabalho diferente.
         </p>
+        <Note>
+          Nos exemplos desta seção e da seguinte (<span className="font-jp">のに</span>), o verbo
+          antes da partícula aparece na <strong>forma simples</strong>:{' '}
+          <span className="font-jp">おくれた</span> ("atrasou"), <span className="font-jp">がんばった</span>{' '}
+          ("me esforcei"), <span className="font-jp">のんだ</span> ("tomei"). Essas formas são tema
+          da lição de Verbos. Por enquanto, leia-as como frases prontas e foque na partícula; a
+          tradução sempre acompanha.
+        </Note>
         <GrammarTable
           headers={['Partícula', 'Tom', 'Quando usar']}
           jpCols={[0]}
@@ -922,8 +971,9 @@ export default function Particulas() {
         </p>
         <p className="text-sm leading-relaxed text-ink">
           <span className="font-jp">か</span> transforma qualquer frase afirmativa em pergunta, só
-          encaixando no final — sem inverter a ordem das palavras como o português faz ("é
-          professor?" vs. "professor é"). Você já viu isso com です (
+          encaixando no final — a ordem das palavras não muda. No português falado, a pergunta
+          muitas vezes só se distingue pela entonação ("você é professor?"); em japonês, quem marca
+          a pergunta é o <span className="font-jp">か</span>. Você já viu isso com です (
           <span className="font-jp">がくせいですか</span>) na lição de Usos do です; a mesma regra
           vale para qualquer predicado, inclusive verbos:
         </p>
@@ -995,7 +1045,7 @@ export default function Particulas() {
           jpCols={[0, 3]}
           rows={[
             ['では', 'で + は', '"então" / contraste de lugar', 'では、はじめましょう (Então, vamos começar)'],
-            ['でも', 'で + も', '"em qualquer"', 'どこでもいきます (Vou a qualquer lugar)'],
+            ['でも', 'で + も', '"também em" (lugar de ação)', 'こうえんでもあそびます (Brinco também no parque)'],
             ['にも', 'に + も', '"também em/para"', 'とうきょうにもいきました (Fui também a Tóquio)'],
           ]}
         />
@@ -1016,6 +1066,12 @@ export default function Particulas() {
             ['Ação em lugar com に', 'としょかんにべんきょうします', 'としょかんでべんきょうします', 'で marca onde a ação acontece.'],
             ['Existência com で', 'つくえのうえでほんがあります', 'つくえのうえにほんがあります', 'に marca onde algo existe.'],
             ['しか sem verbo negativo', 'これしかあります', 'これしかありません', 'しか sempre pede verbo negativo.'],
+            [
+              'Interrogativo-sujeito com は',
+              'だれはきましたか？',
+              'だれがきましたか？',
+              'Palavra interrogativa como sujeito sempre leva が.',
+            ],
             ['と para lista aberta', 'りんごとオレンジとなど…', 'りんごやオレンジなど', 'と é lista fechada; や é lista aberta.'],
             [
               'ごろ com duração',

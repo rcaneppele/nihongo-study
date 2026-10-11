@@ -94,7 +94,7 @@ export const quiz: QuizLicao = {
       id: 'aisatsu-sig3',
       tipo: 'significado',
       pergunta: 'O que すみません pode significar, além de "desculpa"?',
-      alternativas: ['com licença / obrigado por incomodar', 'boa noite', 'tchau', 'bem-vindo'],
+      alternativas: ['com licença / obrigado (pelo incômodo que causei)', 'boa noite', 'tchau', 'bem-vindo'],
       correta: 0,
     },
     {
@@ -155,6 +155,20 @@ export const quiz: QuizLicao = {
       correta: false,
       explicacao: 'É uma resposta correta, mas soa um pouco formal/didática; no dia a dia é comum ouvir いえいえ ou だいじょうぶです em seu lugar.',
     },
+    {
+      id: 'aisatsu-vf6',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'おげんきですか é o "tudo bem?" que se diz todo dia ao colega de trabalho.',
+      correta: false,
+      explicacao: 'おげんきですか é para quem você não vê há algum tempo. No dia a dia, basta おはようございます ou おつかれさまです.',
+    },
+    {
+      id: 'aisatsu-vf7',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'こんにちは é a saudação mais natural para a própria família.',
+      correta: false,
+      explicacao: 'こんにちは é para quem é "de fora". Em casa usam-se おはよう, ただいま, おかえり etc.',
+    },
   ],
 };
 
@@ -176,7 +190,7 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'aisatsu-9', jp: 'しつれいします。', kana: 'しつれいします。', romaji: 'shitsurei shimasu.', pt: 'Com licença. (ao entrar numa sala)' },
       { id: 'aisatsu-10', jp: 'おさきにしつれいします。', kana: 'おさきにしつれいします。', romaji: 'osaki ni shitsurei shimasu.', pt: 'Vou saindo primeiro, com licença.' },
       { id: 'aisatsu-11', jp: 'こんにちは、たなかさん。', kana: 'こんにちは、たなかさん。', romaji: 'konnichiwa, tanaka-san.', pt: 'Boa tarde, sr. Tanaka.' },
-      { id: 'aisatsu-12', jp: 'こんばんは。おげんきですか。', kana: 'こんばんは。おげんきですか。', romaji: 'konbanwa. ogenki desu ka.', pt: 'Boa noite. Como vai?' },
+      { id: 'aisatsu-12', jp: 'こんばんは。おげんきですか。', kana: 'こんばんは。おげんきですか。', romaji: 'konbanwa. ogenki desu ka.', pt: 'Boa noite. Tem passado bem?' },
       { id: 'aisatsu-13', jp: 'ごめん！おくれちゃった。', kana: 'ごめん！おくれちゃった。', romaji: 'gomen! okurechatta.', pt: 'Desculpa! Acabei me atrasando.' },
     ],
   },
@@ -246,7 +260,7 @@ export default function Aisatsu() {
           rows={[
             ['おはようございます', 'ohayou gozaimasu', 'de manhã, até por volta do meio-dia', 'neutro/formal'],
             ['おはよう', 'ohayou', 'de manhã, entre amigos e família', 'casual'],
-            ['こんにちは', 'konnichiwa', 'do meio-dia até o fim da tarde', 'neutro'],
+            ['こんにちは', 'konnichiwa', 'do fim da manhã até o fim da tarde ("olá", "boa tarde")', 'neutro'],
             ['こんばんは', 'konbanwa', 'à noite, ao encontrar alguém', 'neutro'],
             ['おやすみなさい', 'oyasumi nasai', 'antes de dormir, ou ao se despedir à noite', 'neutro/formal'],
             ['おやすみ', 'oyasumi', 'antes de dormir, entre amigos e família', 'casual'],
@@ -257,12 +271,22 @@ export default function Aisatsu() {
           <span className="font-jp">なさい</span> deixa a frase mais casual. Isso se repete em
           várias saudações japonesas.
         </p>
+        <Note>
+          <strong>Armadilha:</strong> <span className="font-jp">こんにちは</span> e{' '}
+          <span className="font-jp">こんばんは</span> são para quem é "de fora" — vizinhos,
+          conhecidos, alguém que você encontra na rua ou numa loja. Com a própria família e com
+          colegas que você vê todo dia, elas soam distantes, quase estranhas. Em casa, de manhã,
+          diz-se <span className="font-jp">おはよう</span>; no trabalho, os colegas trocam{' '}
+          <span className="font-jp">おはようございます</span> ao chegar e{' '}
+          <span className="font-jp">おつかれさまです</span> ao longo do dia (veja a seção de
+          despedidas).
+        </Note>
         <Ex jp="こんにちは、たなかさん。" romaji="konnichiwa, tanaka-san." pt="Boa tarde, sr. Tanaka." />
         <Ex
           jp="こんばんは。おげんきですか。"
           romaji="konbanwa. ogenki desu ka."
-          pt="Boa noite. Como vai?"
-          notes="こんばんは é para encontrar alguém à noite — não confundir com おやすみなさい, que é só para se despedir/dormir"
+          pt="Boa noite. Tem passado bem?"
+          notes={`おげんきですか é para quem você não vê há um tempo — não é o "tudo bem?" de todo dia. E こんばんは é para encontrar; para se despedir à noite, おやすみなさい`}
         />
         <Note>
           <span className="font-jp">ございます</span> não é exclusivo de saudação: é a mesma peça
@@ -290,11 +314,11 @@ export default function Aisatsu() {
           ]}
         />
         <p className="text-sm leading-relaxed text-ink">
-          No dia a dia entre família e amigos, é comum encurtar para{' '}
-          <span className="font-jp">いってらっしゃい</span> →{' '}
-          <span className="font-jp">いってら</span>, e{' '}
+          No dia a dia entre família e amigos, é comum encurtar{' '}
           <span className="font-jp">おかえりなさい</span> →{' '}
-          <span className="font-jp">おかえり</span>.
+          <span className="font-jp">おかえり</span>. (Você pode ouvir também{' '}
+          <span className="font-jp">いってら</span>, uma abreviação de{' '}
+          <span className="font-jp">いってらっしゃい</span> típica da fala jovem, bem informal.)
         </p>
       </Section>
 
@@ -320,6 +344,7 @@ export default function Aisatsu() {
           jp="ごちそうさまでした。とてもおいしかったです。"
           romaji="gochisousama deshita. totemo oishikatta desu."
           pt="Muito obrigado pela comida. Estava muito gostoso."
+          notes="dito também ao sair de um restaurante (para os funcionários) e para quem pagou a refeição"
         />
       </Section>
 
@@ -362,8 +387,7 @@ export default function Aisatsu() {
 
       <Section title="Agradecimentos e respostas">
         <p className="text-sm leading-relaxed text-ink">
-          Assim como as despedidas, "obrigado" também tem uma versão curta (entre amigos) e uma
-          alongada com <span className="font-jp">ございます</span> (mais educada) — o mesmo padrão
+          "Obrigado" também tem uma versão curta (entre amigos) e uma alongada com <span className="font-jp">ございます</span> (mais educada) — o mesmo padrão
           que você já viu em おはよう/おはようございます.
         </p>
         <GrammarTable
@@ -372,6 +396,7 @@ export default function Aisatsu() {
           rows={[
             ['ありがとう', 'arigatou', 'obrigado', 'casual'],
             ['ありがとうございます', 'arigatou gozaimasu', 'muito obrigado', 'neutro/formal'],
+            ['ありがとうございました', 'arigatou gozaimashita', 'muito obrigado (por algo que já terminou)', 'neutro/formal'],
             ['どういたしまして', 'dou itashimashite', 'de nada', 'neutro'],
             ['だいじょうぶです', 'daijoubu desu', 'tudo bem / sem problema (resposta comum a すみません)', 'neutro'],
           ]}
@@ -381,6 +406,12 @@ export default function Aisatsu() {
           romaji="tetsudatte kurete, arigatou gozaimasu."
           pt="Obrigado por me ajudar."
           notes="ありがとうございます — registro neutro/formal, seguro em quase qualquer situação"
+        />
+        <Ex
+          jp="ありがとうございました。"
+          romaji="arigatou gozaimashita."
+          pt="Muito obrigado. (ao sair de uma loja ou ao fim de uma aula)"
+          notes="com ました, agradece algo já concluído — é o que o atendente do konbini diz quando você vai embora"
         />
         <Ex
           jp="どういたしまして。"
@@ -414,7 +445,12 @@ export default function Aisatsu() {
           headers={['Hiragana', 'Romaji', 'Quando usar', 'Registro']}
           jpCols={[0]}
           rows={[
-            ['さようなら', 'sayounara', 'despedida longa, ou de professor para aluno', 'formal'],
+            [
+              'さようなら',
+              'sayounara',
+              'despedida longa; também o "tchau" ritual entre professor e alunos no fim da aula',
+              'neutro, mas soa distante',
+            ],
             ['またね', 'mata ne', 'até mais, entre amigos', 'casual'],
             ['じゃあね', 'jaa ne', 'tchau, entre amigos', 'casual'],
             ['またあした', 'mata ashita', 'até amanhã', 'neutro'],
@@ -496,8 +532,10 @@ export default function Aisatsu() {
             <span className="font-jp">おつかれさまでした</span> é onipresente.
           </strong>{' '}
           No Japão, essa frase é usada dezenas de vezes por dia em qualquer ambiente de trabalho ou
-          estudo: ao sair, ao cruzar com um colega no corredor, em e-mails, até como
-          "oi" informal entre colegas. Não existe uma tradução única — pense nela como "valeu pelo
+          estudo. Ao fim do expediente, diz-se <span className="font-jp">おつかれさまでした</span>{' '}
+          (no passado: o trabalho terminou); ao longo do dia — ao cruzar com um colega no corredor,
+          no começo de um e-mail, como "oi" entre colegas — usa-se a forma presente,{' '}
+          <span className="font-jp">おつかれさまです</span>. Não existe uma tradução única — pense nela como "valeu pelo
           esforço".
         </p>
         <p className="text-sm leading-relaxed text-ink">
@@ -553,8 +591,35 @@ export default function Aisatsu() {
               'さようなら (todo dia, ao se despedir de um amigo próximo)',
               'またね / じゃあね',
               <>
-                <span className="font-jp">さようなら</span> é formal demais e soa como se vocês não
-                fossem se ver tão cedo.
+                <span className="font-jp">さようなら</span> soa distante, como se vocês não fossem se
+                ver tão cedo.
+              </>,
+            ],
+            [
+              'Cumprimentar a família ou colegas de todo dia',
+              'こんにちは (para a mãe, ao chegar em casa)',
+              'ただいま / おはよう / おつかれさまです',
+              <>
+                <span className="font-jp">こんにちは</span> é para quem é "de fora"; com quem você
+                convive diariamente, soa frio.
+              </>,
+            ],
+            [
+              'Usar おげんきですか como "tudo bem?" diário',
+              'おげんきですか (para o colega que você viu ontem)',
+              'おはようございます',
+              <>
+                <span className="font-jp">おげんきですか</span> pergunta como a pessoa tem passado
+                depois de um tempo sem se ver.
+              </>,
+            ],
+            [
+              'Dizer おやすみなさい ao chegar à noite',
+              'おやすみなさい (ao encontrar alguém às 20h)',
+              'こんばんは',
+              <>
+                <span className="font-jp">おやすみなさい</span> é para se despedir ou ir dormir; para
+                encontrar, <span className="font-jp">こんばんは</span>.
               </>,
             ],
           ]}
@@ -578,8 +643,10 @@ export default function Aisatsu() {
             ['Depois de comer', 'ごちそうさまでした'],
             ['Desculpa / com licença', 'すみません'],
             ['Obrigado', 'ありがとうございます'],
+            ['Obrigado (algo já concluído)', 'ありがとうございました'],
             ['De nada', 'どういたしまして / いえいえ'],
             ['Fim do trabalho/aula', 'おつかれさまでした'],
+            ['Cruzar com colega durante o dia', 'おつかれさまです'],
             ['Até mais (casual)', 'またね'],
           ]}
         />

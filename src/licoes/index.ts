@@ -38,15 +38,15 @@ import Kanji, { meta as metaKanji, quiz as quizKanji, kakitori as kakitoriKanji 
 
 export const LICOES: LicaoEntry[] = [
   { meta: metaKana, Component: Kana, quiz: quizKana },
-  { meta: metaApresentacao, Component: Apresentacao, quiz: quizApresentacao, kakitori: kakitoriApresentacao },
   { meta: metaAisatsu, Component: Aisatsu, quiz: quizAisatsu, kakitori: kakitoriAisatsu },
+  { meta: metaDesu, Component: Desu, quiz: quizDesu },
+  { meta: metaApresentacao, Component: Apresentacao, quiz: quizApresentacao, kakitori: kakitoriApresentacao },
   { meta: metaSufixos, Component: Sufixos, quiz: quizSufixos, kakitori: kakitoriSufixos },
+  { meta: metaKoSoADo, Component: KoSoADo, quiz: quizKoSoADo, kakitori: kakitoriKoSoADo },
   { meta: metaPronomes, Component: Pronomes, quiz: quizPronomes, kakitori: kakitoriPronomes },
   { meta: metaFamilia, Component: Familia, quiz: quizFamilia, kakitori: kakitoriFamilia },
-  { meta: metaKoSoADo, Component: KoSoADo, quiz: quizKoSoADo, kakitori: kakitoriKoSoADo },
   { meta: metaParticulas, Component: Particulas, quiz: quizParticulas },
   { meta: metaVerbos, Component: Verbos, quiz: quizVerbos },
-  { meta: metaDesu, Component: Desu, quiz: quizDesu },
   { meta: metaSeikatsu, Component: Seikatsu, quiz: quizSeikatsu, kakitori: kakitoriSeikatsu },
   { meta: metaKanji, Component: Kanji, quiz: quizKanji, kakitori: kakitoriKanji },
 ];

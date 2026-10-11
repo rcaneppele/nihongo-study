@@ -204,7 +204,7 @@ export const quiz: QuizLicao = {
         { texto: 'わたしの', romaji: 'watashi no' },
         { texto: 'けいたいばんごう', romaji: 'keitai bangou' },
         { texto: 'は', romaji: 'wa', particula: true },
-        { texto: 'ぜろきゅうぜろの', romaji: 'zero kyuu zero no' },
+        { texto: 'ゼロきゅうゼロの', romaji: 'zero kyuu zero no' },
         { texto: 'いちにさんよんです', romaji: 'ichi ni san yon desu' },
       ],
       pt: 'Meu número de celular é 090-1234.',
@@ -234,7 +234,7 @@ export const quiz: QuizLicao = {
       id: 'kanji-f22',
       tokens: [
         { texto: 'かくにんします', romaji: 'kakunin shimasu' },
-        { texto: 'ぜろさんの', romaji: 'zero san no' },
+        { texto: 'ゼロさんの', romaji: 'zero san no' },
         { texto: 'きゅうにいさんよんです', romaji: 'kyuu nii san yon desu' },
       ],
       pt: 'Vou confirmar: 03-9234.',
@@ -456,7 +456,7 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-vf6',
       tipo: 'verdadeiro-falso',
-      afirmacao: 'Os dias da semana em japonês (月・火・水・木・金・土・日) seguem uma lógica de nomeação parecida com a de muitos dias da semana em português e inglês, ligada a corpos celestes ou elementos.',
+      afirmacao: 'Os dias da semana em japonês (月・火・水・木・金・土・日) seguem uma lógica de nomeação parecida com a dos dias da semana em inglês (Sunday, Monday), ligada a corpos celestes ou elementos.',
       correta: true,
     },
     {
@@ -506,7 +506,7 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-sig10',
       tipo: 'significado',
-      pergunta: 'Por que um número de telefone em japonês é lido dígito a dígito (さん・に・ぜろ...) em vez de como um número composto?',
+      pergunta: 'Por que um número de telefone em japonês é lido dígito a dígito (さん・に・ゼロ...) em vez de como um número composto?',
       alternativas: [
         'para evitar erro de quem ouve — repetir um dígito solto é mais confiável do que calcular uma dezena de cabeça',
         'porque números compostos não existem em japonês',
@@ -613,7 +613,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-vf14',
       tipo: 'verdadeiro-falso',
-      afirmacao: '田 também sofre essa mudança de som: sozinho é た, mas como segundo elemento de um sobrenome, como em 中田 (Nakata), vira だ.',
+      afirmacao: '田 também sofre essa mudança de som: sozinho é た, mas como segundo elemento de um sobrenome, como em 山田 (Yamada), vira だ.',
+      explicacao: 'É o rendaku. Mas ele não é automático: 中田 é なかた (Nakata), sem mudança.',
       correta: true,
     },
   ],
@@ -822,11 +823,11 @@ const HORAS: ItemKakitoriFonte[] = [
   },
 ];
 
-const DIGITO_TEL_KANA = ['ぜろ', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう'];
+const DIGITO_TEL_KANA = ['ゼロ', 'いち', 'に', 'さん', 'よん', 'ご', 'ろく', 'なな', 'はち', 'きゅう'];
 const DIGITO_TEL_ROMAJI = ['zero', 'ichi', 'ni', 'san', 'yon', 'go', 'roku', 'nana', 'hachi', 'kyuu'];
 
 /** Lê um bloco de dígitos um a um (nunca como quantidade — ver seção "Números de telefone"),
- * com れい em vez de ぜろ pro 0 quando `rei` for true (registro formal de atendimento). */
+ * com れい em vez de ゼロ pro 0 quando `rei` for true (registro formal de atendimento). */
 function lerBlocoTelefone(bloco: string, rei: boolean): { kana: string; romaji: string } {
   const digitos = bloco.split('').map(Number);
   return {
@@ -924,7 +925,7 @@ export default function Kanji() {
             Dizer as horas com <span className="font-jp">時</span>, <span className="font-jp">分</span>{' '}
             e <span className="font-jp">半</span>, incluindo as leituras irregulares de 4, 7 e 9
             horas e a alternância <span className="font-jp">ふん</span>/
-            <span className="font-jp">っぷん</span> dos minutos de 1 a 10.
+            <span className="font-jp">ぷん</span> dos minutos de 1 a 10.
           </li>
           <li>
             Diferenciar <span className="font-jp">半</span> (e meia, depois de uma hora) de{' '}
@@ -1047,7 +1048,7 @@ export default function Kanji() {
           parte — preço, hora, endereço, quantidade — e porque o próprio traço deles é simples.
         </p>
         <GrammarTable
-          headers={['Nº', 'Kanji', 'On\'yomi', 'Romaji', 'Contagem (kun\'yomi + つ)', 'Romaji']}
+          headers={['Nº', 'Kanji', 'Leitura de número', 'Romaji', 'Contagem (kun\'yomi + つ)', 'Romaji']}
           jpCols={[1, 2, 4]}
           rows={[
             ['1', '一', 'いち', 'ichi', 'ひとつ', 'hitotsu'],
@@ -1062,33 +1063,40 @@ export default function Kanji() {
             ['10', '十', 'じゅう', 'juu', 'とお', 'too'],
           ]}
         />
+        <p className="text-sm leading-relaxed text-ink">
+          A coluna "Leitura de número" traz o on'yomi de cada kanji — com duas exceções importantes:
+          em 4 e 7, <span className="font-jp">よん</span> e <span className="font-jp">なな</span>{' '}
+          são, na verdade, kun'yomi (leituras japonesas) que passaram a ser usadas como número no
+          lugar do on'yomi <span className="font-jp">し</span> e <span className="font-jp">しち</span>.
+        </p>
         <Note>
           Repare em três irregularidades que valem menção explícita, porque são as que mais confundem
           quem está começando:
+          <ul className="mt-2 list-disc space-y-1.5 pl-5">
+            <li>
+              <strong className="font-jp">四</strong> tem duas leituras concorrentes:{' '}
+              <span className="font-jp">し</span> (shi, on'yomi) e <span className="font-jp">よん</span>{' '}
+              (yon, kun'yomi).
+              No dia a dia, japoneses preferem <span className="font-jp">よん</span>, porque{' '}
+              <span className="font-jp">し</span> tem o mesmo som da palavra "morte" (
+              <span className="font-jp">死</span>).
+            </li>
+            <li>
+              <strong className="font-jp">七</strong> também tem duas:{' '}
+              <span className="font-jp">しち</span> (shichi, on'yomi) e{' '}
+              <span className="font-jp">なな</span> (nana, kun'yomi). Ao ditar números em voz alta,{' '}
+              <span className="font-jp">なな</span> é a preferida, porque{' '}
+              <span className="font-jp">しち</span> se confunde facilmente com{' '}
+              <span className="font-jp">いち</span> (1) ao telefone.
+            </li>
+            <li>
+              <strong className="font-jp">十</strong>, na coluna de contagem, é{' '}
+              <span className="font-jp">とお</span> — sem o sufixo{' '}
+              <span className="font-jp">つ</span> que todos os outros números de 1 a 9 levam. É a
+              única exceção da tabela, e é irregular mesmo: não tem explicação além de "decore assim".
+            </li>
+          </ul>
         </Note>
-        <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
-          <li>
-            <strong className="font-jp">四</strong> tem duas leituras concorrentes:{' '}
-            <span className="font-jp">し</span> (shi) e <span className="font-jp">よん</span> (yon).
-            No dia a dia, japoneses preferem <span className="font-jp">よん</span>, porque{' '}
-            <span className="font-jp">し</span> tem o mesmo som da palavra "morte" (
-            <span className="font-jp">死</span>).
-          </li>
-          <li>
-            <strong className="font-jp">七</strong> também tem duas:{' '}
-            <span className="font-jp">しち</span> (shichi) e{' '}
-            <span className="font-jp">なな</span> (nana). Ao ditar números em voz alta,{' '}
-            <span className="font-jp">なな</span> é a preferida, porque{' '}
-            <span className="font-jp">しち</span> se confunde facilmente com{' '}
-            <span className="font-jp">いち</span> (1) ao telefone.
-          </li>
-          <li>
-            <strong className="font-jp">十</strong>, na coluna de contagem, é{' '}
-            <span className="font-jp">とお</span> — sem o sufixo{' '}
-            <span className="font-jp">つ</span> que todos os outros números de 1 a 9 levam. É a
-            única exceção da tabela, e é irregular mesmo: não tem explicação além de "decore assim".
-          </li>
-        </ul>
         <Note>
           <strong>Aprofundamento:</strong> a contagem com{' '}
           <span className="font-jp">つ</span> só existe de 1 a 10 — não há{' '}
@@ -1112,7 +1120,7 @@ export default function Kanji() {
           jp="りんごをひとつください。"
           romaji="ringo o hitotsu kudasai."
           pt="Me dá uma maçã, por favor."
-          notes="contando um item físico — kun'yomi + つ. Situação real: quitanda, feira, conbini."
+          notes="contando um item físico — kun'yomi + つ. Situação real: quitanda, feira, konbini."
         />
         <Ex
           jp="コーヒーをふたつおねがいします。"
@@ -1137,7 +1145,7 @@ export default function Kanji() {
           jp="じゅういっさいです。"
           romaji="juuissai desu."
           pt="Tenho onze anos."
-          notes="十一 (じゅういち) + さい (idade) vira じゅういっさい — on'yomi combinado, exatamente como em 十一 sozinho."
+          notes="十一 (じゅういち) + さい (idade) vira じゅういっさい — on'yomi combinado, com a mesma mudança de som de いっさい (1 ano): いち vira いっ"
         />
       </Section>
 
@@ -1202,7 +1210,7 @@ export default function Kanji() {
           jp="これはひゃくえんです。"
           romaji="kore wa hyakuen desu."
           pt="Isto custa cem ienes."
-          notes="preço simples e redondo — situação real de balcão de loja ou conbini."
+          notes="preço simples e redondo — situação real de balcão de loja ou konbini."
         />
         <Ex
           jp="すみません、これはいくらですか。"
@@ -1349,9 +1357,10 @@ export default function Kanji() {
         <p className="text-sm leading-relaxed text-ink">
           <span className="font-jp text-base">分</span> é o kanji mais traiçoeiro dos três: a
           leitura muda conforme o número que vem antes, alternando entre{' '}
-          <span className="font-jp">ふん</span> e <span className="font-jp">っぷん</span>. Não há
-          uma regra fonética simples para prever qual delas cai em cada número — o jeito prático é
-          memorizar a tabela, como qualquer irregularidade de idioma.
+          <span className="font-jp">ふん</span> (som de f) e <span className="font-jp">ぷん</span>{' '}
+          (som de p) — e, em 1, 6, 8 e 10, o próprio número ainda encolhe com um{' '}
+          <span className="font-jp">っ</span> (<span className="font-jp">いっぷん</span>,{' '}
+          <span className="font-jp">ろっぷん</span>). O jeito prático é memorizar a tabela.
         </p>
         <GrammarTable
           headers={['Minuto', 'Leitura', 'Romaji']}
@@ -1372,14 +1381,13 @@ export default function Kanji() {
         <Note>
           <strong>Truque para decorar:</strong> conte nos dedos de uma mão, dobrando um dedo a cada
           minuto — 1 a 5 numa "volta", depois solte a mão e conte 6 a 10 numa segunda volta pelos
-          mesmos cinco dedos. Repare que os três primeiros dedos repetem exatamente o mesmo padrão
-          nas duas voltas (<span className="font-jp">っぷん・ふん・っぷん</span>, ou seja 1º e 6º
-          iguais, 2º e 7º iguais, 3º e 8º iguais) — só os dois últimos dedos invertem: o 4º dedo é{' '}
-          <span className="font-jp">っぷん</span> na primeira volta mas{' '}
+          mesmos cinco dedos. Olhando só o som de p ou de f, os três primeiros dedos repetem o
+          mesmo padrão nas duas voltas (p・f・p: 1 e 6, 2 e 7, 3 e 8) — só os dois últimos
+          invertem: o 4º dedo é <span className="font-jp">ぷん</span> na primeira volta mas{' '}
           <span className="font-jp">ふん</span> na segunda (4 vs. 9), e o 5º é o contrário (
-          <span className="font-jp">ふん</span> na primeira, <span className="font-jp">っぷん</span>{' '}
+          <span className="font-jp">ふん</span> na primeira, <span className="font-jp">ぷん</span>{' '}
           na segunda — 5 vs. 10). É essa reviravolta nos dois últimos dedos que costuma pegar quem
-          está decorando de ouvido, então vale prestar atenção especial nela.
+          está decorando de ouvido.
         </Note>
         <p className="text-sm leading-relaxed text-ink">
           A maior armadilha aqui não é o kanji, é a leitura do número junto de{' '}
@@ -1536,8 +1544,8 @@ export default function Kanji() {
           Até aqui, todo número apareceu inteiro: <span className="font-jp">十一</span> é "onze",
           uma unidade só. Telefone quebra esse padrão — assim como em português, um número de
           telefone não é lido como quantidade, e sim como uma sequência de dígitos separados, um a
-          um. <span className="font-jp">三二〇九</span> não vira "trezentos e vinte e nove"; vira{' '}
-          <span className="font-jp">さん・に・ぜろ・きゅう</span>, quatro sons distintos.
+          um. <span className="font-jp">三二〇九</span> não vira "três mil duzentos e nove"; vira{' '}
+          <span className="font-jp">さん・に・ゼロ・きゅう</span>, quatro sons distintos.
         </p>
         <p className="text-sm leading-relaxed text-ink">
           Essa separação existe para evitar erro de quem ouve: um número composto ("trinta e
@@ -1593,7 +1601,7 @@ export default function Kanji() {
           notes="なんばん você já viu perguntando o número do ônibus — aqui é a mesma pergunta, sobre telefone."
         />
         <Ex
-          jp="わたしのけいたいばんごうは、ぜろきゅうぜろの、いちにさんよんの、ごろくななはちです。"
+          jp="わたしのけいたいばんごうは、ゼロきゅうゼロの、いちにさんよんの、ごろくななはちです。"
           romaji="watashi no keitai bangou wa, zero kyuu zero no, ichi ni san yon no, go roku nana hachi desu."
           pt="Meu número de celular é 090-1234-5678."
           notes="dígito a dígito, com の marcando cada hífen — pausa natural a cada bloco, como no português."
@@ -1689,8 +1697,8 @@ export default function Kanji() {
           jpCols={[0, 1, 2]}
           rows={[
             ['山', 'やま', 'サン', 'yama / san', 'montanha'],
-            ['川', 'かわ（がわ）', '—', 'kawa (gawa)', 'rio'],
-            ['田', 'た（だ）', '—', 'ta (da)', 'arrozal, campo de arroz'],
+            ['川', 'かわ（がわ）', 'セン (rara nesta fase)', 'kawa (gawa)', 'rio'],
+            ['田', 'た（だ）', 'デン (rara nesta fase)', 'ta (da)', 'arrozal, campo de arroz'],
           ]}
         />
         <Note>
@@ -1701,8 +1709,11 @@ export default function Kanji() {
           se chama <em>rendaku</em> ("sonorização sequencial") e aparece em muitas palavras
           compostas do japonês, não só nesses dois kanji — repare em{' '}
           <span className="font-jp">チエテがわ</span> (rio Tietê) e{' '}
-          <span className="font-jp">なかた</span> (Nakata, sobrenome), comparados com{' '}
-          <span className="font-jp">かわ</span> e <span className="font-jp">た</span> sozinhos.
+          <span className="font-jp">やまだ</span> (<span className="font-jp">山田</span>, Yamada,
+          sobrenome), comparados com <span className="font-jp">かわ</span> e{' '}
+          <span className="font-jp">た</span> sozinhos. Mas o rendaku <strong>não é automático</strong>:{' '}
+          <span className="font-jp">中田</span> é <span className="font-jp">なかた</span> (Nakata),
+          sem mudança. Em sobrenomes, a leitura de cada um precisa ser aprendida.
         </Note>
         <p className="text-sm leading-relaxed text-ink">
           <span className="font-jp text-base">山</span> tem ainda uma segunda leitura, on'yomi{' '}
@@ -1741,10 +1752,10 @@ export default function Kanji() {
           notes="川 sozinho, leitura kun'yomi かわ, sem a sonorização de がわ."
         />
         <Ex
-          jp="たなかさんとなかたさんはどうりょうです。"
-          romaji="tanaka-san to nakata-san wa douryou desu."
-          pt="Tanaka e Nakata são colegas de trabalho."
-          notes="dois sobrenomes com 田: た em 田中 (primeiro elemento) vs. だ em 中田 (segundo elemento) — mesma regra da nota acima."
+          jp="たなかさんとやまださんはどうりょうです。"
+          romaji="tanaka-san to yamada-san wa douryou desu."
+          pt="Tanaka e Yamada são colegas de trabalho."
+          notes="dois sobrenomes com 田: た em 田中 (primeiro elemento) vs. だ em 山田 (segundo elemento, com rendaku)"
         />
         <Note>
           <strong>Nota cultural:</strong> sobrenomes formados por esses três kanji — sozinhos ou
@@ -1777,10 +1788,10 @@ export default function Kanji() {
               '十 é a única exceção: na contagem de 1 a 10, só ele não leva つ.',
             ],
             [
-              'Misturar kun\'yomi e on\'yomi dentro da mesma palavra',
+              'Misturar kun\'yomi e on\'yomi na contagem com つ',
               '"ichi-tsu" para "um objeto"',
               'ひとつ (hitotsu)',
-              'A contagem com つ usa kun\'yomi do início ao fim; misturar com on\'yomi não existe em japonês.',
+              'A contagem com つ usa kun\'yomi do início ao fim; "ichi-tsu" não existe.',
             ],
             [
               'Achar que く é sempre a leitura de 9',
@@ -1864,8 +1875,9 @@ export default function Kanji() {
         </p>
         <Note>
           Isso muda uma escolha prática: se você for escolher a quantidade de algo para presentear
-          alguém no Japão (doces, toalhas, copos), evite conjuntos de 4 ou 9 — prefira 3, 5 ou um
-          número par "neutro" como 6 ou 8.
+          alguém no Japão (doces, toalhas, copos), evite conjuntos de 4 ou 9 — prefira 3 ou 5.
+          Números ímpares são os mais tradicionais em presentes; os pares costumam ser evitados
+          sobretudo em casamentos, por poderem ser "divididos ao meio".
         </Note>
         <p className="text-sm leading-relaxed text-ink">
           A mesma superstição aparece nas placas de carro: no sistema de sorteio de placas do
@@ -1879,7 +1891,7 @@ export default function Kanji() {
 
       <Section title="Resumo rápido">
         <GrammarTable
-          headers={['Nº', 'Kanji', 'On\'yomi mais usado', 'Contagem (つ)']}
+          headers={['Nº', 'Kanji', 'Leitura de número mais usada', 'Contagem (つ)']}
           jpCols={[1, 2, 3]}
           rows={[
             ['1', '一', 'いち', 'ひとつ'],

@@ -263,7 +263,7 @@ export default function Sufixos() {
             ['〜さま', 'sama', 'muito formal e respeitoso', '★★★★'],
             ['〜せんせい', 'sensei', 'professor, médico, mestre', '★★★★'],
             ['〜せんぱい', 'senpai', 'veterano no grupo (mais experiente)', '★★★'],
-            ['〜どの', 'dono', 'arcaico, documentos formais', '★★★★★'],
+            ['〜どの', 'dono', 'antiquado; hoje só em alguns documentos oficiais (diplomas, certificados)', '★★★★★'],
           ]}
         />
       </Section>
@@ -284,10 +284,10 @@ export default function Sufixos() {
           notes="Forma educada de abordar alguém."
         />
         <Ex
-          jp="おきゃくさん、いらっしゃいませ。"
-          romaji="okyaku-san, irasshaimase."
-          pt="Bem-vindo, cliente."
-          notes="さん também aparece após おきゃく (cliente), em lojas e restaurantes."
+          jp="おきゃくさん、どちらまでですか？"
+          romaji="okyaku-san, dochira made desu ka?"
+          pt="Para onde, senhor(a)?"
+          notes="um taxista falando com o passageiro: おきゃくさん é o tom do dia a dia; em lojas e hotéis, o atendente usa おきゃくさま (veja abaixo)"
         />
         <Ex
           jp="たなかさんはもうきましたか？"
@@ -400,11 +400,17 @@ export default function Sufixos() {
         />
         <Note>
           <strong>
-            Nunca use <span className="font-jp">せんせい</span> para se referir a si mesmo.
+            <span className="font-jp">せんせい</span> é um título que os <em>outros</em> dão a você.
           </strong>{' '}
-          Dizer <span className="font-jp">わたしはせんせいです</span> ("sou professor") ao se
-          apresentar está certo. Mas chamar a si próprio de <span className="font-jp">せんせい</span>{' '}
-          soaria presunçoso.
+          Por isso, nunca o coloque no próprio nome: um professor se apresenta como{' '}
+          <span className="font-jp">やまだです</span>, não{' '}
+          <span className="font-jp">やまだせんせいです</span>. Para dizer a profissão,{' '}
+          <span className="font-jp">わたしはがっこうのせんせいです</span> ("sou professor de escola")
+          é comum na conversa do dia a dia; em situação formal (entrevista, currículo, apresentação
+          profissional), prefira o termo neutro <span className="font-jp">きょうし</span> (
+          <em>kyoushi</em>): <span className="font-jp">わたしはきょうしです</span>. (Professores de
+          crianças pequenas também falam de si como <span className="font-jp">せんせい</span> na sala
+          de aula, adotando o ponto de vista dos alunos.)
         </Note>
       </Section>
 
@@ -436,10 +442,10 @@ export default function Sufixos() {
           notes={'〜のおかげです = "graças a...".'}
         />
         <Ex
-          jp="かれはわたしのこうはいです。"
-          romaji="kare wa watashi no kouhai desu."
-          pt="Ele é meu kouhai (entrou depois de mim no grupo)."
-          notes="こうはい não vira sufixo (nunca たなかこうはい) — só se usa como substantivo, assim"
+          jp="やまださんはわたしのこうはいです。"
+          romaji="yamada-san wa watashi no kouhai desu."
+          pt="O Yamada é meu kouhai (entrou depois de mim no grupo)."
+          notes="こうはい como substantivo (わたしのこうはい); a pessoa em si continua sendo chamada de nome + さん"
         />
         <Note>
           <span className="font-jp">こうはい</span> quase nunca vira sufixo no nome de alguém.
@@ -467,23 +473,32 @@ export default function Sufixos() {
           headers={['Prefixo', 'Exemplo', 'Romaji', 'Significado']}
           jpCols={[0, 1]}
           rows={[
-            ['お', 'おなまえ', 'onamae', 'seu nome (respeitoso)'],
-            ['お', 'おしごと', 'oshigoto', 'seu trabalho'],
-            ['お', 'おちゃ', 'ocha', 'chá'],
-            ['ご', 'ごかぞく', 'gokazoku', 'sua família'],
-            ['ご', 'ごじゅうしょ', 'gojuusho', 'seu endereço'],
-            ['ご', 'ごはん', 'gohan', 'refeição / arroz (exceção comum)'],
+            ['お', 'おなまえ', 'o-namae', 'seu nome (respeitoso)'],
+            ['お', 'おしごと', 'o-shigoto', 'seu trabalho'],
+            ['お', 'おちゃ', 'ocha', 'chá (palavra de origem chinesa com お — exceção)'],
+            ['ご', 'ごかぞく', 'go-kazoku', 'sua família'],
+            ['ご', 'ごじゅうしょ', 'go-juusho', 'seu endereço'],
+            ['ご', 'ごはん', 'gohan', 'refeição / arroz (expressão fixa)'],
           ]}
         />
+        <Note>
+          Você não precisa saber a origem de cada palavra para acertar o prefixo: na prática,
+          aprenda cada palavra <strong>já com o seu prefixo</strong> (
+          <span className="font-jp">おなまえ</span>, <span className="font-jp">ごかぞく</span>). Há
+          exceções à regra geral — <span className="font-jp">おちゃ</span> (chá) e{' '}
+          <span className="font-jp">おでんわ</span> (telefone) são de origem chinesa e mesmo assim
+          levam <span className="font-jp">お</span>. Em ocha e gohan o prefixo virou parte fixa da
+          palavra; por isso o romaji fica sem hífen.
+        </Note>
         <Ex
           jp="おなまえはなんですか？"
-          romaji="onamae wa nan desu ka?"
+          romaji="o-namae wa nan desu ka?"
           pt="Qual é o seu nome?"
           notes="お eleva なまえ porque a pergunta é sobre a outra pessoa — pergunte assim, não なまえは...?"
         />
         <Ex
           jp="ごじゅうしょをおしえてください。"
-          romaji="gojuusho o oshiete kudasai."
+          romaji="go-juusho o oshiete kudasai."
           pt="Poderia me informar seu endereço?"
           notes="comum em formulários e no balcão de uma imobiliária/prefeitura, pedindo o endereço de outra pessoa"
         />
@@ -494,7 +509,9 @@ export default function Sufixos() {
           <span className="font-jp">ごじゅうしょ</span>) ou expressões fixas (
           <span className="font-jp">おちゃ</span>, <span className="font-jp">ごはん</span>). Para
           as <strong>suas</strong> coisas, evite: dizer{' '}
-          <span className="font-jp">わたしのおなまえ</span>… soaria estranho.
+          <span className="font-jp">わたしのおなまえ</span>… soaria estranho. (Há um caso especial,
+          que você vai ver em <span className="font-jp">ごほうこく</span> logo abaixo: a ação é sua,
+          mas é <strong>dirigida</strong> a quem você respeita.)
         </Note>
       </Section>
 
@@ -511,14 +528,21 @@ export default function Sufixos() {
             [<FuriganaWord kanji="部長" reading="ぶちょう" />, 'buchou', 'diretor de departamento'],
             [<FuriganaWord kanji="課長" reading="かちょう" />, 'kachou', 'gerente de seção'],
             [<FuriganaWord kanji="主任" reading="しゅにん" />, 'shunin', 'líder / responsável'],
-            [<FuriganaWord kanji="同僚" reading="どうりょう" />, 'douryou', 'colega (mesmo nível)'],
+            [
+              <FuriganaWord kanji="同僚" reading="どうりょう" />,
+              'douryou',
+              <>
+                colega (mesmo nível) — não é cargo nem forma de chamar: o colega é chamado de nome +{' '}
+                <span className="font-jp">さん</span>
+              </>,
+            ],
           ]}
         />
         <Ex
           jp="ぶちょう、ごほうこくがあります。"
-          romaji="buchou, gohoukoku ga arimasu."
+          romaji="buchou, go-houkoku ga arimasu."
           pt="Diretor, tenho um relatório para apresentar."
-          notes="O cargo (ぶちょう) é usado como forma de chamar, sem o nome."
+          notes="o cargo (ぶちょう) serve para chamar, sem o nome. O relatório é seu, mas leva ご porque é dirigido ao chefe"
         />
         <Ex
           jp="たなかぶちょうはいらっしゃいますか？"
@@ -554,9 +578,10 @@ export default function Sufixos() {
             Mudar de <span className="font-jp">さん</span> para{' '}
             <span className="font-jp">ちゃん</span>/<span className="font-jp">くん</span>
           </strong>{' '}
-          marca uma aproximação. Espere a outra pessoa sugerir isso ("
-          <span className="font-jp">ちゃんでよんでいいよ</span>" = "pode me chamar de{' '}
-          <span className="font-jp">ちゃん</span>") antes de tomar a iniciativa.
+          marca uma aproximação. Espere a outra pessoa sugerir isso (
+          <span className="font-jp">はなこちゃんってよんでいいよ</span>,{' '}
+          <em>hanako-chan tte yonde ii yo</em>, "pode me chamar de Hanako-chan") antes de tomar a
+          iniciativa.
         </Note>
       </Section>
 
@@ -571,7 +596,7 @@ export default function Sufixos() {
             [
               'Criança pequena',
               <>
-                <span className="font-jp">ちゃん</span> (ou nome sem sufixo)
+                <span className="font-jp">ちゃん</span> (meninos também <span className="font-jp">くん</span>)
               </>,
             ],
             [
@@ -640,6 +665,30 @@ export default function Sufixos() {
               'たなか、ちょっといいですか？ (ao chefe)',
               'たなかさん / たなかぶちょう',
               'Chamar superior sem sufixo é muito rude.',
+            ],
+            [
+              <>
+                Somar <span className="font-jp">さん</span> ao cargo
+              </>,
+              'たなかぶちょうさん',
+              'たなかぶちょう',
+              'O cargo já é o tratamento de respeito; さん depois dele fica redundante.',
+            ],
+            [
+              <>
+                Usar <span className="font-jp">お</span> nas próprias coisas
+              </>,
+              'わたしのおなまえは…',
+              'わたしのなまえは…',
+              'お/ご elevam o que é da outra pessoa; não se eleva o que é seu.',
+            ],
+            [
+              <>
+                Pôr <span className="font-jp">せんせい</span> no próprio nome
+              </>,
+              'わたしはやまだせんせいです。',
+              'わたしはやまだです。',
+              'せんせい é um título dado pelos outros; como さん, não vai no próprio nome.',
             ],
           ]}
         />

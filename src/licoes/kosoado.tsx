@@ -206,7 +206,7 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'kosoado-12', jp: 'こっち', kana: 'こっち', romaji: 'kocchi', pt: 'aqui / pra cá (casual)' },
       { id: 'kosoado-13', jp: 'あっち', kana: 'あっち', romaji: 'acchi', pt: 'lá / pra lá (casual)' },
       { id: 'kosoado-14', jp: 'どっち', kana: 'どっち', romaji: 'docchi', pt: 'qual dos dois (casual)' },
-      { id: 'kosoado-15', jp: 'こんな', kana: 'こんな', romaji: 'konna', pt: 'desse tipo (assim, perto de quem fala)' },
+      { id: 'kosoado-15', jp: 'こんな', kana: 'こんな', romaji: 'konna', pt: 'deste tipo (assim, perto de quem fala)' },
       { id: 'kosoado-16', jp: 'そんな', kana: 'そんな', romaji: 'sonna', pt: 'desse tipo (que você disse)' },
       { id: 'kosoado-17', jp: 'あんな', kana: 'あんな', romaji: 'anna', pt: 'daquele tipo (mais distante)' },
       { id: 'kosoado-18', jp: 'どんな', kana: 'どんな', romaji: 'donna', pt: 'que tipo de' },
@@ -241,8 +241,8 @@ export default function KoSoADo() {
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
             Reconhecer as quatro "distâncias" (こ/そ/あ/ど) e aplicá-las nas sete séries do sistema
-            (adjetivo, pronome, lugar, direção formal, direção casual, tipo, modo) — como um
-            sistema só, não como listas soltas de vocabulário.
+            (antes de substantivo, sozinho, lugar, direção formal, direção casual, tipo, modo) —
+            como um sistema só, não como listas soltas de vocabulário.
           </li>
           <li>
             Escolher entre a forma que acompanha substantivo (<span className="font-jp">この</span>
@@ -326,8 +326,11 @@ export default function KoSoADo() {
             </li>
           </ul>
           <p className="mt-2">
-            Se só há uma pessoa, <span className="font-jp">それ</span> vira "perto, mas não na
-            mão" e <span className="font-jp">あれ</span> vira "bem longe".
+            Quando A e B estão <strong>lado a lado</strong>, olhando para a mesma coisa, a régua
+            muda de referência: <span className="font-jp">こ</span> = perto dos dois,{' '}
+            <span className="font-jp">そ</span> = um pouco afastado dos dois,{' '}
+            <span className="font-jp">あ</span> = longe dos dois. É o caso típico de duas pessoas
+            caminhando juntas na rua.
           </p>
         </Note>
         <p className="text-sm leading-relaxed text-ink">
@@ -346,8 +349,8 @@ export default function KoSoADo() {
         <GrammarTable
           headers={[
             'Grupo',
-            'Adjetivo',
-            'Pronome',
+            'Antes de substantivo',
+            'Sozinho',
             'Lugar',
             'Direção (formal)',
             'Direção (casual)',
@@ -403,8 +406,10 @@ export default function KoSoADo() {
 
       <Section title="この・その・あの・どの — vêm antes de um substantivo">
         <p className="text-sm leading-relaxed text-ink">
-          Esta série funciona como um <strong>adjetivo</strong>: vem sempre antes de um
-          substantivo e nunca fica sozinha. É a forma que você usa para apontar algo que já está
+          Esta série vem sempre <strong>antes de um substantivo</strong>, como um adjetivo, e
+          nunca fica sozinha. (Ela não é um adjetivo -い nem -な, os adjetivos que você verá em
+          outras lições: não muda de forma nem vai antes de <span className="font-jp">です</span>.)
+          É a forma que você usa para apontar algo que já está
           à vista — um item na prateleira, uma foto na tela, o prato que acabou de chegar à mesa —
           sem precisar levantar o dedo para ele.
         </p>
@@ -487,10 +492,10 @@ export default function KoSoADo() {
           notes="あれ = algo longe dos dois. かさ = guarda-chuva."
         />
         <Ex
-          jp="どれがあなたのですか？"
-          romaji="dore ga anata no desu ka?"
-          pt="Qual é o seu?"
-          notes={`どれ pergunta "qual" entre várias coisas.`}
+          jp="どれがたなかさんのですか？"
+          romaji="dore ga tanaka-san no desu ka?"
+          pt="Qual é o do sr. Tanaka?"
+          notes={`どれ pergunta "qual" entre várias coisas (aqui, vários guarda-chuvas)`}
         />
         <Ex
           jp="A：これ、たべていい？　B：それはだめ。"
@@ -517,7 +522,7 @@ export default function KoSoADo() {
           jp="あそこにトイレがあります。"
           romaji="asoko ni toire ga arimasu."
           pt="O banheiro fica lá."
-          notes={`Repare: o grupo あ usa あそこ (e não あこ). É a única forma "irregular" da tabela.`}
+          notes={`Repare: o grupo あ usa あそこ (e não あこ). Junto com ああ (e não あう), na série de modo, é uma das duas formas "irregulares" da tabela`}
         />
         <Ex
           jp="すみません、ゆうびんきょくはどこですか？"
@@ -529,8 +534,9 @@ export default function KoSoADo() {
 
       <Section title="こちら・そちら・あちら・どちら — direção (formal)">
         <p className="text-sm leading-relaxed text-ink">
-          Indicam direção ou lado, de forma educada. Muito usadas por atendentes em lojas, hotéis
-          e empresas.
+          Indicam direção ou lado, de forma educada — e também servem de versão educada de{' '}
+          <span className="font-jp">ここ</span>/<span className="font-jp">これ</span> ("aqui",
+          "isto") e de "esta pessoa". Muito usadas por atendentes em lojas, hotéis e empresas.
         </p>
         <Ex
           jp="こちらへどうぞ。"
@@ -538,7 +544,18 @@ export default function KoSoADo() {
           pt="Por aqui, por favor."
           notes="Um atendente guiando você. (へ aqui se lê e.)"
         />
-        <Ex jp="えきはあちらです。" romaji="eki wa achira desu." pt="A estação é por lá." />
+        <Ex
+          jp="えきはあちらです。"
+          romaji="eki wa achira desu."
+          pt="A estação é por lá."
+          notes="indicando o caminho com a mão aberta, nunca com o dedo"
+        />
+        <Ex
+          jp="おくにはどちらですか？"
+          romaji="okuni wa dochira desu ka?"
+          pt="De que país o(a) senhor(a) é?"
+          notes={`どちら também é o "onde?" educado — mais gentil que どこ`}
+        />
         <Ex
           jp="どちらがよろしいですか？"
           romaji="dochira ga yoroshii desu ka?"
@@ -549,7 +566,7 @@ export default function KoSoADo() {
           jp="こちらはたなかさんです。"
           romaji="kochira wa tanaka-san desu."
           pt="Este é o sr. Tanaka."
-          notes="こちら também apresenta pessoas com educação — mesmo uso visto na lição de Auto-apresentação."
+          notes="こちら apresenta pessoas com educação (lição de Auto-apresentação); これ, para pessoa, seria rude"
         />
         <Ex
           jp="どちらさまですか？"
@@ -578,18 +595,18 @@ export default function KoSoADo() {
         <Ex
           jp="あっちにいって。"
           romaji="acchi ni itte."
-          pt="Vai lá."
-          notes={`Dependendo do tom, pode soar rude ("vai pra lá").`}
+          pt="Vai pra lá."
+          notes={`Dependendo do tom, vira um rude "sai daqui!"`}
         />
         <Ex jp="どっちがいい？" romaji="docchi ga ii?" pt="Qual dos dois você prefere?" />
         <GrammarTable
           headers={['Formal', 'Casual', 'Onde cada um cabe']}
           jpCols={[0, 1]}
           rows={[
-            ['こちら', 'こっち', 'こちら: lojas, escritórios, apresentações'],
-            ['そちら', 'そっち', 'そっち: conversa do dia a dia'],
-            ['あちら', 'あっち', 'あっち: pode soar brusco'],
-            ['どちら', 'どっち', 'どちら: escolha educada entre dois'],
+            ['こちら', 'こっち', 'こちら em lojas, escritórios e apresentações; こっち com amigos e família'],
+            ['そちら', 'そっち', 'そちら também é o "aí / o seu lado" educado (ao telefone: そちらは…); そっち no dia a dia'],
+            ['あちら', 'あっち', 'あちら para indicar o caminho a alguém; あっち entre amigos — no tom errado, soa brusco'],
+            ['どちら', 'どっち', 'どちら para perguntar com educação (inclusive "onde?"); どっち entre amigos'],
           ]}
         />
       </Section>
@@ -660,7 +677,7 @@ export default function KoSoADo() {
         <Ex
           jp="どんなおんがくがすきですか？"
           romaji="donna ongaku ga suki desu ka?"
-          pt="Que tipo de música você gosta?"
+          pt="De que tipo de música você gosta?"
           notes={`どんな é muito comum em perguntas: "que tipo de...?".`}
         />
       </Section>
@@ -692,7 +709,7 @@ export default function KoSoADo() {
           jp="どうぞ。"
           romaji="douzo."
           pt="Por favor (pode ir / aqui está)."
-          notes={`Vem de どう ("como você quiser").`}
+          notes="Historicamente vem de どう; hoje é a palavra de oferecer ou dar passagem"
         />
         <Note>
           Duas expressões importantíssimas do dia a dia:
@@ -725,14 +742,14 @@ export default function KoSoADo() {
             [
               'こ',
               <>
-                algo que <strong>você</strong> vai dizer a seguir
+                algo que <strong>você mesmo</strong> está dizendo (vai dizer ou acabou de dizer)
               </>,
               'こういうりゆうできました。(kou iu riyuu de kimashita.) — Vim por esta razão.',
             ],
             [
               'そ',
               <>
-                algo que <strong>o outro</strong> disse, ou que os dois já mencionaram
+                algo que <strong>o outro</strong> disse, ou que só um dos dois conhece
               </>,
               'そのはなしはしっています。(sono hanashi wa shitte imasu.) — Sei desse assunto.',
             ],
@@ -783,6 +800,12 @@ export default function KoSoADo() {
               'どの precisa de substantivo; sozinho, use どれ ou どちら.',
             ],
             [
+              'Apontar uma pessoa com これ/この',
+              'これはたなかさんです。',
+              'こちらはたなかさんです。',
+              'これ/それ/あれ são para coisas; para pessoas, こちら (ou このかた, このひと).',
+            ],
+            [
               'Usar どっち em atendimento educado',
               'どっちがいいですか？ (a um cliente)',
               'どちらがよろしいですか？',
@@ -806,6 +829,8 @@ export default function KoSoADo() {
             ['"qual" (sozinho, três ou mais)', 'どれ'],
             ['"qual dos dois" (educado)', 'どちら'],
             ['"quem é?" (educado, telefone/interfone)', 'どちらさま'],
+            ['"este(a) é..." (apresentando pessoa)', 'こちら'],
+            ['"onde?" (educado)', 'どちら'],
             ['"deste tipo"', 'こんな'],
             ['"assim, desta forma"', 'こう'],
           ]}

@@ -317,7 +317,7 @@ export default function Desu() {
           jp="たなかさんはせんせいです。"
           romaji="tanaka-san wa sensei desu."
           pt="O sr. Tanaka é professor."
-          notes="たなかさんは (sujeito) + せんせい (o que se diz sobre ele) + です (liga os dois, com polidez)"
+          notes="たなかさんは (tópico: de quem se fala) + せんせい (o que se diz sobre ele) + です (liga os dois, com polidez)"
         />
         <p className="text-sm leading-relaxed text-ink">
           Repare que a frase já faz sentido sem です — <span className="font-jp">たなかさんはせんせい</span>{' '}
@@ -406,10 +406,10 @@ export default function Desu() {
 
       <Section title="Perguntas com ですか">
         <p className="text-sm leading-relaxed text-ink">
-          Para perguntar, o japonês não inverte a ordem das palavras como o português faz
-          ("é professor?" vs. "professor é"): só acrescenta{' '}
-          <span className="font-jp">か</span> no final da frase afirmativa, sem tirar nem
-          trocar mais nada. É a mesma pergunta que você vai fazer toda vez que conhecer
+          Para perguntar, o japonês só acrescenta <span className="font-jp">か</span> no final
+          da frase afirmativa, sem tirar nem trocar mais nada — a ordem das palavras não muda.
+          No português falado, a pergunta muitas vezes se distingue só pela entonação ("você é
+          professor?"); em japonês, quem marca a pergunta é o か. É a mesma pergunta que você vai fazer toda vez que conhecer
           alguém — nome, nacionalidade, profissão — ou confirmar algo sobre um objeto.
         </p>
         <Ex
@@ -483,9 +483,9 @@ export default function Desu() {
         />
         <Note>
           <strong>じゃ é uma contração de では</strong> — as duas formas significam o
-          mesmo. Na prática, quando estiver em dúvida entre ではありません e じゃないです, vá
-          de <span className="font-jp">じゃないです</span>: é a que você mais vai ouvir e
-          usar no dia a dia; ではありません soa um pouco mais formal/escrito.
+          mesmo. Na conversa educada do dia a dia, <span className="font-jp">じゃないです</span>{' '}
+          é a que você mais vai ouvir e usar; ではありません soa um pouco mais formal/escrito, e é
+          a escolha certa numa entrevista, num e-mail de trabalho ou numa reunião.
         </Note>
       </Section>
 
@@ -501,8 +501,8 @@ export default function Desu() {
         <p className="text-sm leading-relaxed text-ink">
           Na dúvida, isso muda uma escolha real: mantenha です/ます até a outra pessoa
           relaxar o tom primeiro, ou pedir diretamente (
-          <span className="font-jp">タメ口でいいよ</span>, algo como "pode falar informal
-          comigo").
+          <span className="font-jp">ためぐちでいいよ</span>, <em>tameguchi de ii yo</em>, algo
+          como "pode falar informal comigo").
         </p>
       </Section>
 
@@ -514,7 +514,9 @@ export default function Desu() {
           <span className="font-jp">たなかさんはせんせいでした</span> serve tanto para "o
           Tanaka foi professor" quanto para "o Tanaka era professor". Você usa isso para
           descrever algo que já não é mais verdade: um emprego antigo, o tempo de ontem,
-          como um lugar costumava ser.
+          como um lugar costumava ser. Atenção: no presente casual, です simplesmente some; no
+          passado casual, não dá para omitir — <span className="font-jp">だった</span> precisa
+          aparecer, porque é ela que marca o passado.
         </p>
         <Ex
           jp="きのうはやすみでした。"
@@ -569,7 +571,7 @@ export default function Desu() {
         <Ex
           jp="きのうはあめじゃなかった。"
           romaji="kinou wa ame janakatta."
-          pt="Ontem não choveu."
+          pt="Ontem não foi dia de chuva."
           notes="lit. 'ontem não foi chuva' — あめ (chuva) como substantivo + です. Forma casual"
         />
         <Ex
@@ -620,14 +622,14 @@ export default function Desu() {
               'Adjetivos -い têm negativa própria (くない), não usam じゃない.',
             ],
             [
-              'Misturar trilhas',
+              'Educado no meio, casual no fim',
               'がくせいですが、いかない',
               'がくせいですが、いきません (educado) / がくせいだけど、いかない (casual)',
-              'Mantenha a mesma trilha (educada ou casual) na frase inteira.',
+              'Quem define a trilha é o final da frase; です no meio com final casual soa incoerente.',
             ],
             [
-              'Esquecer o です no passado',
-              'きのうはやすみです でした',
+              'Somar です e でした',
+              'きのうはやすみですでした',
               'きのうはやすみでした',
               'でした já é a forma completa do passado; não se soma です a ela.',
             ],
@@ -656,7 +658,7 @@ export default function Desu() {
           headers={['', 'Educada (formal)', 'Educada (fala)', 'Casual']}
           jpCols={[1, 2, 3]}
           rows={[
-            ['Presente afirmativo', 'です', '—', '(sem です)'],
+            ['Presente afirmativo', 'です', '—', '(sem です; だ só para reconhecer)'],
             [
               'Presente negativo',
               'ではありません / じゃありません',

@@ -77,7 +77,7 @@ export const quiz: QuizLicao = {
     {
       id: 'kana-sig5',
       tipo: 'significado',
-      pergunta: 'Como se lê は quando funciona como partícula de tema, como em わたしは...?',
+      pergunta: 'Como se lê は quando funciona como partícula de tópico, como em わたしは...?',
       alternativas: ['wa', 'ha', 'wo', 'e'],
       correta: 0,
       explicacao: 'は só vira "wa" quando é partícula; como parte de uma palavra comum (はな, hana), continua "ha".',
@@ -93,14 +93,14 @@ export const quiz: QuizLicao = {
       tipo: 'verdadeiro-falso',
       afirmacao: 'は sempre se lê "wa", em qualquer palavra.',
       correta: false,
-      explicacao: 'は só vira "wa" como partícula de tema. Em palavras comuns, como はな (flor) ou はる (primavera), continua "ha".',
+      explicacao: 'は só vira "wa" como partícula de tópico. Em palavras comuns, como はな (flor) ou はる (primavera), continua "ha".',
     },
     {
       id: 'kana-vf7',
       tipo: 'verdadeiro-falso',
       afirmacao: 'Livros e mangás japoneses são sempre escritos da esquerda para a direita, como em português.',
       correta: false,
-      explicacao: 'Muito material impresso (mangá, romance, jornal) usa escrita vertical (縦書き), lida de cima para baixo e da direita para a esquerda; sites e documentos de trabalho costumam usar escrita horizontal.',
+      explicacao: 'Muito material impresso (mangá, romance, jornal) usa escrita vertical (たてがき), lida de cima para baixo e da direita para a esquerda; sites e documentos de trabalho costumam usar escrita horizontal.',
     },
   ],
 };
@@ -146,8 +146,8 @@ export default function Kana() {
           Esta lição ensina a <strong>reconhecer e ler</strong> hiragana e katakana. Ela não cobre
           kanji — isso é assunto da lição <strong>Kanji — Primeiros Passos</strong> e do{' '}
           <strong>módulo de Kanji</strong> do app (menu "Kanji"), que ensina os kanji do N5 com
-          repetição espaçada, radical/mnemônico e caligrafia. Para treinar a mão com hiragana/
-          katakana especificamente, use o <strong>treino de kana</strong> do app (menu "Kana"),
+          repetição espaçada, radical/mnemônico e caligrafia. Para treinar a mão com
+          hiragana/katakana especificamente, use o <strong>treino de kana</strong> do app (menu "Kana"),
           que tem um modo de desenho com feedback de caligrafia. O uso de partículas como は, を e
           へ dentro de frases é assunto da lição de Partículas; aqui o foco é só a leitura correta
           delas.
@@ -162,11 +162,11 @@ export default function Kana() {
             sistema.
           </li>
           <li>
-            Ler a tabela gojūon na ordem tradicional japonesa (direita para a esquerda, cima para
+            Ler a tabela gojuuon na ordem tradicional japonesa (direita para a esquerda, cima para
             baixo).
           </li>
           <li>
-            Reconhecer dakuten (゛), handakuten (゜), yōon (ゃゅょ), o っ pequeno e a vogal longa —
+            Reconhecer dakuten (゛), handakuten (゜), youon (ゃゅょ), o っ pequeno e a vogal longa —
             e como cada um muda o som e, às vezes, o significado da palavra.
           </li>
           <li>Identificar os kana que mais se confundem visualmente, em hiragana e em katakana.</li>
@@ -197,7 +197,8 @@ export default function Kana() {
         </p>
         <Note>
           O nome técnico disso é "sistema silábico" (ou, mais preciso, "moraico"). Você não
-          precisa decorar esse nome. Basta lembrar: <strong>um kana = um som.</strong>
+          precisa decorar esse nome. Basta lembrar: <strong>um kana = um som.</strong> (Há duas
+          exceções que você verá adiante: as combinações com や, ゆ, よ pequenos e o っ pequeno.)
         </Note>
         <p className="text-sm leading-relaxed text-ink">
           Existem dois conjuntos de kana: hiragana e katakana. Cada um tem os{' '}
@@ -279,11 +280,17 @@ export default function Kana() {
             existe em português; treine bastante.
           </li>
           <li>
-            <strong className="font-jp">ふ</strong> = <em>fu</em> → um "f" bem soprado, quase um
-            "hu".
+            <strong className="font-jp">ふ</strong> = <em>fu</em> → um sopro que sai entre os
+            lábios, quase um "hu". Os dentes de cima não encostam no lábio, como no "f" de{' '}
+            <em>faca</em>.
           </li>
           <li>
             <strong className="font-jp">じ</strong> = <em>ji</em> → som de "dji".
+          </li>
+          <li>
+            <strong className="font-jp">は ひ へ ほ</strong> = <em>ha hi he ho</em> → o "h"{' '}
+            <strong>sempre se pronuncia</strong>: é um sopro, como o "h" do inglês <em>house</em>{' '}
+            (ou o "r" de <em>rato</em> no sotaque carioca). Nunca é mudo como em <em>hotel</em>.
           </li>
           <li>
             <strong className="font-jp">ら り る れ ろ</strong> = <em>ra ri ru re ro</em> → o "r" é
@@ -294,22 +301,35 @@ export default function Kana() {
             <strong>As vogais são sempre puras.</strong> え é sempre "ê" (nunca "éi"); お é sempre
             "ô".
           </li>
+          <li>
+            <strong>Não "feche" a vogal do fim da palavra.</strong> No português do Brasil, "leite"
+            vira "leitchi" e "carro" vira "carru". Em japonês, não: て é sempre "tê" (
+            <span className="font-jp">きって</span> = <em>kitte</em>, nunca "kitchi"), で é "dê", こ
+            é "kô".
+          </li>
+          <li>
+            <strong>O u de す costuma quase sumir no fim de frase</strong>:{' '}
+            <span className="font-jp">です</span> soa "dess", <span className="font-jp">ます</span>{' '}
+            soa "mass". Escreve-se com す normalmente; é só a fala que encurta.
+          </li>
         </ul>
       </Section>
 
       <Section title="Como ler as tabelas de kana">
         <p className="text-sm leading-relaxed text-ink">
-          A tabela oficial do japonês chama-se <strong>gojūon</strong> (ごじゅうおん, "os
+          A tabela oficial do japonês chama-se <strong>gojuuon</strong> (ごじゅうおん, "os
           cinquenta sons"). Ela é organizada no formato tradicional japonês:
         </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
             <strong>As colunas são lidas da direita para a esquerda.</strong> A coluna あ fica à{' '}
-            <strong>direita</strong>; a coluna わ fica à esquerda.
+            <strong>direita</strong>; a coluna わ fica à esquerda. Cada coluna reúne os kana com a{' '}
+            <strong>mesma consoante</strong> (か, き, く, け, こ formam a coluna か).
           </li>
           <li>
             <strong>Cada coluna é lida de cima para baixo</strong>, na ordem das vogais: あ, い,
-            う, え, お.
+            う, え, お. Cada <strong>linha</strong> reúne os kana com a{' '}
+            <strong>mesma vogal</strong> (か, さ, た, な... formam a linha do あ).
           </li>
         </ul>
         <p className="text-sm leading-relaxed text-ink">
@@ -318,11 +338,11 @@ export default function Kana() {
         </p>
         <Note>
           <strong>Nota cultural:</strong> essa direção não é só um capricho da tabela. É a mesma
-          direção da escrita vertical tradicional (縦書き, <em>tategaki</em>), ainda comum em
+          direção da escrita vertical tradicional (たてがき, <em>tategaki</em>), ainda comum em
           romances, mangás, jornais e placas no Japão: o texto desce em colunas, e a próxima
           coluna fica à <strong>esquerda</strong> da anterior — o oposto do português. Sites,
           aplicativos e a maior parte dos documentos de trabalho hoje usam escrita horizontal
-          (横書き, <em>yokogaki</em>), da esquerda para a direita, como o nosso alfabeto. Ao pegar
+          (よこがき, <em>yokogaki</em>), da esquerda para a direita, como o nosso alfabeto. Ao pegar
           um mangá japonês, não estranhe se a capa parecer estar "do lado errado" — é só a direção
           de leitura mudando.
         </Note>
@@ -334,7 +354,7 @@ export default function Kana() {
           puro". Leia da direita (あ) para a esquerda (わ), cada coluna de cima para baixo.
         </p>
         <GrammarTable
-          headers={['わ行', 'ら行', 'や行', 'ま行', 'は行', 'な行', 'た行', 'さ行', 'か行', 'あ行']}
+          headers={['わ', 'ら', 'や', 'ま', 'は', 'な', 'た', 'さ', 'か', 'あ']}
           rows={[
             [
               kanaCell('わ', 'wa'), kanaCell('ら', 'ra'), kanaCell('や', 'ya'), kanaCell('ま', 'ma'),
@@ -381,8 +401,8 @@ export default function Kana() {
             </li>
             <li>
               <strong className="font-jp">を</strong>, nesta tabela, aparece com a leitura "wo" —
-              mas na prática ele só existe como partícula, e se lê diferente. Duas seções à
-              frente explica esse caso, junto com は e へ.
+              mas na prática ele só existe como partícula, e se lê diferente. A seção "は, へ e
+              を", duas seções à frente, explica esse caso, junto com は e へ.
             </li>
           </ul>
         </Note>
@@ -394,7 +414,7 @@ export default function Kana() {
           para baixo.
         </p>
         <GrammarTable
-          headers={['ワ行', 'ラ行', 'ヤ行', 'マ行', 'ハ行', 'ナ行', 'タ行', 'サ行', 'カ行', 'ア行']}
+          headers={['ワ', 'ラ', 'ヤ', 'マ', 'ハ', 'ナ', 'タ', 'サ', 'カ', 'ア']}
           rows={[
             [
               kanaCell('ワ', 'wa'), kanaCell('ラ', 'ra'), kanaCell('ヤ', 'ya'), kanaCell('マ', 'ma'),
@@ -446,7 +466,7 @@ export default function Kana() {
           Isso é resquício de uma pronúncia mais antiga do japonês, que mudou na fala mas não na
           escrita. Você vai encontrar <span className="font-jp">は</span> e{' '}
           <span className="font-jp">を</span> em praticamente toda frase japonesa (
-          <span className="font-jp">は</span> marca o assunto da frase,{' '}
+          <span className="font-jp">は</span> marca o tópico — o assunto — da frase,{' '}
           <span className="font-jp">を</span> marca o objeto direto do verbo);{' '}
           <span className="font-jp">へ</span> aparece sempre que se fala de destino ou direção.
           Qual usar e por quê — quando preferir は a が, por exemplo — é assunto da lição de
@@ -456,7 +476,7 @@ export default function Kana() {
           headers={['Kana', 'Como parte de uma palavra', 'Como partícula']}
           jpCols={[0]}
           rows={[
-            ['は', 'ha (はな, hana, flor)', 'wa (marca o assunto da frase)'],
+            ['は', 'ha (はな, hana, flor)', 'wa (marca o tópico — o assunto — da frase)'],
             ['へ', 'he (へや, heya, quarto)', 'e (marca destino/direção)'],
             ['を', '(quase não aparece fora deste uso)', 'o (marca o objeto direto do verbo)'],
           ]}
@@ -487,18 +507,19 @@ export default function Kana() {
         />
         <Note>
           Esta é provavelmente a exceção mais importante de toda a leitura de hiragana: aparece
-          cedo, aparece sempre, e é fácil esquecer no início porque a tabela gojūon mostra{' '}
+          cedo, aparece sempre, e é fácil esquecer no início porque a tabela gojuuon mostra{' '}
           <span className="font-jp">は</span> e <span className="font-jp">へ</span> só com a
           leitura normal. Se uma frase não fizer sentido com "ha"/"he", teste "wa"/"e" — é bem
           provável que seja partícula.
         </Note>
       </Section>
 
-      <Section title="Dakuten (゛) — os sons «sonoros»">
+      <Section title='Dakuten (゛) — os sons "sonoros"'>
         <p className="text-sm leading-relaxed text-ink">
           <strong>Dakuten</strong> (だくてん) são as <strong>duas aspas</strong> que se colocam no
-          canto superior direito de um kana: ゛. Elas transformam o som numa versão "mais
-          grave/vibrada". A lógica é simples:
+          canto superior direito de um kana: ゛. Elas transformam o som numa versão{' '}
+          <strong>sonora</strong> — aquela em que a garganta vibra (encoste a mão no pescoço e diga
+          "ssss" e depois "zzzz": no segundo, você sente a vibração). A lógica é simples:
         </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
@@ -516,7 +537,7 @@ export default function Kana() {
         </ul>
         <p className="text-sm leading-relaxed text-ink">Hiragana com dakuten:</p>
         <GrammarTable
-          headers={['ば行', 'だ行', 'ざ行', 'が行']}
+          headers={['ば', 'だ', 'ざ', 'が']}
           rows={[
             [kanaCell('ば', 'ba'), kanaCell('だ', 'da'), kanaCell('ざ', 'za'), kanaCell('が', 'ga')],
             [kanaCell('び', 'bi'), kanaCell('ぢ', 'ji'), kanaCell('じ', 'ji'), kanaCell('ぎ', 'gi')],
@@ -527,7 +548,7 @@ export default function Kana() {
         />
         <p className="text-sm leading-relaxed text-ink">Katakana com dakuten:</p>
         <GrammarTable
-          headers={['バ行', 'ダ行', 'ザ行', 'ガ行']}
+          headers={['バ', 'ダ', 'ザ', 'ガ']}
           rows={[
             [kanaCell('バ', 'ba'), kanaCell('ダ', 'da'), kanaCell('ザ', 'za'), kanaCell('ガ', 'ga')],
             [kanaCell('ビ', 'bi'), kanaCell('ヂ', 'ji'), kanaCell('ジ', 'ji'), kanaCell('ギ', 'gi')],
@@ -539,11 +560,12 @@ export default function Kana() {
         <Note>
           <strong>Detalhe importante:</strong> じ e ぢ têm o <strong>mesmo som</strong> (
           <em>ji</em>); ず e づ também (<em>zu</em>). Na prática, quase sempre se usa じ e ず. As
-          formas ぢ e づ aparecem em pouquíssimas palavras. Não se preocupe com elas por enquanto.
+          formas ぢ e づ aparecem em poucas palavras (como <span className="font-jp">つづく</span>,{' '}
+          <em>tsuzuku</em>, continuar). Por enquanto, basta saber lê-las quando aparecerem.
         </Note>
       </Section>
 
-      <Section title="Handakuten (゜) — o som «p»">
+      <Section title='Handakuten (゜) — o som "p"'>
         <p className="text-sm leading-relaxed text-ink">
           <strong>Handakuten</strong> (はんだくてん) é a <strong>bolinha</strong> no canto
           superior direito: ゜. Ela só aparece na coluna は e cria o som de "p".
@@ -552,7 +574,7 @@ export default function Kana() {
           <strong className="font-jp">は → ぱ</strong> (h vira p)
         </p>
         <GrammarTable
-          headers={['Hiragana (ぱ行)', 'Romaji', 'Katakana (パ行)']}
+          headers={['Hiragana (coluna ぱ)', 'Romaji', 'Katakana (coluna パ)']}
           jpCols={[0, 2]}
           rows={[
             ['ぱ', 'pa', 'パ'],
@@ -575,10 +597,10 @@ export default function Kana() {
         </Note>
       </Section>
 
-      <Section title="Yōon (combinados) — kana + pequeno ゃ ゅ ょ">
+      <Section title="Youon (combinados) — kana + pequeno ゃ ゅ ょ">
         <p className="text-sm leading-relaxed text-ink">
-          <strong>Yōon</strong> (ようおん) são sons formados juntando um kana da coluna{' '}
-          <strong>い</strong> (como き, し, ち) com um <strong>や, ゆ ou よ pequeno</strong> (ゃ,
+          <strong>Youon</strong> (ようおん) são sons formados juntando um kana terminado em{' '}
+          <strong>i</strong> (da linha do い: き, し, ち, に etc. — menos o próprio い) com um <strong>や, ゆ ou よ pequeno</strong> (ゃ,
           ゅ, ょ). Repare no tamanho: o segundo kana é <strong>miúdo</strong>. É isso que avisa
           que os dois se fundem num único som.
         </p>
@@ -598,7 +620,7 @@ export default function Kana() {
           Regra prática: leia os dois juntos, rápido, como uma sílaba única.
         </p>
         <p className="text-sm leading-relaxed text-ink">
-          Hiragana — yōon. Colunas da direita (き) para a esquerda (り); linhas de cima (ゃ) para
+          Hiragana — youon. Colunas da direita (き) para a esquerda (り); linhas de cima (ゃ) para
           baixo (ょ).
         </p>
         <GrammarTable
@@ -618,7 +640,7 @@ export default function Kana() {
             ],
           ]}
         />
-        <p className="text-sm leading-relaxed text-ink">Yōon com dakuten/handakuten (sons sonoros e "p"):</p>
+        <p className="text-sm leading-relaxed text-ink">Youon com dakuten/handakuten (sons sonoros e "p"):</p>
         <GrammarTable
           headers={['ぴ', 'び', 'じ', 'ぎ']}
           rows={[
@@ -627,7 +649,7 @@ export default function Kana() {
             [kanaCell('ぴょ', 'pyo'), kanaCell('びょ', 'byo'), kanaCell('じょ', 'jo'), kanaCell('ぎょ', 'gyo')],
           ]}
         />
-        <p className="text-sm leading-relaxed text-ink">Katakana — yōon. Mesma lógica, em katakana.</p>
+        <p className="text-sm leading-relaxed text-ink">Katakana — youon. Mesma lógica, em katakana.</p>
         <GrammarTable
           headers={['リ', 'ミ', 'ヒ', 'ニ', 'チ', 'シ', 'キ']}
           rows={[
@@ -657,7 +679,8 @@ export default function Kana() {
 
       <Section title="Sinais especiais que mudam o som">
         <p className="text-sm leading-relaxed text-ink">
-          Além dos kana, três sinais aparecem o tempo todo e alteram a leitura.
+          Além dos kana, dois recursos aparecem o tempo todo e alteram a leitura: o っ pequeno e a
+          vogal longa.
         </p>
         <p className="text-sm leading-relaxed text-ink">
           <strong>O つ pequeno (っ / ッ) — a "pausa dobrada".</strong> Um <strong>つ miúdo</strong>{' '}
@@ -668,7 +691,7 @@ export default function Kana() {
           jp="きって"
           romaji="kitte"
           pt="selo"
-          notes="o っ dobra o t: lê-se ki-(pausa)-te. Sem o っ, きて (kite) seria venha. A pausa muda a palavra"
+          notes={`o っ dobra o t: lê-se ki-(pausa)-te. Sem o っ, きて (kite) seria "venha" (pedido informal). A pausa muda a palavra`}
         />
         <Ex jp="がっこう" romaji="gakkou" pt="escola" notes="o っ dobra o k: ga-(pausa)-kou" />
 
@@ -682,13 +705,22 @@ export default function Kana() {
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
             <strong className="font-jp">おかあさん</strong> (<em>okaasan</em>) → mãe (o "a" é
-            longo: あ + あ).
+            longo: か + あ).
           </li>
           <li>
-            <strong className="font-jp">こうこう</strong> (<em>koukou</em>) → colégio (o som "ô"
-            é longo: お + う).
+            <strong className="font-jp">こうこう</strong> (<em>koukou</em>) → colégio. O "ô" longo
+            quase sempre se escreve com <strong>う</strong>: こ + う soa "kôô", não "kô-u".
+          </li>
+          <li>
+            <strong className="font-jp">せんせい</strong> (<em>sensei</em>) → professor. O "ê"
+            longo costuma se escrever com <strong>い</strong>: せ + い soa "sêê" na fala natural.
           </li>
         </ul>
+        <p className="text-sm leading-relaxed text-ink">
+          Repare nos dois últimos: o kana escrito (う, い) não é o som que se ouve. O romaji deste
+          app segue a escrita (<em>koukou</em>, <em>sensei</em>), mas a pronúncia é de vogal
+          esticada.
+        </p>
         <p className="text-sm leading-relaxed text-ink">
           No <strong>katakana</strong>, usa-se um <strong>traço</strong> (ー):
         </p>
@@ -719,10 +751,17 @@ export default function Kana() {
             ['ファ フィ フェ フォ', 'fa fi fe fo', 'ファイル (arquivo)'],
             ['ティ / ディ', 'ti / di', 'パーティー (festa)'],
             ['ウィ / ウェ', 'wi / we', 'ウェブ (web)'],
-            ['ジェ / チェ', 'je / che', 'チェック (checar)'],
-            ['ヴ', 'vu (som de "v")', 'ヴァイオリン (violino)'],
+            ['ジェ / チェ', 'je / che', 'チェック (checagem, marca de "ok")'],
+            ['ヴ', 'vu (som de "v")', 'ヴァイオリン (violino) — muitas vezes escrito バイオリン, com som de b'],
           ]}
         />
+        <Note>
+          Cuidado com o hábito brasileiro de transformar "ti" em "tchi" e "di" em "dji":{' '}
+          <span className="font-jp">ティ</span> e <span className="font-jp">ディ</span> existem
+          justamente para soar como o "t" e o "d" secos de <em>tia</em> e <em>dia</em> no sotaque
+          nordestino ou português — <span className="font-jp">パーティー</span> é "paatii", não
+          "paatchii".
+        </Note>
       </Section>
 
       <Section title="Exemplos em contexto">
@@ -730,15 +769,15 @@ export default function Kana() {
         <Ex jp="すし" romaji="sushi" pt="sushi" notes="dois kana simples: す (su) + し (shi)" />
         <Ex jp="ねこ" romaji="neko" pt="gato" notes="ね (ne) + こ (ko)" />
         <Ex jp="でんわ" romaji="denwa" pt="telefone" notes="で (dakuten em て) + ん (n) + わ (wa)" />
-        <Ex jp="しゃしん" romaji="shashin" pt="foto" notes="começa com o yōon しゃ (sha): し + や pequeno" />
-        <Ex jp="パン" romaji="pan" pt="pão" notes="palavra estrangeira, por isso katakana. パ tem handakuten (som de p)" />
+        <Ex jp="しゃしん" romaji="shashin" pt="foto" notes="começa com o youon しゃ (sha): し + や pequeno" />
+        <Ex jp="パン" romaji="pan" pt="pão" notes={`palavra estrangeira, por isso katakana. パ tem handakuten (som de p). Veio do português "pão", trazido no século XVI`} />
         <Ex jp="テレビ" romaji="terebi" pt="televisão" notes="katakana, do inglês television. ビ tem dakuten" />
         <Ex jp="コーヒー" romaji="koohii" pt="café" notes="katakana com dois traços de vogal longa (ー)" />
         <Ex
           jp="わたしはにほんごをべんきょうしています。"
           romaji="watashi wa nihongo o benkyou shite imasu."
           pt="Estou estudando japonês."
-          notes="reúne は e を como partícula (wa/o, não ha/wo), dakuten em べ/ご, e o kana ん"
+          notes="só para ler: は e を como partícula (wa/o), dakuten em べ/ご, o youon きょ e o kana ん"
         />
       </Section>
 
@@ -756,15 +795,32 @@ export default function Kana() {
           headers={['Grupo', 'Como diferenciar']}
           jpCols={[0]}
           rows={[
-            ['あ / お', 'お tem um traço curto isolado a mais, no canto superior direito, que あ não tem.'],
-            ['い / り', 'り é mais alta e termina com um traço que desce à direita; い são só dois tracinhos curtos.'],
-            ['さ / ち / き', 'き tem um traço a mais cruzando o corpo (fica mais "cheio"); ち é uma curva só, sem cruzamento.'],
-            ['く / へ', 'く forma um ângulo mais fechado, como um "menor que" (<); へ é um traço só, mais aberto e raso.'],
-            ['は / ほ', 'ほ tem um tracinho extra no meio do corpo, que は não tem.'],
-            ['る / ろ', 'る fecha o traço final num laço; ろ termina em gancho aberto, sem fechar.'],
             [
-              'ぬ / め / ね / れ / わ',
-              'preste atenção no laço final: ぬ e め fecham a voltinha; ね fecha e ainda soma um rabinho; れ e わ não chegam a fechar, só fazem um gancho.',
+              'あ / お',
+              'as duas começam com um traço horizontal cruzado por um vertical; a diferença é que お tem um tracinho solto no canto superior direito, e あ não.',
+            ],
+            [
+              'い / り',
+              'い são dois tracinhos curtos, lado a lado; em り, o traço da direita é bem mais longo e desce, curvando.',
+            ],
+            [
+              'さ / ち / き',
+              <>
+                さ e ち são quase espelhadas: a curva de baixo de さ se abre para a direita (como um
+                "c"); a de ち se abre para a esquerda (como o fim de um "5"). き é como さ, mas com{' '}
+                <strong>dois</strong> traços horizontais em cima.
+              </>,
+            ],
+            [
+              'く / へ',
+              'os dois são um traço só: く aponta para a esquerda, como o sinal "<"; へ aponta para cima, como um telhado achatado.',
+            ],
+            ['は / ほ', 'a parte da direita de ほ tem um traço horizontal a mais, fechando o topo; は tem só um.'],
+            ['る / ろ', 'る fecha o traço final num laço; ろ termina em gancho aberto, sem fechar.'],
+            ['ぬ / め', 'ぬ termina num laço; め é a mesma forma sem o laço.'],
+            [
+              'ね / れ / わ',
+              'as três começam com o mesmo traço vertical à esquerda; o final é que muda: ね termina num laço, れ termina com um rabinho para fora (para a direita), わ termina numa curva que volta para dentro, sem laço.',
             ],
           ]}
         />
@@ -775,12 +831,33 @@ export default function Kana() {
           headers={['Grupo', 'Como diferenciar']}
           jpCols={[0]}
           rows={[
-            ['シ / ツ', 'シ termina com uma curva que sobe (como um sorriso); ツ termina com um traço que desce (como uma carranca).'],
-            ['ソ / ン', 'mesma lógica de シ/ツ, em miniatura: ソ termina subindo (como シ); ン termina mais reto/para baixo (como ツ).'],
+            [
+              'シ / ツ',
+              <>
+                em シ, os dois tracinhos ficam <strong>à esquerda</strong>, um acima do outro, e o
+                traço longo <strong>sobe</strong> de baixo para cima; em ツ, os tracinhos ficam{' '}
+                <strong>em cima</strong>, lado a lado, e o traço longo <strong>desce</strong> do alto
+                à direita.
+              </>,
+            ],
+            [
+              'ソ / ン',
+              'mesma lógica de シ/ツ, com um tracinho só: ソ é como ツ (tracinho em cima, traço longo descendo); ン é como シ (tracinho à esquerda, traço longo subindo).',
+            ],
             ['ウ / ワ', 'ウ tem um tracinho curto a mais, perto do topo, que ワ não tem.'],
-            ['チ / テ', 'テ começa com um traço horizontal comprido, atravessando o topo; チ começa com um tracinho curto e diagonal.'],
-            ['ル / レ', 'レ é uma curva só, um traço; ル tem essa mesma curva mais um traço curto extra à esquerda.'],
-            ['ミ / ニ / コ', 'conte os traços: ミ tem três tracinhos diagonais; ニ tem dois traços horizontais; コ é um traço só, dobrado em ângulo reto.'],
+            [
+              'チ / テ',
+              <>
+                テ tem dois traços horizontais em cima (o primeiro mais curto), e o traço que desce sai
+                do segundo, <strong>sem atravessar</strong> nenhum deles; em チ, o primeiro traço é
+                diagonal e o traço que desce <strong>atravessa</strong> o horizontal.
+              </>,
+            ],
+            ['ル / レ', 'レ é uma curva só, um traço; ル tem essa mesma curva mais um traço extra à esquerda, descendo.'],
+            [
+              'ミ / ニ / コ',
+              'ミ tem três tracinhos diagonais; ニ tem dois traços horizontais soltos; em コ, os traços se ligam pela direita, formando um quadrado aberto à esquerda.',
+            ],
             ['ク / タ', 'タ tem um traço a mais cruzando o corpo (fica mais "cheio"), que ク não tem.'],
           ]}
         />
@@ -837,10 +914,24 @@ export default function Kana() {
           rows={[
             ['Ler を como "uo"', 'を = "uo"', 'を = o', 'を é sempre o, e só como partícula.'],
             [
+              'Ler o "h" como mudo',
+              'はな = "ana"',
+              'はな = hana',
+              <>
+                O "h" japonês é sempre um sopro audível, nunca mudo como em <em>hotel</em>.
+              </>,
+            ],
+            [
+              'Fechar a vogal do fim',
+              'きって = "kitchi"',
+              'きって = kit-te',
+              'て é sempre "tê"; o japonês não reduz "e" final a "i" como o português do Brasil.',
+            ],
+            [
               'Ler は como "ha" sendo partícula',
               'わたしは = "watashi ha"',
               'わたしは = "watashi wa"',
-              'は muda para "wa" só quando é partícula de tema. Como parte de uma palavra (はな), continua "ha".',
+              'は muda para "wa" só quando é partícula de tópico. Como parte de uma palavra (はな), continua "ha".',
             ],
             [
               'Ignorar o っ pequeno',
@@ -854,16 +945,16 @@ export default function Kana() {
               'おばさん = tia, おばあさん = avó',
               'O tamanho da vogal muda o significado.',
             ],
-            ['Ler yōon como dois sons', 'きゃ = "ki-ya"', 'きゃ = kya (um som)', 'O や pequeno funde-se com o kana anterior.'],
+            ['Ler youon como dois sons', 'きゃ = "ki-ya"', 'きゃ = kya (um som)', 'O や pequeno funde-se com o kana anterior.'],
             [
               'Usar katakana para palavra japonesa',
               'ネコ para "gato"',
               'ねこ',
-              'Palavras japonesas comuns vão em hiragana.',
+              'Palavras japonesas comuns vão em hiragana. ネコ só aparece quando se quer destaque (ou em textos científicos), não na escrita normal.',
             ],
             [
-              'Confundir ゛e ゜',
-              'は゜ querendo "ba"',
+              'Confundir ゛ e ゜',
+              'ぱ (pa) quando queria "ba"',
               'ば (゛) = ba, ぱ (゜) = pa',
               'Duas aspas = som sonoro; bolinha = som de "p".',
             ],
@@ -884,7 +975,7 @@ export default function Kana() {
             <strong>Dakuten e handakuten</strong> — são só variações de sons que você já sabe.
           </li>
           <li>
-            <strong>Yōon</strong> — as combinações com ゃゅょ.
+            <strong>Youon</strong> — as combinações com ゃゅょ.
           </li>
           <li>
             <strong>Sinais especiais</strong> — っ (pausa), ー (vogal longa).
@@ -902,8 +993,9 @@ export default function Kana() {
             ['palavra estrangeira ou nome de fora', 'katakana'],
             ['som "g, z, d, b"', 'kana + dakuten (゛)'],
             ['som "p"', 'kana + handakuten (゜)'],
-            ['som "kya, sha, cho"...', 'yōon (kana + ゃ/ゅ/ょ pequeno)'],
+            ['som "kya, sha, cho"...', 'youon (kana + ゃ/ゅ/ょ pequeno)'],
             ['consoante dobrada (pausa)', 'っ pequeno'],
+            ['vogal longa (em hiragana)', 'mais uma vogal: おかあさん; "ô" longo com う (こう), "ê" longo geralmente com い (せい)'],
             ['vogal longa (em katakana)', 'traço ー'],
           ]}
         />

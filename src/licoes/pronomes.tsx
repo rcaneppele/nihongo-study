@@ -199,7 +199,7 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'pronomes-8', jp: 'わたしたち', kana: 'わたしたち', romaji: 'watashitachi', pt: 'nós (neutro)' },
       { id: 'pronomes-9', jp: 'ぼくら', kana: 'ぼくら', romaji: 'bokura', pt: 'nós (masculino, casual)' },
       { id: 'pronomes-10', jp: 'あなた', kana: 'あなた', romaji: 'anata', pt: 'você (neutro/formal)' },
-      { id: 'pronomes-11', jp: 'きみ', kana: 'きみ', romaji: 'kimi', pt: 'você (casual, de superior pra inferior)' },
+      { id: 'pronomes-11', jp: 'きみ', kana: 'きみ', romaji: 'kimi', pt: 'você (casual, de superior para inferior)' },
       { id: 'pronomes-12', jp: 'おまえ', kana: 'おまえ', romaji: 'omae', pt: 'você (muito casual, pode soar rude)' },
       { id: 'pronomes-13', jp: 'あんた', kana: 'あんた', romaji: 'anta', pt: 'você (casual, meio rude)' },
       { id: 'pronomes-14', jp: 'かれ', kana: 'かれ', romaji: 'kare', pt: 'ele / namorado' },
@@ -316,7 +316,7 @@ export default function Pronomes() {
           jp="わたしはこのかいしゃではたらいています。"
           romaji="watashi wa kono kaisha de hataraite imasu."
           pt="Eu trabalho nesta empresa."
-          notes="わたし — seguro em qualquer situação, formal ou informal."
+          notes="わたし — seguro em qualquer situação; entre amigos homens soa um pouco sério, mas nunca errado"
         />
         <Ex
           jp="ぼくもいっしょにいきます。"
@@ -327,7 +327,7 @@ export default function Pronomes() {
         <Ex
           jp="おれ、さきにかえるね。"
           romaji="ore, saki ni kaeru ne."
-          pt="Eu vou voltar primeiro, viu."
+          pt="Vou indo na frente, tá?"
           notes="おれ — bem casual, majoritariamente masculino; reconheça antes de usar (ver nota abaixo)."
         />
         <Note>
@@ -388,7 +388,7 @@ export default function Pronomes() {
           jpCols={[0]}
           rows={[
             [
-              <FuriganaWord kanji="貴方" reading="あなた" />,
+              'あなた',
               'anata',
               'neutro / formal',
               'Correto, mas raro entre iguais; pode soar distante. Tem usos legítimos restritos — veja nota abaixo.',
@@ -458,7 +458,12 @@ export default function Pronomes() {
           rows={[
             ['みなさん', 'minasan', 'neutro / semiformal', 'O mais comum: "pessoal", "todos".'],
             ['みなさま', 'minasama', 'muito formal', 'Cerimônias, discursos, anúncios.'],
-            ['あなたたち', 'anatatachi', 'neutro', 'Raro na fala; mais na escrita.'],
+            [
+              'あなたたち',
+              'anatatachi',
+              'neutro, mas pode soar de cima para baixo',
+              'Pouco usado; na fala, aparece mais de adulto para crianças ("vocês aí").',
+            ],
             ['きみたち', 'kimitachi', 'casual, de superior para inferior', 'Professor com a turma, técnico com o time.'],
             ['みんな', 'minna', 'casual', '"Todo mundo", conversa do dia a dia.'],
           ]}
@@ -483,7 +488,15 @@ export default function Pronomes() {
           headers={['Kanji (furigana)', 'Romaji', 'Significado', 'Atenção']}
           jpCols={[0]}
           rows={[
-            [<FuriganaWord kanji="彼" reading="かれ" />, 'kare', 'ele', 'Também significa "namorado". Cuidado com a ambiguidade.'],
+            [
+              <FuriganaWord kanji="彼" reading="かれ" />,
+              'kare',
+              'ele',
+              <>
+                Também significa "namorado" (para "namorado", a palavra mais comum é{' '}
+                <span className="font-jp">かれし</span>, <em>kareshi</em>). Cuidado com a ambiguidade.
+              </>,
+            ],
             [<FuriganaWord kanji="彼女" reading="かのじょ" />, 'kanojo', 'ela', 'Também significa "namorada".'],
             ['あのひと', 'ano hito', 'aquela pessoa', 'Neutro e natural. Não indica gênero.'],
             ['あのかた', 'ano kata', 'aquela pessoa (respeitoso)', 'Versão formal de あのひと.'],
@@ -518,8 +531,7 @@ export default function Pronomes() {
 
       <Section title="じぶん — 'si mesmo'">
         <p className="text-sm leading-relaxed text-ink">
-          <strong className="font-jp">じぶん</strong> (<span className="font-jp">自分</span>,{' '}
-          <em>jibun</em>) é o pronome reflexivo. Significa "si mesmo, eu mesmo, você mesmo",
+          <strong className="font-jp">じぶん</strong> (<em>jibun</em>) é o pronome reflexivo. Significa "si mesmo, eu mesmo, você mesmo",
           conforme o contexto. É ótimo para evitar confusão com pronomes de pessoa.
         </p>
         <Ex jp="じぶんでやります。" romaji="jibun de yarimasu." pt="Faço eu mesmo. / Faço por conta própria." />
@@ -533,7 +545,7 @@ export default function Pronomes() {
           jp="かれはじぶんのことしかかんがえない。"
           romaji="kare wa jibun no koto shika kangaenai."
           pt="Ele só pensa em si mesmo."
-          notes={`Aqui じぶん se refere a "ele". Note o しか + verbo negativo (visto na lição de partículas).`}
+          notes={`Aqui じぶん se refere a "ele". Note o しか + verbo negativo (detalhes na lição de Partículas).`}
         />
         <Note>
           No dialeto de Kansai, <span className="font-jp">じぶん</span> às vezes vira "você", o que
@@ -560,13 +572,13 @@ export default function Pronomes() {
           jp="A：きのう、なにをしましたか？　B：えいがをみました。"
           romaji="A: kinou, nani o shimashita ka? B: eiga o mimashita."
           pt="A: O que você fez ontem? B: Assisti a um filme."
-          notes={`B não precisa dizer "eu": o contexto já diz que é ele.`}
+          notes={`B não precisa dizer "eu": a pergunta já deixa claro de quem se fala`}
         />
         <Ex
           jp="コーヒーをおねがいします。"
           romaji="koohii o onegaishimasu."
           pt="Um café, por favor."
-          notes={`no konbini/café, "eu quero" nunca precisa ser dito — o pedido já deixa claro quem fala`}
+          notes={`num café, "eu quero" nunca precisa ser dito — o pedido já deixa claro quem fala`}
         />
         <Ex
           jp="がくせいです。だいがくでけいざいをべんきょうしています。"
@@ -682,9 +694,9 @@ export default function Pronomes() {
           rows={[
             [
               'Usar pronomes demais',
-              'わたしはコーヒーがわたしはすきです。',
-              'コーヒーがすきです。',
-              'Repetir pronome soa robótico; omita quando o contexto é claro.',
+              'わたしはたなかです。わたしはがくせいです。わたしはコーヒーがすきです。',
+              'たなかです。がくせいです。コーヒーがすきです。',
+              'Repetir わたし em toda frase soa robótico; depois que o assunto é você, omita.',
             ],
             [
               <>
@@ -756,7 +768,8 @@ export default function Pronomes() {
             [
               'namorado(a)',
               <>
-                <span className="font-jp">かれ</span> / <span className="font-jp">かのじょ</span>
+                <span className="font-jp">かれ</span> (<span className="font-jp">かれし</span>) /{' '}
+                <span className="font-jp">かのじょ</span>
               </>,
             ],
             ['eu mesmo / si mesmo', 'じぶん'],

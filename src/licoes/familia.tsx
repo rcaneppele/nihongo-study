@@ -244,12 +244,14 @@ export default function Familia() {
         </p>
         <ul className="list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-ink">
           <li>
-            <strong>Registro humilde</strong> (<span className="font-jp">みうち</span>,{' '}
-            <em>miuchi</em>): para falar da <strong>sua própria</strong> família.
+            <strong>Registro humilde</strong>: para falar da <strong>sua própria</strong> família —
+            o grupo de "dentro", que o japonês chama de <span className="font-jp">うち</span> (
+            <em>uchi</em>).
           </li>
           <li>
-            <strong>Registro respeitoso</strong> (<span className="font-jp">たにん</span>,{' '}
-            <em>tanin</em>): para falar da família <strong>de outra pessoa</strong>.
+            <strong>Registro respeitoso</strong>: para falar da família{' '}
+            <strong>de outra pessoa</strong> — o grupo de "fora", <span className="font-jp">そと</span>{' '}
+            (<em>soto</em>).
           </li>
         </ul>
         <p className="text-sm leading-relaxed text-ink">
@@ -272,9 +274,14 @@ export default function Familia() {
           família alheia demonstra consideração.
         </p>
         <Note>
-          Dentro de casa a lógica muda: entre os membros, usam-se as formas respeitosas. As
-          crianças chamam os pais de <span className="font-jp">おとうさん</span> e{' '}
-          <span className="font-jp">おかあさん</span>. As formas humildes (
+          Dentro de casa a lógica muda: para <strong>chamar os parentes mais velhos</strong>,
+          usam-se as formas respeitosas. As crianças chamam os pais de{' '}
+          <span className="font-jp">おとうさん</span> e <span className="font-jp">おかあさん</span>, e
+          o irmão mais velho de <span className="font-jp">おにいさん</span> — muitas vezes na versão
+          carinhosa com <span className="font-jp">ちゃん</span>:{' '}
+          <span className="font-jp">おにいちゃん</span>, <span className="font-jp">おばあちゃん</span>.
+          Já os mais novos são chamados <strong>pelo nome</strong>: ninguém chama o próprio irmão
+          caçula de <span className="font-jp">おとうとさん</span>. As formas humildes (
           <span className="font-jp">ちち</span>, <span className="font-jp">はは</span>) aparecem
           só quando você fala <strong>sobre</strong> sua família com pessoas de fora.
         </Note>
@@ -361,19 +368,26 @@ export default function Familia() {
 
       <Section title="Família por casamento">
         <GrammarTable
-          headers={['Grau', 'Minha família', 'Romaji', 'Uso respeitoso']}
+          headers={['Grau', 'Minha família', 'Romaji', 'Como chamar a pessoa diretamente']}
           jpCols={[1, 3]}
           rows={[
             ['Sogro', <FuriganaWord kanji="義父" reading="ぎふ" />, 'gifu', 'おとうさん'],
             ['Sogra', <FuriganaWord kanji="義母" reading="ぎぼ" />, 'gibo', 'おかあさん'],
             ['Cunhado mais velho', <FuriganaWord kanji="義兄" reading="ぎけい" />, 'gikei', 'おにいさん'],
             ['Cunhada mais velha', <FuriganaWord kanji="義姉" reading="ぎし" />, 'gishi', 'おねえさん'],
-            ['Cunhado mais novo', <FuriganaWord kanji="義弟" reading="ぎてい" />, 'gitei', 'ぎていさん'],
-            ['Cunhada mais nova', <FuriganaWord kanji="義妹" reading="ぎまい" />, 'gimai', 'ぎまいさん'],
-            ['Genro', <FuriganaWord kanji="婿" reading="むこ" />, 'muko', 'むこさん'],
-            ['Nora', <FuriganaWord kanji="嫁" reading="よめ" />, 'yome', 'およめさん'],
+            ['Cunhado mais novo', <FuriganaWord kanji="義弟" reading="ぎてい" />, 'gitei', 'pelo nome (+ さん/くん)'],
+            ['Cunhada mais nova', <FuriganaWord kanji="義妹" reading="ぎまい" />, 'gimai', 'pelo nome (+ さん/ちゃん)'],
+            ['Genro', <FuriganaWord kanji="婿" reading="むこ" />, 'muko', 'pelo nome (+ さん)'],
+            ['Nora', <FuriganaWord kanji="嫁" reading="よめ" />, 'yome', 'pelo nome (+ さん)'],
           ]}
         />
+        <p className="text-sm leading-relaxed text-ink">
+          A última coluna segue a mesma lógica de dentro de casa: os parentes por casamento mais
+          velhos são chamados como se fossem de sangue (o genro chama o sogro de{' '}
+          <span className="font-jp">おとうさん</span>); os mais novos, pelo nome. Para falar do genro
+          ou da nora <strong>de outra pessoa</strong>, use <span className="font-jp">おむこさん</span> e{' '}
+          <span className="font-jp">およめさん</span>.
+        </p>
         <Note>
           O prefixo <span className="font-jp">義</span> (<em>gi</em>) marca "parente por
           casamento". Esses termos compactos (<span className="font-jp">ぎけい</span>,{' '}
@@ -434,7 +448,14 @@ export default function Familia() {
             [<FuriganaWord kanji="孫" reading="まご" />, 'mago', 'neto / neta'],
             [<FuriganaWord kanji="親戚" reading="しんせき" />, 'shinseki', 'parentes em geral'],
             [<FuriganaWord kanji="独身" reading="どくしん" />, 'dokushin', 'solteiro(a)'],
-            [<FuriganaWord kanji="既婚" reading="きこん" />, 'kikon', 'casado(a)'],
+            [
+              <FuriganaWord kanji="既婚" reading="きこん" />,
+              'kikon',
+              <>
+                casado(a) — termo de formulário; na fala, diz-se{' '}
+                <span className="font-jp">けっこんしています</span>
+              </>,
+            ],
             [<FuriganaWord kanji="離婚" reading="りこん" />, 'rikon', 'divórcio / divorciado(a)'],
           ]}
         />
@@ -507,8 +528,8 @@ export default function Familia() {
         <Ex
           jp="ごかぞくはいますか？"
           romaji="gokazoku wa imasu ka?"
-          pt="Você tem família?"
-          notes="ごかぞく é a forma respeitosa de かぞく. Nunca use ご para a sua própria família."
+          pt="Você tem família? (cônjuge, filhos)"
+          notes="ごかぞく é a forma respeitosa de かぞく; nunca use ご para a sua própria família. Pergunta pessoal: melhor esperar o assunto surgir"
         />
         <Ex
           jp="ごきょうだいはいますか？"
@@ -540,8 +561,8 @@ export default function Familia() {
         <Ex
           jp="これはわたしのちちです。"
           romaji="kore wa watashi no chichi desu."
-          pt="Este é meu pai."
-          notes="Apresentando o próprio pai, usa-se ちち (humilde), nunca おとうさん."
+          pt="Este é meu pai. (mostrando uma foto)"
+          notes="falando do próprio pai, ちち (humilde). これ aponta a foto; com o pai em pessoa, diga こちらはちちです"
         />
         <Ex
           jp="たなかさんのおとうさんはどんなおしごとをされていますか？"
@@ -592,6 +613,15 @@ export default function Familia() {
               'ご é respeitoso; a sua família vai sem ele.',
             ],
             [
+              'Usar ちち/はは para chamar o pai ou a mãe',
+              '(em casa) ちち、ごはんだよ！',
+              'おとうさん、ごはんだよ！',
+              <>
+                ちち/はは servem para falar <strong>sobre</strong> os pais com quem é de fora, nunca
+                para chamá-los.
+              </>,
+            ],
+            [
               'Usar むすめ/むすこ como se fossem "criança" em geral',
               'むすめさんはいますか？ (tentando perguntar de forma geral)',
               'おこさんはいますか？',
@@ -608,7 +638,8 @@ export default function Familia() {
           rows={[
             ['Falo da minha família', 'humilde', 'ちち, はは, あに'],
             ['Falo da família de outra pessoa', 'respeitoso', 'おとうさん, おかあさん, おにいさん'],
-            ['Dentro de casa, chamando um parente', 'respeitoso', 'おとうさん, おかあさん'],
+            ['Dentro de casa, chamando um parente mais velho', 'respeitoso', 'おとうさん, おかあさん, おにいさん'],
+            ['Dentro de casa, chamando um parente mais novo', 'pelo nome', '—'],
             ['Pergunta geral sobre filhos/irmãos', 'termo guarda-chuva', 'こども, きょうだい, おこさん, ごきょうだい'],
             ['Já se sabe o gênero/posição', 'termo específico', 'むすこ, おじょうさん, あに, あね, おとうと, いもうと'],
           ]}
