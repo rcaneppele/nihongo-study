@@ -33,6 +33,7 @@ import Sufixos, { meta as metaSufixos, quiz as quizSufixos, kakitori as kakitori
 import Pronomes, { meta as metaPronomes, quiz as quizPronomes, kakitori as kakitoriPronomes } from './pronomes';
 import Verbos, { meta as metaVerbos, quiz as quizVerbos } from './verbos';
 import Desu, { meta as metaDesu, quiz as quizDesu } from './desu';
+import Seikatsu, { meta as metaSeikatsu, quiz as quizSeikatsu, kakitori as kakitoriSeikatsu } from './seikatsu';
 import Kanji, { meta as metaKanji, quiz as quizKanji, kakitori as kakitoriKanji } from './kanji';
 
 export const LICOES: LicaoEntry[] = [
@@ -46,5 +47,6 @@ export const LICOES: LicaoEntry[] = [
   { meta: metaParticulas, Component: Particulas, quiz: quizParticulas },
   { meta: metaVerbos, Component: Verbos, quiz: quizVerbos },
   { meta: metaDesu, Component: Desu, quiz: quizDesu },
+  { meta: metaSeikatsu, Component: Seikatsu, quiz: quizSeikatsu, kakitori: kakitoriSeikatsu },
   { meta: metaKanji, Component: Kanji, quiz: quizKanji, kakitori: kakitoriKanji },
 ];
