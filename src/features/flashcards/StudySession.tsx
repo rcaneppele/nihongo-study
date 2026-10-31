@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { db, type Card, newId } from '../../db/schema';
-import { applyFsrs, REVIEW_GRADES, type Grade } from '../srs/fsrs';
+import { applyFsrs, type Grade } from '../srs/fsrs';
+import GradeButtons from '../srs/GradeButtons';
 import AudioButton from '../../components/AudioButton';
+import SessionHeader from '../../components/SessionHeader';
+import { useShortcuts } from '../../lib/useShortcuts';
 
 /**
  * "review" usa a nota pra atualizar o FSRS (stability/difficulty/dueDate) —
@@ -10,6 +13,12 @@ import AudioButton from '../../components/AudioButton';
  * distorcer a agenda de repetição espaçada.
  */
 export type StudyMode = 'review' | 'practice';
+
+/** O que precisa ser revertido ao desfazer uma nota: o card como estava antes e a linha de `reviews` criada. */
+interface UndoEntry {
+  before: Card;
+  reviewId: string;
+}
 
 export default function StudySession({
   cards,
@@ -23,18 +32,13 @@ export default function StudySession({
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [grading, setGrading] = useState(false);
+  // Pilha de notas dadas nesta sessão (só no modo review). Os objetos em
+  // `cards` são a foto de antes da sessão, então servem de "estado anterior"
+  // pra restaurar no desfazer.
+  const [undoStack, setUndoStack] = useState<UndoEntry[]>([]);
 
   const card = cards[index];
-  if (!card) {
-    return (
-      <div className="card-surface text-center">
-        <p className="font-display text-xl">Sessão concluída.</p>
-        <button className="btn-primary mt-4" onClick={onDone}>
-          Voltar
-        </button>
-      </div>
-    );
-  }
+  const canUndo = index > 0 && !grading;
 
   function advance() {
     setShowBack(false);
@@ -48,38 +52,82 @@ export default function StudySession({
     if (grading) return;
     setGrading(true);
     const result = applyFsrs(card, rating);
+    const reviewId = newId();
     await db.transaction('rw', db.cards, db.reviews, async () => {
       await db.cards.update(card.id, {
         ...result,
         updatedAt: Date.now(),
       });
       await db.reviews.add({
-        id: newId(),
+        id: reviewId,
         cardId: card.id,
         reviewedAt: Date.now(),
         quality: rating,
         intervalAfter: result.scheduledDays,
       });
     });
+    setUndoStack((s) => [...s, { before: card, reviewId }]);
     setGrading(false);
     advance();
   }
 
+  // Volta um card e mostra a resposta de novo, pronto pra ser reavaliado.
+  // No modo review, restaura o estado FSRS anterior e apaga a revisão gravada
+  // — como se a nota nunca tivesse sido dada.
+  async function undo() {
+    if (!canUndo) return;
+    if (mode === 'review') {
+      const last = undoStack[undoStack.length - 1];
+      if (!last) return;
+      setGrading(true);
+      await db.transaction('rw', db.cards, db.reviews, async () => {
+        await db.cards.put({ ...last.before, updatedAt: Date.now() });
+        await db.reviews.delete(last.reviewId);
+      });
+      setUndoStack((s) => s.slice(0, -1));
+      setGrading(false);
+    }
+    setIndex((i) => i - 1);
+    setShowBack(true);
+  }
+
+  useShortcuts({
+    undo: canUndo ? undo : undefined,
+    ' ': card && !showBack ? () => setShowBack(true) : card && mode === 'practice' ? advance : undefined,
+    Enter: card && !showBack ? () => setShowBack(true) : card && mode === 'practice' ? advance : undefined,
+  });
+
+  if (!card) {
+    return (
+      <div className="card-surface text-center">
+        <p className="font-display text-xl">Sessão concluída.</p>
+        <div className="mt-4 flex justify-center gap-2">
+          {canUndo && (
+            <button className="btn-ghost" onClick={undo}>
+              Desfazer última
+            </button>
+          )}
+          <button className="btn-primary" onClick={onDone}>
+            Voltar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-sage">
-        <div className="flex items-center gap-2">
-          {mode === 'practice' && (
+      <SessionHeader
+        index={index}
+        total={cards.length}
+        onUndo={canUndo ? undo : undefined}
+        onQuit={onDone}
+        badge={
+          mode === 'practice' && (
             <span className="rounded bg-line/60 px-2 py-0.5 text-xs uppercase tracking-wide">Prática livre</span>
-          )}
-          <span>
-            {index + 1} de {cards.length}
-          </span>
-        </div>
-        <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onDone}>
-          Desistir e voltar
-        </button>
-      </div>
+          )
+        }
+      />
 
       <div className="card-surface min-h-48 grid place-items-center text-center">
         <div>
@@ -98,19 +146,13 @@ export default function StudySession({
 
       {!showBack ? (
         <button className="btn-primary w-full" onClick={() => setShowBack(true)}>
-          Mostrar resposta
+          Mostrar resposta <kbd className="kbd">Espaço</kbd>
         </button>
       ) : mode === 'review' ? (
-        <div className="grid grid-cols-4 gap-2">
-          {REVIEW_GRADES.map((g) => (
-            <button key={g.label} className="btn-ghost" disabled={grading} onClick={() => grade(g.grade)}>
-              {g.label}
-            </button>
-          ))}
-        </div>
+        <GradeButtons srs={card} disabled={grading} onGrade={grade} />
       ) : (
         <button className="btn-primary w-full" onClick={advance}>
-          Próximo
+          Próximo <kbd className="kbd">Espaço</kbd>
         </button>
       )}
     </div>

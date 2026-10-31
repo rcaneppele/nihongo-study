@@ -70,10 +70,23 @@ export function applyFsrs(state: SrsInput, grade: Grade, now: number = Date.now(
   return toSrsState(card);
 }
 
-/** Rótulos dos botões de revisão e a nota (Rating do FSRS) que cada um envia. */
+/**
+ * Rótulos dos botões de revisão e a nota (Rating do FSRS) que cada um envia.
+ * Os rótulos descrevem o que aconteceu ("Não lembrei"), não o nome técnico
+ * da nota (Again/Hard/Good/Easy), pra ficar óbvio pra quem nunca usou SRS;
+ * `hint` vira o tooltip do botão. `simple` marca os dois que aparecem no
+ * modo padrão de 2 botões (ver src/features/srs/gradeMode.ts) — o FSRS
+ * funciona bem só com "passou/não passou", e os outros dois ficam como
+ * opção em Config.
+ */
 export const REVIEW_GRADES = [
-  { label: 'De novo', grade: Rating.Again },
-  { label: 'Difícil', grade: Rating.Hard },
-  { label: 'Bom', grade: Rating.Good },
-  { label: 'Fácil', grade: Rating.Easy },
+  { label: 'Não lembrei', hint: 'Errei ou não consegui lembrar', grade: Rating.Again, simple: true },
+  { label: 'Com esforço', hint: 'Lembrei, mas demorei ou fiquei em dúvida', grade: Rating.Hard, simple: false },
+  { label: 'Lembrei', hint: 'Lembrei corretamente', grade: Rating.Good, simple: true },
+  { label: 'Fácil', hint: 'Lembrei na hora, sem esforço nenhum', grade: Rating.Easy, simple: false },
 ] as const;
+
+/** Próximo intervalo (em dias) que o card ganharia com essa nota — prévia exibida no botão. */
+export function previewInterval(state: SrsInput, grade: Grade, now: number = Date.now()): number {
+  return applyFsrs(state, grade, now).scheduledDays;
+}

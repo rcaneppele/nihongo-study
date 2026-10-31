@@ -5,6 +5,7 @@ import { freshSrs } from '../features/srs/fsrs';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
 import { parseCardsFile } from '../features/flashcards/importCards';
 import { useTheme, type ThemeMode } from '../lib/useTheme';
+import { setGradeMode, useGradeMode, type GradeMode } from '../features/srs/gradeMode';
 import { N5_DECK, n5CategoryCounts } from '../data/seed/n5';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
@@ -454,8 +455,14 @@ const THEME_OPTIONS: { key: ThemeMode; label: string }[] = [
   { key: 'system', label: 'Sistema' },
 ];
 
+const GRADE_MODE_OPTIONS: { key: GradeMode; label: string }[] = [
+  { key: 'simple', label: '2 botões' },
+  { key: 'full', label: '4 botões' },
+];
+
 function ConfiguracoesTab() {
   const { mode, setMode } = useTheme();
+  const gradeMode = useGradeMode();
 
   return (
     <div className="space-y-6"> 
@@ -470,6 +477,25 @@ function ConfiguracoesTab() {
               key={opt.key}
               className={`rounded-md px-3 py-1.5 ${mode === opt.key ? 'bg-indigo text-paper' : ''}`}
               onClick={() => setMode(opt.key)}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="card-surface space-y-3">
+        <h2 className="font-medium">Revisão (flash cards e kanji)</h2>
+        <p className="text-sm text-sage">
+          "2 botões" mostra só Não lembrei e Lembrei — menos decisão por card, e o algoritmo funciona bem assim.
+          "4 botões" acrescenta Com esforço e Fácil, para quem quer ajustar o intervalo com mais precisão.
+        </p>
+        <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+          {GRADE_MODE_OPTIONS.map((opt) => (
+            <button
+              key={opt.key}
+              className={`rounded-md px-3 py-1.5 ${gradeMode === opt.key ? 'bg-indigo text-paper' : ''}`}
+              onClick={() => setGradeMode(opt.key)}
             >
               {opt.label}
             </button>

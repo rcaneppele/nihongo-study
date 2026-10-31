@@ -1,56 +1,83 @@
 import { useState } from 'react';
-import { db } from '../../db/schema';
-import { applyFsrs, REVIEW_GRADES, type Grade } from '../srs/fsrs';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db, type KanjiProgress } from '../../db/schema';
+import { applyFsrs, type Grade } from '../srs/fsrs';
+import GradeButtons from '../srs/GradeButtons';
 import type { KanjiEntry } from '../../data/kanji';
 import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
+import SessionHeader from '../../components/SessionHeader';
+import { useShortcuts } from '../../lib/useShortcuts';
 
 /**
  * Revisão espaçada dos kanji já aprendidos — mesmo padrão auto-graded de
  * StudySession.tsx (flash cards): mostra o kanji, "Mostrar resposta" revela
- * leituras/significado/exemplos, e as 4 notas do FSRS atualizam
- * kanjiProgress.
+ * leituras/significado/exemplos, e a nota do FSRS (GradeButtons) atualiza
+ * kanjiProgress. Desfazer restaura o kanjiProgress de antes da nota.
  */
 export default function KanjiReviewSession({ entries, onDone }: { entries: KanjiEntry[]; onDone: () => void }) {
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [grading, setGrading] = useState(false);
+  const [undoStack, setUndoStack] = useState<KanjiProgress[]>([]);
   const entry = entries[index];
-
-  if (!entry) {
-    return (
-      <div className="card-surface space-y-4 text-center">
-        <p className="font-display text-xl">Revisão concluída.</p>
-        <button className="btn-primary" onClick={onDone}>
-          Voltar
-        </button>
-      </div>
-    );
-  }
+  const progress = useLiveQuery(() => (entry ? db.kanjiProgress.get(entry.char) : undefined), [entry?.char]);
+  const canUndo = index > 0 && !grading;
 
   async function grade(rating: Grade) {
-    if (grading) return;
+    if (grading || !entry) return;
     setGrading(true);
-    const progress = await db.kanjiProgress.get(entry.char);
-    if (progress) {
-      const result = applyFsrs(progress, rating);
+    const before = await db.kanjiProgress.get(entry.char);
+    if (before) {
+      const result = applyFsrs(before, rating);
       await db.kanjiProgress.update(entry.char, { ...result, updatedAt: Date.now() });
+      setUndoStack((s) => [...s, before]);
     }
     setGrading(false);
     setShowBack(false);
     setIndex((i) => i + 1);
   }
 
+  async function undo() {
+    if (!canUndo) return;
+    const last = undoStack[undoStack.length - 1];
+    if (last) {
+      setGrading(true);
+      await db.kanjiProgress.put({ ...last, updatedAt: Date.now() });
+      setUndoStack((s) => s.slice(0, -1));
+      setGrading(false);
+    }
+    setIndex((i) => i - 1);
+    setShowBack(true);
+  }
+
+  useShortcuts({
+    undo: canUndo ? undo : undefined,
+    ' ': entry && !showBack ? () => setShowBack(true) : undefined,
+    Enter: entry && !showBack ? () => setShowBack(true) : undefined,
+  });
+
+  if (!entry) {
+    return (
+      <div className="card-surface space-y-4 text-center">
+        <p className="font-display text-xl">Revisão concluída.</p>
+        <div className="flex justify-center gap-2">
+          {canUndo && (
+            <button className="btn-ghost" onClick={undo}>
+              Desfazer última
+            </button>
+          )}
+          <button className="btn-primary" onClick={onDone}>
+            Voltar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-sage">
-        <span>
-          {index + 1} de {entries.length}
-        </span>
-        <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onDone}>
-          Desistir e voltar
-        </button>
-      </div>
+      <SessionHeader index={index} total={entries.length} onUndo={canUndo ? undo : undefined} onQuit={onDone} />
 
       <div className="card-surface min-h-48 space-y-4 text-center">
         <div className="flex items-center justify-center gap-2">
@@ -107,16 +134,10 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
 
       {!showBack ? (
         <button className="btn-primary w-full" onClick={() => setShowBack(true)}>
-          Mostrar resposta
+          Mostrar resposta <kbd className="kbd">Espaço</kbd>
         </button>
       ) : (
-        <div className="grid grid-cols-4 gap-2">
-          {REVIEW_GRADES.map((g) => (
-            <button key={g.label} className="btn-ghost" disabled={grading} onClick={() => grade(g.grade)}>
-              {g.label}
-            </button>
-          ))}
-        </div>
+        progress && <GradeButtons srs={progress} disabled={grading} onGrade={grade} />
       )}
     </div>
   );

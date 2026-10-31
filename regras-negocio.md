@@ -43,11 +43,35 @@ Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
   `src/routes/Flashcards.tsx`), tanto em "Estudar" quanto em "Praticar" —
   senão a ordem seria sempre a de inserção no banco, e o usuário acaba
   decorando a sequência em vez de lembrar cada card de forma independente.
-- O usuário avalia cada revisão com uma nota do FSRS (`Rating`). Botões:
-  - **De novo** → `Rating.Again` (1)
-  - **Difícil** → `Rating.Hard` (2)
-  - **Bom** → `Rating.Good` (3)
+- O usuário avalia cada revisão com uma nota do FSRS (`Rating`). Botões
+  (`src/features/srs/GradeButtons.tsx`, compartilhado com a revisão de kanji):
+  - **Não lembrei** → `Rating.Again` (1)
+  - **Com esforço** → `Rating.Hard` (2)
+  - **Lembrei** → `Rating.Good` (3)
   - **Fácil** → `Rating.Easy` (4)
+
+  Os rótulos descrevem o que aconteceu, não o nome técnico da nota, pra
+  ficar claro pra quem nunca usou SRS; cada botão tem um tooltip com a
+  explicação completa (`hint` em `REVIEW_GRADES`).
+- **Modo de botões** (Config > Configurações > "Revisão"; `db.meta`, chave
+  `reviewGradeMode`, entra no backup): **2 botões** (padrão — só Não
+  lembrei e Lembrei; o FSRS funciona bem com passou/não passou e é menos
+  decisão por card) ou **4 botões**. Notas antigas com Hard/Easy continuam
+  válidas; o modo só muda o que aparece na tela.
+- Cada botão tem uma **legenda com o próximo intervalo** ("rever amanhã",
+  "rever em 12 dias"…), calculada com `previewInterval()` sem gravar nada.
+- **Atalhos de teclado** (`src/lib/useShortcuts.ts`; dicas `<kbd>` só
+  aparecem em aparelhos com mouse): Espaço/Enter revela a resposta e, com
+  ela revelada, conta como **Lembrei**; `1`…`N` = botões na ordem exibida;
+  Ctrl/Cmd+Z = desfazer. Ignorados quando o foco está num campo de texto.
+- **Desfazer** (cabeçalho da sessão e tela de conclusão): volta um card e
+  mostra a resposta de novo. No modo "Estudar", restaura o card ao estado
+  FSRS de antes da nota (`updatedAt` atualizado, pra mesclagem tratar como
+  edição recente) e **apaga** a linha de `reviews` gravada — como se a nota
+  não tivesse sido dada. Vale pra quantas notas quiser dentro da sessão
+  atual; ao sair da sessão, a pilha de desfazer se perde. Em "Praticar",
+  só volta o card (nada é gravado).
+- Barra de progresso fina abaixo de "N de total" (`SessionHeader`).
 - `applyFsrs(card, rating)` delega ao `ts-fsrs` (`enable_short_term: false`,
   então o menor intervalo possível é 1 dia — sem passos de aprendizado em
   minutos, já que cada card só é revisado uma vez por sessão) e devolve o
@@ -248,8 +272,10 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
     entra na fila de revisão imediatamente (`dueDate` = agora).
   - **Revisar** (`KanjiReviewSession.tsx`) — mesmo padrão auto-graded de
     `StudySession.tsx` (flash cards): mostra o kanji, "Mostrar resposta"
-    revela leituras/significado/exemplos, as 4 notas do FSRS
-    (`REVIEW_GRADES`) atualizam `kanjiProgress`. Fila = kanji com `dueDate`
+    revela leituras/significado/exemplos, e a nota do FSRS atualiza
+    `kanjiProgress` — mesmos botões, modo 2/4 botões, atalhos e desfazer
+    dos flash cards (seção 1; o desfazer aqui restaura o `kanjiProgress`
+    anterior, já que kanji não grava em `reviews`). Fila = kanji com `dueDate`
     vencido (`getDueKanji`, `src/features/kanji/kanjiQueue.ts`).
   - **Caligrafia** (`KanjiDrawSession.tsx`) — mesmo motor do modo "desenhar"
     de kana (`KanaCanvas` + `scoreDrawing()` + `StrokeReferenceFigure`),
