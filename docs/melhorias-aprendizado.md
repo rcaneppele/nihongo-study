@@ -150,7 +150,15 @@ em `backup.ts` (vence o `updatedAt` mais recente, como hoje).
 **Esforço:** médio. É a mudança mais estrutural deste relatório; vale um
 plano próprio e uma seção em `regras-negocio.md`.
 
-### 3.4 Vocabulário passivo implícito na leitura + "% conhecido" do texto — prioridade alta
+### 3.4 Vocabulário passivo implícito na leitura + "% conhecido" do texto — ✅ implementado (branch experimental)
+
+Feito como descrito abaixo. A chave da palavra é a mesma frente sugerida ao
+salvar como card (`lemma` quando houver); `lemma` ainda não foi preenchido
+nos textos existentes. O resumo de "Terminei a leitura" lista as palavras
+consultadas com "Salvar nos flash cards". Na Home, "Cards no total" deu
+lugar a "Palavras compreendidas" e "Palavras que sei dizer". Detalhes em
+`regras-negocio.md` §4.
+
 
 **O quê:**
 - Ao concluir um texto de leitura (botão "Terminei"), as palavras que o
@@ -343,7 +351,7 @@ poucos, não feature técnica.
 3. ✅ **3.6** (modo escuta/shadowing) — barato e dá uso novo aos 30 textos.
 4. ✅ **3.3** (estágios Reconheço/Sei dizer/Domino) — a mudança estrutural;
    desenhar com calma e documentar em `regras-negocio.md`.
-5. **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
+5. ✅ **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
    vocabulário) — dependem de 3.3 para brilhar.
 6. **3.7**, **3.8**, **3.9**, **3.10** conforme houver conteúdo/tempo.
 

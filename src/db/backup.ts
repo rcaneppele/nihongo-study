@@ -1,4 +1,13 @@
-import { db, type Card, type Review, type KanaProgress, type KanjiProgress, type Meta } from './schema';
+import {
+  db,
+  type Card,
+  type Review,
+  type KanaProgress,
+  type KanjiProgress,
+  type Meta,
+  type ReadingProgress,
+  type WordKnowledge,
+} from './schema';
 import { freshSrs } from '../features/srs/fsrs';
 
 /**
@@ -10,7 +19,7 @@ import { freshSrs } from '../features/srs/fsrs';
  * armazenamento.
  */
 
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export interface BackupFile {
   app: 'nihongo-study';
@@ -20,15 +29,19 @@ export interface BackupFile {
   reviews: Review[];
   kanaProgress: KanaProgress[];
   kanjiProgress: KanjiProgress[];
+  wordKnowledge: WordKnowledge[];
+  readingProgress: ReadingProgress[];
   meta: Meta[];
 }
 
 export async function exportData(): Promise<BackupFile> {
-  const [cards, reviews, kanaProgress, kanjiProgress, meta] = await Promise.all([
+  const [cards, reviews, kanaProgress, kanjiProgress, wordKnowledge, readingProgress, meta] = await Promise.all([
     db.cards.toArray(),
     db.reviews.toArray(),
     db.kanaProgress.toArray(),
     db.kanjiProgress.toArray(),
+    db.wordKnowledge.toArray(),
+    db.readingProgress.toArray(),
     db.meta.toArray(),
   ]);
   return {
@@ -39,6 +52,8 @@ export async function exportData(): Promise<BackupFile> {
     reviews,
     kanaProgress,
     kanjiProgress,
+    wordKnowledge,
+    readingProgress,
     meta,
   };
 }
@@ -75,6 +90,7 @@ function migrateBackup(data: BackupFile): BackupFile {
   let result = data;
   if (result.schemaVersion < 2) result = migrateV1ToV2(result);
   if (result.schemaVersion < 3) result = migrateV2ToV3(result);
+  if (result.schemaVersion < 4) result = migrateV3ToV4(result);
   return result;
 }
 
@@ -113,22 +129,37 @@ function migrateV2ToV3(data: BackupFile): BackupFile {
   };
 }
 
+/** v3 → v4: tabelas `wordKnowledge` e `readingProgress` (leitura extensiva) — backups antigos não têm linhas. */
+function migrateV3ToV4(data: BackupFile): BackupFile {
+  return {
+    ...data,
+    schemaVersion: 4,
+    wordKnowledge: data.wordKnowledge ?? [],
+    readingProgress: data.readingProgress ?? [],
+  };
+}
+
 export type ImportMode = 'replace' | 'merge';
 
 export async function importData(backup: BackupFile, mode: ImportMode = 'replace'): Promise<void> {
-  await db.transaction('rw', db.cards, db.reviews, db.kanaProgress, db.kanjiProgress, db.meta, async () => {
+  const tables = [db.cards, db.reviews, db.kanaProgress, db.kanjiProgress, db.wordKnowledge, db.readingProgress, db.meta];
+  await db.transaction('rw', tables, async () => {
     if (mode === 'replace') {
       await Promise.all([
         db.cards.clear(),
         db.reviews.clear(),
         db.kanaProgress.clear(),
         db.kanjiProgress.clear(),
+        db.wordKnowledge.clear(),
+        db.readingProgress.clear(),
         db.meta.clear(),
       ]);
       await db.cards.bulkAdd(backup.cards);
       await db.reviews.bulkAdd(backup.reviews);
       await db.kanaProgress.bulkAdd(backup.kanaProgress);
       await db.kanjiProgress.bulkAdd(backup.kanjiProgress);
+      await db.wordKnowledge.bulkAdd(backup.wordKnowledge);
+      await db.readingProgress.bulkAdd(backup.readingProgress);
       await db.meta.bulkAdd(backup.meta);
       return;
     }
@@ -148,6 +179,14 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
     for (const k of backup.kanjiProgress) {
       const existing = await db.kanjiProgress.get(k.char);
       if (!existing || k.updatedAt >= existing.updatedAt) await db.kanjiProgress.put(k);
+    }
+    for (const w of backup.wordKnowledge) {
+      const existing = await db.wordKnowledge.get(w.key);
+      if (!existing || w.updatedAt >= existing.updatedAt) await db.wordKnowledge.put(w);
+    }
+    for (const r of backup.readingProgress) {
+      const existing = await db.readingProgress.get(r.textId);
+      if (!existing || r.updatedAt >= existing.updatedAt) await db.readingProgress.put(r);
     }
     await db.meta.bulkPut(backup.meta);
   });

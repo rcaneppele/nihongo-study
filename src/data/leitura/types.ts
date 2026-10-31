@@ -8,6 +8,12 @@ export interface ReadingWord {
   /** Significado em pt-BR pro dicionário pop-up. Undefined em partículas
    * onde não agrega (usuário já viu isso nas lições de gramática). */
   meaning?: string;
+  /** Forma de dicionário, quando a forma no texto é conjugada/flexionada
+   * (ex.: `行きました` → `行く`). Identifica a palavra no vocabulário
+   * passivo e vira a frente sugerida ao salvar como card — sem ela, usa a
+   * forma do texto sem pontuação/partícula (ver `wordKey`). Opcional:
+   * preenchida aos poucos. */
+  lemma?: string;
 }
 
 /** Uma frase/linha do texto. */

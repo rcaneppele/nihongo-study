@@ -58,7 +58,7 @@ toda mudança pede bump; julgue pelo impacto:
 ## Mapa do código
 
 - `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress`, `meta`.
+  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `meta`.
 - `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`;
   migrações incrementais por versão em `migrateBackup`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
@@ -112,6 +112,9 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/features/leitura/useReadAloud.ts` + `ReadAloudBar.tsx` — "ouvir o
   texto" na leitura (contínuo ou shadowing, linha destacada, escutar
   primeiro); velocidade da fala global em `src/features/audio/speech.ts`.
+- `src/features/leitura/knowledge.ts` — vocabulário passivo: palavras
+  compreendidas/consultadas ao concluir um texto, "% conhecido" por texto
+  e os contadores de palavras compreendidas / que sei dizer da Home.
 - `src/lib/useHoldToPauseAdvance.ts` — hook do auto-avanço cronometrado do
   treino de kana (barra de progresso; segurar a tela pausa a contagem).
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/

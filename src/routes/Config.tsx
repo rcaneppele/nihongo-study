@@ -156,6 +156,8 @@ function DadosTab() {
       db.reviews.clear(),
       db.kanaProgress.clear(),
       db.kanjiProgress.clear(),
+      db.wordKnowledge.clear(),
+      db.readingProgress.clear(),
       db.meta.clear(),
     ]);
     setMsg('Todos os dados foram apagados.');

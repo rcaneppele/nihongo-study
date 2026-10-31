@@ -388,9 +388,36 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   mobile, sem matemática de posicionamento), e `AudioButton` por linha
   (reaproveita `speakJapanese` de `src/features/audio/speech.ts`, texto
   puro sem ruby).
-- **Sem progresso persistido** nesta entrega — mesmo estado das lições
-  ("não há progresso rastreado por lição, por ora"): é conteúdo estático,
-  sem tabela nova no Dexie.
+- **Vocabulário passivo e textos lidos** (`src/features/leitura/knowledge.ts`,
+  tabelas `wordKnowledge` e `readingProgress`, schemaVersion 4):
+  - **Identidade da palavra** (`wordKey`): a mesma forma sugerida como
+    frente de card (`suggestCard`): `lemma` quando anotado, senão o texto
+    sem pontuação final e sem a partícula de 1 caractere indicada no
+    significado. Assim uma palavra lida e um card salvo dela batem.
+    Palavras sem `meaning` (partículas/gramática) não contam. Sem `lemma`,
+    formas conjugadas diferentes (`行きました`/`行きます`) contam como
+    palavras distintas — `ReadingWord.lemma` é opcional e vai sendo
+    preenchido aos poucos nos textos.
+  - Tocar numa palavra marca ela como **consultada nesta leitura** (tocar
+    em PT, a tradução da frase, não marca nada).
+  - **"Terminei a leitura"** (fim da tela): para a leitura em voz alta, e
+    para cada palavra única do texto grava em `wordKnowledge` o status da
+    leitura mais recente — `compreendida` (não tocou) ou `consultada`
+    (tocou) —, somando `seenCount`/`lookupCount`; e soma `timesRead` em
+    `readingProgress`. Depois mostra um resumo com a lista das consultadas,
+    cada uma com "Salvar nos flash cards", e "Ler de novo" (zera as
+    consultas da tela, não o histórico) ou "Escolher outro texto". No modo
+    "escutar primeiro" não há toques — concluir conta tudo como
+    compreendido (o usuário entendeu de ouvido).
+  - **Palavras compreendidas** (`useKnownWords`) = chaves com status
+    `compreendida` + frentes de cards já revisados ou com produção.
+    **Palavras que sei dizer** = frentes de cards no estágio Sei dizer ou
+    Domino. Os dois contadores ficam na Home, com ⓘ explicando cada um
+    (abre com toque, pra funcionar no celular).
+  - **% conhecido** de um texto = palavras únicas dele que estão em
+    "compreendidas" ÷ total de palavras únicas. Aparece no topo da tela de
+    leitura e, quando > 0, na listagem (junto com "lido N×"); a listagem
+    explica que ~90%+ é a faixa ideal.
 - **Ouvir o texto** (`ReadAloudBar.tsx` + `useReadAloud.ts`, em
   `src/features/leitura/`): lê as linhas em sequência via
   `speakJapaneseAndWait()`, destacando a linha atual e rolando até ela.
@@ -464,11 +491,13 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
 - **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress` e `meta`. Serve de sincronização e de backup.
+  `kanjiProgress`, `wordKnowledge`, `readingProgress` e `meta`. Serve de
+  sincronização e de backup.
 - **Importar**, dois modos:
   - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e previsível.
   - **Mesclar**: por `id` (UUID) ou pela chave primária da tabela; em conflito,
-    vence o registro com `updatedAt` mais recente (cards, kanjiProgress) ou
+    vence o registro com `updatedAt` mais recente (cards, kanjiProgress,
+    wordKnowledge, readingProgress) ou
     `lastPracticed` mais recente (kana). `reviews` são idempotentes pelo `id`.
 - **UUID como chave** é obrigatório para a mesclagem funcionar sem colisão.
 - `schemaVersion` no backup permite migração futura na importação —

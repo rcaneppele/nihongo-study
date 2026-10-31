@@ -118,11 +118,36 @@ export interface KanjiProgress {
   updatedAt: number; // usado na mesclagem de backup, igual a Card.updatedAt
 }
 
+/**
+ * O que o usuário sabe de uma palavra vista na leitura extensiva (ver
+ * src/features/leitura/knowledge.ts). Chave = forma "limpa" da palavra
+ * (`wordKey`), a mesma usada como frente do card ao salvar da leitura.
+ * Reflete a leitura mais recente: "compreendida" = leu sem tocar pra ver o
+ * significado; "consultada" = tocou.
+ */
+export interface WordKnowledge {
+  key: string;
+  status: 'compreendida' | 'consultada';
+  seenCount: number; // em quantas leituras concluídas a palavra apareceu
+  lookupCount: number; // em quantas delas foi consultada
+  updatedAt: number;
+}
+
+/** Textos de leitura concluídos ("Terminei a leitura"). Chave = id do texto. */
+export interface ReadingProgress {
+  textId: string;
+  timesRead: number;
+  lastReadAt: number;
+  updatedAt: number;
+}
+
 export class NihongoDB extends Dexie {
   cards!: Table<Card, string>;
   reviews!: Table<Review, string>;
   kanaProgress!: Table<KanaProgress, string>;
   kanjiProgress!: Table<KanjiProgress, string>;
+  wordKnowledge!: Table<WordKnowledge, string>;
+  readingProgress!: Table<ReadingProgress, string>;
   meta!: Table<Meta, string>;
 
   constructor() {
@@ -158,6 +183,12 @@ export class NihongoDB extends Dexie {
     // (`db.kanjiProgress.where('dueDate')...`) funcionarem.
     this.version(3).stores({
       kanjiProgress: 'char, dueDate',
+    });
+    // v4: vocabulário passivo da leitura extensiva — palavras compreendidas/
+    // consultadas e textos concluídos. Só tabelas novas, nada a migrar.
+    this.version(4).stores({
+      wordKnowledge: 'key',
+      readingProgress: 'textId',
     });
   }
 }

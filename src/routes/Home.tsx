@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/schema';
@@ -6,9 +7,10 @@ import { KANJI_N5 } from '../data/kanji';
 import { LEITURA_TEXTOS } from '../data/leitura/textos';
 import { LICOES } from '../licoes';
 import { buildReviewQueue } from '../features/flashcards/stages';
+import { useKnownWords } from '../features/leitura/knowledge';
 
 export default function Home() {
-  const totalCards = useLiveQuery(() => db.cards.count(), [], 0);
+  const known = useKnownWords();
   // Mesma fila do "Estudar" em /flashcards (reconhecimento + produção).
   const dueCards = useLiveQuery(async () => buildReviewQueue(await db.cards.toArray()).length, [], 0);
   const kanaPracticed = useLiveQuery(() => db.kanaProgress.count(), [], 0);
@@ -25,9 +27,18 @@ export default function Home() {
         <h1 className="font-display text-3xl font-semibold text-center">こんにちは</h1>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Stat label="Para revisar hoje" value={dueCards} accent />
-        <Stat label="Cards no total" value={totalCards} />
+        <Stat
+          label="Palavras compreendidas"
+          value={known?.understood.size ?? 0}
+          hint="Seu vocabulário passivo: palavras que você leu sem precisar consultar o significado, mais as dos flash cards que você já revisou."
+        />
+        <Stat
+          label="Palavras que sei dizer"
+          value={known?.canSay.size ?? 0}
+          hint="Seu vocabulário ativo: flash cards no estágio Sei dizer ou Domino — você consegue dizer a palavra em japonês partindo do português."
+        />
         <Stat label="Kana praticados" value={`${kanaPracticed}/${ALL_KANA.length}`} />
         <Stat label="Kanji aprendidos" value={`${kanjiLearned}/${KANJI_N5.length}`} />
       </div>
@@ -51,13 +62,41 @@ export default function Home() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: number | string; accent?: boolean }) {
+function Stat({
+  label,
+  value,
+  accent,
+  hint,
+}: {
+  label: string;
+  value: number | string;
+  accent?: boolean;
+  hint?: string;
+}) {
+  // A explicação abre com toque (não só hover/title), pra funcionar no celular.
+  const [showHint, setShowHint] = useState(false);
+
   return (
     <div className="card-surface">
       <div className={`font-display text-3xl font-semibold ${accent ? 'text-hanko' : 'text-indigo'}`}>
         {value}
       </div>
-      <div className="mt-1 text-sm text-sage">{label}</div>
+      <div className="mt-1 flex items-center gap-1 text-sm text-sage">
+        {label}
+        {hint && (
+          <button
+            type="button"
+            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-sage/60 text-[10px] leading-none hover:border-indigo hover:text-indigo"
+            title={hint}
+            aria-label={`O que é: ${label}`}
+            aria-expanded={showHint}
+            onClick={() => setShowHint((v) => !v)}
+          >
+            i
+          </button>
+        )}
+      </div>
+      {hint && showHint && <p className="mt-2 text-xs text-sage">{hint}</p>}
     </div>
   );
 }

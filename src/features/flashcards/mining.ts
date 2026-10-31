@@ -22,9 +22,13 @@ const PARTICLE_NOTE = /\s*\(\+ partícula[^)]*\)\s*$/u;
  * src/data/leitura/types.ts), então isto é só um ponto de partida: o
  * usuário confere e edita antes de salvar. Remove a pontuação final e,
  * quando o significado indica uma partícula de 1 caractere grudada, tira ela
- * também (da frente e da leitura).
+ * também (da frente e da leitura). Se a palavra tem `lemma`, usa ele.
  */
 export function suggestCard(word: ReadingWord): CardDraft {
+  // Com forma de dicionário anotada, ela é a frente; a leitura do texto é
+  // da forma conjugada, então não serve — fica pro usuário preencher.
+  if (word.lemma) return { front: word.lemma, reading: '', back: (word.meaning ?? '').replace(PARTICLE_NOTE, '') };
+
   let front = word.text.replace(TRAILING_PUNCTUATION, '');
   let reading = (word.reading ?? '').replace(TRAILING_PUNCTUATION, '');
   let back = word.meaning ?? '';
