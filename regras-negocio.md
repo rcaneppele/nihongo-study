@@ -97,6 +97,56 @@ O histórico em `reviews` é preservado, mas notas gravadas antes da migração
 usam a escala antiga do SM-2 (0..5); não é relido pelo algoritmo, só fica
 como registro histórico.
 
+### Estágios de vocabulário (reconhecer → produzir)
+Lógica em `src/features/flashcards/stages.ts`. Cada card tem até **duas
+direções**, cada uma com seu próprio estado FSRS:
+
+- **Reconhecimento** (japonês → português): os campos de SRS direto no
+  `Card`, como sempre.
+- **Produção** (português → japonês): `card.production` (mesmo formato,
+  `CardSrs`), opcional — só existe a partir do estágio Sei dizer. Campo sem
+  índice: cards e backups antigos simplesmente não têm, sem migração; a
+  mesclagem de backup continua por `updatedAt` do card inteiro.
+
+O **estágio** é derivado, nunca gravado:
+
+| Estágio | Condição |
+|---|---|
+| Novo | sem produção e reconhecimento nunca revisado (`state` New) |
+| Reconheço | sem produção, reconhecimento já revisado |
+| Sei dizer | tem produção, com intervalo < 21 dias (ou ainda nova) |
+| Domino | produção em Review com `scheduledDays >= 21` |
+
+- **Promoção automática**: ao gravar uma revisão de reconhecimento cujo
+  novo intervalo é **≥ 7 dias** (`PRODUCTION_MIN_DAYS`), o card ganha
+  `production = freshSrs()` (vence na hora). Cards antigos que já tinham
+  intervalo ≥ 7 dias são promovidos na próxima revisão deles (ou à mão).
+- **Domino é só rótulo**: o FSRS continua agendando as duas direções,
+  cada vez mais espaçadas — nada sai da fila.
+- **Mudança manual** (lista de cards em `/flashcards`): "Treinar a dizer"
+  (Novo/Reconheço → Sei dizer, adianta a promoção); "Voltar um estágio"
+  (Sei dizer → Reconheço apaga `production`, e o card é promovido de novo
+  quando o reconhecimento firmar; Domino → Sei dizer reinicia a produção do
+  zero). Grava `updatedAt`.
+- **Fila do "Estudar"** (`buildReviewQueue`, também usada no contador da
+  Home): reconhecimentos e produções vencidos. Se as duas direções do
+  mesmo card vencem juntas, entra **só a produção** (ver a frente em
+  japonês entregaria a resposta); o reconhecimento segue vencido para uma
+  próxima sessão. No máximo **20 produções novas por sessão**
+  (`NEW_PRODUCTION_PER_SESSION`), pra uma leva grande de promoções não
+  inundar a revisão — as demais ficam pras próximas sessões.
+- **Card de produção**: frente = "Como se diz em japonês?" + significado
+  (`back`); se o card tem frase de contexto, mostra a frase com lacuna no
+  lugar da palavra (mantém a partícula grudada: "＿＿が") e a tradução da
+  frase como pista. Resposta de cabeça/em voz alta e autoavaliada (mesmos
+  botões/atalhos/desfazer); o verso mostra a palavra, leitura, áudio e a
+  frase completa.
+- Revisões de produção gravam `direction: 'production'` em `reviews`
+  (ausente = reconhecimento). O desfazer restaura o card inteiro, inclusive
+  desfazendo uma promoção.
+- **Praticar** ganhou a escolha de direção (Reconhecer/Dizer em japonês), válida
+  pra qualquer card selecionado, independente do estágio — não grava nada.
+
 ### Importação
 `parseCardsFile()` (`src/features/flashcards/importCards.ts`) detecta o
 formato pelo nome do arquivo/conteúdo e chama o parser certo:
@@ -147,7 +197,10 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   notas do FSRS (1..4, onde 1 = Again/erro) quanto pras antigas do SM-2
   (0..5, onde 0 = De novo/erro) — as duas escalas têm erro em ≤1, sem overlap
   ambíguo, então não precisa saber de qual escala veio a revisão.
-- **Estágio dos cards**: Novo (`state !== 2`), Aprendendo (`state === 2` e
+- **Jornada do vocabulário**: contagem por estágio (Novo / Reconheço /
+  Sei dizer / Domino — ver "Estágios de vocabulário" acima), com a dica de
+  cada estágio no tooltip.
+- **Intervalo de reconhecimento** (antes "Estágio dos cards"): Novo (`state !== 2`), Aprendendo (`state === 2` e
   `scheduledDays < 21`), Maduro (`state === 2` e `scheduledDays >= 21`, limiar
   igual ao "mature" do Anki). Não há baldes de "Aprendendo"/"Reaprendendo" do
   FSRS (`state` 1/3) porque `enable_short_term: false` faz o algoritmo pular

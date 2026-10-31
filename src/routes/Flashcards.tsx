@@ -4,6 +4,14 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/fsrs';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
+import {
+  buildReviewQueue,
+  cardStage,
+  STAGE_HINTS,
+  STAGE_LABELS,
+  type Direction,
+  type StudyItem,
+} from '../features/flashcards/stages';
 import ProgressStats from '../features/flashcards/ProgressStats';
 import AudioButton from '../components/AudioButton';
 
@@ -26,7 +34,7 @@ export default function Flashcards() {
   const [category, setCategory] = useState<string>('todas');
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [session, setSession] = useState<{ mode: StudyMode; cards: Card[] } | null>(null);
+  const [session, setSession] = useState<{ mode: StudyMode; items: StudyItem[] } | null>(null);
   const [configuringPractice, setConfiguringPractice] = useState(false);
 
   function setTab(key: TabKey) {
@@ -44,8 +52,9 @@ export default function Flashcards() {
   // categoria é só um filtro de exibição da lista abaixo (ver
   // regras-negocio.md), não deve reduzir silenciosamente o que "Estudar"
   // revisa. Quem quer estudar por categoria usa "Praticar" (tem seleção de
-  // categoria própria e explícita, sem afetar o SRS).
-  const due = all.filter((c) => c.dueDate <= Date.now());
+  // categoria própria e explícita, sem afetar o SRS). Inclui as duas
+  // direções (reconhecimento e produção) — ver stages.ts.
+  const due = buildReviewQueue(all);
 
   const query = search.trim().toLowerCase();
   const searched = query
@@ -75,16 +84,18 @@ export default function Flashcards() {
     // Embaralha, igual à prática — senão a ordem de revisão é sempre a
     // mesma (ordem de inserção no banco), e o usuário pode acabar
     // decorando a sequência dos cards em vez de lembrar cada um sozinho.
-    setSession({ mode: 'review', cards: shuffle(due) });
+    setSession({ mode: 'review', items: shuffle(due) });
   }
 
-  function startPractice(pool: Card[]) {
-    setSession({ mode: 'practice', cards: shuffle(pool) });
+  // Na prática livre, qualquer card serve nas duas direções (nada é
+  // gravado), independente do estágio.
+  function startPractice(pool: Card[], direction: Direction) {
+    setSession({ mode: 'practice', items: shuffle(pool).map((card) => ({ card, direction })) });
     setConfiguringPractice(false);
   }
 
   if (session) {
-    return <StudySession cards={session.cards} mode={session.mode} onDone={() => setSession(null)} />;
+    return <StudySession items={session.items} mode={session.mode} onDone={() => setSession(null)} />;
   }
 
   if (configuringPractice) {
@@ -189,14 +200,18 @@ export default function Flashcards() {
                         {card.category}
                       </span>
                     )}
+                    <StageChip card={card} />
                   </div>
-                  <button
-                    className="text-sm text-sage hover:text-hanko"
-                    onClick={() => db.cards.delete(card.id)}
-                    aria-label={`Excluir ${card.front}`}
-                  >
-                    Excluir
-                  </button>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <StageAction card={card} />
+                    <button
+                      className="text-sm text-sage hover:text-hanko"
+                      onClick={() => db.cards.delete(card.id)}
+                      aria-label={`Excluir ${card.front}`}
+                    >
+                      Excluir
+                    </button>
+                  </div>
                 </li>
               ))}
               {filtered.length === 0 && (
@@ -229,9 +244,10 @@ function PracticeConfigScreen({
   onCancel,
 }: {
   cards: Card[];
-  onStart: (cards: Card[]) => void;
+  onStart: (cards: Card[], direction: Direction) => void;
   onCancel: () => void;
 }) {
+  const [direction, setDirection] = useState<Direction>('recognition');
   const categories = Array.from(new Set(cards.map((c) => c.category).filter(Boolean) as string[])).sort();
   const hasUncategorized = cards.some((c) => !c.category);
   const allKeys = hasUncategorized ? [...categories, UNCATEGORIZED] : categories;
@@ -292,18 +308,78 @@ function PracticeConfigScreen({
         <p className="text-sm text-sage">Nenhum card cadastrado ainda.</p>
       )}
 
+      <div>
+        <p className="mb-2 text-sm font-medium text-ink">Direção</p>
+        <div className="flex flex-wrap gap-2">
+          {PRACTICE_DIRECTIONS.map((d) => (
+            <Chip key={d.key} active={direction === d.key} onClick={() => setDirection(d.key)}>
+              {d.label}
+            </Chip>
+          ))}
+        </div>
+      </div>
+
       <div className="flex items-center justify-between rounded-lg border border-line p-4">
         <p className="text-sm text-sage">{matching.length} cards selecionados</p>
         <div className="flex gap-2">
           <button className="btn-ghost" onClick={onCancel}>
             Cancelar
           </button>
-          <button className="btn-primary" disabled={matching.length === 0} onClick={() => onStart(matching)}>
+          <button className="btn-primary" disabled={matching.length === 0} onClick={() => onStart(matching, direction)}>
             Iniciar prática
           </button>
         </div>
       </div>
     </div>
+  );
+}
+
+const PRACTICE_DIRECTIONS: { key: Direction; label: string }[] = [
+  { key: 'recognition', label: 'Reconhecer (japonês → português)' },
+  { key: 'production', label: 'Dizer em japonês (português → japonês)' },
+];
+
+function StageChip({ card }: { card: Card }) {
+  const stage = cardStage(card);
+  if (stage === 'novo') return null;
+  const style = stage === 'reconheco' ? 'border-line text-sage' : stage === 'seiDizer' ? 'border-indigo/40 text-indigo' : 'border-sage text-sage';
+  return (
+    <span className={`ml-2 rounded border px-2 py-0.5 text-xs ${style}`} title={STAGE_HINTS[stage]}>
+      {STAGE_LABELS[stage]}
+    </span>
+  );
+}
+
+/**
+ * Mudança manual de estágio: "Treinar a dizer" adianta a promoção que o
+ * FSRS faria sozinho (intervalo ≥ 7 dias); "voltar" tira a produção (volta
+ * pra Reconheço — será promovido de novo quando o reconhecimento firmar)
+ * ou, de Domino, reinicia a produção do zero.
+ */
+function StageAction({ card }: { card: Card }) {
+  const stage = cardStage(card);
+  const now = Date.now();
+  if (stage === 'novo' || stage === 'reconheco') {
+    return (
+      <button
+        className="text-xs text-sage hover:text-indigo"
+        title="Já reconheço esta palavra — começar a treinar dizê-la em japonês (português → japonês)"
+        onClick={() => db.cards.update(card.id, { production: freshSrs(now), updatedAt: now })}
+      >
+        Treinar a dizer
+      </button>
+    );
+  }
+  return (
+    <button
+      className="text-xs text-sage hover:text-indigo"
+      title={stage === 'seiDizer' ? 'Parar de treinar a dizer e voltar só ao reconhecimento' : 'Recomeçar do zero o treino de dizer'}
+      onClick={() =>
+        db.cards.update(card.id, { production: stage === 'seiDizer' ? undefined : freshSrs(now), updatedAt: now })
+      }
+    >
+      Voltar um estágio
+    </button>
   );
 }
 

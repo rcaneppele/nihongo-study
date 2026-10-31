@@ -37,6 +37,12 @@ export interface Card {
   // Opcionais, sem índice — backups e cards antigos simplesmente não têm.
   example?: CardExample;
   source?: CardSource;
+  /**
+   * Estado FSRS da direção de **produção** (português → japonês), separado
+   * do reconhecimento (campos de SRS abaixo, japonês → português). Só existe
+   * a partir do estágio "Sei dizer" — ver src/features/flashcards/stages.ts.
+   */
+  production?: CardSrs;
   // Estado SRS (FSRS) — ver src/features/srs/fsrs.ts
   stability: number;
   difficulty: number;
@@ -50,9 +56,23 @@ export interface Card {
   updatedAt: number; // usado na mesclagem (vence o mais recente)
 }
 
+/** Campos de estado do FSRS, mesmo formato dos que ficam direto no Card (reconhecimento). */
+export interface CardSrs {
+  stability: number;
+  difficulty: number;
+  state: number;
+  reps: number;
+  lapses: number;
+  scheduledDays: number;
+  dueDate: number;
+  lastReviewedAt?: number;
+}
+
 export interface Review {
   id: string;
   cardId: string;
+  /** Direção revisada; ausente = reconhecimento (todas as revisões anteriores aos estágios). */
+  direction?: 'production';
   reviewedAt: number;
   quality: number; // Rating do FSRS (1..4). Reviews anteriores à migração para FSRS usam a escala antiga do SM-2 (0..5) — é só histórico, não é relido pelo app.
   intervalAfter: number;

@@ -16,7 +16,7 @@ sendo implementados de forma experimental na branch
 ## 1. Ideias centrais
 
 - **Vocabulário é um estado por palavra, não um deck.** Cada palavra passa
-  por estágios — nova → reconheço → produzo → domino — e esse estado é
+  por estágios — nova → reconheço → sei dizer → domino — e esse estado é
   alimentado por várias fontes (leitura, lições, revisão), visível em todo
   lugar do app. Os flashcards são só um dos jeitos de mover a palavra de
   estágio.
@@ -108,14 +108,21 @@ import do N5 já faz.
 
 **Esforço:** baixo-médio.
 
-### 3.3 Estágios de vocabulário: Reconheço → Produzo → Domino — prioridade alta
+### 3.3 Estágios de vocabulário: Reconheço → Sei dizer → Domino — ✅ implementado (branch experimental)
+
+Decisões tomadas na implementação: resposta da produção de cabeça/em voz
+alta (autoavaliada, sem digitação); promoção a Sei dizer quando o intervalo
+de reconhecimento chega a 7 dias; Domino é só rótulo (continua revisando);
+estado de produção como campo opcional `Card.production` (sem tabela nova);
+no máximo 20 produções novas por sessão. Detalhes em `regras-negocio.md` §1.
+
 
 **O quê:** uma "jornada" de 3 estágios nos flash cards:
 
 | Estágio | Nome sugerido | Direção do card |
 |---|---|---|
 | 1 | **Reconheço** | japonês → português (o que existe hoje) |
-| 2 | **Produzo** | português → japonês, de preferência como **frase com lacuna** |
+| 2 | **Sei dizer** | português → japonês, de preferência como **frase com lacuna** |
 | 3 | **Domino** | sai da fila ativa; aparece só em revisões espaçadas longas |
 
 O card sobe de estágio automaticamente (ex.: no estágio 1 quando a
@@ -173,7 +180,7 @@ nos textos existentes onde a forma difere).
 categorias):
 - Tela `/vocabulario` com filtro por **categoria/tema** e uma "escada" de
   **nível JLPT** (N5 hoje; N4/N3 quando os decks existirem — → roadmap §4).
-- Grade de **tiles coloridos pelo estágio** (nova / reconheço / produzo /
+- Grade de **tiles coloridos pelo estágio** (nova / reconheço / sei dizer /
   domino), `% conhecido` do tema e a contagem por estágio.
 - Ações: **"Aprender as 10 próximas"** (cria os cards só delas — substitui
   o import em massa por categoria, evitando inundar a fila), **"Testar 10"**
@@ -307,7 +314,7 @@ poucos, não feature técnica.
 6. **Cores de estágio** para tiles/listas: hoje não há tokens para isso.
    Criar 3–4 tokens novos em `src/index.css` (claro e escuro), derivados da
    paleta atual — sugestão: novo = `line`, reconheço = `indigo` translúcido,
-   produzo = `indigo`, domino = `sage`. **Não** usar `hanko` como cor de
+   sei dizer = `indigo`, domino = `sage`. **Não** usar `hanko` como cor de
    estágio (é reservado a destaque/perigo); o índigo continua sendo a cor
    da ação primária.
 7. **Home orientada a "o que fazer agora"**: em vez de 4 contadores + 5
@@ -334,7 +341,7 @@ poucos, não feature técnica.
 2. ✅ **3.2** (salvar palavra da leitura com contexto) — fecha o ciclo
    leitura → SRS.
 3. ✅ **3.6** (modo escuta/shadowing) — barato e dá uso novo aos 30 textos.
-4. **3.3** (estágios Reconheço/Produzo/Domino) — a mudança estrutural;
+4. ✅ **3.3** (estágios Reconheço/Sei dizer/Domino) — a mudança estrutural;
    desenhar com calma e documentar em `regras-negocio.md`.
 5. **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
    vocabulário) — dependem de 3.3 para brilhar.

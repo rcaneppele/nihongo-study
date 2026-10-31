@@ -74,6 +74,9 @@ toda mudança pede bump; julgue pelo impacto:
   tocada na leitura como card, com a frase de contexto (`Card.example`) e
   a origem (`Card.source`); `CardExampleView.tsx` mostra essa frase no
   verso do card.
+- `src/features/flashcards/stages.ts` — estágios de vocabulário (Novo →
+  Reconheço → Sei dizer → Domino), promoção para a direção de produção
+  (`Card.production`) e fila do "Estudar" (`buildReviewQueue`).
 - `src/features/srs/GradeButtons.tsx` — botões de nota das revisões
   (flash cards e kanji), com legenda de intervalo e atalhos; modo 2/4
   botões em `gradeMode.ts`.

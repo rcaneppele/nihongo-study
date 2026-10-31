@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Review } from '../../db/schema';
+import { cardStage, STAGE_HINTS, STAGE_LABELS, type Stage } from './stages';
 
 /**
  * Com `enable_short_term: false` no FSRS (ver src/features/srs/fsrs.ts), um
@@ -32,6 +33,9 @@ export default function ProgressStats() {
     }
   }
 
+  const stageCounts: Record<Stage, number> = { novo: 0, reconheco: 0, seiDizer: 0, domino: 0 };
+  for (const c of cards) stageCounts[cardStage(c)]++;
+
   const dayCounts = buildDayCounts(reviews, HEATMAP_DAYS);
   const streak = computeStreak(dayCounts);
 
@@ -45,11 +49,37 @@ export default function ProgressStats() {
       </div>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Estágio dos cards</h2>
+        <h2 className="font-medium">Jornada do vocabulário</h2>
+        <p className="text-sm text-sage">
+          Primeiro você reconhece a palavra (japonês → português). Quando o reconhecimento firma, o card passa a pedir
+          também que você diga a palavra em japonês (português → japonês) — é o vocabulário que você consegue usar.
+        </p>
         {cards.length === 0 ? (
           <p className="text-sm text-sage">Nenhum card cadastrado ainda.</p>
         ) : (
-          <StageBar novo={novo} jovem={jovem} maduro={maduro} />
+          <SegmentBar
+            segments={(['novo', 'reconheco', 'seiDizer', 'domino'] as Stage[]).map((stage) => ({
+              label: STAGE_LABELS[stage],
+              hint: STAGE_HINTS[stage],
+              count: stageCounts[stage],
+              className: STAGE_BAR_CLASSES[stage],
+            }))}
+          />
+        )}
+      </section>
+
+      <section className="card-surface space-y-3">
+        <h2 className="font-medium">Intervalo de reconhecimento</h2>
+        {cards.length === 0 ? (
+          <p className="text-sm text-sage">Nenhum card cadastrado ainda.</p>
+        ) : (
+          <SegmentBar
+            segments={[
+              { label: 'Novo', count: novo, className: 'bg-line' },
+              { label: 'Aprendendo', count: jovem, className: 'bg-indigo/50' },
+              { label: `Maduro (≥ ${MATURE_DAYS} dias)`, count: maduro, className: 'bg-indigo' },
+            ]}
+          />
         )}
       </section>
 
@@ -74,13 +104,19 @@ function Stat({ label, value, accent }: { label: string; value: number | string;
   );
 }
 
-function StageBar({ novo, jovem, maduro }: { novo: number; jovem: number; maduro: number }) {
-  const total = novo + jovem + maduro || 1;
-  const segments = [
-    { label: 'Novo', count: novo, className: 'bg-line' },
-    { label: 'Aprendendo', count: jovem, className: 'bg-indigo/50' },
-    { label: 'Maduro', count: maduro, className: 'bg-indigo' },
-  ];
+const STAGE_BAR_CLASSES: Record<Stage, string> = {
+  novo: 'bg-line',
+  reconheco: 'bg-indigo/30',
+  seiDizer: 'bg-indigo',
+  domino: 'bg-sage',
+};
+
+function SegmentBar({
+  segments,
+}: {
+  segments: { label: string; hint?: string; count: number; className: string }[];
+}) {
+  const total = segments.reduce((sum, s) => sum + s.count, 0) || 1;
 
   return (
     <div className="space-y-2">
@@ -91,7 +127,7 @@ function StageBar({ novo, jovem, maduro }: { novo: number; jovem: number; maduro
       </div>
       <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-sage">
         {segments.map((s) => (
-          <span key={s.label} className="flex items-center gap-1.5">
+          <span key={s.label} className="flex items-center gap-1.5" title={s.hint}>
             <span className={`inline-block h-2.5 w-2.5 rounded-full ${s.className}`} />
             {s.label}: {s.count}
           </span>

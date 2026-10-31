@@ -5,14 +5,12 @@ import { ALL_KANA } from '../data/kana';
 import { KANJI_N5 } from '../data/kanji';
 import { LEITURA_TEXTOS } from '../data/leitura/textos';
 import { LICOES } from '../licoes';
+import { buildReviewQueue } from '../features/flashcards/stages';
 
 export default function Home() {
   const totalCards = useLiveQuery(() => db.cards.count(), [], 0);
-  const dueCards = useLiveQuery(
-    () => db.cards.where('dueDate').belowOrEqual(Date.now()).count(),
-    [],
-    0
-  );
+  // Mesma fila do "Estudar" em /flashcards (reconhecimento + produção).
+  const dueCards = useLiveQuery(async () => buildReviewQueue(await db.cards.toArray()).length, [], 0);
   const kanaPracticed = useLiveQuery(() => db.kanaProgress.count(), [], 0);
   const kanjiDue = useLiveQuery(
     () => db.kanjiProgress.where('dueDate').belowOrEqual(Date.now()).count(),
