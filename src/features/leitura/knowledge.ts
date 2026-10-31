@@ -4,6 +4,7 @@ import { db } from '../../db/schema';
 import type { ReadingLine, ReadingText, ReadingWord } from '../../data/leitura/types';
 import { suggestCard } from '../flashcards/mining';
 import { cardStage } from '../flashcards/stages';
+import { registrarAtividade } from '../atividade/atividade';
 
 /**
  * Vocabulário passivo medido pela leitura: ao concluir um texto, as palavras
@@ -70,6 +71,7 @@ export async function finishReading(texto: ReadingText, lookedUp: Set<string>): 
       updatedAt: now,
     });
   });
+  await registrarAtividade('leituras');
 }
 
 export interface KnownWords {

@@ -5,6 +5,7 @@ import type { ItemKakitori, ModoKakitori, RegistroKakitori } from '../data/kakit
 import { isSpeechSupported } from '../features/audio/speech';
 import KakitoriSession from '../features/kakitori/KakitoriSession';
 import KakitoriResultado from '../features/kakitori/KakitoriResultado';
+import { registrarAtividade } from '../features/atividade/atividade';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -43,6 +44,7 @@ export default function Kakitori() {
   }
 
   function finalizar(r: RegistroKakitori[]) {
+    void registrarAtividade('praticas', r.length);
     setRegistros(r);
     setItens(null);
   }

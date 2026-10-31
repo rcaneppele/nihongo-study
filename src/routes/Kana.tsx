@@ -15,6 +15,7 @@ import AudioButton from '../components/AudioButton';
 import { scoreDrawing, type DrawScore, type Stroke } from '../features/handwriting/strokes';
 import StrokeReferenceFigure from '../features/handwriting/StrokeReferenceFigure';
 import { useHoldToPauseAdvance } from '../lib/useHoldToPauseAdvance';
+import { registrarAtividade } from '../features/atividade/atividade';
 
 const CANVAS_SIZE = 280;
 /** Tempo até avançar sozinho pra próxima pergunta após responder (o usuário pode tocar "Próximo" a qualquer momento pra pular a espera). Errar dá mais tempo pra ler a resposta certa. */
@@ -572,6 +573,7 @@ function DrawQuestion({
     if (result) return;
     const outcome = scoreDrawing(giveUp ? [] : strokes, entry.char, CANVAS_SIZE);
     setResult(outcome);
+    void registrarAtividade('praticas');
     const p = await db.kanaProgress.get(entry.char);
     await db.kanaProgress.put({
       char: entry.char,
@@ -729,6 +731,7 @@ function Segment({
 }
 
 async function updateProgress(entry: KanaEntry, correct: boolean) {
+  void registrarAtividade('praticas');
   const p = await db.kanaProgress.get(entry.char);
   await db.kanaProgress.put({
     char: entry.char,
@@ -743,6 +746,7 @@ async function updateProgress(entry: KanaEntry, correct: boolean) {
 }
 
 async function updateChoiceProgress(entry: KanaEntry, correct: boolean) {
+  void registrarAtividade('praticas');
   const p = await db.kanaProgress.get(entry.char);
   await db.kanaProgress.put({
     char: entry.char,

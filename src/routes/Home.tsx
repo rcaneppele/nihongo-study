@@ -8,6 +8,7 @@ import { LEITURA_TEXTOS } from '../data/leitura/textos';
 import { LICOES } from '../licoes';
 import { buildReviewQueue } from '../features/flashcards/stages';
 import { useKnownWords } from '../features/leitura/knowledge';
+import { PESO_LEITURA, useMetaDiaria, useResumoDia } from '../features/atividade/atividade';
 
 export default function Home() {
   const known = useKnownWords();
@@ -26,6 +27,8 @@ export default function Home() {
       <section>
         <h1 className="font-display text-3xl font-semibold text-center">こんにちは</h1>
       </section>
+
+      <Hoje />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Stat label="Para revisar hoje" value={dueCards} accent />
@@ -99,6 +102,53 @@ function Stat({
       </div>
       {hint && showHint && <p className="mt-2 text-xs text-sage">{hint}</p>}
     </div>
+  );
+}
+
+/**
+ * Meta diária e sequência de dias (ver src/features/atividade/atividade.ts):
+ * barra até a meta, o que foi feito hoje e quantos dias seguidos de estudo.
+ */
+function Hoje() {
+  const resumo = useResumoDia();
+  const meta = useMetaDiaria();
+  if (!resumo) return null;
+
+  const { hoje, pontos, sequencia, estudouHoje } = resumo;
+  const batida = pontos >= meta;
+  const partes = [
+    hoje.revisoes > 0 && `${hoje.revisoes} revisões`,
+    hoje.novos > 0 && `${hoje.novos} novos`,
+    hoje.praticas > 0 && `${hoje.praticas} práticas`,
+    hoje.leituras > 0 && `${hoje.leituras} texto(s) lido(s)`,
+  ].filter(Boolean);
+
+  return (
+    <section className="card-surface grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+      <div className="space-y-2">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="font-medium">{batida ? 'Meta de hoje batida' : 'Meta de hoje'}</p>
+          <p className="text-sm text-sage">
+            <span className="font-semibold text-indigo">{Math.min(pontos, meta)}</span> de {meta} atividades
+          </p>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-line">
+          <div
+            className={`h-full transition-[width] ${batida ? 'bg-sage' : 'bg-indigo'}`}
+            style={{ width: `${Math.min(100, (pontos / meta) * 100)}%` }}
+          />
+        </div>
+        <p className="text-xs text-sage">
+          {partes.length > 0 ? partes.join(' · ') : 'Nada ainda hoje.'} Cada resposta conta 1; um texto lido conta{' '}
+          {PESO_LEITURA}.
+        </p>
+      </div>
+      <div className="text-center sm:border-l sm:border-line sm:pl-5">
+        <p className="font-display text-3xl font-semibold text-indigo">{sequencia}</p>
+        <p className="text-xs text-sage">{sequencia === 1 ? 'dia seguido' : 'dias seguidos'}</p>
+        {!estudouHoje && sequencia > 0 && <p className="mt-1 text-xs text-hanko">estude hoje para manter</p>}
+      </div>
+    </section>
   );
 }
 

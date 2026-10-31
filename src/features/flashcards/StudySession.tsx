@@ -8,6 +8,8 @@ import SessionHeader from '../../components/SessionHeader';
 import { useShortcuts } from '../../lib/useShortcuts';
 import CardExampleView from './CardExampleView';
 import { promotedProduction, type StudyItem } from './stages';
+import { registrarAtividade } from '../atividade/atividade';
+import { State } from 'ts-fsrs';
 
 /**
  * "review" usa a nota pra atualizar o FSRS (stability/difficulty/dueDate) —
@@ -55,6 +57,11 @@ export default function StudySession({
     setIndex((i) => i + 1);
   }
 
+  function nextPractice() {
+    void registrarAtividade('praticas');
+    advance();
+  }
+
   async function grade(rating: Grade) {
     // Sem essa trava, um segundo clique durante a gravação (dedo trêmulo,
     // duplo clique) registraria uma revisão duplicada no histórico e pularia
@@ -86,6 +93,9 @@ export default function StudySession({
       });
     });
     setUndoStack((s) => [...s, { before: card, reviewId }]);
+    // Primeira revisão de reconhecimento de um card = palavra nova aprendida hoje.
+    void registrarAtividade('revisoes');
+    if (!isProduction && card.state === State.New) void registrarAtividade('novos');
     setGrading(false);
     advance();
   }
@@ -105,7 +115,13 @@ export default function StudySession({
         await db.reviews.delete(last.reviewId);
       });
       setUndoStack((s) => s.slice(0, -1));
+      void registrarAtividade('revisoes', -1);
+      if (items[index - 1]?.direction === 'recognition' && last.before.state === State.New) {
+        void registrarAtividade('novos', -1);
+      }
       setGrading(false);
+    } else {
+      void registrarAtividade('praticas', -1);
     }
     setIndex((i) => i - 1);
     setShowBack(true);
@@ -113,8 +129,8 @@ export default function StudySession({
 
   useShortcuts({
     undo: canUndo ? undo : undefined,
-    ' ': card && !showBack ? () => setShowBack(true) : card && mode === 'practice' ? advance : undefined,
-    Enter: card && !showBack ? () => setShowBack(true) : card && mode === 'practice' ? advance : undefined,
+    ' ': card && !showBack ? () => setShowBack(true) : card && mode === 'practice' ? nextPractice : undefined,
+    Enter: card && !showBack ? () => setShowBack(true) : card && mode === 'practice' ? nextPractice : undefined,
   });
 
   if (!card) {
@@ -198,7 +214,7 @@ export default function StudySession({
       ) : mode === 'review' ? (
         <GradeButtons srs={isProduction ? card.production! : card} disabled={grading} onGrade={grade} />
       ) : (
-        <button className="btn-primary w-full" onClick={advance}>
+        <button className="btn-primary w-full" onClick={nextPractice}>
           Próximo <kbd className="kbd">Espaço</kbd>
         </button>
       )}

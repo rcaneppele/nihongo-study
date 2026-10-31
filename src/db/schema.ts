@@ -141,6 +141,19 @@ export interface ReadingProgress {
   updatedAt: number;
 }
 
+/**
+ * Atividade de estudo de um dia (data local "AAAA-MM-DD"), pra meta diária e
+ * sequência de dias — ver src/features/atividade/atividade.ts.
+ */
+export interface Activity {
+  day: string;
+  revisoes: number; // notas dadas em revisões FSRS (flash cards e kanji)
+  praticas: number; // respostas em treinos que não mexem no FSRS (kana, quiz, kakitori, prática livre…)
+  leituras: number; // textos de leitura concluídos
+  novos: number; // itens aprendidos pela primeira vez (primeira revisão de um card, kanji aprendido)
+  updatedAt: number;
+}
+
 export class NihongoDB extends Dexie {
   cards!: Table<Card, string>;
   reviews!: Table<Review, string>;
@@ -148,6 +161,7 @@ export class NihongoDB extends Dexie {
   kanjiProgress!: Table<KanjiProgress, string>;
   wordKnowledge!: Table<WordKnowledge, string>;
   readingProgress!: Table<ReadingProgress, string>;
+  activity!: Table<Activity, string>;
   meta!: Table<Meta, string>;
 
   constructor() {
@@ -189,6 +203,10 @@ export class NihongoDB extends Dexie {
     this.version(4).stores({
       wordKnowledge: 'key',
       readingProgress: 'textId',
+    });
+    // v5: atividade por dia (meta diária e sequência). Só tabela nova.
+    this.version(5).stores({
+      activity: 'day',
     });
   }
 }

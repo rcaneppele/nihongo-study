@@ -286,7 +286,14 @@ estes" que monta um exercício a partir dos próprios erros.
 **Dados:** tudo já existe, exceto as consultas de leitura (vem com 3.4).
 **Esforço:** baixo-médio.
 
-### 3.9 Meta diária e sequência de todo o app — prioridade baixa (→ roadmap 3.7)
+### 3.9 Meta diária e sequência de todo o app — ✅ implementado (branch experimental)
+
+Tabela `activity` (um registro por dia, quatro contadores), meta diária
+configurável (10/20/40/60 atividades; texto lido vale 10) e sequência de
+dias que também conta o histórico de `reviews`. Bloco "Hoje" no topo da
+Home. Sem "palavras até a próxima meta" — a meta é diária. Detalhes em
+`regras-negocio.md` §5c.
+
 
 **O quê:** a sequência hoje só conta revisões de flash cards. Contar
 **qualquer atividade** (leitura concluída, lição, kana, kanji) e mostrar na
@@ -379,7 +386,7 @@ poucos, não feature técnica.
    desenhar com calma e documentar em `regras-negocio.md`.
 5. ✅ **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
    vocabulário) — ✅ ambos feitos.
-6. ✅ **3.7**; ✅ **3.8**; **3.9**, **3.10** conforme houver conteúdo/tempo.
+6. ✅ **3.7**; ✅ **3.8**; ✅ **3.9**, **3.10** conforme houver conteúdo/tempo.
 
 Ajustes de UI da seção 4 entram junto com a feature que mexe na mesma tela.
 

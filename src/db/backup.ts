@@ -6,6 +6,7 @@ import {
   type KanjiProgress,
   type Meta,
   type ReadingProgress,
+  type Activity,
   type WordKnowledge,
 } from './schema';
 import { freshSrs } from '../features/srs/fsrs';
@@ -19,7 +20,7 @@ import { freshSrs } from '../features/srs/fsrs';
  * armazenamento.
  */
 
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 
 export interface BackupFile {
   app: 'nihongo-study';
@@ -31,17 +32,19 @@ export interface BackupFile {
   kanjiProgress: KanjiProgress[];
   wordKnowledge: WordKnowledge[];
   readingProgress: ReadingProgress[];
+  activity: Activity[];
   meta: Meta[];
 }
 
 export async function exportData(): Promise<BackupFile> {
-  const [cards, reviews, kanaProgress, kanjiProgress, wordKnowledge, readingProgress, meta] = await Promise.all([
+  const [cards, reviews, kanaProgress, kanjiProgress, wordKnowledge, readingProgress, activity, meta] = await Promise.all([
     db.cards.toArray(),
     db.reviews.toArray(),
     db.kanaProgress.toArray(),
     db.kanjiProgress.toArray(),
     db.wordKnowledge.toArray(),
     db.readingProgress.toArray(),
+    db.activity.toArray(),
     db.meta.toArray(),
   ]);
   return {
@@ -54,6 +57,7 @@ export async function exportData(): Promise<BackupFile> {
     kanjiProgress,
     wordKnowledge,
     readingProgress,
+    activity,
     meta,
   };
 }
@@ -91,6 +95,7 @@ function migrateBackup(data: BackupFile): BackupFile {
   if (result.schemaVersion < 2) result = migrateV1ToV2(result);
   if (result.schemaVersion < 3) result = migrateV2ToV3(result);
   if (result.schemaVersion < 4) result = migrateV3ToV4(result);
+  if (result.schemaVersion < 5) result = migrateV4ToV5(result);
   return result;
 }
 
@@ -139,10 +144,15 @@ function migrateV3ToV4(data: BackupFile): BackupFile {
   };
 }
 
+/** v4 → v5: tabela `activity` (meta diária/sequência) — backups antigos não têm linhas. */
+function migrateV4ToV5(data: BackupFile): BackupFile {
+  return { ...data, schemaVersion: 5, activity: data.activity ?? [] };
+}
+
 export type ImportMode = 'replace' | 'merge';
 
 export async function importData(backup: BackupFile, mode: ImportMode = 'replace'): Promise<void> {
-  const tables = [db.cards, db.reviews, db.kanaProgress, db.kanjiProgress, db.wordKnowledge, db.readingProgress, db.meta];
+  const tables = [db.cards, db.reviews, db.kanaProgress, db.kanjiProgress, db.wordKnowledge, db.readingProgress, db.activity, db.meta];
   await db.transaction('rw', tables, async () => {
     if (mode === 'replace') {
       await Promise.all([
@@ -152,6 +162,7 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
         db.kanjiProgress.clear(),
         db.wordKnowledge.clear(),
         db.readingProgress.clear(),
+        db.activity.clear(),
         db.meta.clear(),
       ]);
       await db.cards.bulkAdd(backup.cards);
@@ -160,6 +171,7 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
       await db.kanjiProgress.bulkAdd(backup.kanjiProgress);
       await db.wordKnowledge.bulkAdd(backup.wordKnowledge);
       await db.readingProgress.bulkAdd(backup.readingProgress);
+      await db.activity.bulkAdd(backup.activity);
       await db.meta.bulkAdd(backup.meta);
       return;
     }
@@ -187,6 +199,24 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
     for (const r of backup.readingProgress) {
       const existing = await db.readingProgress.get(r.textId);
       if (!existing || r.updatedAt >= existing.updatedAt) await db.readingProgress.put(r);
+    }
+    // Atividade: o mesmo dia pode ter sido estudado em dois aparelhos. Somar
+    // contaria duas vezes ao reimportar o mesmo backup, então fica o maior
+    // valor de cada contador — subestima um pouco, mas é idempotente.
+    for (const a of backup.activity) {
+      const existing = await db.activity.get(a.day);
+      await db.activity.put(
+        existing
+          ? {
+              day: a.day,
+              revisoes: Math.max(a.revisoes, existing.revisoes),
+              praticas: Math.max(a.praticas, existing.praticas),
+              leituras: Math.max(a.leituras, existing.leituras),
+              novos: Math.max(a.novos, existing.novos),
+              updatedAt: Math.max(a.updatedAt, existing.updatedAt),
+            }
+          : a
+      );
     }
     await db.meta.bulkPut(backup.meta);
   });

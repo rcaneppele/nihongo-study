@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { contarDisponiveis, gerarDiga, licoesComFrases, type ItemDiga, type RegistroDiga } from '../features/diga/gerador';
 import DigaSession from '../features/diga/DigaSession';
 import DigaResultado from '../features/diga/DigaResultado';
+import { registrarAtividade } from '../features/atividade/atividade';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -46,6 +47,7 @@ export default function Diga() {
         <DigaSession
           itens={itens}
           onFinalizar={(r) => {
+            void registrarAtividade('praticas', r.length);
             setRegistros(r);
             setItens(null);
           }}

@@ -6,6 +6,7 @@ import { exportData, downloadBackup, parseBackup, importData, type ImportMode } 
 import { parseCardsFile } from '../features/flashcards/importCards';
 import { useTheme, type ThemeMode } from '../lib/useTheme';
 import { setGradeMode, useGradeMode, type GradeMode } from '../features/srs/gradeMode';
+import { META_OPCOES, PESO_LEITURA, setMetaDiaria, useMetaDiaria } from '../features/atividade/atividade';
 import { N5_DECK, n5CategoryCounts } from '../data/seed/n5';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
@@ -158,6 +159,7 @@ function DadosTab() {
       db.kanjiProgress.clear(),
       db.wordKnowledge.clear(),
       db.readingProgress.clear(),
+      db.activity.clear(),
       db.meta.clear(),
     ]);
     setMsg('Todos os dados foram apagados.');
@@ -465,6 +467,7 @@ const GRADE_MODE_OPTIONS: { key: GradeMode; label: string }[] = [
 function ConfiguracoesTab() {
   const { mode, setMode } = useTheme();
   const gradeMode = useGradeMode();
+  const metaDiaria = useMetaDiaria();
 
   return (
     <div className="space-y-6"> 
@@ -481,6 +484,25 @@ function ConfiguracoesTab() {
               onClick={() => setMode(opt.key)}
             >
               {opt.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="card-surface space-y-3">
+        <h2 className="font-medium">Meta diária</h2>
+        <p className="text-sm text-sage">
+          Quantas atividades por dia você quer fazer. Cada resposta (revisão, treino de kana, quiz, kakitori…) conta 1;
+          um texto lido conta {PESO_LEITURA}. Aparece no início do app, junto com a sequência de dias.
+        </p>
+        <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+          {META_OPCOES.map((opt) => (
+            <button
+              key={opt}
+              className={`rounded-md px-3 py-1.5 ${metaDiaria === opt ? 'bg-indigo text-paper' : ''}`}
+              onClick={() => setMetaDiaria(opt)}
+            >
+              {opt}
             </button>
           ))}
         </div>

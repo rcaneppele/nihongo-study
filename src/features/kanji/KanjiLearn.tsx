@@ -4,6 +4,7 @@ import { freshSrs } from '../srs/fsrs';
 import type { KanjiEntry } from '../../data/kanji';
 import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
+import { registrarAtividade } from '../atividade/atividade';
 
 /**
  * Tela de "aprender" um kanji novo, antes dele entrar no ciclo de revisão do
@@ -34,6 +35,7 @@ export default function KanjiLearn({ entries, onDone }: { entries: KanjiEntry[];
     setSaving(true);
     const now = Date.now();
     await db.kanjiProgress.put({ char: entry.char, ...freshSrs(now), createdAt: now, updatedAt: now });
+    void registrarAtividade('novos');
     setSaving(false);
     setIndex((i) => i + 1);
   }

@@ -45,7 +45,7 @@ export default function ProgressStats() {
         <Stat label="Cards no total" value={cards.length} />
         <Stat label="Revisões feitas" value={totalReviews} />
         <Stat label="Taxa de acerto" value={accuracy === null ? '—' : `${accuracy}%`} accent />
-        <Stat label="Sequência atual" value={streak > 0 ? `${streak} dia(s)` : '—'} />
+        <Stat label="Sequência de revisões" value={streak > 0 ? `${streak} dia(s)` : '—'} />
       </div>
 
       <section className="card-surface space-y-3">

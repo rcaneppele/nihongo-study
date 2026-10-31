@@ -245,7 +245,7 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - **Heatmap de revisões**: últimos 84 dias (12 semanas), um quadrado por dia,
   intensidade da cor proporcional ao nº de revisões daquele dia relativo ao
   dia mais cheio do período. Alinhado por dia da semana (estilo GitHub).
-- **Sequência atual**: dias consecutivos (contando de hoje pra trás) com pelo
+- **Sequência de revisões**: dias consecutivos (contando de hoje pra trás) com pelo
   menos uma revisão.
 
 ## 2. Treino de kana
@@ -581,11 +581,45 @@ Quiz e "Diga em japonês" não guardam histórico, então não entram.
   Cards cuja maior parte dos lapsos é na produção são treinados na direção
   "dizer em japonês".
 
+## 5c. Meta diária e sequência de dias
+
+Lógica em `src/features/atividade/atividade.ts`, tabela `activity`
+(schemaVersion 5): uma linha por dia (data local "AAAA-MM-DD") com quatro
+contadores, somados por `registrarAtividade(tipo, n)`:
+
+| Contador | Quando soma |
+|---|---|
+| `revisoes` | cada nota em revisão FSRS — flash cards (as duas direções) e kanji |
+| `novos` | primeira revisão de reconhecimento de um card (estado New) e cada kanji "aprendido" |
+| `praticas` | cada resposta em treino que não mexe no FSRS: kana (romaji, múltipla escolha, desenho), caligrafia de kanji, prática livre de cards/pontos fracos (ao avançar), e no fim de Quiz, Kakitori e "Diga em japonês" (nº de itens) |
+| `leituras` | cada "Terminei a leitura" |
+
+O desfazer das revisões/prática subtrai o que tinha somado (nunca abaixo
+de 0).
+
+- **Meta diária** (Config > Configurações; `db.meta`, chave `metaDiaria`,
+  opções 10/20/40/60, padrão 20): atividades = revisões + práticas + novos
+  + leituras × 10 (`PESO_LEITURA` — um texto dá bem mais trabalho que uma
+  resposta).
+- **Sequência**: dias seguidos com estudo, contando qualquer dia com
+  atividade registrada **ou** com linha em `reviews` (histórico anterior à
+  tabela `activity` — a sequência de quem já estudava não zera). Termina
+  hoje, ou ontem se hoje ainda não houve estudo (o dia não acabou — a Home
+  avisa "estude hoje para manter").
+- **Home**: bloco "Hoje" no topo — barra até a meta (sage quando batida),
+  resumo do dia e a sequência. O "Sequência" da aba Progresso dos flash
+  cards virou "Sequência de revisões" (só revisões de cards), pra não
+  confundir com esta.
+- **Mesclagem de backup**: o mesmo dia pode ter sido estudado em dois
+  aparelhos; somar contaria duas vezes ao reimportar o mesmo arquivo, então
+  fica o **maior valor de cada contador** — subestima um pouco, mas é
+  idempotente.
+
 ## 6. Dados e sincronização
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
 - **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress`, `wordKnowledge`, `readingProgress` e `meta`. Serve de
+  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity` e `meta`. Serve de
   sincronização e de backup.
 - **Importar**, dois modos:
   - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e previsível.

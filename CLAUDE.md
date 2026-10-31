@@ -58,7 +58,7 @@ toda mudança pede bump; julgue pelo impacto:
 ## Mapa do código
 
 - `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `meta`.
+  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta`.
 - `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`;
   migrações incrementais por versão em `migrateBackup`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
@@ -141,6 +141,9 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/features/diga/` + `src/routes/Diga.tsx` — "Diga em japonês"
   (`/licoes/diga`): português → dizer a frase em japonês → conferir,
   usando as `quiz.frases` das lições; frases erradas podem virar cards.
+- `src/features/atividade/atividade.ts` — atividade por dia
+  (`registrarAtividade`, chamado por cada módulo), meta diária e sequência
+  de dias exibidas na Home.
 - `src/features/pontos-fracos/pontosFracos.ts` + `src/routes/PontosFracos.tsx`
   — "Pontos fracos" (`/pontos-fracos`): o que mais erra em cards, kana,
   kanji e leitura, com treino em prática livre.

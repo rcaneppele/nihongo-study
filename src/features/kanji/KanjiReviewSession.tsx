@@ -8,6 +8,7 @@ import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
 import SessionHeader from '../../components/SessionHeader';
 import { useShortcuts } from '../../lib/useShortcuts';
+import { registrarAtividade } from '../atividade/atividade';
 
 /**
  * Revisão espaçada dos kanji já aprendidos — mesmo padrão auto-graded de
@@ -32,6 +33,7 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
       const result = applyFsrs(before, rating);
       await db.kanjiProgress.update(entry.char, { ...result, updatedAt: Date.now() });
       setUndoStack((s) => [...s, before]);
+      void registrarAtividade('revisoes');
     }
     setGrading(false);
     setShowBack(false);
@@ -45,6 +47,7 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
       setGrading(true);
       await db.kanjiProgress.put({ ...last, updatedAt: Date.now() });
       setUndoStack((s) => s.slice(0, -1));
+      void registrarAtividade('revisoes', -1);
       setGrading(false);
     }
     setIndex((i) => i - 1);

@@ -5,6 +5,7 @@ import { contarDisponiveis, gerarQuiz } from '../data/quiz/gerador';
 import { TIPOS_QUIZ, type PerguntaGerada, type RegistroResposta, type TipoQuiz } from '../data/quiz/types';
 import QuizSession from '../features/quiz/QuizSession';
 import QuizResultado from '../features/quiz/QuizResultado';
+import { registrarAtividade } from '../features/atividade/atividade';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -59,6 +60,7 @@ export default function Quiz() {
   }
 
   function finalizar(respostas: RegistroResposta[]) {
+    void registrarAtividade('praticas', respostas.length);
     setResultado(respostas);
     setPerguntas(null);
   }
