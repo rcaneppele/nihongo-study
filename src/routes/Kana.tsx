@@ -1,3 +1,5 @@
+import { useSearchParams } from 'react-router-dom';
+import { desempenhoPorFamilia, type DesempenhoFamilia } from '../features/kana/desempenho';
 import { Target } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import ResultadoResumo from '../components/ResultadoResumo';
@@ -43,7 +45,12 @@ const SINGLE_FAMILIES = KANA_FAMILIES.filter((f) => f.group === 'single').map((f
 
 export default function Kana() {
   const [stage, setStage] = useState<Stage>('config');
-  const [mode, setMode] = useState<Mode>('romaji');
+  // `?modo=` vem dos hubs do método (ex.: Praticar › Escrever abre em "desenho").
+  const [params] = useSearchParams();
+  const modoDaUrl = params.get('modo');
+  const [mode, setMode] = useState<Mode>(
+    modoDaUrl === 'romaji' || modoDaUrl === 'escolha' || modoDaUrl === 'desenho' ? modoDaUrl : 'romaji'
+  );
   const [script, setScript] = useState<Script>('hiragana');
   const [selected, setSelected] = useState<Set<string>>(new Set(SINGLE_FAMILIES));
   const [pool, setPool] = useState<KanaEntry[]>([]);
@@ -916,43 +923,4 @@ function shuffle<T>(arr: T[]): T[] {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
-}
-
-interface DesempenhoFamilia {
-  /** Acerto médio (0–1) dos kana praticados da família, no modo escolhido. */
-  taxa: number;
-  praticados: number;
-  total: number;
-}
-
-/**
- * Desempenho de cada família no modo de treino atual, a partir do
- * kanaProgress: romaji e múltipla escolha pela taxa de acerto; desenho pela
- * melhor nota (0–100). A largura da barra = quantos kana da família já foram
- * praticados nesse modo; a cor = o acerto.
- */
-function desempenhoPorFamilia(progresso: KanaProgress[], script: Script, mode: Mode): Map<string, DesempenhoFamilia> {
-  const porChar = new Map(progresso.map((p) => [p.char, p]));
-  const resultado = new Map<string, DesempenhoFamilia>();
-  for (const f of KANA_FAMILIES) {
-    const entradas = getKanaByFamilies(script, [f.key]);
-    let soma = 0;
-    let praticados = 0;
-    for (const e of entradas) {
-      const p = porChar.get(e.char);
-      if (!p) continue;
-      if (mode === 'desenho') {
-        if (p.drawBest === undefined) continue;
-        soma += p.drawBest / 100;
-      } else {
-        const certos = mode === 'romaji' ? p.romajiCorrect : (p.choiceCorrect ?? 0);
-        const errados = mode === 'romaji' ? p.romajiWrong : (p.choiceWrong ?? 0);
-        if (certos + errados === 0) continue;
-        soma += certos / (certos + errados);
-      }
-      praticados++;
-    }
-    if (praticados > 0) resultado.set(f.key, { taxa: soma / praticados, praticados, total: entradas.length });
-  }
-  return resultado;
 }

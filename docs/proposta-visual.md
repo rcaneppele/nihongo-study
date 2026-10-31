@@ -7,10 +7,12 @@ templates de dashboard (Cruip *Mosaic* e *Artifact*) e um shot de app de
 agendamento (Dribbble, "Movexa"). Nenhum é de estudo de idiomas; o que
 interessa neles são os **padrões de componente**, não o conteúdo.
 
-Mockup da Home com a proposta aplicada: `docs/visual/mockup-home.html`
-(abre no navegador) e as capturas `mockup-home-desktop.png` /
-`mockup-home-mobile.png`. Para comparar: `atual-home-desktop.png` /
-`atual-home-mobile.png`.
+> **Status: implementada (5 fases, out/2026).** Este documento fica como
+> registro das decisões visuais e é a referência citada pelo `CLAUDE.md`.
+> Depois dela, a reorganização pelo método (`proposta-reorganizacao.md`)
+> mudou a Home: a "Sugestão para agora", os contadores e o "Continuar
+> estudando" da §4 deram lugar ao Plano do dia, e os contadores foram
+> para o Progresso. Os mockups usados durante a proposta foram removidos.
 
 ---
 
@@ -220,5 +222,3 @@ Cada fase é uma entrega testável; a 1 sozinha já resolve os problemas
 técnicos (fonte, offline) e o espaço perdido do jumbotron. Mudança visual,
 sem mexer em dados → bump **minor** ao final (ou patch se parar na fase 1).
 
-Decisões em aberto para o usuário estão listadas na resposta que acompanha
-este documento.

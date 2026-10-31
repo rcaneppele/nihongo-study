@@ -25,14 +25,23 @@ comportamento devem ser refletidas aqui.
   `''`, que esconde inclusive a nota do N5.
 - Categoria é o eixo principal de filtro na tela de estudo.
 
-### Lista de cards (aba "Estudar")
+### Meus cards (`/flashcards`)
+`/flashcards` é "Meus cards" (Revisar › Meus cards): lista, novo card e
+prática livre. A revisão (FSRS) fica **só** na Revisão do dia (`/revisar`,
+cards + kanji) — o botão de revisão de Meus cards é um link pra lá, com o
+total vencido. As antigas
+abas Vocabulário e Progresso viraram páginas do método — `?tab=vocabulario`
+redireciona pra `/aprender/palavras` e `?tab=progresso` pra `/progresso`.
+A revisão completa do dia (cards + kanji) fica em `/revisar` (§5d).
+
+#### Lista de cards
 Pra não virar uma lista infinita conforme o usuário acumula cards: chips de
 categoria filtram primeiro, depois uma busca por texto (frente/verso/leitura,
 case-insensitive) filtra mais, e só então a lista renderiza — no máximo
 `PAGE_SIZE` (20) cards por vez, com um botão "Carregar mais" pra revelar o
 próximo lote. Trocar de categoria ou de busca reseta a paginação de volta
 pro topo. Isso é só sobre exibição — os filtros de categoria/busca não
-afetam quais cards entram em "Estudar"/"Praticar" (isso usa `dueDate`/
+afetam quais cards entram na Revisão do dia ou em "Praticar" (isso usa `dueDate`/
 categoria selecionada nas telas de sessão, sem relação com a busca).
 - Se a categoria selecionada deixa de existir (ex.: apagou o último card
   dela), a seleção volta pra "Todas" sozinha — senão a lista ficaria presa
@@ -48,14 +57,15 @@ Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
 
 - Card novo: `freshSrs()` cria um card FSRS vazio (`createEmptyCard`), que
   vence imediatamente.
-- A sessão de estudo ("Estudar") inclui **todos** os cards com
+- A revisão dos flash cards (primeira parte da Revisão do dia) inclui **todos** os cards com
   `dueDate <= agora`, de qualquer categoria — o chip de categoria da lista
   em `/flashcards` é só filtro de exibição, não afeta essa seleção (ver
   seção "Lista de cards" acima). Quem quer estudar restrito a uma categoria
   usa "Praticar" (`PracticeConfigScreen`, seleção de categoria própria),
   que não grava no SRS.
-- A ordem de entrega dos cards na sessão é embaralhada (`shuffle`,
-  `src/routes/Flashcards.tsx`), tanto em "Estudar" quanto em "Praticar" —
+- A ordem de entrega dos cards na sessão é embaralhada (`shuffle`, em
+  `src/routes/Revisar.tsx` e `src/routes/Flashcards.tsx`), tanto na Revisão
+  do dia quanto em "Praticar" —
   senão a ordem seria sempre a de inserção no banco, e o usuário acaba
   decorando a sequência em vez de lembrar cada card de forma independente.
 - O usuário avalia cada revisão com uma nota do FSRS (`Rating`). Botões
@@ -80,7 +90,7 @@ Desde a migração para FSRS (schemaVersion 2), cada card carrega `stability`,
   ela revelada, conta como **Lembrei**; `1`…`N` = botões na ordem exibida;
   Ctrl/Cmd+Z = desfazer. Ignorados quando o foco está num campo de texto.
 - **Desfazer** (cabeçalho da sessão e tela de conclusão): volta um card e
-  mostra a resposta de novo. No modo "Estudar", restaura o card ao estado
+  mostra a resposta de novo. Na revisão (modo `review`), restaura o card ao estado
   FSRS de antes da nota (`updatedAt` atualizado, pra mesclagem tratar como
   edição recente) e **apaga** a linha de `reviews` gravada — como se a nota
   não tivesse sido dada. Vale pra quantas notas quiser dentro da sessão
@@ -135,11 +145,16 @@ O **estágio** é derivado, nunca gravado:
   (Sei dizer → Reconheço apaga `production`, e o card é promovido de novo
   quando o reconhecimento firmar; Domino → Sei dizer reinicia a produção do
   zero). Grava `updatedAt`.
-- **Fila do "Estudar"** (`buildReviewQueue`, também usada no contador da
-  Home): reconhecimentos e produções vencidos. Se as duas direções do
-  mesmo card vencem juntas, entra **só a produção** (ver a frente em
-  japonês entregaria a resposta); o reconhecimento segue vencido para uma
-  próxima sessão. No máximo **20 produções novas por sessão**
+- **Fila de revisão dos flash cards** (`buildReviewQueue`, usada na
+  Revisão do dia e nos contadores de pendências): reconhecimentos e produções vencidos. Os dois sentidos do
+  mesmo card **nunca no mesmo dia** (ver a frente em japonês entregaria a
+  resposta do outro): se vencem juntos, entra **só a produção**; e se um
+  sentido já foi revisado hoje (`lastReviewedAt` de hoje), o outro fica
+  para amanhã — como o "enterrar irmãos" do Anki. Isso também segura a
+  produção recém-criada pela promoção a Sei dizer (nasce vencida logo
+  depois de o reconhecimento ser revisado). Sem essa regra, ao concluir a
+  Revisão do dia ainda sobravam itens vencidos na hora (achado no teste
+  ponta a ponta). No máximo **20 produções novas por sessão**
   (`NEW_PRODUCTION_PER_SESSION`), pra uma leva grande de promoções não
   inundar a revisão — as demais ficam pras próximas sessões.
 - **Card de produção**: frente = "Como se diz em japonês?" + significado
@@ -154,8 +169,9 @@ O **estágio** é derivado, nunca gravado:
 - **Praticar** ganhou a escolha de direção (Reconhecer/Dizer em japonês), válida
   pra qualquer card selecionado, independente do estágio — não grava nada.
 
-### Mapa de vocabulário (aba "Vocabulário")
-Aba de `/flashcards` (`VocabularyMap.tsx`, lógica em
+### Mapa de vocabulário ("Palavras novas")
+Página `/aprender/palavras` (Aprender › Palavras novas; `PalavrasNovas.tsx`
++ `VocabularyMap.tsx`, lógica em
 `src/features/flashcards/vocabulary.ts`), sobre o deck N5 **sem kanji**
 (`N5_DECK`, mesmo filtro do import). Não tem tabela própria: cruza o deck
 com `cards` (pela `front`) e `wordKnowledge` (pela chave).
@@ -174,8 +190,9 @@ com `cards` (pela `front`) e `wordKnowledge` (pela chave).
   textos, então o desempate pesa.
 - **"Aprender as próximas 10"**: cria cards (estado FSRS novo, mesmo formato
   do import do N5) das 10 palavras Novas mais úteis do filtro; elas entram
-  em "Estudar" na hora. É a alternativa gradual ao import por categoria em
-  Config, que continua existindo.
+  na Revisão do dia na hora. É o caminho recomendado; o import por
+  categoria inteira em Config fica recolhido em "Avançado" (§1, Deck de
+  vocabulário N5).
 - **"Testar 10 que já conheço"**: prática livre (não grava nada) com até 10
   palavras sorteadas entre as conhecidas, direção reconhecimento. Palavras
   conhecidas sem card (leitura/"Já sei") entram como card transitório, não
@@ -186,7 +203,7 @@ com `cards` (pela `front`) e `wordKnowledge` (pela chave).
   (Nova); "Criar card" e, se marcada no próprio mapa, "Desmarcar já sei"
   (Reconheço sem card); controle de estágio do card (com card).
 - **"Já sei"** grava em `wordKnowledge` com status `compreendida` e
-  `seenCount` 0 — entra nas "Palavras compreendidas" da Home. Só pode ser
+  `seenCount` 0 — entra nas "Palavras compreendidas" do Progresso. Só pode ser
   desmarcado enquanto a palavra não aparece numa leitura concluída (aí o
   registro passa a ser da leitura).
 
@@ -228,7 +245,11 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   (ストーブ, ノート, アパート), abreviações e homônimos (デパート, コート,
   マッチ) e palavras nativas com uso que confunde lusófonos (あなた, はい,
   いいえ, ちょっと, はく/かぶる). Notas sem kanji, mesma regra das lições.
-- Em Config > Dados > "Vocabulário N5" (`src/routes/Config.tsx`), o usuário
+- Em Config > Dados > "Vocabulário N5" (`src/routes/Config.tsx`), o
+  caminho recomendado vem primeiro — um atalho pra Aprender › Palavras
+  novas (10 por vez, das mais úteis). O import por categoria inteira fica
+  recolhido num bloco "Avançado" (`<details>`), com aviso de que pode
+  encher a Revisão do dia de uma vez. Nele, o usuário
   marca quais categorias quer e importa só essas — evita popular a fila de
   revisão com centenas de cards de uma vez só. Antes de importar, o app
   verifica os `front` já existentes em `db.cards` e pula os que já foram
@@ -237,7 +258,9 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   SRS inicial, igual à importação manual.
 
 ### Progresso
-Aba "Progresso" em `/flashcards` (`src/features/flashcards/ProgressStats.tsx`).
+Página `/progresso` (`src/routes/Progresso.tsx`), junto com os contadores
+de vocabulário passivo/ativo e de kana/kanji (que saíram da Home); as
+estatísticas de revisão vêm de `src/features/flashcards/ProgressStats.tsx`.
 Calcula tudo no cliente a partir de `db.cards`/`db.reviews` — nenhum dado
 novo persistido, sem lib de gráfico (divs + Tailwind).
 
@@ -257,8 +280,9 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - **Heatmap de revisões**: últimos 84 dias (12 semanas), um quadrado por dia,
   intensidade da cor proporcional ao nº de revisões daquele dia relativo ao
   dia mais cheio do período. Alinhado por dia da semana (estilo GitHub).
-- **Sequência de revisões**: dias consecutivos (contando de hoje pra trás) com pelo
-  menos uma revisão.
+- **Sequência de estudo**: a mesma do bloco "Hoje" da Home (qualquer
+  atividade, `useResumoDia().sequencia`, §5c) — não há mais uma "sequência
+  de revisões" separada, pra não ter dois números com o mesmo nome.
 
 ## 2. Treino de kana
 
@@ -385,7 +409,9 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
     mnemônico, leituras e exemplos de uma vez (diferente da revisão). Ao
     confirmar, cria a linha em `kanjiProgress` com `freshSrs()` — o kanji
     entra na fila de revisão imediatamente (`dueDate` = agora).
-  - **Revisar** (`KanjiReviewSession.tsx`) — mesmo padrão auto-graded de
+  - **Revisar** (`KanjiReviewSession.tsx`, aberta só pela Revisão do dia
+    em `/revisar` — a página `/kanji` mostra apenas um aviso com link
+    quando há kanji vencidos) — mesmo padrão auto-graded de
     `StudySession.tsx` (flash cards): mostra o kanji, "Mostrar resposta"
     revela leituras/significado/exemplos, e a nota do FSRS atualiza
     `kanjiProgress` — mesmos botões, modo 2/4 botões, atalhos e desfazer
@@ -475,7 +501,8 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   - **Palavras compreendidas** (`useKnownWords`) = chaves com status
     `compreendida` + frentes de cards já revisados ou com produção.
     **Palavras que sei dizer** = frentes de cards no estágio Sei dizer ou
-    Domino. Os dois contadores ficam na Home, com ⓘ explicando cada um
+    Domino. Os dois contadores ficam no Progresso (e resumidos no atalho
+    de Progresso da Home), com ⓘ explicando cada um
     (abre com toque, pra funcionar no celular) e um selo "↗ +n" dos últimos
     7 dias, só com o que dá pra medir: compreendidas = cards com a primeira
     revisão na semana + palavras compreendidas na primeira leitura em que
@@ -592,7 +619,7 @@ Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
 ## 5b. Pontos fracos
 
 `/pontos-fracos` (`src/routes/PontosFracos.tsx`, lógica em
-`src/features/pontos-fracos/pontosFracos.ts`), com atalho na Home. Junta o
+`src/features/pontos-fracos/pontosFracos.ts`), em Revisar › Pontos fracos. Junta o
 que o usuário mais erra em cada módulo, **só lendo dados que já existem**
 — nenhuma tabela nova, nada gravado.
 
@@ -645,43 +672,112 @@ de 0).
 - **Home**: bloco "Hoje" no topo — anel de progresso até a meta (matcha
   quando batida), chips do dia (revisões/novos/práticas/textos lidos), faixa
   dos **últimos 7 dias** terminando hoje (dia com estudo marcado; hoje em
-  destaque escuro) e selo da sequência (`useResumoDia().semana`). O "Sequência" da aba Progresso dos flash
-  cards virou "Sequência de revisões" (só revisões de cards), pra não
-  confundir com esta.
+  destaque escuro) e selo da sequência (`useResumoDia().semana`). É a única
+  sequência do app — a página Progresso mostra a mesma ("Sequência de
+  estudo").
 - **Mesclagem de backup**: o mesmo dia pode ter sido estudado em dois
   aparelhos; somar contaria duas vezes ao reimportar o mesmo arquivo, então
   fica o **maior valor de cada contador** — subestima um pouco, mas é
   idempotente.
 
-## 5d. Home — "Sugestão para agora" e navegação
+## 5d. Home (Hoje), navegação e hubs do método
 
 - **Saudação** pela hora do aparelho, em japonês com romaji e tradução
   pequenos: おはようございます (antes das 11h), こんにちは (até 18h),
   こんばんは (depois) — o app não sabe o nome do usuário, e assim a saudação
   também ensina. Acima, a data por extenso.
-- **Layout** (visual em `docs/proposta-visual.md`): saudação → "Hoje" (§5c)
-  ao lado da sugestão → 4 contadores (palavras compreendidas, sei dizer, kana
-  praticados, kanji aprendidos — os dois últimos com barra de progresso) →
-  "Continuar estudando" (um atalho por módulo, com a cor do módulo e selo de
-  pendências em flash cards/kanji).
+- **Layout** (visual em `docs/proposta-visual.md`): saudação → "Hoje"
+  (§5c) ao lado do **Plano do dia** → "Seu método" (um atalho por hub:
+  Aprender, Praticar, Revisar — com as pendências —, Progresso, cada um
+  com uma linha e um número do momento). Os contadores de vocabulário e
+  escrita ficam em `/progresso`.
+- **Plano do dia** (`src/features/metodo/PlanoDoDia.tsx`): o ciclo do
+  método em 3 passos, na ordem **Revisar → Aprender → Praticar**. Cada passo
+  mostra a recomendação do hub correspondente e é marcado como **feito**
+  pela atividade registrada hoje (tabela `activity`, §5c) — nada novo é
+  gravado:
 
-- **Sugestão para agora** (topo da Home, `sugerir` em
-  `src/routes/Home.tsx`): uma ação principal ("Começar") e uma alternativa
-  discreta ("ou …"), na ordem de prioridade:
-  1. flash cards vencidos (mesma fila do "Estudar");
-  2. kanji vencidos;
-  3. um texto de leitura — o de maior "% conhecido", com −50 se lido nos
-     últimos 3 dias e −5 por releitura; a explicação muda conforme o % (≥ 85%:
-     "no ponto para ler com fluidez");
-  4. palavras novas (aba Vocabulário de `/flashcards`).
-- **Navegação lateral** (desktop) agrupada por intenção: Início ·
-  *Aprender* (Lições, Leitura, Kanji) · *Praticar* (Flash cards, Kana,
-  Pontos fracos). A barra inferior do celular mostra os mesmos itens menos
-  Pontos fracos (`sidebarOnly` — a barra já está no limite; o atalho fica
-  na Home). Na barra do celular, o item ativo ganha uma pílula atrás do
-  ícone e rótulo em negrito, **na cor do módulo** (Início índigo, Lições
-  `fuji`, Leitura `matcha`, Kanji `hanko`, Cards `sora`, Kana `kin`) — a
-  pílula ocupa o mesmo espaço nos inativos, pra nada pular ao trocar de aba.
+  | Passo | Recomendação | Feito quando |
+  |---|---|---|
+  | Revisar | "Revisar N item(ns)" (flash cards + kanji vencidos) → Revisão do dia | não há nada vencido |
+  | Aprender | o "Próximo passo" de Aprender (palavras novas → kanji → lição) | `novos` > 0 hoje |
+  | Praticar | o "Próximo passo" de Praticar (ler, ou escutar um texto já lido) | `leituras` > 0 ou `praticas` > 0 hoje |
+
+  O primeiro passo não feito é o **atual**: destacado, com o porquê e o
+  botão escuro "Começar". Os outros não feitos mostram só o título e
+  "Fazer agora"; os feitos, um check e o resumo do dia ("2 item(ns)
+  novo(s) aprendido(s) hoje"). Com os 3 feitos: "Plano do dia completo!".
+  Substitui a antiga "Sugestão para agora" (sugestão única + alternativa).
+- **Navegação pelo método** (`src/features/metodo/estrutura.ts`, ver
+  `docs/proposta-reorganizacao.md`): **Hoje · Aprender · Praticar · Revisar
+  · Progresso** — os mesmos 5 itens na barra inferior do celular e na
+  lateral do desktop (que também lista os atalhos de cada seção: Aprender ›
+  Lições, Palavras novas, Kanji novos, Alfabetos; Praticar › Ler, Ouvir,
+  Falar, Escrever; Revisar › Revisão do dia, Pontos fracos, Testar lições,
+  Meus cards). Configurações fica na engrenagem (topo no celular, rodapé da
+  lateral no desktop).
+  - A **seção ativa vem da rota** (`secaoDaRota`), não do clique: dentro de
+    uma ferramenta, o menu mostra onde ela mora no método (ex.: `/leitura/…`
+    → Praticar; `/flashcards?tab=vocabulario` → Aprender; `/flashcards` →
+    Revisar; `/licoes/quiz` → Revisar; Kakitori e Diga em japonês →
+    Praticar). Ferramentas que aparecem em mais de uma seção ficam marcadas
+    na principal.
+  - Item ativo com pílula e texto **na cor da seção** (Hoje índigo, Aprender
+    `fuji`, Praticar `matcha`, Revisar `sora`, Progresso `kin`); Revisar
+    mostra as pendências (flash cards + kanji vencidos, `usePendencias`).
+- **Revisão do dia** (topo de `/revisar`): um botão encadeia as duas
+  revisões FSRS que já existem — primeiro a fila dos flash cards
+  (`buildReviewQueue`, embaralhada), depois os kanji vencidos
+  (`getDueKanji`) —, sem mudar a lógica de nenhuma. A tela final dos cards
+  vira "Continuar para os kanji (N)"; a dos kanji, "Concluir revisão".
+  "Desistir e voltar" no meio volta pro hub sem marcar como concluída (o que
+  já foi respondido está gravado). Sem nada vencido, o bloco mostra "Tudo em
+  dia" (ou "Revisão do dia concluída!" logo depois de terminar).
+- **Modos pré-escolhidos** — as atividades dos hubs abrem a ferramenta já
+  no modo da habilidade, pela URL (as telas continuam abrindo no padrão sem
+  o parâmetro):
+
+  | URL | Efeito | Hub |
+  |---|---|---|
+  | `/leitura?modo=ouvir` | faixa "Escutar antes de ler" na lista; cada texto abre com "Escutar primeiro" ligado | Ouvir |
+  | `/leitura?modo=acompanhar` | faixa explicando "Ouvir o texto" com a linha destacada | Ouvir |
+  | `/leitura?modo=shadowing` | faixa "Shadowing"; cada texto abre com o modo shadowing selecionado | Falar |
+  | `/kana?modo=romaji` · `desenho` | treino de kana já nesse modo | Ler · Escrever |
+  | `/kanji?modo=caligrafia` | começa a prática de caligrafia direto (uma vez; ao sair, fica na página) | Escrever |
+  | `/licoes/kakitori?modo=desenhar` | ditado já no modo desenhar | Escrever |
+  | `/flashcards?praticar=producao` | abre a prática livre já na direção "dizer em japonês" | Falar |
+
+  Na leitura, o modo acompanha a navegação (lista → texto → "Todos os
+  textos"), e a faixa tem "Ler normalmente" pra sair dele. O menu marca
+  Praticar quando a ferramenta foi aberta num desses modos de habilidade
+  (`secaoDaRota` olha a query também).
+- **Próximo passo** (topo dos hubs Aprender, Praticar e de cada
+  habilidade; `src/features/metodo/proximoPasso.ts`): uma ação
+  recomendada, calculada só com dados já gravados (nada novo é
+  registrado). Em ordem de prioridade, a primeira regra que se aplica:
+
+  | Hub | Regras |
+  |---|---|
+  | Aprender | N palavras novas (até 10) do mapa, citando a próxima mais útil → kanji novos (se o vocabulário sem kanji acabou) → revisitar uma lição |
+  | Ler | texto de `recomendarTexto` (maior "% conhecido", −50 se lido nos últimos 3 dias, −5 por releitura) |
+  | Ouvir | escutar sem ler o melhor texto **já lido** (`?modo=ouvir`) → sem texto lido, ditado (Kakitori) |
+  | Falar | cards vencidos na direção "dizer em japonês" (→ Revisão do dia) → shadowing de um texto já lido → Diga em japonês |
+  | Escrever | família de hiragana com pior nota de desenho (< 85%) → kanji aprendidos ainda não desenhados (caligrafia) → começar a desenhar o hiragana (se nunca desenhou) → ditado à mão |
+  | Praticar | sem leitura concluída nos últimos 2 dias → o passo de Ler; senão, o de Ouvir (input primeiro) |
+
+  O Plano do dia da Home usa os passos de Aprender e Praticar daqui.
+- **Lições** (`/licoes`) não tem mais a seção "Praticar": no lugar, uma
+  linha com o próximo passo do ciclo (Praticar falando, Praticar ouvindo,
+  Testar o que ficou). Quiz, Kakitori e Diga em japonês moram nos hubs.
+- **Hubs** (uma página por seção, mesmo esqueleto: cabeçalho com o porquê +
+  cartões de atividade com "pra que serve"): `/aprender`, `/praticar` (as 4
+  habilidades), `/praticar/:habilidade` (ler, ouvir, falar, escrever),
+  `/revisar` (atividades com contagem de vencidos) e `/progresso`
+  (contadores de vocabulário/escrita + as estatísticas de revisão). As
+  atividades apontam pras telas de sempre — as rotas antigas continuam
+  valendo. Uma mesma ferramenta aparece em mais de um hub quando serve a
+  mais de uma habilidade (Kakitori em Ouvir e Escrever; textos de leitura em
+  Ler, Ouvir e Falar).
 
 ## 6. Dados e sincronização
 

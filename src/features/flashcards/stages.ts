@@ -84,11 +84,24 @@ export interface StudyItem {
   direction: Direction;
 }
 
+function mesmoDia(ts: number | undefined, now: number): boolean {
+  if (ts === undefined) return false;
+  const a = new Date(ts);
+  const b = new Date(now);
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
 /**
- * Fila da sessão "Estudar": reconhecimentos e produções vencidos. Se as
- * duas direções do mesmo card vencem juntas, entra só a produção — ver a
- * frente em japonês logo antes (ou depois) entregaria a resposta da outra.
- * O reconhecimento continua vencido e entra numa próxima sessão.
+ * Fila de revisão dos flash cards (Revisão do dia e contadores):
+ * reconhecimentos e produções vencidos. Os dois sentidos do mesmo card
+ * **nunca no mesmo dia** — ver a frente em japonês logo antes (ou depois)
+ * entregaria a resposta do outro:
+ * - se os dois vencem juntos, entra só a produção;
+ * - se um sentido já foi revisado hoje, o outro fica para amanhã (como o
+ *   "enterrar irmãos" do Anki). Isso também segura a produção recém-criada
+ *   pela promoção a "Sei dizer" (nasce vencida, mas o reconhecimento acabou
+ *   de ser revisado) — sem isso, ao concluir a Revisão do dia ainda
+ *   apareceriam itens vencidos na hora.
  */
 export function buildReviewQueue(cards: Card[], now: number = Date.now()): StudyItem[] {
   const items: StudyItem[] = [];
@@ -96,14 +109,17 @@ export function buildReviewQueue(cards: Card[], now: number = Date.now()): Study
 
   for (const card of cards) {
     const prod = card.production;
-    let productionDue = !!prod && prod.dueDate <= now;
+    const reconhecimentoHoje = mesmoDia(card.lastReviewedAt, now);
+    const producaoHoje = mesmoDia(prod?.lastReviewedAt, now);
+
+    let productionDue = !!prod && prod.dueDate <= now && !reconhecimentoHoje;
     if (productionDue && prod!.state === State.New) {
       if (newProductions >= NEW_PRODUCTION_PER_SESSION) productionDue = false;
       else newProductions++;
     }
 
     if (productionDue) items.push({ card, direction: 'production' });
-    else if (card.dueDate <= now) items.push({ card, direction: 'recognition' });
+    else if (card.dueDate <= now && !producaoHoje) items.push({ card, direction: 'recognition' });
   }
   return items;
 }

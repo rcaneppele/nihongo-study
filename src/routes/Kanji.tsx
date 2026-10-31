@@ -1,24 +1,37 @@
 import type { ReactNode } from 'react';
-import { CalendarClock, PenLine, Sparkles } from 'lucide-react';
+import { CalendarClock, ChevronRight, PenLine, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import StatCard from '../components/StatCard';
 import { TILE, type Cor } from '../lib/cores';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/schema';
 import { KANJI_N5, type KanjiEntry } from '../data/kanji';
-import { getAvailableNewKanji, getDueKanji, getStartedKanji } from '../features/kanji/kanjiQueue';
+import { getAvailableNewKanji, getStartedKanji } from '../features/kanji/kanjiQueue';
 import KanjiLearn from '../features/kanji/KanjiLearn';
-import KanjiReviewSession from '../features/kanji/KanjiReviewSession';
 import KanjiDrawSession from '../features/kanji/KanjiDrawSession';
 
 const NEW_BATCH_SIZES = [5, 10, 20];
 
-type Session = { mode: 'aprender' | 'revisar' | 'caligrafia'; entries: KanjiEntry[] } | null;
+type Session = { mode: 'aprender' | 'caligrafia'; entries: KanjiEntry[] } | null;
 
 export default function Kanji() {
   const [session, setSession] = useState<Session>(null);
   const [batchSize, setBatchSize] = useState(5);
+  // `?modo=caligrafia` vem de Praticar › Escrever: começa a prática de
+  // caligrafia direto (uma vez só — ao sair dela, fica na página do kanji).
+  const [params] = useSearchParams();
+  const caligrafiaDireto = params.get('modo') === 'caligrafia';
+  const jaAbriu = useRef(false);
+  useEffect(() => {
+    if (!caligrafiaDireto || jaAbriu.current) return;
+    jaAbriu.current = true;
+    void getStartedKanji().then((entries) => {
+      if (entries.length > 0) setSession({ mode: 'caligrafia', entries: shuffle(entries) });
+    });
+  }, [caligrafiaDireto]);
 
   const learnedCount = useLiveQuery(() => db.kanjiProgress.count(), [], 0);
   const dueCount = useLiveQuery(
@@ -33,11 +46,6 @@ export default function Kanji() {
     setSession({ mode: 'aprender', entries });
   }
 
-  async function startReview() {
-    const entries = shuffle(await getDueKanji());
-    setSession({ mode: 'revisar', entries });
-  }
-
   async function startDraw() {
     const entries = shuffle(await getStartedKanji());
     setSession({ mode: 'caligrafia', entries });
@@ -46,7 +54,6 @@ export default function Kanji() {
   if (session) {
     const onDone = () => setSession(null);
     if (session.mode === 'aprender') return <KanjiLearn entries={session.entries} onDone={onDone} />;
-    if (session.mode === 'revisar') return <KanjiReviewSession entries={session.entries} onDone={onDone} />;
     return <KanjiDrawSession entries={session.entries} onDone={onDone} />;
   }
 
@@ -111,17 +118,22 @@ export default function Kanji() {
         </button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <AcaoKanji
-          icon={<CalendarClock className="h-5 w-5" />}
-          cor="sora"
-          titulo="Revisar"
-          desc={dueCount > 0 ? `${dueCount} kanji esperando por você` : 'Nada pendente agora'}
-          pendente={dueCount}
-          botao="Revisar"
-          disabled={dueCount === 0}
-          onClick={startReview}
-        />
+      {/* A revisão dos kanji fica na Revisão do dia (junto com os cards) —
+          aqui só o aviso de que há vencidos. */}
+      {dueCount > 0 && (
+        <Link
+          to="/revisar"
+          className="flex items-center gap-3 rounded-2xl border border-sora/25 bg-sora/8 px-4 py-3 text-sm text-ink hover:bg-sora/12"
+        >
+          <CalendarClock className="h-5 w-5 shrink-0 text-sora" />
+          <span className="min-w-0 flex-1">
+            <span className="font-semibold">{dueCount} kanji para revisar hoje</span> — eles entram na Revisão do dia.
+          </span>
+          <ChevronRight className="h-4 w-4 shrink-0 text-ink/40" />
+        </Link>
+      )}
+
+      <div className="grid gap-3">
         <AcaoKanji
           icon={<PenLine className="h-5 w-5" />}
           cor="kin"

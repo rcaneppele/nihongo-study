@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, ChevronRight, Headphones, ListChecks, MessageCircle } from 'lucide-react';
 import { LICOES } from '../licoes';
@@ -27,32 +26,24 @@ export default function Licoes() {
         </div>
       </div>
 
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-sage">Praticar</h2>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <Pratica
-            to="/licoes/quiz"
-            icon={<ListChecks className="h-5 w-5" />}
-            titulo="Quiz"
-            desc="Perguntas aleatórias das lições: ordem da frase, partículas, significado"
-          />
-          <Pratica
-            to="/licoes/kakitori"
-            icon={<Headphones className="h-5 w-5" />}
-            titulo="Kakitori"
-            desc="Ouça e escreva o que foi dito"
-          />
-          <Pratica
-            to="/licoes/diga"
-            icon={<MessageCircle className="h-5 w-5" />}
-            titulo="Diga em japonês"
-            desc="Veja em português e monte a frase em japonês"
-          />
-        </div>
-      </section>
+      <div className="card-surface flex flex-wrap items-center gap-x-4 gap-y-2 py-4 text-sm">
+        <span className="text-sage">Estudou uma lição? Próximo passo do ciclo:</span>
+        <Link to="/praticar/falar" className="inline-flex items-center gap-1.5 font-medium text-matcha hover:underline">
+          <MessageCircle className="h-4 w-4" />
+          Praticar falando
+        </Link>
+        <Link to="/praticar/ouvir" className="inline-flex items-center gap-1.5 font-medium text-sora hover:underline">
+          <Headphones className="h-4 w-4" />
+          Praticar ouvindo
+        </Link>
+        <Link to="/licoes/quiz" className="inline-flex items-center gap-1.5 font-medium text-fuji hover:underline">
+          <ListChecks className="h-4 w-4" />
+          Testar o que ficou
+        </Link>
+      </div>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-sage">Estudar</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-sage">Todas as lições</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {LICOES.map(({ meta }) => (
             <Link
@@ -80,19 +71,5 @@ export default function Licoes() {
         </div>
       </section>
     </div>
-  );
-}
-
-/** Atalho para um modo de prática, na cor das lições. */
-function Pratica({ to, icon, titulo, desc }: { to: string; icon: ReactNode; titulo: string; desc: string }) {
-  return (
-    <Link to={to} className="card-surface group flex min-w-0 items-center gap-4 transition-colors hover:border-fuji/40">
-      <span className="icon-tile h-11 w-11 rounded-2xl bg-fuji/12 text-fuji">{icon}</span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-medium text-ink">{titulo}</span>
-        <span className="block text-sm text-sage">{desc}</span>
-      </span>
-      <ChevronRight className="h-4 w-4 shrink-0 text-ink/30 transition-transform group-hover:translate-x-0.5" />
-    </Link>
   );
 }

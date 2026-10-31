@@ -38,10 +38,17 @@ export default function StudySession({
   items,
   mode,
   onDone,
+  onQuit = onDone,
+  doneLabel = 'Voltar',
 }: {
   items: StudyItem[];
   mode: StudyMode;
+  /** Fim normal da sessão (botão da tela final). */
   onDone: () => void;
+  /** "Desistir e voltar" no meio — por padrão, o mesmo que onDone. */
+  onQuit?: () => void;
+  /** Rótulo do botão da tela final — ex.: "Continuar para os kanji" na Revisão do dia. */
+  doneLabel?: string;
 }) {
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
@@ -149,7 +156,7 @@ export default function StudySession({
             </button>
           )}
           <button className="btn-primary" onClick={onDone}>
-            Voltar
+            {doneLabel}
           </button>
         </div>
       </div>
@@ -162,7 +169,7 @@ export default function StudySession({
         index={index}
         total={items.length}
         onUndo={canUndo ? undo : undefined}
-        onQuit={onDone}
+        onQuit={onQuit}
         badge={
           mode === 'practice' && (
             <span className="rounded bg-line/60 px-2 py-0.5 text-xs uppercase tracking-wide">Prática livre</span>

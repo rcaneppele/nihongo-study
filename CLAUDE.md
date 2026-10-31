@@ -11,7 +11,10 @@ treino de hiragana/katakana (modo digitar romaji e modo desenhar com feedback de
 caligrafia), módulo de Kanji (repetição espaçada com radical/mnemônico + a
 mesma caligrafia do treino de kana), leitura extensiva (textos curtos
 graduados por nível, com furigana e significado por palavra) e lições de
-estudo (conteúdo estático de gramática e vocabulário).
+estudo (conteúdo estático de gramática e vocabulário). Essas ferramentas são
+apresentadas **pelo método** — Hoje · Aprender · Praticar (ler/ouvir/falar/
+escrever) · Revisar · Progresso —, não por módulo (ver
+`src/features/metodo/estrutura.ts` e `regras-negocio.md` §5d).
 
 ## Princípios de arquitetura (não quebrar sem combinar)
 
@@ -76,9 +79,9 @@ toda mudança pede bump; julgue pelo impacto:
   verso do card.
 - `src/features/flashcards/stages.ts` — estágios de vocabulário (Novo →
   Reconheço → Sei dizer → Domino), promoção para a direção de produção
-  (`Card.production`) e fila do "Estudar" (`buildReviewQueue`).
-- `src/features/flashcards/vocabulary.ts` + `VocabularyMap.tsx` — aba
-  "Vocabulário" de `/flashcards`: deck N5 por categoria com estado de cada
+  (`Card.production`) e fila de revisão dos flash cards (`buildReviewQueue`).
+- `src/features/flashcards/vocabulary.ts` + `VocabularyMap.tsx` — página
+  "Palavras novas" (`/aprender/palavras`, `PalavrasNovas.tsx`): deck N5 por categoria com estado de cada
   palavra, % conhecido, "Aprender as próximas 10" e painel da palavra;
   `StageControls.tsx` tem o rótulo/ação de estágio usados na lista e no mapa.
 - `src/features/flashcards/note.ts` + `CardNote.tsx` — nota de origem/uso
@@ -88,7 +91,7 @@ toda mudança pede bump; julgue pelo impacto:
   (flash cards e kanji), com legenda de intervalo e atalhos; modo 2/4
   botões em `gradeMode.ts`.
 - `src/features/flashcards/ProgressStats.tsx` — estatísticas de progresso
-  (aba "Progresso" em `/flashcards`), calculadas de `db.cards`/`db.reviews`.
+  (página `/progresso`), calculadas de `db.cards`/`db.reviews`.
 - `src/features/handwriting/strokes.ts` — captura/normalização de traços e
   `scoreDrawing()`: reconhecimento + pontuação de caligrafia contra o
   KanjiVG. Compartilhado entre o treino de kana e o módulo de Kanji (mescla
@@ -104,10 +107,11 @@ toda mudança pede bump; julgue pelo impacto:
   disponíveis para aprender, já iniciados).
 - `src/features/kanji/KanjiLearn.tsx`, `KanjiReviewSession.tsx`,
   `KanjiDrawSession.tsx` — telas de aprender/revisar/praticar caligrafia do
-  módulo de Kanji (`/kanji`).
+  módulo de Kanji. Aprender e caligrafia ficam em `/kanji`; a revisão roda
+  dentro da Revisão do dia (`/revisar`), depois dos flash cards.
 - `src/components/Furigana.tsx` — kanji com leitura em cima via
-  `<ruby>/<rt>`; usado no módulo de Kanji e na leitura extensiva (ainda não
-  nas lições).
+  `<ruby>/<rt>`; usado no módulo de Kanji, na leitura extensiva e, via
+  `FuriganaWord`, nas tabelas de referência das lições.
 - `src/data/leitura/types.ts` — tipos da leitura extensiva (`ReadingWord`,
   `ReadingLine`, `ReadingText`); `src/data/leitura/textos.ts`
   (`LEITURA_TEXTOS`) — textos originais por nível (1: só kana; 2: kanji com
@@ -122,7 +126,7 @@ toda mudança pede bump; julgue pelo impacto:
   primeiro); velocidade da fala global em `src/features/audio/speech.ts`.
 - `src/features/leitura/knowledge.ts` — vocabulário passivo: palavras
   compreendidas/consultadas ao concluir um texto, "% conhecido" por texto
-  e os contadores de palavras compreendidas / que sei dizer da Home.
+  e os contadores de palavras compreendidas / que sei dizer do Progresso.
 - `src/lib/useHoldToPauseAdvance.ts` — hook do auto-avanço cronometrado do
   treino de kana (barra de progresso; segurar a tela pausa a contagem).
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/
@@ -135,8 +139,8 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/data/kana.ts` — kana (seion, dakuten/handakuten, yōon) com romaji e
   famílias para o seletor de treino.
 - `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 completo
-  (~700 palavras, pt-BR), importável por categoria em Config > Dados >
-  "Vocabulário N5".
+  (~700 palavras, pt-BR), base de Aprender › Palavras novas; o import por
+  categoria inteira fica em Config > Dados > "Vocabulário N5" > Avançado.
 - `src/data/kanjivg/kana-strokes.json` / `kanji-strokes.json` — dados de
   traço (ordem/forma) do KanjiVG, gerados por `scripts/build-kana-strokes.mjs`
   / `scripts/build-kanji-strokes.mjs` (`npm run build:kana-strokes` /
@@ -148,7 +152,7 @@ toda mudança pede bump; julgue pelo impacto:
   virar cards.
 - `src/features/atividade/atividade.ts` — atividade por dia
   (`registrarAtividade`, chamado por cada módulo), meta diária e sequência
-  de dias exibidas na Home.
+  de dias exibidas na Home e no Progresso.
 - `src/features/pontos-fracos/pontosFracos.ts` + `src/routes/PontosFracos.tsx`
   — "Pontos fracos" (`/pontos-fracos`): o que mais erra em cards, kana,
   kanji e leitura, com treino em prática livre.
@@ -161,6 +165,17 @@ toda mudança pede bump; julgue pelo impacto:
   lições: `Section`, `Ex` (exemplo com japonês/romaji/tradução/nota), `Note`,
   `GrammarTable` e `ReadingKey` (legenda "kana ← descrição" usada na seção
   "Como ler esta lição" de cada lição).
+- `src/features/metodo/estrutura.ts` — **estrutura do app pelo método**
+  (Hoje · Aprender · Praticar [ler/ouvir/falar/escrever] · Revisar ·
+  Progresso): seções, habilidades e atividades de cada hub, e
+  `secaoDaRota()`. Fonte única da navegação e dos hubs (`Aprender.tsx`,
+  `Praticar.tsx`, `Habilidade.tsx`, `Revisar.tsx`, `Progresso.tsx`). Ao criar
+  uma ferramenta nova, decidir aqui em que objetivo(s) ela entra.
+  `PlanoDoDia.tsx` é o plano do dia da Home (Revisar → Aprender →
+  Praticar). `nivel.ts` dá os indicadores de "Seu nível nesta habilidade".
+  `proximoPasso.ts` calcula o "Próximo passo" de cada hub (com
+  `src/features/leitura/recomendacao.ts` e `src/features/kana/desempenho.ts`,
+  também usados pela Home e pelo treino de kana).
 - `src/routes/` — uma página por arquivo.
 
 ## Convenções
@@ -231,5 +246,6 @@ toda mudança pede bump; julgue pelo impacto:
 
 ## Regras de negócio
 
-Detalhadas em `regras-negocio.md` (SRS, kana, import/export). Consulte antes de
+Detalhadas em `regras-negocio.md` (SRS e estágios, kana, kanji, leitura,
+lições, navegação pelo método, import/export). Consulte antes de
 mexer na lógica de revisão ou de sincronização.

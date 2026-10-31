@@ -21,16 +21,20 @@ export default function ProgressRing({
     <div className={`relative shrink-0 ${tamanho}`}>
       <svg viewBox="0 0 36 36" className={`${tamanho} -rotate-90`} aria-hidden>
         <circle cx="18" cy="18" r={raio} fill="none" className="stroke-line" strokeWidth="3.2" />
-        <circle
-          cx="18"
-          cy="18"
-          r={raio}
-          fill="none"
-          className={`transition-[stroke-dasharray] duration-500 ${TRACO[cor]}`}
-          strokeWidth="3.2"
-          strokeLinecap="round"
-          strokeDasharray={`${f * circ} ${circ}`}
-        />
+        {/* Em 0 não desenha o arco: com a ponta arredondada, um arco de
+            comprimento zero aparece como um pontinho no topo. */}
+        {f > 0 && (
+          <circle
+            cx="18"
+            cy="18"
+            r={raio}
+            fill="none"
+            className={`transition-[stroke-dasharray] duration-500 ${TRACO[cor]}`}
+            strokeWidth="3.2"
+            strokeLinecap="round"
+            strokeDasharray={`${f * circ} ${circ}`}
+          />
+        )}
       </svg>
       <div className="absolute inset-0 grid place-items-center text-center leading-none">{children}</div>
     </div>

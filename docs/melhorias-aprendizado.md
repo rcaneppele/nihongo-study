@@ -7,9 +7,9 @@ para japonês. Conversação com IA ficou de fora por princípio (sem backend,
 sem LLM — ver `roadmap.md` §6).
 
 Complementa o `docs/roadmap.md`: onde uma ideia daqui reforça ou muda um
-item que já está lá, isso é indicado (ex.: "→ roadmap 3.6"). Os itens estão
-sendo implementados de forma experimental na branch
-`experimento/melhorias-aprendizado`.
+item que já está lá, isso é indicado (ex.: "→ roadmap 3.6"). Todos os itens
+foram implementados (out/2026, branch `experimento/melhorias-aprendizado`);
+as regras finais estão em `regras-negocio.md`.
 
 ---
 

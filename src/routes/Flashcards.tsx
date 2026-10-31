@@ -1,44 +1,45 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { usePendencias } from '../features/metodo/pendencias';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/fsrs';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
 import { buildReviewQueue, type Direction, type StudyItem } from '../features/flashcards/stages';
-import ProgressStats from '../features/flashcards/ProgressStats';
-import VocabularyMap from '../features/flashcards/VocabularyMap';
 import { StageAction, StageChip } from '../features/flashcards/StageControls';
 import { NoteEditor } from '../features/flashcards/CardNote';
 import AudioButton from '../components/AudioButton';
-import { Copy, Play, Plus, Search, Shuffle, Sparkles, Trash2 } from 'lucide-react';
+import { Layers, Play, Plus, Search, Shuffle, Sparkles, Trash2 } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 
-type TabKey = 'estudar' | 'vocabulario' | 'progresso';
-
-const TABS: { key: TabKey; label: string }[] = [
-  { key: 'estudar', label: 'Estudar' },
-  { key: 'vocabulario', label: 'Vocabulário' },
-  { key: 'progresso', label: 'Progresso' },
-];
-
-function asTabKey(value: string | null): TabKey | null {
-  return TABS.some((t) => t.key === value) ? (value as TabKey) : null;
-}
+// Abas que existiam aqui e viraram páginas do método: links antigos
+// (`/flashcards?tab=…`) redirecionam pro lugar novo.
+const ABAS_MOVIDAS: Record<string, string> = {
+  vocabulario: '/aprender/palavras',
+  progresso: '/progresso',
+};
 
 const PAGE_SIZE = 20;
 
+/**
+ * "Meus cards" (Revisar › Meus cards): a lista dos flash cards — buscar,
+ * criar, anotar, mudar estágio — e a prática livre. A revisão (FSRS) fica
+ * num lugar só, a Revisão do dia em /revisar (cards + kanji).
+ */
 export default function Flashcards() {
-  const [params, setParams] = useSearchParams();
-  const tab = asTabKey(params.get('tab')) ?? 'estudar';
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const pendencias = usePendencias();
+  const abaMovida = ABAS_MOVIDAS[params.get('tab') ?? ''];
   const [category, setCategory] = useState<string>('todas');
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [session, setSession] = useState<{ mode: StudyMode; items: StudyItem[] } | null>(null);
-  const [configuringPractice, setConfiguringPractice] = useState(false);
+  // `?praticar=producao` vem de Praticar › Falar: abre direto a prática na
+  // direção "dizer em japonês".
+  const praticarProducao = params.get('praticar') === 'producao';
+  const [configuringPractice, setConfiguringPractice] = useState(praticarProducao);
   const [adding, setAdding] = useState(false);
-
-  function setTab(key: TabKey) {
-    setParams(key === 'estudar' ? {} : { tab: key }, { replace: true });
-  }
 
   const cards = useLiveQuery(() => db.cards.toArray(), [], [] as Card[]);
   const categories = Array.from(
@@ -79,19 +80,14 @@ export default function Flashcards() {
     if (category !== 'todas' && !categories.includes(category)) setCategory('todas');
   }, [category, categories]);
 
-  function startReview() {
-    // Embaralha, igual à prática — senão a ordem de revisão é sempre a
-    // mesma (ordem de inserção no banco), e o usuário pode acabar
-    // decorando a sequência dos cards em vez de lembrar cada um sozinho.
-    setSession({ mode: 'review', items: shuffle(due) });
-  }
-
   // Na prática livre, qualquer card serve nas duas direções (nada é
   // gravado), independente do estágio.
   function startPractice(pool: Card[], direction: Direction) {
     setSession({ mode: 'practice', items: shuffle(pool).map((card) => ({ card, direction })) });
     setConfiguringPractice(false);
   }
+
+  if (abaMovida) return <Navigate to={abaMovida} replace />;
 
   if (session) {
     return <StudySession items={session.items} mode={session.mode} onDone={() => setSession(null)} />;
@@ -100,7 +96,12 @@ export default function Flashcards() {
   if (configuringPractice) {
     return (
       <PracticeConfigScreen
+        // Remonta quando os cards chegam do banco — vindo direto pela URL
+        // (?praticar=producao) a tela abre antes do carregamento, e a seleção
+        // inicial ("todas as categorias") ficaria vazia.
+        key={(cards ?? []).length > 0 ? 'carregado' : 'carregando'}
         cards={cards ?? []}
+        initialDirection={praticarProducao ? 'production' : 'recognition'}
         onStart={startPractice}
         onCancel={() => setConfiguringPractice(false)}
       />
@@ -109,161 +110,127 @@ export default function Flashcards() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="icon-tile h-11 w-11 rounded-2xl bg-sora/12 text-sora">
-            <Copy className="h-5 w-5" />
-          </span>
+      <PageHeader
+        icon={<Layers className="h-5 w-5" />}
+        cor="sora"
+        title="Meus cards"
+        subtitle={`${all.length} cards · ${due.length} para revisar`}
+      >
+        <button className="btn-ghost" disabled={(cards ?? []).length === 0} onClick={() => setConfiguringPractice(true)}>
+          <Shuffle className="h-4 w-4" />
+          Praticar
+        </button>
+        {/* Revisar fica num lugar só — a Revisão do dia (cards + kanji). */}
+        <Link to="/revisar" className="btn-primary">
+          <Play className="h-4 w-4" />
+          Revisão do dia{pendencias.revisao > 0 ? ` (${pendencias.revisao})` : ''}
+        </Link>
+      </PageHeader>
+
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {categories.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            <Chip active={category === 'todas'} onClick={() => setCategory('todas')}>
+              Todas
+            </Chip>
+            {categories.map((c) => (
+              <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
+                {c}
+              </Chip>
+            ))}
+          </div>
+          ) : (
+            <span />
+          )}
+          {!adding && (
+            <button className="btn-ghost" onClick={() => setAdding(true)}>
+              <Plus className="h-4 w-4" />
+              Novo card
+            </button>
+          )}
+        </div>
+
+        {adding && <AddCardForm onClose={() => setAdding(false)} />}
+
+        {filtered.length > 0 && (
           <div>
-            <h1 className="font-display text-2xl font-semibold tracking-tight">Flash cards</h1>
-            <p className="text-sm text-sage">
-              {all.length} cards · {due.length} para revisar
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button
-            className="btn-ghost"
-            disabled={(cards ?? []).length === 0}
-            onClick={() => setConfiguringPractice(true)}
-          >
-            <Shuffle className="h-4 w-4" />
-            Praticar
-          </button>
-          <button className="btn-primary" disabled={due.length === 0} onClick={startReview}>
-            <Play className="h-4 w-4" />
-            Estudar ({due.length})
-          </button>
-        </div>
-      </div>
-
-      <div role="tablist" aria-label="Seções de flash cards" className="segmented">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            role="tab"
-            aria-selected={tab === t.key}
-            onClick={() => setTab(t.key)}
-            className={`segmented-item px-4 ${tab === t.key ? 'segmented-item-active' : ''}`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      <div role="tabpanel">
-        {tab === 'progresso' ? (
-          <ProgressStats />
-        ) : tab === 'vocabulario' ? (
-          <VocabularyMap onPractice={(items) => setSession({ mode: 'practice', items })} />
-        ) : (
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              {categories.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                <Chip active={category === 'todas'} onClick={() => setCategory('todas')}>
-                  Todas
-                </Chip>
-                {categories.map((c) => (
-                  <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
-                    {c}
-                  </Chip>
-                ))}
-              </div>
-              ) : (
-                <span />
-              )}
-              {!adding && (
-                <button className="btn-ghost" onClick={() => setAdding(true)}>
-                  <Plus className="h-4 w-4" />
-                  Novo card
-                </button>
-              )}
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sage" />
+              <input
+                type="search"
+                className="field pl-9"
+                placeholder="Buscar por frente, verso ou leitura…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                aria-label="Buscar cards"
+              />
             </div>
-
-            {adding && <AddCardForm onClose={() => setAdding(false)} />}
-
-            {filtered.length > 0 && (
-              <div>
-                <div className="relative">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sage" />
-                  <input
-                    type="search"
-                    className="field pl-9"
-                    placeholder="Buscar por frente, verso ou leitura…"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    aria-label="Buscar cards"
-                  />
-                </div>
-                {query && (
-                  <p className="mt-1 text-xs text-sage">
-                    {searched.length} de {filtered.length} card(s)
-                  </p>
-                )}
-              </div>
-            )}
-
-            <ul className="space-y-2">
-              {visible.map((card) => (
-                <li key={card.id} className="card-surface flex flex-wrap items-center gap-x-4 gap-y-2 p-4">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="font-jp text-lg">{card.front}</span>
-                      <AudioButton text={card.front} size="sm" />
-                      <StageChip card={card} />
-                      {card.category && (
-                        <span className="badge bg-line/70 font-medium text-sage">{card.category}</span>
-                      )}
-                    </div>
-                    <p className="truncate text-sm text-sage">
-                      {card.reading && <span className="font-jp">{card.reading} · </span>}
-                      <span className="text-ink">{card.back}</span>
-                    </p>
-                  </div>
-                  <NoteEditor key={card.updatedAt} card={card} />
-                  <div className="flex shrink-0 items-center gap-3">
-                    <StageAction card={card} />
-                    <button
-                      className="grid h-8 w-8 place-items-center rounded-full text-sage transition-colors hover:bg-hanko/10 hover:text-hanko"
-                      onClick={() => db.cards.delete(card.id)}
-                      aria-label={`Excluir ${card.front}`}
-                      title="Excluir card"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </li>
-              ))}
-              {filtered.length === 0 && (
-                <li className="card-surface flex flex-col items-center gap-3 py-10 text-center">
-                  <span className="icon-tile h-12 w-12 rounded-2xl bg-sora/12 text-sora">
-                    <Copy className="h-6 w-6" />
-                  </span>
-                  <div>
-                    <p className="font-medium">Nenhum card ainda</p>
-                    <p className="text-sm text-sage">
-                      Comece pelas palavras mais úteis do N5, salve palavras da leitura ou crie um card.
-                    </p>
-                  </div>
-                  <button className="btn-primary" onClick={() => setTab('vocabulario')}>
-                    <Sparkles className="h-4 w-4" />
-                    Escolher palavras para aprender
-                  </button>
-                </li>
-              )}
-              {filtered.length > 0 && searched.length === 0 && (
-                <li className="card-surface text-center text-sage">Nenhum card encontrado para "{search}".</li>
-              )}
-            </ul>
-
-            {remaining > 0 && (
-              <button className="btn-ghost w-full" onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}>
-                Carregar mais ({remaining} restante{remaining === 1 ? '' : 's'})
-              </button>
+            {query && (
+              <p className="mt-1 text-xs text-sage">
+                {searched.length} de {filtered.length} card(s)
+              </p>
             )}
           </div>
+        )}
+
+        <ul className="space-y-2">
+          {visible.map((card) => (
+            <li key={card.id} className="card-surface flex flex-wrap items-center gap-x-4 gap-y-2 p-4">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="font-jp text-lg">{card.front}</span>
+                  <AudioButton text={card.front} size="sm" />
+                  <StageChip card={card} />
+                  {card.category && (
+                    <span className="badge bg-line/70 font-medium text-sage">{card.category}</span>
+                  )}
+                </div>
+                <p className="truncate text-sm text-sage">
+                  {card.reading && <span className="font-jp">{card.reading} · </span>}
+                  <span className="text-ink">{card.back}</span>
+                </p>
+              </div>
+              <NoteEditor key={card.updatedAt} card={card} />
+              <div className="flex shrink-0 items-center gap-3">
+                <StageAction card={card} />
+                <button
+                  className="grid h-8 w-8 place-items-center rounded-full text-sage transition-colors hover:bg-hanko/10 hover:text-hanko"
+                  onClick={() => db.cards.delete(card.id)}
+                  aria-label={`Excluir ${card.front}`}
+                  title="Excluir card"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </li>
+          ))}
+          {filtered.length === 0 && (
+            <li className="card-surface flex flex-col items-center gap-3 py-10 text-center">
+              <span className="icon-tile h-12 w-12 rounded-2xl bg-sora/12 text-sora">
+                <Layers className="h-6 w-6" />
+              </span>
+              <div>
+                <p className="font-medium">Nenhum card ainda</p>
+                <p className="text-sm text-sage">
+                  Comece pelas palavras mais úteis do N5, salve palavras da leitura ou crie um card.
+                </p>
+              </div>
+              <button className="btn-primary" onClick={() => navigate('/aprender/palavras')}>
+                <Sparkles className="h-4 w-4" />
+                Escolher palavras para aprender
+              </button>
+            </li>
+          )}
+          {filtered.length > 0 && searched.length === 0 && (
+            <li className="card-surface text-center text-sage">Nenhum card encontrado para "{search}".</li>
+          )}
+        </ul>
+
+        {remaining > 0 && (
+          <button className="btn-ghost w-full" onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}>
+            Carregar mais ({remaining} restante{remaining === 1 ? '' : 's'})
+          </button>
         )}
       </div>
     </div>
@@ -276,12 +243,14 @@ function PracticeConfigScreen({
   cards,
   onStart,
   onCancel,
+  initialDirection,
 }: {
   cards: Card[];
   onStart: (cards: Card[], direction: Direction) => void;
   onCancel: () => void;
+  initialDirection: Direction;
 }) {
-  const [direction, setDirection] = useState<Direction>('recognition');
+  const [direction, setDirection] = useState<Direction>(initialDirection);
   const categories = Array.from(new Set(cards.map((c) => c.category).filter(Boolean) as string[])).sort();
   const hasUncategorized = cards.some((c) => !c.category);
   const allKeys = hasUncategorized ? [...categories, UNCATEGORIZED] : categories;

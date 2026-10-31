@@ -2,7 +2,7 @@ import { Code, DatabaseBackup, Goal, Info, Layers, Library, Palette, Settings, T
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { db, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/fsrs';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
@@ -257,40 +257,58 @@ function DadosTab() {
         <SectionTitle icon={<Library className="h-4 w-4" />} cor="kin">
           Vocabulário N5
         </SectionTitle>
-        <p className="text-sm text-sage">
-          Marque as categorias que quiser importar. Cada card entra como novo, pronto pra revisão —
-          escolha só o que for estudar agora pra não lotar a fila de revisão de uma vez.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {n5Counts.map(({ category, count }) => {
-            const active = n5Selected.has(category);
-            return (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-sora/8 px-4 py-3">
+          <p className="min-w-0 flex-1 text-sm text-ink">
+            O jeito recomendado de aprender o vocabulário N5 é em{' '}
+            <span className="font-semibold">Aprender › Palavras novas</span>: 10 palavras por vez, das mais úteis
+            para as menos, sem lotar a revisão.
+          </p>
+          <Link to="/aprender/palavras" className="btn-primary">
+            Palavras novas
+          </Link>
+        </div>
+
+        {/* Import em massa (categoria inteira de uma vez): continua
+            disponível, mas recolhido — vai contra o ritmo do método e pode
+            encher a Revisão do dia de uma vez. */}
+        <details className="group rounded-xl border border-line/70 px-4 py-3">
+          <summary className="cursor-pointer text-sm font-medium text-ink/80 marker:text-sage">
+            Avançado: importar categorias inteiras de uma vez
+          </summary>
+          <div className="mt-3 space-y-3">
+            <p className="text-sm text-sage">
+              Cada card entra como novo e já vence na Revisão do dia — importar uma categoria inteira pode criar dezenas
+              de revisões de uma vez. Use só se já conhece essas palavras de outro lugar.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {n5Counts.map(({ category, count }) => {
+                const active = n5Selected.has(category);
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => toggleN5Category(category)}
+                    className={`chip ${active ? 'chip-active' : ''}`}
+                  >
+                    {category} <span className="text-xs opacity-70">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-3">
               <button
-                key={category}
-                type="button"
-                onClick={() => toggleN5Category(category)}
-                className={[
-                  'rounded-full border px-3 py-1.5 text-sm transition-colors',
-                  active ? 'border-indigo bg-indigo/10 text-indigo' : 'border-line text-sage hover:bg-line/30',
-                ].join(' ')}
+                className="btn-ghost"
+                onClick={importN5}
+                disabled={n5Selected.size === 0 || n5Importing}
               >
-                {category} <span className="text-xs opacity-70">({count})</span>
+                {n5Importing ? 'Importando…' : 'Importar selecionados'}
               </button>
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            className="btn-primary"
-            onClick={importN5}
-            disabled={n5Selected.size === 0 || n5Importing}
-          >
-            {n5Importing ? 'Importando…' : 'Importar selecionados'}
-          </button>
-          {n5SelectedCount > 0 && (
-            <span className="text-sm text-sage">{n5SelectedCount} card(s) selecionado(s)</span>
-          )}
-        </div>
+              {n5SelectedCount > 0 && (
+                <span className="text-sm text-sage">{n5SelectedCount} card(s) selecionado(s)</span>
+              )}
+            </div>
+          </div>
+        </details>
       </section>
 
       <section className="card-surface space-y-3">

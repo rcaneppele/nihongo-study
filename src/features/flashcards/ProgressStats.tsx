@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Review } from '../../db/schema';
 import { cardStage, STAGE_BAR, STAGE_HINTS, STAGE_LABELS, type Stage } from './stages';
 import StatCard from '../../components/StatCard';
+import { useResumoDia } from '../atividade/atividade';
 import { CalendarDays, Copy, Flame, History, Route, Target } from 'lucide-react';
 
 /**
@@ -17,6 +18,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export default function ProgressStats() {
   const cards = useLiveQuery(() => db.cards.toArray(), [], null);
+  const resumo = useResumoDia();
   const reviews = useLiveQuery(() => db.reviews.toArray(), [], null);
 
   if (!cards || !reviews) return null;
@@ -40,7 +42,9 @@ export default function ProgressStats() {
   for (const c of cards) stageCounts[cardStage(c)]++;
 
   const dayCounts = buildDayCounts(reviews, HEATMAP_DAYS);
-  const streak = computeStreak(dayCounts);
+  // Uma sequência só no app: a de estudo (qualquer atividade), a mesma do
+  // bloco "Hoje" da Home — não uma "sequência de revisões" à parte.
+  const sequencia = resumo?.sequencia ?? 0;
 
   return (
     <div className="space-y-6">
@@ -62,8 +66,8 @@ export default function ProgressStats() {
         <StatCard
           icon={<Flame className="h-[18px] w-[18px]" />}
           cor="hanko"
-          valor={streak > 0 ? `${streak} dia(s)` : '—'}
-          label="Sequência de revisões"
+          valor={sequencia > 0 ? `${sequencia} dia(s)` : '—'}
+          label="Sequência de estudo"
         />
       </div>
 
@@ -213,11 +217,3 @@ function buildDayCounts(reviews: Review[], days: number): { day: number; count: 
   return result;
 }
 
-function computeStreak(dayCounts: { day: number; count: number }[]): number {
-  let streak = 0;
-  for (let i = dayCounts.length - 1; i >= 0; i--) {
-    if (dayCounts[i].count > 0) streak++;
-    else break;
-  }
-  return streak;
-}

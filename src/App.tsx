@@ -13,6 +13,12 @@ import Quiz from './routes/Quiz';
 import Kakitori from './routes/Kakitori';
 import Diga from './routes/Diga';
 import PontosFracos from './routes/PontosFracos';
+import Aprender from './routes/Aprender';
+import PalavrasNovas from './routes/PalavrasNovas';
+import Praticar from './routes/Praticar';
+import Habilidade from './routes/Habilidade';
+import Revisar from './routes/Revisar';
+import Progresso from './routes/Progresso';
 import Config from './routes/Config';
 
 export default function App() {
@@ -32,6 +38,12 @@ export default function App() {
         <Route path="/licoes/diga" element={<Diga />} />
         <Route path="/licoes/:id" element={<Licao />} />
         <Route path="/pontos-fracos" element={<PontosFracos />} />
+        <Route path="/aprender" element={<Aprender />} />
+        <Route path="/aprender/palavras" element={<PalavrasNovas />} />
+        <Route path="/praticar" element={<Praticar />} />
+        <Route path="/praticar/:habilidade" element={<Habilidade />} />
+        <Route path="/revisar" element={<Revisar />} />
+        <Route path="/progresso" element={<Progresso />} />
         <Route path="/config" element={<Config />} />
       </Routes>
     </Layout>

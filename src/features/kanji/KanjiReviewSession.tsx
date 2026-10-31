@@ -17,7 +17,20 @@ import { registrarAtividade } from '../atividade/atividade';
  * leituras/significado/exemplos, e a nota do FSRS (GradeButtons) atualiza
  * kanjiProgress. Desfazer restaura o kanjiProgress de antes da nota.
  */
-export default function KanjiReviewSession({ entries, onDone }: { entries: KanjiEntry[]; onDone: () => void }) {
+export default function KanjiReviewSession({
+  entries,
+  onDone,
+  onQuit = onDone,
+  doneLabel = 'Voltar',
+}: {
+  entries: KanjiEntry[];
+  /** Fim normal da sessão (botão da tela final). */
+  onDone: () => void;
+  /** "Desistir e voltar" no meio — por padrão, o mesmo que onDone. */
+  onQuit?: () => void;
+  /** Rótulo do botão da tela final. */
+  doneLabel?: string;
+}) {
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [grading, setGrading] = useState(false);
@@ -72,7 +85,7 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
             </button>
           )}
           <button className="btn-primary" onClick={onDone}>
-            Voltar
+            {doneLabel}
           </button>
         </div>
       </div>
@@ -81,7 +94,7 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
 
   return (
     <div className="space-y-4">
-      <SessionHeader index={index} total={entries.length} onUndo={canUndo ? undo : undefined} onQuit={onDone} />
+      <SessionHeader index={index} total={entries.length} onUndo={canUndo ? undo : undefined} onQuit={onQuit} />
 
       <StudyCard etiqueta={<span className="badge bg-hanko/10 text-xs text-hanko">Kanji</span>}>
         <div className="w-full space-y-4">

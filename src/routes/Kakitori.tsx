@@ -1,7 +1,7 @@
 import { ChevronLeft, Headphones } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { contarDisponiveis, gerarKakitori, listarFontes } from '../data/kakitori/gerador';
 import type { ItemKakitori, ModoKakitori, RegistroKakitori } from '../data/kakitori/types';
 import { isSpeechSupported } from '../features/audio/speech';
@@ -15,7 +15,9 @@ const FONTES = listarFontes();
 
 export default function Kakitori() {
   const [fonteIds, setFonteIds] = useState<Set<string>>(new Set(FONTES.map((f) => f.id)));
-  const [modo, setModo] = useState<ModoKakitori>('digitar');
+  // `?modo=desenhar` vem de Praticar › Escrever (ditado escrito à mão).
+  const [params] = useSearchParams();
+  const [modo, setModo] = useState<ModoKakitori>(params.get('modo') === 'desenhar' ? 'desenhar' : 'digitar');
   const [quantidadeDesejada, setQuantidadeDesejada] = useState(QUANTIDADE_PADRAO);
   const [itens, setItens] = useState<ItemKakitori[] | null>(null);
   const [registros, setRegistros] = useState<RegistroKakitori[] | null>(null);

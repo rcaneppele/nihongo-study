@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { getTextoById } from '../data/leitura/textos';
 import type { ReadingLine, ReadingText, ReadingWord } from '../data/leitura/types';
 import Furigana from '../components/Furigana';
@@ -21,8 +21,13 @@ export default function LeituraTexto() {
   const texto = id ? getTextoById(id) : undefined;
   const [showFurigana, setShowFurigana] = useState(true);
   const [selection, setSelection] = useState<Selection | null>(null);
-  const [readMode, setReadMode] = useState<ReadAloudMode>('normal');
-  const [hideText, setHideText] = useState(false);
+  // `?modo=` vem da lista de leitura aberta por um hub do método:
+  // "ouvir" = escutar antes de ler (texto escondido); "shadowing" = modo
+  // shadowing já selecionado.
+  const [params] = useSearchParams();
+  const modoDaUrl = params.get('modo');
+  const [readMode, setReadMode] = useState<ReadAloudMode>(modoDaUrl === 'shadowing' ? 'shadowing' : 'normal');
+  const [hideText, setHideText] = useState(modoDaUrl === 'ouvir');
   const lineTexts = (texto?.lines ?? []).map((line) => line.words.map((w) => w.text).join(''));
   const readAloud = useReadAloud(lineTexts, readMode);
   const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -62,7 +67,10 @@ export default function LeituraTexto() {
 
   return (
     <div className={`space-y-4 ${selection ? 'pb-64 md:pb-0' : ''}`}>
-      <Link to="/leitura" className="inline-flex items-center gap-1 text-sm text-sage hover:text-ink">
+      <Link
+        to={`/leitura${modoDaUrl ? `?modo=${modoDaUrl}` : ''}`}
+        className="inline-flex items-center gap-1 text-sm text-sage hover:text-ink"
+      >
         <ChevronLeft className="h-4 w-4" />
         Todos os textos
       </Link>

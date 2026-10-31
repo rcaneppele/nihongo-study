@@ -37,9 +37,10 @@ externo — ver seção 6 para o motivo técnico:
 
 ---
 
-## 2. Onde o app está hoje (baseline)
+## 2. Onde o app estava na pesquisa (baseline de set/2026)
 
-Para contexto de quem for ler este roadmap sem ter acompanhado a pesquisa:
+Retrato da época da pesquisa, mantido como contexto das prioridades — o
+estado atual está no `README.md` e nas seções "Concluído" abaixo:
 
 | Funcionalidade | Cobre | Não cobre |
 |---|---|---|
@@ -149,7 +150,12 @@ compartilhada pelos dois scripts geradores. Escopo inicial: só os ~110
 kanji do N5 (mesmo escopo do módulo) — cobertura de N4/N3/jōyō completo
 é a mesma extensão futura de 3.1.
 
-### 3.6 Sentence mining / vocabulário com contexto
+### 3.6 Sentence mining / vocabulário com contexto — ✅ implementado (2026-10, branch `experimento/melhorias-aprendizado`)
+**Status:** palavra tocada na leitura vira card com a frase de contexto e
+a origem (`src/features/flashcards/mining.ts`); frases erradas do "Diga em
+japonês" também viram cards. Detalhes em `docs/melhorias-aprendizado.md`
+§3.2 e `regras-negocio.md` §1/§4.
+
 **O quê:** permitir criar um flashcard a partir de uma frase das lições ou
 da leitura extensiva, marcando a palavra-alvo desconhecida na frase (em vez
 de só importar decks prontos).
@@ -161,7 +167,12 @@ existente — é essencialmente um novo fluxo de criação de card, não uma
 tabela nova.
 **Esforço:** baixo-médio, é CRUD local sobre o schema já existente.
 
-### 3.7 Gamificação alinhada ao SRS
+### 3.7 Gamificação alinhada ao SRS — 🟡 parcial (2026-10)
+**Status:** feitos a sequência de estudo (qualquer atividade), a meta
+diária e a faixa da semana na Home, e o heatmap de revisões no Progresso
+(`src/features/atividade/atividade.ts`). **Pendente:** conquistas locais
+("100 kanji", "N5 completo").
+
 **O quê:** streaks de estudo, heatmap de revisões (estilo "contribution
 graph"), conquistas locais (ex.: "100 kanji dominados", "7 dias seguidos",
 "N5 completo").
@@ -223,8 +234,24 @@ roadmap.
   ordem certa — treina produção sem exigir avaliação de texto livre.
 
 ### Progresso
-- **Modo "revisão de erros"**: lista dedicada dos itens mais errados,
-  derivável do que `ProgressStats.tsx` já calcula de `db.reviews`.
+- **Modo "revisão de erros"** — ✅ feito como **Pontos fracos**
+  (`/pontos-fracos`, 2026-10): cards, kana, kanji e palavras consultadas na
+  leitura, com treino em prática livre.
+
+### Depois da reorganização pelo método (2026-10)
+O app foi reorganizado em Hoje · Aprender · Praticar (ler/ouvir/falar/
+escrever) · Revisar · Progresso, **sem criar funcionalidade** — ver
+`docs/proposta-reorganizacao.md`. Ideias que ficaram de fora por exigirem
+funcionalidade nova, e que completariam o método:
+- **Progresso por lição** ("lição 3 de 12 concluída"): registrar lição
+  estudada/concluída. Daria uma trilha em *Aprender* e um critério melhor
+  para o passo "Aprender" do plano do dia.
+- **Nível por habilidade em Ouvir e Falar**: hoje essas habilidades não
+  têm medição própria (o "Seu nível" delas mostra só o material
+  disponível). Exigiria guardar resultado de ditado, "escutar primeiro" e
+  shadowing.
+- **Histórico do Quiz e do Diga em japonês**: hoje não guardam
+  resultado; alimentaria Pontos fracos e o próximo passo de *Falar*.
 
 ---
 
