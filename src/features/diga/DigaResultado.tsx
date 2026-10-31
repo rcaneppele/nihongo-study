@@ -1,3 +1,5 @@
+import ResultadoResumo from '../../components/ResultadoResumo';
+import { Copy } from 'lucide-react';
 import { useState } from 'react';
 import { kanaExibicao, romaji, salvarFrasesComoCards, type RegistroDiga } from './gerador';
 
@@ -22,23 +24,21 @@ export default function DigaResultado({ registros }: { registros: RegistroDiga[]
 
   return (
     <div className="space-y-4">
-      <div className="card-surface space-y-3 text-center">
-        <p className="font-display text-xl">
-          Você disse {acertos} de {registros.length} frase(s) certas
-        </p>
+      <ResultadoResumo titulo="Diga em japonês" acertos={acertos} total={registros.length} unidade="frases certas">
         {erradas.length > 0 && (
-          <>
+          <div className="mt-2 space-y-2">
             <button className="btn-ghost" onClick={salvar} disabled={msg !== null}>
+              <Copy className="h-4 w-4" />
               Salvar as {erradas.length} que errei nos flash cards
             </button>
-            {msg && <p className="text-sm text-indigo">{msg}</p>}
-          </>
+            {msg && <p className="text-sm text-sora">{msg}</p>}
+          </div>
         )}
-      </div>
+      </ResultadoResumo>
 
       <ul className="space-y-2">
         {registros.map(({ item, acertou }, i) => (
-          <li key={i} className={`card-surface space-y-1 border-l-4 ${acertou ? 'border-l-sage' : 'border-l-hanko'}`}>
+          <li key={i} className={`card-surface space-y-1 border-l-4 ${acertou ? 'border-l-matcha' : 'border-l-hanko'}`}>
             <p className="text-sm text-ink">
               {acertou ? '✓' : '✗'} {item.pt}
             </p>

@@ -26,11 +26,27 @@ export default {
         hanko: withOpacity('--color-hanko'), // acento, usar com parcimônia
         sage: withOpacity('--color-sage'),
         line: withOpacity('--color-line'),
+        // Uma cor de apoio por módulo — só em ícones, badges e barras (ver src/index.css).
+        sora: withOpacity('--color-sora'),
+        matcha: withOpacity('--color-matcha'),
+        fuji: withOpacity('--color-fuji'),
+        kin: withOpacity('--color-kin'),
+        sakura: withOpacity('--color-sakura'),
+      },
+      opacity: {
+        8: '0.08',
+        12: '0.12',
+      },
+      boxShadow: {
+        card: '0 1px 2px rgb(var(--shadow-color) / 0.04), 0 8px 24px -12px rgb(var(--shadow-color) / 0.14)',
       },
       fontFamily: {
-        display: ['"Shippori Mincho"', 'serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
-        jp: ['"Noto Sans JP"', '"Hiragino Sans"', 'sans-serif'],
+        // Títulos e números: Inter (moderna, combina com o corpo); japonês cai
+        // pro Noto Sans JP pela pilha. Fontes empacotadas via @fontsource-variable
+        // (ver src/main.tsx).
+        display: ['"Inter Variable"', '"Noto Sans JP Variable"', 'system-ui', 'sans-serif'],
+        body: ['"Inter Variable"', '"Noto Sans JP Variable"', 'system-ui', 'sans-serif'],
+        jp: ['"Noto Sans JP Variable"', '"Hiragino Sans"', 'sans-serif'],
       },
     },
   },

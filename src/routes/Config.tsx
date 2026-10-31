@@ -1,3 +1,6 @@
+import { Code, DatabaseBackup, Goal, Info, Layers, Library, Palette, Settings, TriangleAlert, Upload, User } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
+import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { db, newId } from '../db/schema';
@@ -29,12 +32,14 @@ export default function Config() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold">Config</h1>
-        <p className="text-sm text-sage">Dados, configurações e informações sobre o app.</p>
-      </div>
+      <PageHeader
+        icon={<Settings className="h-5 w-5" />}
+        cor="indigo"
+        title="Configurações"
+        subtitle="Dados, preferências e informações sobre o app."
+      />
 
-      <div role="tablist" aria-label="Seções de configuração" className="flex gap-1 border-b border-line">
+      <div role="tablist" aria-label="Seções de configuração" className="segmented">
         {TABS.map((t) => (
           <button
             key={t.key}
@@ -42,12 +47,7 @@ export default function Config() {
             role="tab"
             aria-selected={tab === t.key}
             onClick={() => setTab(t.key)}
-            className={[
-              'rounded-t-lg px-4 py-2 text-sm font-medium transition-colors',
-              tab === t.key
-                ? 'border border-b-0 border-line bg-surface text-indigo'
-                : 'text-sage hover:text-ink',
-            ].join(' ')}
+            className={`segmented-item px-4 ${tab === t.key ? 'segmented-item-active' : ''}`}
           >
             {t.label}
           </button>
@@ -174,7 +174,9 @@ function DadosTab() {
 
       <section className="card-surface space-y-4">
         <div className="flex items-center gap-1.5">
-          <h2 className="font-medium">Backup completo</h2>
+          <SectionTitle icon={<DatabaseBackup className="h-4 w-4" />} cor="sora">
+          Backup completo
+        </SectionTitle>
           <HelpButton label="Ajuda: como funciona o backup completo" onClick={() => setBackupHelpOpen(true)} />
         </div>
         <p className="text-sm text-sage">
@@ -194,15 +196,15 @@ function DadosTab() {
           <div className="space-y-2 sm:pl-4">
             <h3 className="text-sm font-semibold text-ink">Importar</h3>
             <p className="text-sm text-sage">Escolha como o arquivo se combina com o que já está salvo aqui:</p>
-            <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+            <div className="segmented">
               <button
-                className={`rounded-md px-3 py-1.5 ${mode === 'replace' ? 'bg-indigo text-paper' : ''}`}
+                className={`segmented-item ${mode === 'replace' ? 'segmented-item-active' : ''}`}
                 onClick={() => setMode('replace')}
               >
                 Substituir
               </button>
               <button
-                className={`rounded-md px-3 py-1.5 ${mode === 'merge' ? 'bg-indigo text-paper' : ''}`}
+                className={`segmented-item ${mode === 'merge' ? 'segmented-item-active' : ''}`}
                 onClick={() => setMode('merge')}
               >
                 Mesclar
@@ -226,7 +228,9 @@ function DadosTab() {
 
       <section className="card-surface space-y-3">
         <div className="flex items-center gap-1.5">
-          <h2 className="font-medium">Importar cards</h2>
+          <SectionTitle icon={<Upload className="h-4 w-4" />} cor="sora">
+          Importar cards
+        </SectionTitle>
           <HelpButton
             label="Ajuda: formatos aceitos e como exportar do Anki"
             onClick={() => setCardsHelpOpen(true)}
@@ -250,7 +254,9 @@ function DadosTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Vocabulário N5</h2>
+        <SectionTitle icon={<Library className="h-4 w-4" />} cor="kin">
+          Vocabulário N5
+        </SectionTitle>
         <p className="text-sm text-sage">
           Marque as categorias que quiser importar. Cada card entra como novo, pronto pra revisão —
           escolha só o que for estudar agora pra não lotar a fila de revisão de uma vez.
@@ -288,7 +294,9 @@ function DadosTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Zona de risco</h2>
+        <SectionTitle icon={<TriangleAlert className="h-4 w-4" />} cor="hanko">
+          Zona de risco
+        </SectionTitle>
         <p className="text-sm text-sage">
           Apaga tudo deste dispositivo. Faça um backup antes (seção acima) se quiser preservar.
         </p>
@@ -472,15 +480,17 @@ function ConfiguracoesTab() {
   return (
     <div className="space-y-6"> 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Aparência</h2>
+        <SectionTitle icon={<Palette className="h-4 w-4" />} cor="fuji">
+          Aparência
+        </SectionTitle>
         <p className="text-sm text-sage">
           "Sistema" segue o tema do seu aparelho/navegador e muda sozinho se ele mudar.
         </p>
-        <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+        <div className="segmented">
           {THEME_OPTIONS.map((opt) => (
             <button
               key={opt.key}
-              className={`rounded-md px-3 py-1.5 ${mode === opt.key ? 'bg-indigo text-paper' : ''}`}
+              className={`segmented-item ${mode === opt.key ? 'segmented-item-active' : ''}`}
               onClick={() => setMode(opt.key)}
             >
               {opt.label}
@@ -490,16 +500,18 @@ function ConfiguracoesTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Meta diária</h2>
+        <SectionTitle icon={<Goal className="h-4 w-4" />} cor="matcha">
+          Meta diária
+        </SectionTitle>
         <p className="text-sm text-sage">
           Quantas atividades por dia você quer fazer. Cada resposta (revisão, treino de kana, quiz, kakitori…) conta 1;
           um texto lido conta {PESO_LEITURA}. Aparece no início do app, junto com a sequência de dias.
         </p>
-        <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+        <div className="segmented">
           {META_OPCOES.map((opt) => (
             <button
               key={opt}
-              className={`rounded-md px-3 py-1.5 ${metaDiaria === opt ? 'bg-indigo text-paper' : ''}`}
+              className={`segmented-item ${metaDiaria === opt ? 'segmented-item-active' : ''}`}
               onClick={() => setMetaDiaria(opt)}
             >
               {opt}
@@ -509,16 +521,18 @@ function ConfiguracoesTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Revisão (flash cards e kanji)</h2>
+        <SectionTitle icon={<Layers className="h-4 w-4" />} cor="sora">
+          Revisão (flash cards e kanji)
+        </SectionTitle>
         <p className="text-sm text-sage">
           "2 botões" mostra só Não lembrei e Lembrei — menos decisão por card, e o algoritmo funciona bem assim.
           "4 botões" acrescenta Com esforço e Fácil, para quem quer ajustar o intervalo com mais precisão.
         </p>
-        <div className="inline-flex rounded-lg border border-line p-1 text-sm">
+        <div className="segmented">
           {GRADE_MODE_OPTIONS.map((opt) => (
             <button
               key={opt.key}
-              className={`rounded-md px-3 py-1.5 ${gradeMode === opt.key ? 'bg-indigo text-paper' : ''}`}
+              className={`segmented-item ${gradeMode === opt.key ? 'segmented-item-active' : ''}`}
               onClick={() => setGradeMode(opt.key)}
             >
               {opt.label}
@@ -531,10 +545,21 @@ function ConfiguracoesTab() {
 }
 
 function SobreTab() {
+  const { resolvedTheme } = useTheme();
+  const logoFile = resolvedTheme === 'dark' ? 'logo-dark.png' : 'logo.png';
+
   return (
     <div className="space-y-6">
+      <section className="card-hero flex flex-col items-center gap-1 text-center">
+        <img src={`${import.meta.env.BASE_URL}${logoFile}`} alt="Nihongo Study" className="h-32 object-contain" />
+        <p className="text-sage">Flash cards, kana, kanji, leitura e lições</p>
+        <p className="badge bg-indigo/8 text-indigo">versão {__APP_VERSION__}</p>
+      </section>
+
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">O que é o Nihongo Study</h2>
+        <SectionTitle icon={<Info className="h-4 w-4" />} cor="indigo">
+          O que é o Nihongo Study
+        </SectionTitle>
         <p className="text-sm text-sage">
           Este aplicativo foi desenvolvido por mim para apoiar meus estudos no curso de japonês do
           CIL (Centro Interescolar de Línguas), unidade do Gama, em Brasília. A ideia surgiu da
@@ -549,7 +574,9 @@ function SobreTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Código aberto</h2>
+        <SectionTitle icon={<Code className="h-4 w-4" />} cor="indigo">
+          Código aberto
+        </SectionTitle>
         <p className="text-sm text-sage">
           O código-fonte é público e distribuído sob a licença MIT — você pode usar, copiar,
           modificar e redistribuir livremente, mantendo o aviso de copyright original.
@@ -567,7 +594,9 @@ function SobreTab() {
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Autor</h2>
+        <SectionTitle icon={<User className="h-4 w-4" />} cor="indigo">
+          Autor
+        </SectionTitle>
         <Field label="Nome">
           <span className="text-sm text-ink">Rodrigo da Silva Ferreira Caneppele</span>
         </Field>
@@ -590,5 +619,15 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
       <p className="label">{label}</p>
       {children}
     </div>
+  );
+}
+
+/** Título de seção com ícone num tile pequeno, na cor do assunto. */
+function SectionTitle({ icon, cor, children }: { icon: ReactNode; cor: Cor; children: ReactNode }) {
+  return (
+    <h2 className="flex items-center gap-2.5 font-medium">
+      <span className={`icon-tile h-8 w-8 rounded-lg ${TILE[cor]}`}>{icon}</span>
+      {children}
+    </h2>
   );
 }

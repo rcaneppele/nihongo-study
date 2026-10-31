@@ -1,3 +1,4 @@
+import SessionHeader from '../../components/SessionHeader';
 import { useState } from 'react';
 import { db } from '../../db/schema';
 import type { KanjiEntry } from '../../data/kanji';
@@ -20,7 +21,7 @@ export default function KanjiDrawSession({ entries, onDone }: { entries: KanjiEn
 
   if (!entry) {
     return (
-      <div className="card-surface space-y-4 text-center">
+      <div className="card-hero space-y-4 text-center">
         <p className="font-display text-xl">
           {entries.length === 0 ? 'Aprenda um kanji antes de praticar a caligrafia dele.' : 'Prática concluída.'}
         </p>
@@ -37,14 +38,13 @@ export default function KanjiDrawSession({ entries, onDone }: { entries: KanjiEn
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-sage">
-        <span>
-          {index + 1} de {entries.length}
-        </span>
-        <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onDone}>
-          Parar por aqui
-        </button>
-      </div>
+      <SessionHeader
+        index={index}
+        total={entries.length}
+        onQuit={onDone}
+        semDesfazer
+        badge={<span className="badge bg-kin/12 text-kin">Caligrafia</span>}
+      />
       <DrawQuestion key={entry.char} entry={entry} onNext={next} />
     </div>
   );
@@ -69,10 +69,10 @@ function DrawQuestion({ entry, onNext }: { entry: KanjiEntry; onNext: () => void
   }
 
   return (
-    <div className="card-surface space-y-4">
+    <div className="card-hero space-y-4">
       <div className="text-center">
         <p className="text-sm text-sage">Desenhe o kanji para:</p>
-        <p className="font-jp text-2xl text-indigo">{entry.meaning}</p>
+        <p className="text-2xl font-medium text-hanko">{entry.meaning}</p>
       </div>
 
       <div className="flex justify-center">
@@ -90,7 +90,7 @@ function DrawQuestion({ entry, onNext }: { entry: KanjiEntry; onNext: () => void
         </div>
       ) : (
         <div className="space-y-3 text-center">
-          <p className={`text-3xl font-semibold ${result.passed ? 'text-indigo' : 'text-hanko'}`}>{result.score}%</p>
+          <p className={`text-3xl font-semibold ${result.passed ? 'text-matcha' : 'text-hanko'}`}>{result.score}%</p>
 
           {result.hints.length > 0 && (
             <ul className="mx-auto max-w-xs space-y-1 text-left text-sm text-sage">

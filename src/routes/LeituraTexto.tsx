@@ -8,6 +8,7 @@ import SaveWordForm from '../features/flashcards/SaveWordForm';
 import ReadAloudBar from '../features/leitura/ReadAloudBar';
 import { useReadAloud, type ReadAloudMode } from '../features/leitura/useReadAloud';
 import { finishReading, knownPercent, textWords, useKnownWords, wordKey } from '../features/leitura/knowledge';
+import { CheckCircle2, ChevronLeft, X } from 'lucide-react';
 
 // Na palavra, guarda a linha e a posição também — pra salvar o card com a
 // frase de contexto e a palavra destacada nela.
@@ -20,7 +21,6 @@ export default function LeituraTexto() {
   const texto = id ? getTextoById(id) : undefined;
   const [showFurigana, setShowFurigana] = useState(true);
   const [selection, setSelection] = useState<Selection | null>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
   const [readMode, setReadMode] = useState<ReadAloudMode>('normal');
   const [hideText, setHideText] = useState(false);
   const lineTexts = (texto?.lines ?? []).map((line) => line.words.map((w) => w.text).join(''));
@@ -44,8 +44,9 @@ export default function LeituraTexto() {
       const key = wordKey(next.word);
       if (key) setLookedUp((prev) => (prev.has(key) ? prev : new Set(prev).add(key)));
     }
+    // Sem rolar a página: no desktop o cartão fica fixo no topo da coluna
+    // (sticky) e no celular vira um painel fixo no rodapé.
     setSelection(next);
-    cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   if (!texto) {
@@ -60,22 +61,28 @@ export default function LeituraTexto() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Link to="/leitura" className="text-sm text-sage hover:text-hanko hover:underline">
-          ← Todos os textos
-        </Link>
-        <button className="btn-ghost text-xs" onClick={() => setShowFurigana((v) => !v)}>
-          {showFurigana ? 'Ocultar furigana' : 'Mostrar furigana'}
-        </button>
-      </div>
+    <div className={`space-y-4 ${selection ? 'pb-64 md:pb-0' : ''}`}>
+      <Link to="/leitura" className="inline-flex items-center gap-1 text-sm text-sage hover:text-ink">
+        <ChevronLeft className="h-4 w-4" />
+        Todos os textos
+      </Link>
 
-      <div>
-        <p className="font-jp text-2xl">{texto.title}</p>
-        <p className="text-sm text-sage">
-          Nível {texto.level}
-          {known && ` · você conhece ~${knownPercent(texto, known)}% das palavras`}
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="space-y-1.5">
+          <h1 className="font-jp text-2xl font-medium">{texto.title}</h1>
+          <div className="flex flex-wrap gap-1.5">
+            <span className="badge bg-matcha/12 text-matcha">Nível {texto.level}</span>
+            {known && <span className="badge bg-line/70 text-sage">conhece ~{knownPercent(texto, known)}%</span>}
+          </div>
+        </div>
+        <button
+          className={`chip ${showFurigana ? 'chip-active' : ''}`}
+          aria-pressed={showFurigana}
+          onClick={() => setShowFurigana((v) => !v)}
+          title="Leitura em hiragana em cima dos kanji"
+        >
+          Furigana
+        </button>
       </div>
 
       <ReadAloudBar
@@ -90,9 +97,23 @@ export default function LeituraTexto() {
         onRestart={readAloud.restart}
       />
 
-      <div ref={cardRef} className="card-surface min-h-20 scroll-mt-4">
+      <div
+        className={[
+          'card-surface min-h-20 md:sticky md:top-4 md:z-10',
+          selection
+            ? 'fixed inset-x-3 bottom-[calc(4.25rem+env(safe-area-inset-bottom,0px))] z-30 max-h-[60vh] overflow-y-auto shadow-xl md:inset-x-auto md:bottom-auto md:max-h-none md:shadow-card'
+            : '',
+        ].join(' ')}
+      >
         {selection ? (
-          <div className="space-y-1">
+          <div className="relative space-y-1 pr-8">
+            <button
+              className="absolute right-0 top-0 grid h-7 w-7 place-items-center rounded-full text-sage hover:bg-line/60 hover:text-ink"
+              onClick={() => setSelection(null)}
+              aria-label="Fechar"
+            >
+              <X className="h-4 w-4" />
+            </button>
             <div className="flex flex-wrap items-center gap-x-1 gap-y-1">
               {selection.kind === 'word' ? (
                 <Furigana
@@ -144,7 +165,7 @@ export default function LeituraTexto() {
 
       <div className="card-surface space-y-5">
         {hideText && (
-          <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-indigo/5 px-3 py-2 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-matcha/8 px-3 py-2 text-sm">
             <span className="text-sage">Texto escondido — ouça e tente entender antes de ler.</span>
             <button className="btn-ghost px-3 py-1 text-xs" onClick={() => setHideText(false)}>
               Mostrar texto
@@ -157,8 +178,8 @@ export default function LeituraTexto() {
             ref={(el) => {
               lineRefs.current[i] = el;
             }}
-            className={`-mx-2 flex flex-wrap items-start gap-x-1 gap-y-2 rounded-lg px-2 py-1 transition-colors ${
-              activeLine === i ? 'bg-indigo/10' : ''
+            className={`-mx-3 flex flex-wrap items-start gap-x-1 gap-y-2 rounded-r-xl border-l-4 px-2 py-1 transition-colors ${
+              activeLine === i ? 'border-matcha bg-matcha/8' : 'border-transparent'
             }`}
           >
             <AudioButton text={lineTexts[i]} size="sm" />
@@ -169,7 +190,7 @@ export default function LeituraTexto() {
               <button
                 type="button"
                 onClick={() => select({ kind: 'line', line })}
-                className="inline-flex h-6 shrink-0 items-center justify-center rounded-full px-1.5 text-[10px] font-bold tracking-wide text-sage transition-colors hover:bg-indigo/10 hover:text-indigo"
+                className="inline-flex h-6 shrink-0 items-center justify-center rounded-full px-1.5 text-[10px] font-bold tracking-wide text-sage transition-colors hover:bg-matcha/10 hover:text-matcha"
                 aria-label="Ver tradução da frase completa"
                 title="Ver tradução da frase completa"
               >
@@ -179,7 +200,11 @@ export default function LeituraTexto() {
                 <button
                   key={j}
                   onClick={() => select({ kind: 'word', word, line, lineIndex: i, wordIndex: j })}
-                  className="rounded px-0.5 leading-relaxed transition-colors hover:bg-indigo/10"
+                  className={`rounded px-0.5 leading-relaxed transition-colors hover:bg-matcha/10 ${
+                    selection?.kind === 'word' && selection.lineIndex === i && selection.wordIndex === j
+                      ? 'bg-matcha/15'
+                      : ''
+                  }`}
                 >
                   <Furigana
                     segments={[{ text: word.text, reading: showFurigana ? word.reading : undefined }]}
@@ -206,7 +231,10 @@ export default function LeituraTexto() {
         />
       ) : (
         <div className="card-surface flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-sage">
+          <span className="icon-tile bg-matcha/12 text-matcha">
+            <CheckCircle2 className="h-5 w-5" />
+          </span>
+          <p className="min-w-0 flex-1 text-sm text-sage">
             {lookedUp.size === 0
               ? 'Leu até o fim? Registre a leitura — as palavras que você não precisou consultar contam como compreendidas.'
               : `Você consultou ${lookedUp.size} palavra(s) nesta leitura. As demais contam como compreendidas.`}
@@ -248,12 +276,18 @@ function ReadingSummary({
   const consulted = textWords(texto).filter((w) => lookedUp.has(w.key));
 
   return (
-    <div className="card-surface space-y-4">
-      <div>
-        <p className="font-display text-lg font-semibold">Leitura registrada</p>
-        <p className="text-sm text-sage">
-          {result.understood} palavra(s) compreendida(s) sem consultar · {result.lookedUp} consultada(s)
-        </p>
+    <div className="card-hero space-y-4">
+      <div className="flex items-center gap-3">
+        <span className="icon-tile h-11 w-11 rounded-2xl bg-matcha/12 text-matcha">
+          <CheckCircle2 className="h-5 w-5" />
+        </span>
+        <div className="space-y-1">
+          <p className="font-display text-lg font-semibold tracking-tight">Leitura registrada</p>
+          <div className="flex flex-wrap gap-1.5">
+            <span className="badge bg-matcha/12 text-xs text-matcha">{result.understood} compreendida(s)</span>
+            <span className="badge bg-kin/12 text-xs text-kin">{result.lookedUp} consultada(s)</span>
+          </div>
+        </div>
       </div>
 
       {consulted.length > 0 && (

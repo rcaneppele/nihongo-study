@@ -1,3 +1,8 @@
+import type { ReactNode } from 'react';
+import { CalendarClock, PenLine, Sparkles } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
+import StatCard from '../components/StatCard';
+import { TILE, type Cor } from '../lib/cores';
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../db/schema';
@@ -47,45 +52,54 @@ export default function Kanji() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold">Kanji</h1>
-        <p className="text-sm text-sage">Nível N5 · significado, leituras e traço</p>
+      <PageHeader
+        icon={<span className="font-jp text-xl">字</span>}
+        cor="hanko"
+        title="Kanji"
+        subtitle="Nível N5 · significado, leituras e traço"
+      />
+
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        <StatCard
+          icon={<span className="font-jp">字</span>}
+          cor="hanko"
+          valor={learnedCount}
+          total={KANJI_N5.length}
+          label="Aprendidos"
+        />
+        <StatCard
+          icon={<CalendarClock className="h-[18px] w-[18px]" />}
+          cor="sora"
+          valor={dueCount}
+          label="Para revisar hoje"
+        />
+        <StatCard
+          icon={<Sparkles className="h-[18px] w-[18px]" />}
+          cor="fuji"
+          valor={availableNew}
+          label="Ainda não iniciados"
+        />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="card-surface">
-          <div className="font-display text-3xl font-semibold text-indigo">
-            {learnedCount}/{KANJI_N5.length}
+      <div className="card-hero space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="icon-tile bg-fuji/12 text-fuji">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="font-medium text-ink">Aprender kanji novos</p>
+              <p className="text-xs text-sage">
+                {availableNew > 0 ? `${availableNew} disponíveis` : 'Você já aprendeu todos os kanji do N5!'}
+              </p>
+            </div>
           </div>
-          <div className="mt-1 text-sm text-sage">Aprendidos</div>
-        </div>
-        <div className="card-surface">
-          <div className="font-display text-3xl font-semibold text-hanko">{dueCount}</div>
-          <div className="mt-1 text-sm text-sage">Para revisar hoje</div>
-        </div>
-        <div className="card-surface">
-          <div className="font-display text-3xl font-semibold text-ink">{availableNew}</div>
-          <div className="mt-1 text-sm text-sage">Ainda não iniciados</div>
-        </div>
-      </div>
-
-      <div className="card-surface space-y-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-ink">Aprender kanji novos</p>
-            <p className="text-xs text-sage">
-              {availableNew > 0 ? `${availableNew} disponíveis` : 'Você já aprendeu todos os kanji do N5!'}
-            </p>
-          </div>
-          <div className="inline-flex rounded-lg border border-line p-1">
+          <div className="segmented">
             {NEW_BATCH_SIZES.map((n) => (
               <button
                 key={n}
                 onClick={() => setBatchSize(n)}
-                className={[
-                  'rounded-md px-3 py-1.5 text-sm transition-colors',
-                  batchSize === n ? 'bg-indigo text-paper' : 'text-ink hover:bg-line/40',
-                ].join(' ')}
+                className={['segmented-item', batchSize === n ? 'segmented-item-active' : ''].join(' ')}
               >
                 {n}
               </button>
@@ -97,29 +111,64 @@ export default function Kanji() {
         </button>
       </div>
 
-      <div className="flex items-center justify-between rounded-lg border border-line p-4">
-        <div>
-          <p className="text-sm font-medium text-ink">📅 Revisar</p>
-          <p className="text-xs text-sage">
-            {dueCount > 0 ? `${dueCount} kanji esperando por você` : 'Nada pendente agora'}
-          </p>
-        </div>
-        <button className="btn-ghost shrink-0" disabled={dueCount === 0} onClick={startReview}>
-          Revisar
-        </button>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <AcaoKanji
+          icon={<CalendarClock className="h-5 w-5" />}
+          cor="sora"
+          titulo="Revisar"
+          desc={dueCount > 0 ? `${dueCount} kanji esperando por você` : 'Nada pendente agora'}
+          pendente={dueCount}
+          botao="Revisar"
+          disabled={dueCount === 0}
+          onClick={startReview}
+        />
+        <AcaoKanji
+          icon={<PenLine className="h-5 w-5" />}
+          cor="kin"
+          titulo="Praticar caligrafia"
+          desc={learnedCount > 0 ? `${learnedCount} kanji já aprendidos` : 'Aprenda um kanji primeiro'}
+          botao="Praticar"
+          disabled={learnedCount === 0}
+          onClick={startDraw}
+        />
       </div>
+    </div>
+  );
+}
 
-      <div className="flex items-center justify-between rounded-lg border border-line p-4">
-        <div>
-          <p className="text-sm font-medium text-ink">✍️ Praticar caligrafia</p>
-          <p className="text-xs text-sage">
-            {learnedCount > 0 ? `${learnedCount} kanji já aprendidos` : 'Aprenda um kanji primeiro'}
-          </p>
-        </div>
-        <button className="btn-ghost shrink-0" disabled={learnedCount === 0} onClick={startDraw}>
-          Praticar
-        </button>
+/** Cartão de ação do módulo: ícone, título com pendências, descrição e botão. */
+function AcaoKanji({
+  icon,
+  cor,
+  titulo,
+  desc,
+  pendente,
+  botao,
+  disabled,
+  onClick,
+}: {
+  icon: ReactNode;
+  cor: Cor;
+  titulo: string;
+  desc: string;
+  pendente?: number;
+  botao: string;
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <div className="card-surface flex min-w-0 items-center gap-4">
+      <span className={`icon-tile h-11 w-11 rounded-2xl ${TILE[cor]}`}>{icon}</span>
+      <div className="min-w-0 flex-1">
+        <p className="flex items-center gap-2 font-medium text-ink">
+          {titulo}
+          {!!pendente && <span className="badge bg-hanko/10 text-hanko">{pendente}</span>}
+        </p>
+        <p className="text-sm text-sage">{desc}</p>
       </div>
+      <button className="btn-ghost shrink-0" disabled={disabled} onClick={onClick}>
+        {botao}
+      </button>
     </div>
   );
 }

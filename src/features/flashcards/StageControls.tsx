@@ -1,14 +1,13 @@
 import { db, type Card } from '../../db/schema';
 import { freshSrs } from '../srs/fsrs';
-import { cardStage, STAGE_HINTS, STAGE_LABELS } from './stages';
+import { cardStage, STAGE_BADGE, STAGE_HINTS, STAGE_LABELS } from './stages';
 
 /** Rótulo do estágio do card (Reconheço / Sei dizer / Domino), com a explicação no tooltip. */
 export function StageChip({ card }: { card: Card }) {
   const stage = cardStage(card);
   if (stage === 'novo') return null;
-  const style = stage === 'reconheco' ? 'border-line text-sage' : stage === 'seiDizer' ? 'border-indigo/40 text-indigo' : 'border-sage text-sage';
   return (
-    <span className={`ml-2 rounded border px-2 py-0.5 text-xs ${style}`} title={STAGE_HINTS[stage]}>
+    <span className={`badge ${STAGE_BADGE[stage]}`} title={STAGE_HINTS[stage]}>
       {STAGE_LABELS[stage]}
     </span>
   );

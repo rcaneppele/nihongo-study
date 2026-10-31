@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { EyeOff, Headphones, Mic, Pause, Play, RotateCcw } from 'lucide-react';
 import { setSpeechSpeed, useSpeechSpeed, type SpeechSpeed } from '../audio/speech';
 import type { ReadAloudMode, ReadAloudState } from './useReadAloud';
 
@@ -44,32 +45,41 @@ export default function ReadAloudBar({
   return (
     <div className="card-surface space-y-3">
       <div className="flex flex-wrap items-center gap-2">
+        <span className="icon-tile h-9 w-9 bg-matcha/12 text-matcha">
+          <Headphones className="h-[18px] w-[18px]" />
+        </span>
         {playing ? (
           <button className="btn-primary" onClick={onPause}>
-            ⏸ Pausar
+            <Pause className="h-4 w-4" />
+            Pausar
           </button>
         ) : (
           <button className="btn-primary" onClick={onPlay}>
-            ▶ {state.status === 'paused' ? 'Continuar' : 'Ouvir o texto'}
+            <Play className="h-4 w-4" />
+            {state.status === 'paused' ? 'Continuar' : 'Ouvir o texto'}
           </button>
         )}
         {state.status === 'paused' && (
           <button className="btn-ghost" onClick={onRestart}>
+            <RotateCcw className="h-4 w-4" />
             Do início
           </button>
         )}
-        <span className="text-sm text-sage">
+        <span className={`badge ${state.status === 'idle' ? 'bg-line/70 text-sage' : 'bg-matcha/12 text-matcha'}`}>
           {state.status === 'idle' ? `${totalLines} linhas` : `Linha ${state.line + 1} de ${totalLines}`}
         </span>
       </div>
 
       {state.shadowPauseMs !== null && (
         <div className="space-y-1">
-          <p className="text-sm font-medium text-indigo">Sua vez — repita a frase em voz alta</p>
+          <p className="flex items-center gap-1.5 text-sm font-medium text-matcha">
+            <Mic className="h-4 w-4" />
+            Sua vez — repita a frase em voz alta
+          </p>
           <div className="h-1 w-full overflow-hidden rounded-full bg-line">
             <div
               key={state.line}
-              className="countdown-bar h-full bg-indigo/50"
+              className="countdown-bar h-full bg-matcha/60"
               style={{ animationDuration: `${state.shadowPauseMs}ms` }}
             />
           </div>
@@ -91,10 +101,15 @@ export default function ReadAloudBar({
             </SegmentButton>
           ))}
         </Segmented>
-        <label className="inline-flex cursor-pointer items-center gap-2" title="Esconde o texto para você tentar entender só ouvindo">
-          <input type="checkbox" checked={hideText} onChange={(e) => onHideTextChange(e.target.checked)} />
-          Escutar primeiro (esconder texto)
-        </label>
+        <button
+          className={`chip inline-flex items-center gap-1.5 ${hideText ? 'chip-active' : ''}`}
+          aria-pressed={hideText}
+          title="Esconde o texto para você tentar entender só ouvindo"
+          onClick={() => onHideTextChange(!hideText)}
+        >
+          <EyeOff className="h-3.5 w-3.5" />
+          Escutar primeiro
+        </button>
       </div>
       {mode === 'shadowing' && (
         <p className="text-xs text-sage">
@@ -110,7 +125,7 @@ function Segmented({ label, children }: { label: string; children: ReactNode }) 
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-sage">{label}</span>
-      <div className="inline-flex rounded-lg border border-line p-0.5">{children}</div>
+      <div className="segmented">{children}</div>
     </div>
   );
 }
@@ -130,7 +145,7 @@ function SegmentButton({
 }) {
   return (
     <button
-      className={`rounded-md px-2.5 py-1 text-xs disabled:opacity-50 ${active ? 'bg-indigo text-paper' : ''}`}
+      className={`segmented-item px-2.5 py-1 text-xs ${active ? 'segmented-item-active' : ''}`}
       disabled={disabled}
       title={title}
       onClick={onClick}

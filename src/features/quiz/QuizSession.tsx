@@ -1,3 +1,4 @@
+import SessionHeader from '../../components/SessionHeader';
 import { useEffect, useRef, useState } from 'react';
 import { useHoldToPauseAdvance } from '../../lib/useHoldToPauseAdvance';
 import type { PerguntaGerada, RegistroResposta, Token } from '../../data/quiz/types';
@@ -30,14 +31,7 @@ export default function QuizSession({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-sage">
-        <span>
-          {index + 1} de {perguntas.length}
-        </span>
-        <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onDesistir}>
-          Desistir e voltar
-        </button>
-      </div>
+      <SessionHeader index={index} total={perguntas.length} onQuit={onDesistir} semDesfazer />
 
       <QuestionCard
         key={pergunta.id}
@@ -83,7 +77,7 @@ const ESTADO_NEUTRO_DIM = 'border border-line opacity-40';
 function Feedback({ acertou, explicacao }: { acertou: boolean; explicacao?: string }) {
   return (
     <div className="space-y-1">
-      <p className={`text-sm font-medium ${acertou ? 'text-sage' : 'text-hanko'}`}>
+      <p className={`text-sm font-medium ${acertou ? 'text-matcha' : 'text-hanko'}`}>
         {acertou ? '✓ Certo!' : '✗ Errado.'}
       </p>
       {explicacao && <p className="text-sm text-ink/80">{explicacao}</p>}
@@ -185,7 +179,7 @@ function ReordenarFrase({ pergunta, ultima, onResponder, onAvancar }: CardProps<
   }
 
   return (
-    <div className="card-surface space-y-4">
+    <div className="card-hero space-y-4">
       <p className="text-sm text-sage">Toque nas palavras na ordem certa para formar a frase:</p>
       <p className="text-sm text-ink">{pergunta.pt}</p>
 
@@ -247,7 +241,7 @@ function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardPro
   const acertou = escolhida === pergunta.correta;
 
   return (
-    <div className="card-surface space-y-4">
+    <div className="card-hero space-y-4">
       <p className="text-sm text-sage">Escolha a partícula correta:</p>
 
       <div className="flex flex-wrap items-end gap-1.5">
@@ -313,7 +307,7 @@ function MultiplaEscolha({ pergunta, ultima, onResponder, onAvancar }: CardProps
   }
 
   return (
-    <div className="card-surface space-y-4">
+    <div className="card-hero space-y-4">
       <p className="text-base text-ink">{pergunta.pergunta}</p>
 
       <div className="space-y-2">
@@ -374,7 +368,7 @@ function VerdadeiroFalso({ pergunta, ultima, onResponder, onAvancar }: CardProps
   }
 
   return (
-    <div className="card-surface space-y-4">
+    <div className="card-hero space-y-4">
       <p className="text-base text-ink">{pergunta.afirmacao}</p>
 
       <div className="grid grid-cols-2 gap-2">

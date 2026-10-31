@@ -1,3 +1,4 @@
+import ResultadoResumo from '../../components/ResultadoResumo';
 import type { PerguntaGerada, RegistroResposta } from '../../data/quiz/types';
 
 export default function QuizResultado({ respostas }: { respostas: RegistroResposta[] }) {
@@ -5,11 +6,7 @@ export default function QuizResultado({ respostas }: { respostas: RegistroRespos
 
   return (
     <div className="space-y-4">
-      <div className="card-surface text-center">
-        <p className="font-display text-xl">
-          Você acertou {acertos} de {respostas.length}
-        </p>
-      </div>
+      <ResultadoResumo titulo="Resultado do quiz" acertos={acertos} total={respostas.length} />
 
       <ul className="space-y-2">
         {respostas.map((r, i) => {
@@ -17,10 +14,10 @@ export default function QuizResultado({ respostas }: { respostas: RegistroRespos
           return (
             <li
               key={i}
-              className={`card-surface space-y-1.5 border-l-4 ${r.acertou ? 'border-l-sage' : 'border-l-hanko'}`}
+              className={`card-surface space-y-1.5 border-l-4 ${r.acertou ? 'border-l-matcha' : 'border-l-hanko'}`}
             >
               <p className="text-sm text-ink">{enunciado(r.pergunta)}</p>
-              <p className={`text-sm ${r.acertou ? 'text-sage' : 'text-hanko'}`}>
+              <p className={`text-sm ${r.acertou ? 'text-matcha' : 'text-hanko'}`}>
                 {r.acertou ? '✓' : '✗'} Sua resposta:{' '}
                 <span className={jp ? 'font-jp' : 'font-medium'}>{r.suaResposta}</span>
               </p>

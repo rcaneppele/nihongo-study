@@ -40,6 +40,24 @@ export const STAGE_HINTS: Record<Stage, string> = {
   domino: `Você diz a palavra em japonês com segurança (intervalo ≥ ${MASTERED_DAYS} dias)`,
 };
 
+/**
+ * Cores dos estágios — as mesmas na lista de cards, no mapa de vocabulário e
+ * no Progresso: cinza → azul claro → azul → verde (o "dominado").
+ */
+export const STAGE_BADGE: Record<Stage, string> = {
+  novo: 'bg-line/70 text-sage',
+  reconheco: 'bg-sora/12 text-sora',
+  seiDizer: 'bg-sora text-paper',
+  domino: 'bg-matcha/15 text-matcha',
+};
+
+export const STAGE_BAR: Record<Stage, string> = {
+  novo: 'bg-line',
+  reconheco: 'bg-sora/40',
+  seiDizer: 'bg-sora',
+  domino: 'bg-matcha',
+};
+
 export function cardStage(card: Card): Stage {
   if (card.production) {
     return card.production.state === State.Review && card.production.scheduledDays >= MASTERED_DAYS

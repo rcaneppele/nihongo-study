@@ -79,19 +79,53 @@ export interface KnownWords {
   understood: Set<string>;
   /** Frentes de cards no estágio Sei dizer ou Domino. */
   canSay: Set<string>;
+  /**
+   * Crescimento dos últimos 7 dias, só com o que dá pra medir de verdade:
+   * compreendidas = cards com a primeira revisão na semana + palavras
+   * compreendidas na primeira leitura em que apareceram (`seenCount` 1);
+   * sei dizer = cards de "Sei dizer"/"Domino" cuja primeira revisão de
+   * produção foi na semana.
+   */
+  understoodWeek: number;
+  canSayWeek: number;
 }
+
+const SEMANA_MS = 7 * 24 * 60 * 60 * 1000;
 
 export function useKnownWords(): KnownWords | undefined {
   return useLiveQuery(async () => {
-    const [knowledge, cards] = await Promise.all([db.wordKnowledge.toArray(), db.cards.toArray()]);
+    const [knowledge, cards, reviews] = await Promise.all([
+      db.wordKnowledge.toArray(),
+      db.cards.toArray(),
+      db.reviews.toArray(),
+    ]);
+    const desde = Date.now() - SEMANA_MS;
+
+    // Primeira revisão de cada card, por direção.
+    const primeiraRec = new Map<string, number>();
+    const primeiraProd = new Map<string, number>();
+    for (const r of reviews) {
+      const mapa = r.direction === 'production' ? primeiraProd : primeiraRec;
+      const atual = mapa.get(r.cardId);
+      if (atual === undefined || r.reviewedAt < atual) mapa.set(r.cardId, r.reviewedAt);
+    }
+
     const understood = new Set(knowledge.filter((k) => k.status === 'compreendida').map((k) => k.key));
+    const novasNaSemana = new Set(
+      knowledge.filter((k) => k.status === 'compreendida' && k.seenCount === 1 && k.updatedAt >= desde).map((k) => k.key)
+    );
     const canSay = new Set<string>();
+    let canSayWeek = 0;
     for (const card of cards) {
       if (card.state !== State.New || card.production) understood.add(card.front);
+      if ((primeiraRec.get(card.id) ?? 0) >= desde) novasNaSemana.add(card.front);
       const stage = cardStage(card);
-      if (stage === 'seiDizer' || stage === 'domino') canSay.add(card.front);
+      if (stage === 'seiDizer' || stage === 'domino') {
+        canSay.add(card.front);
+        if ((primeiraProd.get(card.id) ?? 0) >= desde) canSayWeek++;
+      }
     }
-    return { understood, canSay };
+    return { understood, canSay, understoodWeek: novasNaSemana.size, canSayWeek };
   }, []);
 }
 

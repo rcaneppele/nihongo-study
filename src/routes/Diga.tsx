@@ -1,3 +1,5 @@
+import { ChevronLeft, MessageCircle } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { contarDisponiveis, gerarDiga, licoesComFrases, type ItemDiga, type RegistroDiga } from '../features/diga/gerador';
@@ -73,15 +75,12 @@ export default function Diga() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <Link to="/licoes" className="btn-ghost mb-4 inline-flex text-sm">
-          ← Lições
+      <div className="space-y-4">
+        <Link to="/licoes" className="inline-flex items-center gap-1 text-sm text-sage hover:text-ink">
+          <ChevronLeft className="h-4 w-4" />
+          Lições
         </Link>
-        <h1 className="font-display text-2xl font-semibold">Diga em japonês</h1>
-        <p className="mt-1 text-sm text-sage">
-          Você vê uma frase em português e diz em japonês — de preferência em voz alta. Depois confere com a resposta e
-          o áudio. É o treino de montar frases inteiras sozinho, que a leitura e os flash cards não cobrem.
-        </p>
+        <PageHeader icon={<MessageCircle className="h-5 w-5" />} cor="fuji" title="Diga em japonês" subtitle="Você vê uma frase em português e diz em japonês — de preferência em voz alta. Depois confere com a resposta e o áudio. É o treino de montar frases inteiras sozinho, que a leitura e os flash cards não cobrem." />
       </div>
 
       <div>
@@ -103,10 +102,7 @@ export default function Diga() {
               <button
                 key={meta.id}
                 onClick={() => toggleLicao(meta.id)}
-                className={[
-                  'rounded-full border px-3 py-1.5 text-sm transition-colors',
-                  active ? 'border-indigo bg-indigo text-paper' : 'border-line text-ink hover:bg-line/40',
-                ].join(' ')}
+                className={`chip ${active ? 'chip-active' : ''}`}
               >
                 {meta.emoji} {meta.title}
               </button>

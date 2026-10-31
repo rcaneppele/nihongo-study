@@ -16,6 +16,25 @@ export default defineConfig({
       // periódica/on-focus, que o script auto-injetado (`injectRegister: 'auto'`) não oferece.
       injectRegister: false,
       includeAssets: ['icons/apple-touch-icon.png', 'favicon.png', 'logo.png', 'logo-dark.png'],
+      workbox: {
+        // Inter (latin) é pequena e entra no pré-cache. As fontes japonesas vêm
+        // fatiadas em dezenas de arquivos por faixa de caracteres (o navegador
+        // só baixa os que a página usa) — pré-cachear todas seria vários MB;
+        // em vez disso, cada fatia baixada fica num cache próprio e passa a
+        // funcionar offline dali em diante.
+        globPatterns: ['**/*.{js,css,html}', 'assets/inter-latin-*.woff2'],
+        runtimeCaching: [
+          {
+            urlPattern: /\.woff2?$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'fontes',
+              expiration: { maxEntries: 400 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
+      },
       manifest: {
         name: 'Nihongo Study',
         short_name: 'Nihongo',

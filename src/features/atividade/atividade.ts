@@ -53,6 +53,8 @@ export interface ResumoDia {
   /** Dias seguidos com estudo, terminando hoje (ou ontem, se hoje ainda não estudou). */
   sequencia: number;
   estudouHoje: boolean;
+  /** Últimos 7 dias (o último é hoje), pra faixa da semana da Home. */
+  semana: { day: string; diaDoMes: number; diaDaSemana: number; estudou: boolean }[];
 }
 
 /**
@@ -78,6 +80,12 @@ export function useResumoDia(): ResumoDia | undefined {
       sequencia++;
       cursor.setDate(cursor.getDate() - 1);
     }
-    return { hoje, pontos: pontos(hoje), sequencia, estudouHoje };
+    const semana = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      const day = diaLocal(d.getTime());
+      return { day, diaDoMes: d.getDate(), diaDaSemana: d.getDay(), estudou: dias.has(day) };
+    });
+    return { hoje, pontos: pontos(hoje), sequencia, estudouHoje, semana };
   }, []);
 }

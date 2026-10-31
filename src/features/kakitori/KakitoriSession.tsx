@@ -1,3 +1,4 @@
+import SessionHeader from '../../components/SessionHeader';
 import { useEffect, useRef, useState } from 'react';
 import { useHoldToPauseAdvance } from '../../lib/useHoldToPauseAdvance';
 import { speakJapanese } from '../audio/speech';
@@ -27,14 +28,7 @@ export default function KakitoriSession({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-sage">
-        <span>
-          {index + 1} de {itens.length}
-        </span>
-        <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onDesistir}>
-          Desistir e voltar
-        </button>
-      </div>
+      <SessionHeader index={index} total={itens.length} onQuit={onDesistir} semDesfazer />
 
       <ItemCard
         key={item.id}
@@ -77,8 +71,8 @@ function ItemCard({
   }
 
   return (
-    <div className="card-surface space-y-4">
-      <span className="inline-block rounded-full bg-line px-2 py-0.5 text-xs text-sage">{item.origemLabel}</span>
+    <div className="card-hero space-y-4">
+      <span className="badge bg-fuji/12 text-xs text-fuji">{item.origemLabel}</span>
 
       <div className="flex flex-col items-center gap-2 py-2">
         <button
@@ -173,7 +167,7 @@ function AvancarAuto({ acertou, ultimo, onAvancar }: { acertou: boolean; ultimo:
 
   return (
     <div className="space-y-1">
-      <p className={`text-center text-sm font-medium ${acertou ? 'text-sage' : 'text-hanko'}`}>
+      <p className={`text-center text-sm font-medium ${acertou ? 'text-matcha' : 'text-hanko'}`}>
         {acertou ? '✓ Marcado como acerto' : '✗ Marcado como erro'}
       </p>
       <button ref={nextBtnRef} className="btn-primary w-full" onClick={onAvancar}>

@@ -5,6 +5,8 @@ import GradeButtons from '../srs/GradeButtons';
 import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
 import SessionHeader from '../../components/SessionHeader';
+import StudyCard from '../../components/StudyCard';
+import { Eye, MessageCircle } from 'lucide-react';
 import { useShortcuts } from '../../lib/useShortcuts';
 import CardExampleView from './CardExampleView';
 import { NoteBox } from './CardNote';
@@ -168,7 +170,21 @@ export default function StudySession({
         }
       />
 
-      <div className="card-surface min-h-48 grid place-items-center text-center">
+      <StudyCard
+        etiqueta={
+          isProduction ? (
+            <span className="badge bg-matcha/12 text-xs text-matcha">
+              <MessageCircle className="h-3.5 w-3.5" />
+              Dizer em japonês
+            </span>
+          ) : (
+            <span className="badge bg-sora/12 text-xs text-sora">
+              <Eye className="h-3.5 w-3.5" />
+              Reconhecer
+            </span>
+          )
+        }
+      >
         {isProduction ? (
           <div className="w-full">
             <p className="label">Como se diz em japonês?</p>
@@ -177,7 +193,7 @@ export default function StudySession({
             {showBack && (
               <div className="mt-4 border-t border-line pt-4">
                 <div className="flex items-center justify-center gap-2">
-                  <p className="font-jp text-4xl">{card.front}</p>
+                  <p className="font-jp text-5xl">{card.front}</p>
                   <AudioButton text={card.front} />
                 </div>
                 {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
@@ -197,7 +213,7 @@ export default function StudySession({
         ) : (
           <div>
             <div className="flex items-center justify-center gap-2">
-              <p className="font-jp text-4xl">{card.front}</p>
+              <p className="font-jp text-5xl">{card.front}</p>
               <AudioButton text={card.front} />
             </div>
             {showBack && (
@@ -218,7 +234,7 @@ export default function StudySession({
             )}
           </div>
         )}
-      </div>
+      </StudyCard>
 
       {!showBack ? (
         <button className="btn-primary w-full" onClick={() => setShowBack(true)}>

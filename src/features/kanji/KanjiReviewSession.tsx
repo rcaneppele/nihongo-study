@@ -7,6 +7,7 @@ import type { KanjiEntry } from '../../data/kanji';
 import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
 import SessionHeader from '../../components/SessionHeader';
+import StudyCard from '../../components/StudyCard';
 import { useShortcuts } from '../../lib/useShortcuts';
 import { registrarAtividade } from '../atividade/atividade';
 
@@ -82,7 +83,8 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
     <div className="space-y-4">
       <SessionHeader index={index} total={entries.length} onUndo={canUndo ? undo : undefined} onQuit={onDone} />
 
-      <div className="card-surface min-h-48 space-y-4 text-center">
+      <StudyCard etiqueta={<span className="badge bg-hanko/10 text-xs text-hanko">Kanji</span>}>
+        <div className="w-full space-y-4">
         <div className="flex items-center justify-center gap-2">
           <p className="font-jp text-7xl">{entry.char}</p>
           {showBack && <AudioButton text={entry.examples[0]?.word ?? entry.char} />}
@@ -133,7 +135,8 @@ export default function KanjiReviewSession({ entries, onDone }: { entries: Kanji
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </StudyCard>
 
       {!showBack ? (
         <button className="btn-primary w-full" onClick={() => setShowBack(true)}>

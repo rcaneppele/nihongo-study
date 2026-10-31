@@ -168,8 +168,26 @@ toda mudança pede bump; julgue pelo impacto:
 - TypeScript estrito; evite `any`.
 - Componentes em PascalCase; um componente "de página" por arquivo em `routes/`.
 - Estilização só com Tailwind + as classes utilitárias em `src/index.css`
-  (`btn-primary`, `card-surface`, `field`, `label`, etc.). Cores pelos tokens
+  (`btn-primary`, `card-surface`, `card-hero`, `icon-tile`, `badge`,
+  `segmented`/`segmented-item`, `field`, `label`, etc.). Cores pelos tokens
   (`indigo`, `hanko`, `paper`, `ink`, `sage`, `line`) — não cravar hex solto.
+  Cores de apoio **por módulo** (`sora` flash cards, `matcha` leitura, `fuji`
+  lições, `kin` kana, `sakura` pontos fracos; kanji usa `hanko`) só em
+  pequenas áreas: ícones, `icon-tile` (fundo `/12`), `badge`, barras finas —
+  nunca em fundos grandes. Visão completa em `docs/proposta-visual.md`.
+- Componentes visuais compartilhados: `PageHeader` (cabeçalho de página com
+  ícone na cor do módulo, título, subtítulo e ações), `StatCard` (contador com ícone,
+  selo de crescimento ou barra), `ProgressRing` (anel 0–1), `StudyCard`
+  (card das sessões de estudo, efeito de pilha + etiqueta), em
+  `src/components/` — e `ResultadoResumo` (anel de acerto das telas de
+  resultado); cores de módulo prontas em `src/lib/cores.ts`; cores
+  dos estágios de vocabulário em `STAGE_BADGE`/`STAGE_BAR`
+  (`src/features/flashcards/stages.ts`), as mesmas na lista, no mapa e no
+  Progresso. Filtros em pílula: classes `chip`/`chip-active`.
+- Ícones: `lucide-react` (traço, mesmo estilo em todo o app); emoji só como
+  identidade de cada lição. Fontes empacotadas via `@fontsource-variable`
+  (Inter + Noto Sans JP, importadas em `src/main.tsx`) — nunca por CDN, pra
+  funcionar offline.
   O modo escuro é resolvido nesses mesmos tokens (redefinidos sob `:root.dark`
   em `src/index.css`), não com variantes `dark:` espalhadas pelos componentes
   — então usar os tokens já garante suporte a claro/escuro de graça.

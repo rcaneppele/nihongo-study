@@ -272,6 +272,12 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 
 ### Fluxo: teste com pontuação
 - Configuração → Teste → Resultado (`src/routes/Kana.tsx`).
+- Na configuração, cada tile de família mostra uma barra fina com o
+  desempenho **no modo escolhido** (`desempenhoPorFamilia`): largura = kana
+  da família já praticados nesse modo; cor = acerto médio deles (romaji e
+  múltipla escolha pela taxa de acerto; desenho pela melhor nota) — verde
+  ≥ 85%, âmbar ≥ 60%, vermelho abaixo. Sem barra = ainda não praticou nesse
+  modo. Só leitura de `kanaProgress`, nada novo gravado.
 - O teste cobre todos os kana das famílias selecionadas pelo menos uma vez,
   em ordem aleatória. Kana com maior taxa de erro histórica em
   `kanaProgress` (para o modo escolhido — `romajiWrong`/`romajiCorrect` no
@@ -431,9 +437,13 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   fechado.
 - **Fluxo** (`src/routes/Leitura.tsx` + `LeituraTexto.tsx`): listagem
   agrupada por nível → tela de leitura com toggle de furigana (ligado por
-  padrão), um cartão fixo que mostra texto/leitura/significado da última
+  padrão), um cartão que mostra texto/leitura/significado da última
   palavra tocada (em vez de tooltip flutuante — mais simples e robusto no
-  mobile, sem matemática de posicionamento), e `AudioButton` por linha
+  mobile, sem matemática de posicionamento) — no desktop fica fixo no topo
+  da coluna enquanto se rola (`sticky`); no celular, com uma palavra
+  selecionada, vira um painel fixo no rodapé (acima da barra de navegação),
+  com botão de fechar; tocar não rola mais a página —, a palavra
+  selecionada fica realçada no texto, e `AudioButton` por linha
   (reaproveita `speakJapanese` de `src/features/audio/speech.ts`, texto
   puro sem ruby).
 - **Vocabulário passivo e textos lidos** (`src/features/leitura/knowledge.ts`,
@@ -466,7 +476,11 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
     `compreendida` + frentes de cards já revisados ou com produção.
     **Palavras que sei dizer** = frentes de cards no estágio Sei dizer ou
     Domino. Os dois contadores ficam na Home, com ⓘ explicando cada um
-    (abre com toque, pra funcionar no celular).
+    (abre com toque, pra funcionar no celular) e um selo "↗ +n" dos últimos
+    7 dias, só com o que dá pra medir: compreendidas = cards com a primeira
+    revisão na semana + palavras compreendidas na primeira leitura em que
+    apareceram (`seenCount` 1); sei dizer = cards de Sei dizer/Domino com a
+    primeira revisão de produção na semana (`understoodWeek`/`canSayWeek`).
   - **% conhecido** de um texto = palavras únicas dele que estão em
     "compreendidas" ÷ total de palavras únicas. Aparece no topo da tela de
     leitura e, quando > 0, na listagem (junto com "lido N×"); a listagem
@@ -556,7 +570,9 @@ Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
   voz alta ou de cabeça). "Travou?" mostra as palavras da frase
   embaralhadas como dica. "Mostrar resposta" revela a frase em kana
   (partícula grudada na palavra anterior, espaço entre blocos, como nos
-  textos de nível 1), o romaji e **toca o áudio sozinho** (texto sem
+  textos de nível 1 — a partícula é reconhecida pelo texto do token, porque
+  nas frases do quiz `particula: true` marca só a que vira lacuna no
+  "Escolher partícula"), o romaji e **toca o áudio sozinho** (texto sem
   espaços, pra síntese não fazer pausas). Autoavaliação **Errei / Acertei**
   — pequenas variações naturais contam como acerto. Mesmos atalhos das
   revisões (Espaço revela e, revelado, = Acertei; 1/2; Ctrl+Z volta uma
@@ -626,8 +642,10 @@ de 0).
   tabela `activity` — a sequência de quem já estudava não zera). Termina
   hoje, ou ontem se hoje ainda não houve estudo (o dia não acabou — a Home
   avisa "estude hoje para manter").
-- **Home**: bloco "Hoje" no topo — barra até a meta (sage quando batida),
-  resumo do dia e a sequência. O "Sequência" da aba Progresso dos flash
+- **Home**: bloco "Hoje" no topo — anel de progresso até a meta (matcha
+  quando batida), chips do dia (revisões/novos/práticas/textos lidos), faixa
+  dos **últimos 7 dias** terminando hoje (dia com estudo marcado; hoje em
+  destaque escuro) e selo da sequência (`useResumoDia().semana`). O "Sequência" da aba Progresso dos flash
   cards virou "Sequência de revisões" (só revisões de cards), pra não
   confundir com esta.
 - **Mesclagem de backup**: o mesmo dia pode ter sido estudado em dois
@@ -636,6 +654,16 @@ de 0).
   idempotente.
 
 ## 5d. Home — "Sugestão para agora" e navegação
+
+- **Saudação** pela hora do aparelho, em japonês com romaji e tradução
+  pequenos: おはようございます (antes das 11h), こんにちは (até 18h),
+  こんばんは (depois) — o app não sabe o nome do usuário, e assim a saudação
+  também ensina. Acima, a data por extenso.
+- **Layout** (visual em `docs/proposta-visual.md`): saudação → "Hoje" (§5c)
+  ao lado da sugestão → 4 contadores (palavras compreendidas, sei dizer, kana
+  praticados, kanji aprendidos — os dois últimos com barra de progresso) →
+  "Continuar estudando" (um atalho por módulo, com a cor do módulo e selo de
+  pendências em flash cards/kanji).
 
 - **Sugestão para agora** (topo da Home, `sugerir` em
   `src/routes/Home.tsx`): uma ação principal ("Começar") e uma alternativa
@@ -650,7 +678,10 @@ de 0).
   *Aprender* (Lições, Leitura, Kanji) · *Praticar* (Flash cards, Kana,
   Pontos fracos). A barra inferior do celular mostra os mesmos itens menos
   Pontos fracos (`sidebarOnly` — a barra já está no limite; o atalho fica
-  na Home).
+  na Home). Na barra do celular, o item ativo ganha uma pílula atrás do
+  ícone e rótulo em negrito, **na cor do módulo** (Início índigo, Lições
+  `fuji`, Leitura `matcha`, Kanji `hanko`, Cards `sora`, Kana `kin`) — a
+  pílula ocupa o mesmo espaço nos inativos, pra nada pular ao trocar de aba.
 
 ## 6. Dados e sincronização
 

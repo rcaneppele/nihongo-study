@@ -11,12 +11,15 @@ export default function SessionHeader({
   onUndo,
   onQuit,
   badge,
+  semDesfazer,
 }: {
   index: number;
   total: number;
   onUndo?: () => void;
   onQuit: () => void;
   badge?: ReactNode;
+  /** Sessões sem desfazer (ex.: treino de kana) — esconde o botão em vez de deixá-lo desabilitado. */
+  semDesfazer?: boolean;
 }) {
   const done = Math.min(index, total);
 
@@ -30,6 +33,7 @@ export default function SessionHeader({
           </span>
         </div>
         <div className="flex items-center gap-3">
+          {!semDesfazer && (
           <button
             className="inline-flex items-center gap-1 text-xs text-sage hover:text-indigo disabled:opacity-40 disabled:hover:text-sage"
             onClick={onUndo}
@@ -42,6 +46,7 @@ export default function SessionHeader({
             </svg>
             Desfazer
           </button>
+          )}
           <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onQuit}>
             Desistir e voltar
           </button>

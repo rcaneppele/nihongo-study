@@ -36,7 +36,7 @@ export default function GradeButtons({
       {grades.map((g, i) => (
         <button
           key={g.label}
-          className={`${g.grade === Rating.Good ? 'btn-primary' : 'btn-ghost'} flex-col gap-0.5 py-2.5`}
+          className={`btn flex-col gap-0.5 py-2.5 ${GRADE_STYLE[g.grade]}`}
           disabled={disabled}
           title={g.hint}
           onClick={() => onGrade(g.grade)}
@@ -52,6 +52,15 @@ export default function GradeButtons({
     </div>
   );
 }
+
+// Cor de significado por nota, em tons suaves — só "Lembrei" (a resposta
+// mais comum) é sólido, pra ser a ação óbvia.
+const GRADE_STYLE: Record<Grade, string> = {
+  [Rating.Again]: 'border border-hanko/30 bg-hanko/5 text-hanko hover:bg-hanko/10',
+  [Rating.Hard]: 'border border-kin/30 bg-kin/5 text-kin hover:bg-kin/10',
+  [Rating.Good]: 'bg-indigo text-paper hover:bg-indigo-soft',
+  [Rating.Easy]: 'border border-matcha/30 bg-matcha/5 text-matcha hover:bg-matcha/10',
+};
 
 function formatInterval(days: number): string {
   if (days <= 1) return 'rever amanhã';

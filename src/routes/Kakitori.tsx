@@ -1,3 +1,5 @@
+import { ChevronLeft, Headphones } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { contarDisponiveis, gerarKakitori, listarFontes } from '../data/kakitori/gerador';
@@ -74,15 +76,12 @@ export default function Kakitori() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <Link to="/licoes" className="btn-ghost mb-4 inline-flex text-sm">
-          ← Lições
+      <div className="space-y-4">
+        <Link to="/licoes" className="inline-flex items-center gap-1 text-sm text-sage hover:text-ink">
+          <ChevronLeft className="h-4 w-4" />
+          Lições
         </Link>
-        <h1 className="font-display text-2xl font-semibold">Kakitori (書き取り)</h1>
-        <p className="mt-1 text-sm text-sage">
-          Ouça e escreva o que foi dito, como no ditado do sensei. Escolha as lições, depois
-          confira sua resposta contra a certa — sem correção automática.
-        </p>
+        <PageHeader icon={<Headphones className="h-5 w-5" />} cor="fuji" title="Kakitori (書き取り)" subtitle="Ouça e escreva o que foi dito, como no ditado do sensei. Escolha as lições, depois confira sua resposta contra a certa — sem correção automática." />
       </div>
 
       {!isSpeechSupported() && (
@@ -137,10 +136,7 @@ export default function Kakitori() {
                 <button
                   key={fonte.id}
                   onClick={() => toggleFonte(fonte.id)}
-                  className={[
-                    'rounded-full border px-3 py-1.5 text-sm transition-colors',
-                    active ? 'border-indigo bg-indigo text-paper' : 'border-line text-ink hover:bg-line/40',
-                  ].join(' ')}
+                  className={`chip ${active ? 'chip-active' : ''}`}
                 >
                   {fonte.emoji} {fonte.label}
                 </button>

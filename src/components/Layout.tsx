@@ -1,8 +1,12 @@
-import type { ReactNode, SVGProps } from 'react';
+import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useTheme } from '../lib/useTheme';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { BookOpen, BookOpenText, Copy, House, Settings, Target, type LucideIcon } from 'lucide-react';
+import { db } from '../db/schema';
+import { buildReviewQueue } from '../features/flashcards/stages';
+import { PILULA, TEXTO, type Cor } from '../lib/cores';
 
-// `shortLabel` é o rótulo usado na barra inferior do mobile — com 5 itens
+// `shortLabel` é o rótulo usado na barra inferior do mobile — com 6 itens
 // numa tela estreita, "Flash cards" (o mais longo) quebra linha e desalinha
 // os ícones dos outros itens. Cai pra "Cards" só ali; a barra lateral do
 // desktop (mais espaço) sempre usa `label`.
@@ -11,35 +15,51 @@ import { useTheme } from '../lib/useTheme';
 // novo × praticar/revisar o que já viu). `sidebarOnly` fica fora da barra
 // inferior do celular, que já está no limite de itens — esses têm atalho na
 // Home.
+//
+// `cor` é a cor do módulo (src/lib/cores.ts) — pinta o ícone na lateral e o
+// indicador do item ativo na barra do celular, pra navegação e atalhos da
+// Home falarem a mesma língua visual.
+// `badge` diz qual contador de pendências aparece ao lado do item.
 interface NavItem {
   to: string;
   label: string;
   shortLabel?: string;
   end: boolean;
-  icon: (props: SVGProps<SVGSVGElement>) => ReactNode;
+  icon: LucideIcon | ((props: { className?: string }) => ReactNode);
+  cor: Cor;
   group?: 'Aprender' | 'Praticar';
   sidebarOnly?: boolean;
+  badge?: 'cards' | 'kanji';
 }
 
 const NAV: NavItem[] = [
-  { to: '/', label: 'Início', end: true, icon: IconHome },
-  { to: '/licoes', label: 'Lições', end: false, icon: IconBook, group: 'Aprender' },
-  { to: '/leitura', label: 'Leitura', shortLabel: 'Ler', end: false, icon: IconLeitura, group: 'Aprender' },
-  { to: '/kanji', label: 'Kanji', end: false, icon: IconKanji, group: 'Aprender' },
-  { to: '/flashcards', label: 'Flash cards', shortLabel: 'Cards', end: false, icon: IconCards, group: 'Praticar' },
-  { to: '/kana', label: 'Kana', end: false, icon: IconKana, group: 'Praticar' },
-  { to: '/pontos-fracos', label: 'Pontos fracos', end: false, icon: IconTarget, group: 'Praticar', sidebarOnly: true },
+  { to: '/', label: 'Início', end: true, icon: House, cor: 'indigo' },
+  { to: '/licoes', label: 'Lições', end: false, icon: BookOpen, cor: 'fuji', group: 'Aprender' },
+  { to: '/leitura', label: 'Leitura', shortLabel: 'Ler', end: false, icon: BookOpenText, cor: 'matcha', group: 'Aprender' },
+  { to: '/kanji', label: 'Kanji', end: false, icon: IconKanji, cor: 'hanko', group: 'Aprender', badge: 'kanji' },
+  { to: '/flashcards', label: 'Flash cards', shortLabel: 'Cards', end: false, icon: Copy, cor: 'sora', group: 'Praticar', badge: 'cards' },
+  { to: '/kana', label: 'Kana', end: false, icon: IconKana, cor: 'kin', group: 'Praticar' },
+  { to: '/pontos-fracos', label: 'Pontos fracos', end: false, icon: Target, cor: 'sakura', group: 'Praticar', sidebarOnly: true },
 ];
 
+/** Pendências de revisão pros badges da navegação (mesma fila do "Estudar" e dos kanji vencidos). */
+function usePendencias(): Record<'cards' | 'kanji', number> {
+  const cards = useLiveQuery(async () => buildReviewQueue(await db.cards.toArray()).length, [], 0);
+  const kanji = useLiveQuery(() => db.kanjiProgress.where('dueDate').belowOrEqual(Date.now()).count(), [], 0);
+  return { cards, kanji };
+}
+
 export default function Layout({ children }: { children: ReactNode }) {
+  const pendencias = usePendencias();
+
   return (
     <div className="flex min-h-full">
-      <Sidebar />
+      <Sidebar pendencias={pendencias} />
 
       <div className="flex min-h-full min-w-0 flex-1 flex-col md:pl-60">
-        <Jumbotron />
+        <MobileTopBar />
 
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 lg:px-8 md:pb-16">
+        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-5 sm:px-6 md:pb-16 md:pt-8 lg:px-8">
           {children}
         </main>
 
@@ -48,102 +68,128 @@ export default function Layout({ children }: { children: ReactNode }) {
         </footer>
       </div>
 
-      <BottomNav />
+      <BottomNav pendencias={pendencias} />
     </div>
   );
 }
 
-function Jumbotron() {
-  const { resolvedTheme } = useTheme();
-  const logoFile = resolvedTheme === 'dark' ? 'logo-dark.png' : 'logo.png';
-
+/** Ícone do app (sem o texto do logo, que fica ilegível em tamanho pequeno); o logo completo fica em Config > Sobre. */
+function Logo({ className }: { className?: string }) {
   return (
-    <div className="relative border-b border-line bg-gradient-to-b from-indigo/5 to-transparent px-4 py-8 text-center sm:py-10">
-      <div className="absolute right-4 top-4">
-        <NavLink
-          to="/config"
-          aria-label="Configurações e dados"
-          className="grid h-10 w-10 place-items-center rounded-full border border-line bg-surface/70 text-ink transition-colors hover:bg-line/40"
-        >
-          <IconGear className="h-5 w-5" />
-        </NavLink>
-      </div>
-      <NavLink to="/" className="inline-block">
-        <img
-          src={`${import.meta.env.BASE_URL}${logoFile}`}
-          alt="Nihongo Study"
-          className="mx-auto h-32 sm:h-40 md:h-44"
-        />
+    <img
+      src={`${import.meta.env.BASE_URL}icons/icon-192.png`}
+      alt=""
+      className={`rounded-xl object-contain shadow-sm ${className ?? ''}`}
+    />
+  );
+}
+
+/** Celular: barra fina no topo (logo + nome + configurações) no lugar do antigo logo grande. */
+function MobileTopBar() {
+  return (
+    <div className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-paper/90 px-4 py-2 backdrop-blur md:hidden">
+      <NavLink to="/" className="flex items-center gap-2">
+        <Logo className="h-8 w-8" />
+        <span className="font-semibold tracking-tight">Nihongo Study</span>
       </NavLink>
-      <p className="mt-1 text-sage">Flash cards, kana e tópicos de estudo</p>
-      <p className="mt-1 text-xs text-sage/70">Nihongo Study · v{__APP_VERSION__}</p>
+      <NavLink
+        to="/config"
+        aria-label="Configurações e dados"
+        className="grid h-9 w-9 place-items-center rounded-full text-ink transition-colors hover:bg-line/50"
+      >
+        <Settings className="h-5 w-5" />
+      </NavLink>
     </div>
   );
 }
 
-function Sidebar() {
+function Sidebar({ pendencias }: { pendencias: Record<'cards' | 'kanji', number> }) {
   return (
-    <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-line bg-surface/60 px-3 py-5 md:flex">
-      <nav className="flex flex-1 flex-col gap-1">
+    <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-line bg-surface/70 px-3 py-4 md:flex">
+      <NavLink to="/" className="mb-5 flex items-center gap-2.5 px-2">
+        <Logo className="h-9 w-9" />
+        <span className="leading-tight">
+          <span className="block font-semibold tracking-tight">Nihongo Study</span>
+          <span className="block text-[11px] text-sage">v{__APP_VERSION__}</span>
+        </span>
+      </NavLink>
+
+      <nav className="flex flex-1 flex-col gap-0.5">
         {NAV.map((item, i) => (
           <div key={item.to}>
             {item.group && item.group !== NAV[i - 1]?.group && (
-              <p className="mb-1 mt-4 px-3 text-xs font-medium uppercase tracking-wide text-sage">{item.group}</p>
+              <p className="mb-1 mt-5 px-3 text-[11px] font-semibold uppercase tracking-wider text-sage/80">
+                {item.group}
+              </p>
             )}
             <NavLink to={item.to} end={item.end} className={sidebarLinkClass}>
-              <item.icon className="h-5 w-5 shrink-0" />
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  <item.icon className={`h-[18px] w-[18px] shrink-0 ${isActive || item.cor === 'indigo' ? '' : TEXTO[item.cor]}`} />
+                  <span className="flex-1">{item.label}</span>
+                  {item.badge && pendencias[item.badge] > 0 && (
+                    <span className="badge bg-hanko text-paper">{pendencias[item.badge]}</span>
+                  )}
+                </>
+              )}
             </NavLink>
           </div>
         ))}
       </nav>
+
+      <NavLink to="/config" className={sidebarLinkClass}>
+        <Settings className="h-[18px] w-[18px] shrink-0" />
+        Configurações
+      </NavLink>
     </aside>
   );
 }
 
 function sidebarLinkClass({ isActive }: { isActive: boolean }) {
   return [
-    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-    isActive ? 'bg-indigo text-paper' : 'text-ink hover:bg-line/50',
+    'flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+    isActive ? 'bg-indigo/8 text-indigo' : 'text-ink/80 hover:bg-line/50 hover:text-ink',
   ].join(' ');
 }
 
-function BottomNav() {
+function BottomNav({ pendencias }: { pendencias: Record<'cards' | 'kanji', number> }) {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur md:hidden">
       {NAV.filter((item) => !item.sidebarOnly).map((item) => (
-        <NavLink key={item.to} to={item.to} end={item.end} className={bottomNavLinkClass}>
-          <item.icon className="h-5 w-5" />
-          {item.shortLabel ?? item.label}
+        <NavLink
+          key={item.to}
+          to={item.to}
+          end={item.end}
+          className={({ isActive }) => bottomNavLinkClass(isActive, item.cor)}
+        >
+          {({ isActive }) => (
+            <>
+              {/* Pílula na cor do módulo atrás do ícone marca a aba atual (mesmo
+                  espaço quando inativa, pra nada pular ao trocar de aba). */}
+              <span
+                className={`relative flex items-center justify-center rounded-full px-4 py-1 transition-colors ${
+                  isActive ? PILULA[item.cor] : ''
+                }`}
+              >
+                <item.icon className="h-5 w-5" />
+                {item.badge && pendencias[item.badge] > 0 && (
+                  <span className="absolute right-2.5 top-0.5 h-2 w-2 rounded-full bg-hanko ring-2 ring-paper" aria-hidden />
+                )}
+              </span>
+              {item.shortLabel ?? item.label}
+            </>
+          )}
         </NavLink>
       ))}
     </nav>
   );
 }
 
-function bottomNavLinkClass({ isActive }: { isActive: boolean }) {
+function bottomNavLinkClass(isActive: boolean, cor: Cor) {
   return [
-    'flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors whitespace-nowrap',
-    isActive ? 'text-indigo' : 'text-sage',
+    'flex flex-1 flex-col items-center gap-0.5 py-1.5 text-xs transition-colors whitespace-nowrap',
+    isActive ? `font-semibold ${TEXTO[cor]}` : 'font-medium text-sage',
   ].join(' ');
-}
-
-function IconHome(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M3 11.5 12 4l9 7.5" />
-      <path d="M5.5 10v9a1 1 0 0 0 1 1H17.5a1 1 0 0 0 1-1v-9" />
-    </svg>
-  );
-}
-
-function IconCards(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <rect x="7" y="3" width="13" height="15" rx="2" />
-      <path d="M4 7v13a1 1 0 0 0 1 1h13" />
-    </svg>
-  );
 }
 
 function IconKana({ className }: { className?: string }) {
@@ -159,48 +205,5 @@ function IconKanji({ className }: { className?: string }) {
     <span aria-hidden className={`grid place-items-center font-jp text-[0.95rem] leading-none ${className ?? ''}`}>
       字
     </span>
-  );
-}
-
-function IconLeitura(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M5.5 3h10L20 7.5V21H5.5z" />
-      <path d="M15.5 3v4.5H20" />
-      <path d="M8.5 12.5h7" />
-      <path d="M8.5 16h7" />
-    </svg>
-  );
-}
-
-function IconBook(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-    </svg>
-  );
-}
-
-const GEAR_TEETH = [0, 45, 90, 135, 180, 225, 270, 315];
-
-function IconGear(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" {...props}>
-      <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" strokeWidth={2.4} />
-      {GEAR_TEETH.map((deg) => (
-        <rect key={deg} x="10.9" y="2.6" width="2.2" height="3.4" rx="0.6" transform={`rotate(${deg} 12 12)`} />
-      ))}
-    </svg>
-  );
-}
-
-function IconTarget(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <circle cx="12" cy="12" r="8.5" />
-      <circle cx="12" cy="12" r="4.5" />
-      <circle cx="12" cy="12" r="0.8" fill="currentColor" />
-    </svg>
   );
 }

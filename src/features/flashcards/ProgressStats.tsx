@@ -1,6 +1,9 @@
+import type { ReactNode } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Review } from '../../db/schema';
-import { cardStage, STAGE_HINTS, STAGE_LABELS, type Stage } from './stages';
+import { cardStage, STAGE_BAR, STAGE_HINTS, STAGE_LABELS, type Stage } from './stages';
+import StatCard from '../../components/StatCard';
+import { CalendarDays, Copy, Flame, History, Route, Target } from 'lucide-react';
 
 /**
  * Com `enable_short_term: false` no FSRS (ver src/features/srs/fsrs.ts), um
@@ -41,15 +44,31 @@ export default function ProgressStats() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-4">
-        <Stat label="Cards no total" value={cards.length} />
-        <Stat label="Revisões feitas" value={totalReviews} />
-        <Stat label="Taxa de acerto" value={accuracy === null ? '—' : `${accuracy}%`} accent />
-        <Stat label="Sequência de revisões" value={streak > 0 ? `${streak} dia(s)` : '—'} />
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        <StatCard icon={<Copy className="h-[18px] w-[18px]" />} cor="sora" valor={cards.length} label="Cards no total" />
+        <StatCard
+          icon={<History className="h-[18px] w-[18px]" />}
+          cor="indigo"
+          valor={totalReviews}
+          label="Revisões feitas"
+        />
+        <StatCard
+          icon={<Target className="h-[18px] w-[18px]" />}
+          cor="matcha"
+          valor={accuracy === null ? '—' : `${accuracy}%`}
+          label="Taxa de acerto"
+          hint="Revisões em que você lembrou (qualquer nota acima de Não lembrei), sobre o total de revisões."
+        />
+        <StatCard
+          icon={<Flame className="h-[18px] w-[18px]" />}
+          cor="hanko"
+          valor={streak > 0 ? `${streak} dia(s)` : '—'}
+          label="Sequência de revisões"
+        />
       </div>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Jornada do vocabulário</h2>
+        <SectionTitle icon={<Route className="h-4 w-4" />}>Jornada do vocabulário</SectionTitle>
         <p className="text-sm text-sage">
           Primeiro você reconhece a palavra (japonês → português). Quando o reconhecimento firma, o card passa a pedir
           também que você diga a palavra em japonês (português → japonês) — é o vocabulário que você consegue usar.
@@ -62,29 +81,29 @@ export default function ProgressStats() {
               label: STAGE_LABELS[stage],
               hint: STAGE_HINTS[stage],
               count: stageCounts[stage],
-              className: STAGE_BAR_CLASSES[stage],
+              className: STAGE_BAR[stage],
             }))}
           />
         )}
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Intervalo de reconhecimento</h2>
+        <SectionTitle icon={<History className="h-4 w-4" />}>Intervalo de reconhecimento</SectionTitle>
         {cards.length === 0 ? (
           <p className="text-sm text-sage">Nenhum card cadastrado ainda.</p>
         ) : (
           <SegmentBar
             segments={[
               { label: 'Novo', count: novo, className: 'bg-line' },
-              { label: 'Aprendendo', count: jovem, className: 'bg-indigo/50' },
-              { label: `Maduro (≥ ${MATURE_DAYS} dias)`, count: maduro, className: 'bg-indigo' },
+              { label: 'Aprendendo', count: jovem, className: 'bg-sora/40' },
+              { label: `Maduro (≥ ${MATURE_DAYS} dias)`, count: maduro, className: 'bg-sora' },
             ]}
           />
         )}
       </section>
 
       <section className="card-surface space-y-3">
-        <h2 className="font-medium">Revisões nos últimos {HEATMAP_DAYS} dias</h2>
+        <SectionTitle icon={<CalendarDays className="h-4 w-4" />}>Revisões nos últimos {HEATMAP_DAYS} dias</SectionTitle>
         {totalReviews === 0 ? (
           <p className="text-sm text-sage">Nenhuma revisão registrada ainda.</p>
         ) : (
@@ -95,21 +114,15 @@ export default function ProgressStats() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: number | string; accent?: boolean }) {
+function SectionTitle({ icon, children }: { icon: ReactNode; children: ReactNode }) {
   return (
-    <div className="card-surface">
-      <div className={`font-display text-3xl font-semibold ${accent ? 'text-hanko' : 'text-indigo'}`}>{value}</div>
-      <div className="mt-1 text-sm text-sage">{label}</div>
-    </div>
+    <h2 className="flex items-center gap-2 font-medium">
+      <span className="icon-tile h-7 w-7 rounded-lg bg-indigo/8 text-indigo">{icon}</span>
+      {children}
+    </h2>
   );
 }
 
-const STAGE_BAR_CLASSES: Record<Stage, string> = {
-  novo: 'bg-line',
-  reconheco: 'bg-indigo/30',
-  seiDizer: 'bg-indigo',
-  domino: 'bg-sage',
-};
 
 function SegmentBar({
   segments,
@@ -120,7 +133,7 @@ function SegmentBar({
 
   return (
     <div className="space-y-2">
-      <div className="flex h-3 w-full overflow-hidden rounded-full">
+      <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full">
         {segments.map((s) => (
           <div key={s.label} className={s.className} style={{ width: `${(s.count / total) * 100}%` }} />
         ))}
@@ -157,10 +170,10 @@ function Heatmap({ dayCounts }: { dayCounts: { day: number; count: number }[] })
                 <div
                   key={di}
                   title={`${new Date(d.day).toLocaleDateString('pt-BR')}: ${d.count} revisão(ões)`}
-                  className={`h-3 w-3 rounded-sm ${heatColor(d.count, max)}`}
+                  className={`h-3.5 w-3.5 rounded-[4px] ${heatColor(d.count, max)}`}
                 />
               ) : (
-                <div key={di} className="h-3 w-3" />
+                <div key={di} className="h-3.5 w-3.5" />
               )
             )}
           </div>
@@ -173,10 +186,10 @@ function Heatmap({ dayCounts }: { dayCounts: { day: number; count: number }[] })
 function heatColor(count: number, max: number): string {
   if (count === 0) return 'bg-line/60';
   const ratio = count / max;
-  if (ratio > 0.75) return 'bg-indigo';
-  if (ratio > 0.5) return 'bg-indigo/70';
-  if (ratio > 0.25) return 'bg-indigo/45';
-  return 'bg-indigo/25';
+  if (ratio > 0.75) return 'bg-matcha';
+  if (ratio > 0.5) return 'bg-matcha/70';
+  if (ratio > 0.25) return 'bg-matcha/45';
+  return 'bg-matcha/25';
 }
 
 function startOfDay(ts: number): number {

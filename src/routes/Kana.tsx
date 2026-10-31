@@ -1,3 +1,7 @@
+import { Target } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
+import ResultadoResumo from '../components/ResultadoResumo';
+import SessionHeader from '../components/SessionHeader';
 import { useEffect, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type KanaProgress, type KanaType } from '../db/schema';
@@ -100,10 +104,12 @@ export default function Kana() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold">Treino de kana</h1>
-        <p className="text-sm text-sage">Hiragana e katakana</p>
-      </div>
+      <PageHeader
+        icon={<span className="font-jp text-xl">あ</span>}
+        cor="kin"
+        title="Treino de kana"
+        subtitle="Hiragana e katakana"
+      />
 
       {stage === 'config' && (
         <ConfigScreen
@@ -162,6 +168,8 @@ function ConfigScreen({
   const composite = KANA_FAMILIES.filter((f) => f.group === 'composite');
   const previewType: KanaType = script === 'katakana' ? 'katakana' : 'hiragana';
   const selectedCount = getKanaByFamilies(script, selected).length;
+  const progresso = useLiveQuery(() => db.kanaProgress.toArray(), []);
+  const desempenho = desempenhoPorFamilia(progresso ?? [], script, mode);
 
   return (
     <div className="space-y-6">
@@ -192,9 +200,12 @@ function ConfigScreen({
         </div>
       </div>
 
-      <div className="flex items-center justify-between rounded-lg border border-line p-4">
-        <div>
-          <p className="text-sm font-medium text-ink">🎯 Praticar pontos fracos</p>
+      <div className="card-surface flex flex-wrap items-center gap-4">
+        <span className="icon-tile bg-sakura/12 text-sakura">
+          <Target className="h-5 w-5" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-medium text-ink">Praticar pontos fracos</p>
           <p className="text-xs text-sage">
             {weakCount > 0
               ? `${weakCount} kana com mais erros no modo "${mode === 'romaji' ? 'digitar romaji' : mode === 'escolha' ? 'múltipla escolha' : 'desenhar'}"`
@@ -212,6 +223,7 @@ function ConfigScreen({
         selected={selected}
         previewType={previewType}
         onToggle={onToggleFamily}
+        desempenho={desempenho}
         onSelectAll={() => onSetGroupSelection('single', true)}
         onSelectNone={() => onSetGroupSelection('single', false)}
       />
@@ -222,12 +234,22 @@ function ConfigScreen({
         selected={selected}
         previewType={previewType}
         onToggle={onToggleFamily}
+        desempenho={desempenho}
         onSelectAll={() => onSetGroupSelection('composite', true)}
         onSelectNone={() => onSetGroupSelection('composite', false)}
       />
 
-      <div className="flex items-center justify-between rounded-lg border border-line p-4">
-        <p className="text-sm text-sage">{selectedCount} kana selecionados</p>
+      <p className="text-xs text-sage">
+        A barrinha em cada família é o seu acerto no modo escolhido:{' '}
+        <span className="font-medium text-matcha">verde</span> a partir de 85%,{' '}
+        <span className="font-medium text-kin">âmbar</span> a partir de 60%,{' '}
+        <span className="font-medium text-hanko">vermelho</span> abaixo. Sem barra = ainda não praticou.
+      </p>
+
+      <div className="card-surface flex items-center justify-between gap-3">
+        <p className="text-sm text-sage">
+          <span className="font-semibold text-ink">{selectedCount}</span> kana selecionados
+        </p>
         <button className="btn-primary" disabled={selectedCount === 0} onClick={onStart}>
           Iniciar teste
         </button>
@@ -242,6 +264,7 @@ function FamilyGroup({
   selected,
   previewType,
   onToggle,
+  desempenho,
   onSelectAll,
   onSelectNone,
 }: {
@@ -250,6 +273,7 @@ function FamilyGroup({
   selected: Set<string>;
   previewType: KanaType;
   onToggle: (key: string) => void;
+  desempenho: Map<string, DesempenhoFamilia>;
   onSelectAll: () => void;
   onSelectNone: () => void;
 }) {
@@ -269,17 +293,33 @@ function FamilyGroup({
       <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
         {families.map((f) => {
           const active = selected.has(f.key);
+          const d = desempenho.get(f.key);
           return (
             <button
               key={f.key}
               onClick={() => onToggle(f.key)}
+              title={
+                d
+                  ? `Acerto ${Math.round(d.taxa * 100)}% · ${d.praticados} de ${d.total} praticados`
+                  : 'Ainda não praticado neste modo'
+              }
               className={[
-                'rounded-lg border p-2 text-center transition-colors',
-                active ? 'border-indigo bg-indigo/10' : 'border-line hover:bg-line/30',
+                'rounded-xl border p-2 text-center transition-colors',
+                active ? 'border-kin/60 bg-kin/8' : 'border-line/70 bg-surface hover:border-kin/30',
               ].join(' ')}
             >
               <p className="font-jp text-lg leading-tight">{familyPreview(previewType, f.key)}</p>
               <p className="text-xs text-sage">{f.key}</p>
+              <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-line/70">
+                {d && (
+                  <span
+                    className={`block h-full rounded-full ${
+                      d.taxa >= 0.85 ? 'bg-matcha' : d.taxa >= 0.6 ? 'bg-kin' : 'bg-hanko/80'
+                    }`}
+                    style={{ width: `${Math.max(8, (d.praticados / d.total) * 100)}%` }}
+                  />
+                )}
+              </span>
             </button>
           );
         })}
@@ -317,17 +357,17 @@ function KanaTest({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm text-sage">
-        <span>
-          {index + 1} / {pool.length}
-        </span>
-        <span>
-          {correctSoFar} acerto{correctSoFar === 1 ? '' : 's'}
-        </span>
-        <button className="text-xs text-sage hover:text-hanko hover:underline" onClick={onCancel}>
-          Desistir e voltar à seleção
-        </button>
-      </div>
+      <SessionHeader
+        index={index}
+        total={pool.length}
+        onQuit={onCancel}
+        semDesfazer
+        badge={
+          <span className="badge bg-matcha/12 text-matcha">
+            {correctSoFar} acerto{correctSoFar === 1 ? '' : 's'}
+          </span>
+        }
+      />
 
       {mode === 'romaji' ? (
         <RomajiQuestion key={current.char + index} entry={current} onAnswered={record} />
@@ -370,7 +410,7 @@ function RomajiQuestion({
   }
 
   return (
-    <div className="card-surface space-y-4 text-center">
+    <div className="card-hero space-y-4 text-center">
       <div className="flex items-center justify-center gap-2">
         <p className="font-jp text-7xl">{entry.char}</p>
         <AudioButton text={entry.char} />
@@ -395,7 +435,7 @@ function RomajiQuestion({
         </div>
       ) : (
         <div className="space-y-3">
-          <p className={feedback === 'right' ? 'text-indigo' : 'text-hanko'}>
+          <p className={feedback === 'right' ? 'text-matcha' : 'text-hanko'}>
             {feedback === 'right' ? 'Certo!' : `Era "${entry.romaji}"`}
           </p>
           <div className="mx-auto flex max-w-[10rem] flex-col items-center gap-1">
@@ -492,7 +532,7 @@ function ChoiceQuestion({
   }
 
   return (
-    <div className="card-surface space-y-4 text-center">
+    <div className="card-hero space-y-4 text-center">
       <div className="text-center">
         <p className="text-sm text-sage">
           Escolha o kana correspondente a ({entry.type === 'hiragana' ? 'hiragana' : 'katakana'})
@@ -532,7 +572,7 @@ function ChoiceQuestion({
         </button>
       ) : (
         <div className="space-y-3">
-          <p className={feedback === 'right' ? 'text-indigo' : 'text-hanko'}>
+          <p className={feedback === 'right' ? 'text-matcha' : 'text-hanko'}>
             {feedback === 'right' ? 'Certo!' : `Era "${entry.char}"`}
           </p>
           <div className="mx-auto flex max-w-[10rem] flex-col items-center gap-1">
@@ -588,7 +628,7 @@ function DrawQuestion({
   }
 
   return (
-    <div className="card-surface space-y-4">
+    <div className="card-hero space-y-4">
       <div className="text-center">
         <p className="text-sm text-sage">
           Desenhe o kana correspondente a ({entry.type === 'hiragana' ? 'hiragana' : 'katakana'})
@@ -611,7 +651,7 @@ function DrawQuestion({
         </div>
       ) : (
         <div className="space-y-3 text-center">
-          <p className={`text-3xl font-semibold ${result.passed ? 'text-indigo' : 'text-hanko'}`}>{result.score}%</p>
+          <p className={`text-3xl font-semibold ${result.passed ? 'text-matcha' : 'text-hanko'}`}>{result.score}%</p>
 
           {result.hints.length > 0 && (
             <ul className="mx-auto max-w-xs space-y-1 text-left text-sm text-sage">
@@ -665,25 +705,19 @@ function ResultScreen({
 }) {
   const total = answers.length;
   const correct = answers.filter((a) => a.correct).length;
-  const accuracy = total ? Math.round((correct / total) * 100) : 0;
   const mistakes = answers.filter((a) => !a.correct);
 
   return (
-    <div className="card-surface space-y-6 text-center">
-      <div>
-        <p className="text-sm text-sage">Resultado do teste</p>
-        <p className="font-display text-4xl font-semibold text-indigo">{accuracy}%</p>
-        <p className="text-sm text-sage">
-          {correct} de {total} corretos
-        </p>
-      </div>
+    <div className="space-y-4">
+      <ResultadoResumo titulo="Resultado do teste" acertos={correct} total={total} />
+      <div className="card-surface space-y-6 text-center">
 
       {mistakes.length > 0 && (
         <div className="text-left">
           <p className="mb-2 text-sm font-medium text-ink">Para revisar</p>
           <div className="flex flex-wrap gap-2">
             {mistakes.map((m, i) => (
-              <span key={i} className="rounded-lg border border-line px-3 py-1.5 text-sm">
+              <span key={i} className="rounded-xl border border-kin/25 bg-kin/8 px-3 py-1.5 text-sm">
                 <span className="font-jp">{m.entry.char}</span> — {m.entry.romaji}
               </span>
             ))}
@@ -699,6 +733,7 @@ function ResultScreen({
           Refazer teste
         </button>
       </div>
+      </div>
     </div>
   );
 }
@@ -713,14 +748,14 @@ function Segment({
   options: Array<{ value: string; label: string }>;
 }) {
   return (
-    <div className="inline-flex rounded-lg border border-line p-1">
+    <div className="segmented">
       {options.map((o) => (
         <button
           key={o.value}
           onClick={() => onChange(o.value)}
           className={[
-            'rounded-md px-3 py-1.5 text-sm transition-colors',
-            value === o.value ? 'bg-indigo text-paper' : 'text-ink hover:bg-line/40',
+            'segmented-item',
+            value === o.value ? 'segmented-item-active' : '',
           ].join(' ')}
         >
           {o.label}
@@ -881,4 +916,43 @@ function shuffle<T>(arr: T[]): T[] {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+interface DesempenhoFamilia {
+  /** Acerto médio (0–1) dos kana praticados da família, no modo escolhido. */
+  taxa: number;
+  praticados: number;
+  total: number;
+}
+
+/**
+ * Desempenho de cada família no modo de treino atual, a partir do
+ * kanaProgress: romaji e múltipla escolha pela taxa de acerto; desenho pela
+ * melhor nota (0–100). A largura da barra = quantos kana da família já foram
+ * praticados nesse modo; a cor = o acerto.
+ */
+function desempenhoPorFamilia(progresso: KanaProgress[], script: Script, mode: Mode): Map<string, DesempenhoFamilia> {
+  const porChar = new Map(progresso.map((p) => [p.char, p]));
+  const resultado = new Map<string, DesempenhoFamilia>();
+  for (const f of KANA_FAMILIES) {
+    const entradas = getKanaByFamilies(script, [f.key]);
+    let soma = 0;
+    let praticados = 0;
+    for (const e of entradas) {
+      const p = porChar.get(e.char);
+      if (!p) continue;
+      if (mode === 'desenho') {
+        if (p.drawBest === undefined) continue;
+        soma += p.drawBest / 100;
+      } else {
+        const certos = mode === 'romaji' ? p.romajiCorrect : (p.choiceCorrect ?? 0);
+        const errados = mode === 'romaji' ? p.romajiWrong : (p.choiceWrong ?? 0);
+        if (certos + errados === 0) continue;
+        soma += certos / (certos + errados);
+      }
+      praticados++;
+    }
+    if (praticados > 0) resultado.set(f.key, { taxa: soma / praticados, praticados, total: entradas.length });
+  }
+  return resultado;
 }

@@ -10,6 +10,7 @@ import VocabularyMap from '../features/flashcards/VocabularyMap';
 import { StageAction, StageChip } from '../features/flashcards/StageControls';
 import { NoteEditor } from '../features/flashcards/CardNote';
 import AudioButton from '../components/AudioButton';
+import { Copy, Play, Plus, Search, Shuffle, Sparkles, Trash2 } from 'lucide-react';
 
 type TabKey = 'estudar' | 'vocabulario' | 'progresso';
 
@@ -33,6 +34,7 @@ export default function Flashcards() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [session, setSession] = useState<{ mode: StudyMode; items: StudyItem[] } | null>(null);
   const [configuringPractice, setConfiguringPractice] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   function setTab(key: TabKey) {
     setParams(key === 'estudar' ? {} : { tab: key }, { replace: true });
@@ -107,12 +109,17 @@ export default function Flashcards() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="font-display text-2xl font-semibold">Flash cards</h1>
-          <p className="text-sm text-sage">
-            {all.length} cards · {due.length} para revisar
-          </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="icon-tile h-11 w-11 rounded-2xl bg-sora/12 text-sora">
+            <Copy className="h-5 w-5" />
+          </span>
+          <div>
+            <h1 className="font-display text-2xl font-semibold tracking-tight">Flash cards</h1>
+            <p className="text-sm text-sage">
+              {all.length} cards · {due.length} para revisar
+            </p>
+          </div>
         </div>
         <div className="flex gap-2">
           <button
@@ -120,15 +127,17 @@ export default function Flashcards() {
             disabled={(cards ?? []).length === 0}
             onClick={() => setConfiguringPractice(true)}
           >
+            <Shuffle className="h-4 w-4" />
             Praticar
           </button>
           <button className="btn-primary" disabled={due.length === 0} onClick={startReview}>
+            <Play className="h-4 w-4" />
             Estudar ({due.length})
           </button>
         </div>
       </div>
 
-      <div role="tablist" aria-label="Seções de flash cards" className="flex gap-1 border-b border-line">
+      <div role="tablist" aria-label="Seções de flash cards" className="segmented">
         {TABS.map((t) => (
           <button
             key={t.key}
@@ -136,10 +145,7 @@ export default function Flashcards() {
             role="tab"
             aria-selected={tab === t.key}
             onClick={() => setTab(t.key)}
-            className={[
-              'rounded-t-lg px-4 py-2 text-sm font-medium transition-colors',
-              tab === t.key ? 'border border-b-0 border-line bg-surface text-indigo' : 'text-sage hover:text-ink',
-            ].join(' ')}
+            className={`segmented-item px-4 ${tab === t.key ? 'segmented-item-active' : ''}`}
           >
             {t.label}
           </button>
@@ -153,7 +159,8 @@ export default function Flashcards() {
           <VocabularyMap onPractice={(items) => setSession({ mode: 'practice', items })} />
         ) : (
           <div className="space-y-6">
-            {categories.length > 0 && (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              {categories.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 <Chip active={category === 'todas'} onClick={() => setCategory('todas')}>
                   Todas
@@ -164,20 +171,32 @@ export default function Flashcards() {
                   </Chip>
                 ))}
               </div>
-            )}
+              ) : (
+                <span />
+              )}
+              {!adding && (
+                <button className="btn-ghost" onClick={() => setAdding(true)}>
+                  <Plus className="h-4 w-4" />
+                  Novo card
+                </button>
+              )}
+            </div>
 
-            <AddCardForm />
+            {adding && <AddCardForm onClose={() => setAdding(false)} />}
 
             {filtered.length > 0 && (
               <div>
-                <input
-                  type="search"
-                  className="field"
-                  placeholder="Buscar por frente, verso ou leitura…"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  aria-label="Buscar cards"
-                />
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sage" />
+                  <input
+                    type="search"
+                    className="field pl-9"
+                    placeholder="Buscar por frente, verso ou leitura…"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    aria-label="Buscar cards"
+                  />
+                </div>
                 {query && (
                   <p className="mt-1 text-xs text-sage">
                     {searched.length} de {filtered.length} card(s)
@@ -188,35 +207,50 @@ export default function Flashcards() {
 
             <ul className="space-y-2">
               {visible.map((card) => (
-                <li key={card.id} className="card-surface flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-                  <div className="flex items-center">
-                    <span className="font-jp text-lg">{card.front}</span>
-                    <AudioButton text={card.front} size="sm" />
-                    <span className="mx-2 text-line">·</span>
-                    <span className="text-sm">{card.back}</span>
-                    {card.category && (
-                      <span className="ml-2 rounded bg-line/60 px-2 py-0.5 text-xs text-sage">
-                        {card.category}
-                      </span>
-                    )}
-                    <StageChip card={card} />
+                <li key={card.id} className="card-surface flex flex-wrap items-center gap-x-4 gap-y-2 p-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="font-jp text-lg">{card.front}</span>
+                      <AudioButton text={card.front} size="sm" />
+                      <StageChip card={card} />
+                      {card.category && (
+                        <span className="badge bg-line/70 font-medium text-sage">{card.category}</span>
+                      )}
+                    </div>
+                    <p className="truncate text-sm text-sage">
+                      {card.reading && <span className="font-jp">{card.reading} · </span>}
+                      <span className="text-ink">{card.back}</span>
+                    </p>
                   </div>
+                  <NoteEditor key={card.updatedAt} card={card} />
                   <div className="flex shrink-0 items-center gap-3">
-                    <NoteEditor key={card.updatedAt} card={card} />
                     <StageAction card={card} />
                     <button
-                      className="text-sm text-sage hover:text-hanko"
+                      className="grid h-8 w-8 place-items-center rounded-full text-sage transition-colors hover:bg-hanko/10 hover:text-hanko"
                       onClick={() => db.cards.delete(card.id)}
                       aria-label={`Excluir ${card.front}`}
+                      title="Excluir card"
                     >
-                      Excluir
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </li>
               ))}
               {filtered.length === 0 && (
-                <li className="card-surface text-center text-sage">
-                  Nenhum card ainda. Adicione acima ou importe na tela de dados.
+                <li className="card-surface flex flex-col items-center gap-3 py-10 text-center">
+                  <span className="icon-tile h-12 w-12 rounded-2xl bg-sora/12 text-sora">
+                    <Copy className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="font-medium">Nenhum card ainda</p>
+                    <p className="text-sm text-sage">
+                      Comece pelas palavras mais úteis do N5, salve palavras da leitura ou crie um card.
+                    </p>
+                  </div>
+                  <button className="btn-primary" onClick={() => setTab('vocabulario')}>
+                    <Sparkles className="h-4 w-4" />
+                    Escolher palavras para aprender
+                  </button>
                 </li>
               )}
               {filtered.length > 0 && searched.length === 0 && (
@@ -293,10 +327,7 @@ function PracticeConfigScreen({
                 <button
                   key={key}
                   onClick={() => toggle(key)}
-                  className={[
-                    'rounded-full border px-3 py-1.5 text-sm transition-colors',
-                    active ? 'border-indigo bg-indigo text-paper' : 'border-line text-ink hover:bg-line/40',
-                  ].join(' ')}
+                  className={`chip ${active ? 'chip-active' : ''}`}
                 >
                   {key === UNCATEGORIZED ? 'Sem categoria' : key} ({count})
                 </button>
@@ -339,7 +370,7 @@ const PRACTICE_DIRECTIONS: { key: Direction; label: string }[] = [
   { key: 'production', label: 'Dizer em japonês (português → japonês)' },
 ];
 
-function AddCardForm() {
+function AddCardForm({ onClose }: { onClose: () => void }) {
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
   const [reading, setReading] = useState('');
@@ -371,6 +402,7 @@ function AddCardForm() {
 
   return (
     <div className="card-surface space-y-3">
+      <p className="font-medium">Novo card</p>
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="front">
@@ -409,9 +441,14 @@ function AddCardForm() {
           />
         </div>
       </div>
-      <button className="btn-primary" onClick={add} disabled={!front.trim() || !back.trim()}>
-        Adicionar card
-      </button>
+      <div className="flex gap-2">
+        <button className="btn-primary" onClick={add} disabled={!front.trim() || !back.trim()}>
+          Adicionar card
+        </button>
+        <button className="btn-ghost" onClick={onClose}>
+          Fechar
+        </button>
+      </div>
     </div>
   );
 }
@@ -428,10 +465,7 @@ function Chip({
   return (
     <button
       onClick={onClick}
-      className={[
-        'rounded-full border px-3 py-1 text-sm transition-colors',
-        active ? 'border-indigo bg-indigo text-paper' : 'border-line text-ink hover:bg-line/40',
-      ].join(' ')}
+      className={`chip ${active ? 'chip-active' : ''}`}
     >
       {children}
     </button>

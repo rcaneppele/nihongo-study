@@ -4,6 +4,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../db/schema';
 import { n5CategoryCounts } from '../../data/seed/n5';
 import AudioButton from '../../components/AudioButton';
+import ProgressRing from '../../components/ProgressRing';
+import { Shuffle, Sparkles } from 'lucide-react';
 import { StageAction } from './StageControls';
 import { NoteBox } from './CardNote';
 import { cardNote } from './note';
@@ -24,22 +26,31 @@ import {
 
 const BATCH = 10;
 
-// Cores por estado: neutro → índigo claro → índigo → sage. `hanko` fica de
-// fora de propósito (reservado a destaque/perigo).
+// Cores por estado — as mesmas dos estágios na lista de cards e no Progresso
+// (STAGE_BADGE/STAGE_BAR em stages.ts): neutro → azul claro → azul → verde.
+// `hanko` fica de fora de propósito (reservado a destaque/perigo).
 const TILE_CLASSES: Record<WordState, string> = {
-  nova: 'border-line bg-surface text-ink',
-  naFila: 'border-dashed border-indigo/50 bg-surface text-ink',
-  reconheco: 'border-indigo/20 bg-indigo/15 text-ink',
-  seiDizer: 'border-indigo bg-indigo text-paper',
-  domino: 'border-sage bg-sage text-paper',
+  nova: 'border-line/70 bg-surface text-ink',
+  naFila: 'border-dashed border-sora/50 bg-surface text-ink',
+  reconheco: 'border-sora/20 bg-sora/12 text-ink',
+  seiDizer: 'border-sora bg-sora text-paper',
+  domino: 'border-matcha/30 bg-matcha/15 text-ink',
 };
 
 const DOT_CLASSES: Record<WordState, string> = {
   nova: 'border border-line bg-surface',
-  naFila: 'border border-dashed border-indigo/60 bg-surface',
-  reconheco: 'bg-indigo/30',
-  seiDizer: 'bg-indigo',
-  domino: 'bg-sage',
+  naFila: 'border border-dashed border-sora/60 bg-surface',
+  reconheco: 'bg-sora/40',
+  seiDizer: 'bg-sora',
+  domino: 'bg-matcha',
+};
+
+const BADGE_CLASSES: Record<WordState, string> = {
+  nova: 'bg-line/70 text-sage',
+  naFila: 'bg-sora/8 text-sora',
+  reconheco: 'bg-sora/12 text-sora',
+  seiDizer: 'bg-sora text-paper',
+  domino: 'bg-matcha/15 text-matcha',
 };
 
 /**
@@ -100,15 +111,19 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="space-y-5">
-          <section className="card-surface grid gap-5 sm:grid-cols-[auto_minmax(0,1fr)]">
+          <section className="card-hero grid gap-5 sm:grid-cols-[auto_minmax(0,1fr)]">
             <div>
               <p className="text-xs text-sage">
                 {category === 'todas' ? 'Vocabulário N5' : category} · {words.length} palavras
               </p>
-              <p className="font-display text-5xl font-semibold text-indigo">
-                {percent}% <span className="text-base font-normal text-sage">conhecido</span>
-              </p>
-              <div className="mt-3 grid grid-cols-2 gap-x-5 gap-y-1.5 text-sm">
+              <div className="mt-3 flex items-center gap-4">
+                <ProgressRing fracao={percent / 100} cor="matcha">
+                  <div>
+                    <p className="text-xl font-semibold">{percent}%</p>
+                    <p className="mt-0.5 text-[11px] text-sage">conhecido</p>
+                  </div>
+                </ProgressRing>
+              <div className="grid grid-cols-1 gap-y-1 text-sm">
                 {WORD_STATE_ORDER.map((s) => (
                   <span key={s} className="flex items-center gap-1.5">
                     <span className={`inline-block h-2.5 w-2.5 rounded-sm ${DOT_CLASSES[s]}`} />
@@ -117,12 +132,15 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
                   </span>
                 ))}
               </div>
+              </div>
             </div>
             <div className="flex flex-col gap-2 sm:justify-center">
               <button className="btn-primary justify-start" disabled={nextNew.length === 0} onClick={learnNext}>
+                <Sparkles className="h-4 w-4" />
                 Aprender as próximas {Math.min(BATCH, nextNew.length) || BATCH}
               </button>
               <button className="btn-ghost justify-start" disabled={knownWords.length === 0} onClick={testKnown}>
+                <Shuffle className="h-4 w-4" />
                 Testar {Math.min(BATCH, knownWords.length) || BATCH} que já conheço
               </button>
               <p className="text-xs text-sage">
@@ -138,7 +156,7 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
               <button
                 key={w.entry.front}
                 onClick={() => setSelectedFront(w.entry.front)}
-                className={`rounded-lg border px-3 py-2 text-left transition-shadow hover:shadow-md ${TILE_CLASSES[w.state]} ${
+                className={`rounded-xl border px-3 py-2 text-left transition-shadow hover:shadow-card ${TILE_CLASSES[w.state]} ${
                   selected?.entry.front === w.entry.front ? 'ring-2 ring-indigo ring-offset-2 ring-offset-paper' : ''
                 }`}
               >
@@ -162,7 +180,7 @@ function WordPanel({ word, isSuggestion }: { word: VocabWord; isSuggestion: bool
   const markedHere = state === 'reconheco' && !card && (word.knowledge?.seenCount ?? 0) === 0;
 
   return (
-    <aside className="card-surface h-fit space-y-4 lg:sticky lg:top-4">
+    <aside className="card-hero h-fit space-y-4 lg:sticky lg:top-4">
       <p className="text-xs text-sage">
         {isSuggestion && state === 'nova' ? 'Próxima palavra mais útil que você ainda não sabe' : entry.category}
       </p>
@@ -177,10 +195,7 @@ function WordPanel({ word, isSuggestion }: { word: VocabWord; isSuggestion: bool
 
       {(card ? cardNote(card) : entry.note) && <NoteBox note={(card ? cardNote(card) : entry.note)!} />}
 
-      <p className="text-sm">
-        <span className="text-sage">Estado: </span>
-        {WORD_STATE_LABELS[state]}
-      </p>
+      <span className={`badge ${BADGE_CLASSES[state]}`}>{WORD_STATE_LABELS[state]}</span>
 
       <div className="text-sm">
         {texts.length === 0 ? (
@@ -244,10 +259,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   return (
     <button
       onClick={onClick}
-      className={[
-        'rounded-full border px-3 py-1 text-sm transition-colors',
-        active ? 'border-indigo bg-indigo text-paper' : 'border-line text-ink hover:bg-line/40',
-      ].join(' ')}
+      className={`chip ${active ? 'chip-active' : ''}`}
     >
       {children}
     </button>

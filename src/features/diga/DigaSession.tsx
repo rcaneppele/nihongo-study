@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import AudioButton from '../../components/AudioButton';
 import SessionHeader from '../../components/SessionHeader';
+import StudyCard from '../../components/StudyCard';
 import { useShortcuts } from '../../lib/useShortcuts';
 import { speakJapanese } from '../audio/speech';
 import { kanaAudio, kanaExibicao, romaji, type ItemDiga, type RegistroDiga } from './gerador';
@@ -66,10 +67,14 @@ export default function DigaSession({
     <div className="space-y-4">
       <SessionHeader index={index} total={itens.length} onUndo={index > 0 ? voltar : undefined} onQuit={onDesistir} />
 
-      <div className="card-surface min-h-56 space-y-4 text-center">
-        <p className="text-xs text-sage">
-          {item.emoji} {item.origem}
-        </p>
+      <StudyCard
+        etiqueta={
+          <span className="badge bg-fuji/12 text-xs text-fuji">
+            {item.emoji} {item.origem}
+          </span>
+        }
+      >
+        <div className="w-full space-y-4">
         <p className="label">Diga em japonês — em voz alta ou de cabeça</p>
         <p className="text-2xl">{item.pt}</p>
 
@@ -97,7 +102,8 @@ export default function DigaSession({
             <p className="text-sm text-sage">{romaji(item.tokens)}</p>
           </div>
         )}
-      </div>
+        </div>
+      </StudyCard>
 
       {!revelado ? (
         <button className="btn-primary w-full" onClick={() => setRevelado(true)}>
@@ -105,7 +111,7 @@ export default function DigaSession({
         </button>
       ) : (
         <div className="grid grid-cols-2 gap-2">
-          <button className="btn-ghost flex-col gap-0.5 py-2.5" onClick={() => responder(false)} title="Não consegui dizer, ou disse diferente">
+          <button className="btn flex-col gap-0.5 border border-hanko/30 bg-hanko/5 py-2.5 text-hanko hover:bg-hanko/10" onClick={() => responder(false)} title="Não consegui dizer, ou disse diferente">
             <span className="flex items-center gap-1.5">
               Errei <kbd className="kbd">1</kbd>
             </span>

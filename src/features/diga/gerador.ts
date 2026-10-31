@@ -74,7 +74,17 @@ export function contarDisponiveis(licaoIds: string[]): number {
  * せんせい です") — mais fácil de ler pra quem ainda está aprendendo kana.
  */
 export function kanaExibicao(tokens: Token[]): string {
-  return tokens.reduce((acc, t, i) => (i === 0 ? t.texto : t.particula ? acc + t.texto : `${acc} ${t.texto}`), '');
+  return tokens.reduce((acc, t, i) => (i === 0 ? t.texto : ehParticula(t) ? acc + t.texto : `${acc} ${t.texto}`), '');
+}
+
+// Nas frases do quiz, `particula: true` marca só a partícula que vira lacuna
+// no "Escolher partícula" (uma por frase — o gerador usa a primeira marcada),
+// então as demais partículas vêm sem a marca. Pra exibição, reconhece pelo
+// próprio texto do token.
+const PARTICULAS = new Set(['は', 'が', 'を', 'に', 'で', 'へ', 'と', 'も', 'の', 'から', 'まで', 'や', 'か', 'ね', 'よ', 'ごろ']);
+
+function ehParticula(t: Token): boolean {
+  return !!t.particula || PARTICULAS.has(t.texto);
 }
 
 /** Texto pro áudio: sem espaços, senão a síntese de voz faz pausas artificiais. */

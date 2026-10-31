@@ -243,14 +243,13 @@ só um botão por linha. Tudo reaproveita `speakJapanese`.
 
 ### 3.7 Exercício "monte a frase" — ✅ implementado (branch experimental), como "Diga em japonês"
 
-Primeira versão sem conteúdo novo: usa as `quiz.frases` que as lições já
-têm (~126 frases em 11 lições). Fica em Lições > Praticar e no fim de cada
-lição ("Pratique esta lição"). Dica opcional com as palavras embaralhadas;
-resposta revelada com kana, romaji e áudio automático; frases erradas
-podem ser salvas como flash cards já no estágio Sei dizer (é o "reuso
-espaçado"). Pendente: frases **novas** por lição, combinando a gramática
-com vocabulário já visto (campo próprio, ex. `producao`), para não treinar
-só as mesmas frases do quiz. Detalhes em `regras-negocio.md` §5.
+Usa as frases próprias de cada lição (`diga`, 6 por lição — gramática da
+lição com vocabulário já visto, em contextos novos) somadas às
+`quiz.frases` que as lições já tinham. Fica em Lições > Praticar e no fim
+de cada lição ("Pratique esta lição"). Dica opcional com as palavras
+embaralhadas; resposta revelada com kana, romaji e áudio automático;
+frases erradas podem ser salvas como flash cards já no estágio Sei dizer
+(é o "reuso espaçado"). Detalhes em `regras-negocio.md` §5.
 
 
 **O quê:** no fim de cada lição (ou numa aba "Praticar" das lições), uma

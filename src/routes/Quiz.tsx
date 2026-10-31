@@ -1,3 +1,5 @@
+import { ChevronLeft, ListChecks } from 'lucide-react';
+import PageHeader from '../components/PageHeader';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LICOES } from '../licoes';
@@ -90,14 +92,12 @@ export default function Quiz() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <Link to="/licoes" className="btn-ghost mb-4 inline-flex text-sm">
-          ← Lições
+      <div className="space-y-4">
+        <Link to="/licoes" className="inline-flex items-center gap-1 text-sm text-sage hover:text-ink">
+          <ChevronLeft className="h-4 w-4" />
+          Lições
         </Link>
-        <h1 className="font-display text-2xl font-semibold">Quiz</h1>
-        <p className="mt-1 text-sm text-sage">
-          Escolha as lições e os tipos de pergunta, depois gere um quiz aleatório para praticar.
-        </p>
+        <PageHeader icon={<ListChecks className="h-5 w-5" />} cor="fuji" title="Quiz" subtitle="Escolha as lições e os tipos de pergunta, depois gere um quiz aleatório para praticar." />
       </div>
 
       <div>
@@ -123,10 +123,7 @@ export default function Quiz() {
                 <button
                   key={meta.id}
                   onClick={() => toggleLicao(meta.id)}
-                  className={[
-                    'rounded-full border px-3 py-1.5 text-sm transition-colors',
-                    active ? 'border-indigo bg-indigo text-paper' : 'border-line text-ink hover:bg-line/40',
-                  ].join(' ')}
+                  className={`chip ${active ? 'chip-active' : ''}`}
                 >
                   {meta.emoji} {meta.title}
                 </button>
