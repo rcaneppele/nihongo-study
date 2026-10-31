@@ -13,7 +13,7 @@ export default function Licoes() {
 
       <div>
         <p className="mb-2 text-sm font-medium text-ink">Praticar</p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             to="/licoes/quiz"
             className="card-surface flex items-center gap-3 border-hanko/30 transition-colors hover:border-hanko"
@@ -39,6 +39,19 @@ export default function Licoes() {
             <div className="min-w-0">
               <div className="font-medium text-ink">Kakitori</div>
               <div className="mt-0.5 text-sm text-sage">Ouça e escreva o que foi dito</div>
+            </div>
+          </Link>
+
+          <Link
+            to="/licoes/diga"
+            className="card-surface flex items-center gap-3 border-indigo/30 transition-colors hover:border-indigo"
+          >
+            <span className="text-3xl leading-none" aria-hidden>
+              🗣️
+            </span>
+            <div className="min-w-0">
+              <div className="font-medium text-ink">Diga em japonês</div>
+              <div className="mt-0.5 text-sm text-sage">Veja em português e monte a frase em japonês</div>
             </div>
           </Link>
         </div>

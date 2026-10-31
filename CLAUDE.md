@@ -138,6 +138,9 @@ toda mudança pede bump; julgue pelo impacto:
   / `scripts/build-kanji-strokes.mjs` (`npm run build:kana-strokes` /
   `build:kanji-strokes` para regenerar; lógica de busca/parse do SVG
   compartilhada em `scripts/lib/kanjivg.mjs`).
+- `src/features/diga/` + `src/routes/Diga.tsx` — "Diga em japonês"
+  (`/licoes/diga`): português → dizer a frase em japonês → conferir,
+  usando as `quiz.frases` das lições; frases erradas podem virar cards.
 - `src/licoes/index.ts` — registro central das lições (`LICOES`): cada entrada
   tem `meta` (id, título, subtítulo, emoji, tags) e um `Component` React.
 - `src/licoes/*.tsx` — uma lição por arquivo (ex.: `kosoado.tsx`,

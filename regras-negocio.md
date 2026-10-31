@@ -517,6 +517,36 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - `/licoes` → `src/routes/Licoes.tsx` — grade de cards com todas as lições.
 - `/licoes/:id` → `src/routes/Licao.tsx` — renderiza o componente da lição
   correspondente ao `id`; exibe mensagem de "não encontrada" se o id não existir.
+  Lições com `quiz.frases` terminam com o atalho "Pratique esta lição" →
+  "Diga em japonês" só daquela lição.
+- `/licoes/diga` → `src/routes/Diga.tsx` — ver "Diga em japonês" abaixo.
+
+### Diga em japonês (produção de frases)
+Lógica em `src/features/diga/` (`gerador.ts`, `DigaSession.tsx`,
+`DigaResultado.tsx`). Treina **montar a frase inteira** em japonês, que o
+Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
+
+- **Conteúdo**: as `quiz.frases` das lições — as mesmas frases do
+  "Reordenar frase" do Quiz. Toda lição com frases de quiz entra
+  automaticamente; não há conteúdo próprio (ainda).
+- **Configuração**: escolher lições (chips, "Todas"/"Nenhuma") e
+  quantidade, mesmo padrão do Quiz. `?licao=<id>` pré-seleciona só uma
+  lição (atalho do fim de cada lição).
+- **Sessão**: mostra a frase em português; o usuário diz em japonês (em
+  voz alta ou de cabeça). "Travou?" mostra as palavras da frase
+  embaralhadas como dica. "Mostrar resposta" revela a frase em kana
+  (partícula grudada na palavra anterior, espaço entre blocos, como nos
+  textos de nível 1), o romaji e **toca o áudio sozinho** (texto sem
+  espaços, pra síntese não fazer pausas). Autoavaliação **Errei / Acertei**
+  — pequenas variações naturais contam como acerto. Mesmos atalhos das
+  revisões (Espaço revela e, revelado, = Acertei; 1/2; Ctrl+Z volta uma
+  frase) e `SessionHeader` com barra de progresso.
+- **Resultado**: acertos e lista das frases. "Salvar as N que errei nos
+  flash cards" cria cards (frente = frase em kana, verso = português,
+  leitura = romaji, categoria **"Frases"**, tags `frase` + id da lição) já
+  com `production` — entram direto no estágio **Sei dizer**, porque o
+  objetivo é dizer a frase. Pula frases que já têm card (mesma frente).
+- Nada é gravado além disso: sem histórico de sessões, como o Quiz.
 
 ### Como adicionar uma lição
 1. Crie `src/licoes/<id>.tsx` exportando `meta` e o componente default.

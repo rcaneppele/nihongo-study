@@ -16,7 +16,8 @@ export default function Licao() {
     );
   }
 
-  const { meta, Component } = entry;
+  const { meta, Component, quiz } = entry;
+  const temFrases = (quiz?.frases?.length ?? 0) > 0;
 
   return (
     <div className="mx-auto max-w-2xl space-y-8">
@@ -36,6 +37,18 @@ export default function Licao() {
       </div>
 
       <Component />
+
+      {temFrases && (
+        <div className="card-surface flex flex-wrap items-center justify-between gap-3 border-indigo/30">
+          <div>
+            <p className="font-medium">Pratique esta lição</p>
+            <p className="text-sm text-sage">Veja as frases em português e diga em japonês.</p>
+          </div>
+          <Link to={`/licoes/diga?licao=${meta.id}`} className="btn-primary">
+            🗣️ Diga em japonês
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
