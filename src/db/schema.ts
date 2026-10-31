@@ -9,6 +9,24 @@ import { freshSrs } from '../features/srs/fsrs';
  * colidiriam ao mesclar backups. UUID evita isso (ver src/db/backup.ts).
  */
 
+/**
+ * Frase de contexto de um card — onde a palavra foi encontrada (ex.: um
+ * texto de leitura). Dividida em pedaços pra poder mostrar furigana e
+ * destacar a palavra do card (`highlight` = índice em `segments`).
+ */
+export interface CardExample {
+  segments: { text: string; reading?: string }[];
+  highlight?: number;
+  translation?: string;
+}
+
+/** De onde o card veio, quando foi criado a partir de outro conteúdo do app. */
+export interface CardSource {
+  kind: 'leitura';
+  id: string;
+  title: string;
+}
+
 export interface Card {
   id: string;
   front: string; // japonês (palavra/frase)
@@ -16,6 +34,9 @@ export interface Card {
   reading?: string; // leitura (kana/romaji)
   category?: string; // categoria principal (usada no filtro)
   tags: string[];
+  // Opcionais, sem índice — backups e cards antigos simplesmente não têm.
+  example?: CardExample;
+  source?: CardSource;
   // Estado SRS (FSRS) — ver src/features/srs/fsrs.ts
   stability: number;
   difficulty: number;

@@ -3,6 +3,7 @@ import { db, type Card, newId } from '../../db/schema';
 import { applyFsrs, type Grade } from '../srs/fsrs';
 import GradeButtons from '../srs/GradeButtons';
 import AudioButton from '../../components/AudioButton';
+import CardExampleView from './CardExampleView';
 import SessionHeader from '../../components/SessionHeader';
 import { useShortcuts } from '../../lib/useShortcuts';
 
@@ -139,6 +140,11 @@ export default function StudySession({
             <div className="mt-4 border-t border-line pt-4">
               {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
               <p className="text-xl">{card.back}</p>
+              {card.example && (
+                <div className="mt-4">
+                  <CardExampleView example={card.example} source={card.source} />
+                </div>
+              )}
             </div>
           )}
         </div>

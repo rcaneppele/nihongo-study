@@ -4,8 +4,13 @@ import { getTextoById } from '../data/leitura/textos';
 import type { ReadingLine, ReadingWord } from '../data/leitura/types';
 import Furigana from '../components/Furigana';
 import AudioButton from '../components/AudioButton';
+import SaveWordForm from '../features/flashcards/SaveWordForm';
 
-type Selection = { kind: 'word'; word: ReadingWord } | { kind: 'line'; line: ReadingLine };
+// Na palavra, guarda a linha e a posição também — pra salvar o card com a
+// frase de contexto e a palavra destacada nela.
+type Selection =
+  | { kind: 'word'; word: ReadingWord; line: ReadingLine; lineIndex: number; wordIndex: number }
+  | { kind: 'line'; line: ReadingLine };
 
 export default function LeituraTexto() {
   const { id } = useParams<{ id: string }>();
@@ -78,6 +83,17 @@ export default function LeituraTexto() {
                 ? (selection.word.meaning ?? '(sem tradução — palavra gramatical)')
                 : selection.line.translation}
             </p>
+            {selection.kind === 'word' && selection.word.meaning && (
+              <div className="pt-2">
+                <SaveWordForm
+                  key={`${selection.lineIndex}-${selection.wordIndex}`}
+                  word={selection.word}
+                  wordIndex={selection.wordIndex}
+                  line={selection.line}
+                  texto={texto}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <p className="text-sm text-sage">
@@ -103,7 +119,7 @@ export default function LeituraTexto() {
             {line.words.map((word, j) => (
               <button
                 key={j}
-                onClick={() => select({ kind: 'word', word })}
+                onClick={() => select({ kind: 'word', word, line, lineIndex: i, wordIndex: j })}
                 className="rounded px-0.5 leading-relaxed transition-colors hover:bg-indigo/10"
               >
                 <Furigana

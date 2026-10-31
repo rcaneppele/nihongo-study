@@ -80,7 +80,14 @@ dados no Dexie, UUID, sync por JSON. Onde há mudança de schema, ela é
 
 Vale para flash cards e revisão de kanji. Detalhes em `regras-negocio.md`.
 
-### 3.2 Card com contexto + "salvar palavra" da leitura — prioridade alta (→ roadmap 3.6)
+### 3.2 Card com contexto + "salvar palavra" da leitura — ✅ implementado (branch experimental) (→ roadmap 3.6)
+
+Feito como descrito abaixo, com um ajuste: em vez de salvar direto, o
+botão abre um mini-formulário pré-preenchido, porque o texto guarda a forma
+de superfície (`天気が`, `行きました。`) — o app sugere a forma limpa e o
+usuário confere. A barra de ações no verso ficou como "áudio da frase" +
+"Ver tradução da frase". Detalhes em `regras-negocio.md` §1 e §4.
+
 
 **O quê:** ao tocar numa palavra em `LeituraTexto` (e futuramente nos `<Ex>`
 das lições), o cartão de palavra ganha **"Salvar nos flash cards"**. O card
@@ -320,7 +327,7 @@ poucos, não feature técnica.
 ## 5. Ordem sugerida
 
 1. ✅ **3.1** (revisão mais leve).
-2. **3.2** (salvar palavra da leitura com contexto) — fecha o ciclo
+2. ✅ **3.2** (salvar palavra da leitura com contexto) — fecha o ciclo
    leitura → SRS.
 3. **3.6** (modo escuta/shadowing) — barato e dá uso novo aos 30 textos.
 4. **3.3** (estágios Reconheço/Produzo/Domino) — a mudança estrutural;

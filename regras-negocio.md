@@ -8,6 +8,14 @@ comportamento devem ser refletidas aqui.
 ### Estrutura
 - Um card tem: frente (japonês), verso (significado), leitura opcional,
   categoria opcional e tags.
+- Opcionalmente, **frase de contexto** (`example`: frase em pedaços com
+  furigana, índice da palavra destacada e tradução) e **origem** (`source`:
+  de qual texto de leitura veio). São campos sem índice no Dexie — cards e
+  backups antigos simplesmente não têm, sem migração. Quando há `example`,
+  o verso do card na sessão mostra a frase com a palavra destacada, áudio
+  da frase, "Ver tradução da frase" sob demanda e "Leitura · título"
+  (`CardExampleView.tsx`; a origem é só texto, não link, pra não perder a
+  sessão em andamento).
 - Categoria é o eixo principal de filtro na tela de estudo.
 
 ### Lista de cards (aba "Estudar")
@@ -330,6 +338,23 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - **Sem progresso persistido** nesta entrega — mesmo estado das lições
   ("não há progresso rastreado por lição, por ora"): é conteúdo estático,
   sem tabela nova no Dexie.
+- **Salvar palavra nos flash cards** (`SaveWordForm.tsx` +
+  `src/features/flashcards/mining.ts`): o cartão da palavra tocada mostra
+  "+ Salvar nos flash cards" (só em palavras com `meaning` — partículas
+  soltas não). Abre um mini-formulário pré-preenchido por `suggestCard()`
+  pra o usuário conferir, já que o texto guarda a forma de superfície:
+  - tira a pontuação final da frente e da leitura;
+  - se o significado termina em "(+ partícula …)", tira essa nota e o
+    último caractere da frente/leitura (ex.: `天気が`/`てんきが` →
+    `天気`/`てんき`). Partículas de 2+ caracteres (`には`) e conjugações
+    ficam pro usuário ajustar.
+
+  O card é criado com estado FSRS novo, categoria **"Leitura"**, tag
+  `leitura`, a linha inteira como `example` (palavra destacada) e o texto
+  como `source`. Duplicata = mesma `front` (mesmo critério do import do
+  N5): se a palavra sugerida já existe, o cartão mostra "Já está nos seus
+  flash cards" no lugar do botão; se o usuário editar a frente para uma que
+  já existe, o salvamento é recusado com aviso.
 
 ## 5. Lições de estudo
 

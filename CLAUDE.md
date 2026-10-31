@@ -70,6 +70,13 @@ toda mudança pede bump; julgue pelo impacto:
   Texto Simples"); `parseCardsFile()` detecta o formato pelo nome do
   arquivo/conteúdo.
 - `src/features/flashcards/StudySession.tsx` — sessão de revisão/prática.
+- `src/features/flashcards/mining.ts` + `SaveWordForm.tsx` — salvar palavra
+  tocada na leitura como card, com a frase de contexto (`Card.example`) e
+  a origem (`Card.source`); `CardExampleView.tsx` mostra essa frase no
+  verso do card.
+- `src/features/srs/GradeButtons.tsx` — botões de nota das revisões
+  (flash cards e kanji), com legenda de intervalo e atalhos; modo 2/4
+  botões em `gradeMode.ts`.
 - `src/features/flashcards/ProgressStats.tsx` — estatísticas de progresso
   (aba "Progresso" em `/flashcards`), calculadas de `db.cards`/`db.reviews`.
 - `src/features/handwriting/strokes.ts` — captura/normalização de traços e
