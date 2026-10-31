@@ -1,6 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import Furigana, { FuriganaWord } from '../components/Furigana';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -311,6 +311,88 @@ function kj(...parts: (string | [string, string])[]) {
     />
   );
 }
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'seikatsu-d1',
+    tokens: [
+      { texto: 'いつも', romaji: 'itsumo' },
+      { texto: 'じゅういちじ', romaji: 'juuichiji' },
+      { texto: 'ごろ', romaji: 'goro', particula: true },
+      { texto: 'ねます', romaji: 'nemasu' },
+    ],
+    pt: 'Sempre durmo por volta das onze.',
+  },
+  {
+    id: 'seikatsu-d2',
+    tokens: [
+      { texto: 'ときどき', romaji: 'tokidoki' },
+      { texto: 'ともだち', romaji: 'tomodachi' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'カフェ', romaji: 'kafe' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'いきます', romaji: 'ikimasu' },
+    ],
+    pt: 'Às vezes vou a um café com amigos.',
+  },
+  {
+    id: 'seikatsu-d3',
+    tokens: [
+      { texto: 'テレビ', romaji: 'terebi' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'ぜんぜん', romaji: 'zenzen' },
+      { texto: 'みません', romaji: 'mimasen' },
+    ],
+    pt: 'Não assisto TV de jeito nenhum.',
+  },
+  {
+    id: 'seikatsu-d4',
+    tokens: [
+      { texto: 'おきて', romaji: 'okite' },
+      { texto: 'かお', romaji: 'kao' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'あらって', romaji: 'aratte' },
+      { texto: 'コーヒー', romaji: 'koohii' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'のみます', romaji: 'nomimasu' },
+    ],
+    pt: 'Acordo, lavo o rosto e tomo café.',
+  },
+  {
+    id: 'seikatsu-d5',
+    tokens: [
+      { texto: 'しごと', romaji: 'shigoto' },
+      { texto: 'の', romaji: 'no', particula: true },
+      { texto: 'あとで', romaji: 'ato de' },
+      { texto: 'ジム', romaji: 'jimu' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'いきます', romaji: 'ikimasu' },
+    ],
+    pt: 'Depois do trabalho, vou à academia.',
+  },
+  {
+    id: 'seikatsu-d6',
+    tokens: [
+      { texto: 'きのう', romaji: 'kinou' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'ろくじ', romaji: 'rokuji' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'おきて', romaji: 'okite' },
+      { texto: 'しちじ', romaji: 'shichiji' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'いえ', romaji: 'ie' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'でました', romaji: 'demashita' },
+    ],
+    pt: 'Ontem acordei às seis e saí de casa às sete.',
+  },
+];
 
 export default function Seikatsu() {
   return (

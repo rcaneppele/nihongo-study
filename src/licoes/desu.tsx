@@ -1,5 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'desu',
@@ -252,6 +252,82 @@ export const quiz: QuizLicao = {
 // Sem `kakitori`: esta lição ensina o sistema de conjugação da cópula (afirmativa/negativa/
 // passado), não vocabulário próprio — os "itens" seriam substantivos/adjetivos já vistos em
 // outras lições, só com です grudado. O ditado desta lição foi removido.
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'desu-d1',
+    tokens: [
+      { texto: 'わたし', romaji: 'watashi' },
+      { texto: 'の', romaji: 'no', particula: true },
+      { texto: 'しゅみ', romaji: 'shumi' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'えいが', romaji: 'eiga' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Meu hobby é cinema.',
+  },
+  {
+    id: 'desu-d2',
+    tokens: [
+      { texto: 'きょう', romaji: 'kyou' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'やすみ', romaji: 'yasumi' },
+      { texto: 'ではありません', romaji: 'dewa arimasen' },
+    ],
+    pt: 'Hoje não é dia de folga.',
+  },
+  {
+    id: 'desu-d3',
+    tokens: [
+      { texto: 'たなかさん', romaji: 'tanaka-san' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'がくせい', romaji: 'gakusei' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'A Tanaka é estudante?',
+  },
+  {
+    id: 'desu-d4',
+    tokens: [
+      { texto: 'きのう', romaji: 'kinou' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'いい', romaji: 'ii' },
+      { texto: 'てんき', romaji: 'tenki' },
+      { texto: 'でした', romaji: 'deshita' },
+    ],
+    pt: 'Ontem fez tempo bom.',
+  },
+  {
+    id: 'desu-d5',
+    tokens: [
+      { texto: 'わたし', romaji: 'watashi' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'せんせい', romaji: 'sensei' },
+      { texto: 'じゃありません', romaji: 'ja arimasen' },
+      { texto: 'がくせい', romaji: 'gakusei' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Não sou professor. Sou estudante.',
+  },
+  {
+    id: 'desu-d6',
+    tokens: [
+      { texto: 'あした', romaji: 'ashita' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'にちようび', romaji: 'nichiyoubi' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'ね', romaji: 'ne', particula: true },
+    ],
+    pt: 'Amanhã é domingo, né.',
+  },
+];
 
 export default function Desu() {
   return (

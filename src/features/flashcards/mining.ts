@@ -25,9 +25,12 @@ const PARTICLE_NOTE = /\s*\(\+ partícula[^)]*\)\s*$/u;
  * também (da frente e da leitura). Se a palavra tem `lemma`, usa ele.
  */
 export function suggestCard(word: ReadingWord): CardDraft {
-  // Com forma de dicionário anotada, ela é a frente; a leitura do texto é
-  // da forma conjugada, então não serve — fica pro usuário preencher.
-  if (word.lemma) return { front: word.lemma, reading: '', back: (word.meaning ?? '').replace(PARTICLE_NOTE, '') };
+  // Com forma de dicionário anotada, ela é a frente e `lemmaReading` a
+  // leitura (a leitura do texto é da forma conjugada, não serve). O
+  // significado continua o da forma do texto ("fui"), pro usuário ajustar.
+  if (word.lemma) {
+    return { front: word.lemma, reading: word.lemmaReading ?? '', back: (word.meaning ?? '').replace(PARTICLE_NOTE, '') };
+  }
 
   let front = word.text.replace(TRAILING_PUNCTUATION, '');
   let reading = (word.reading ?? '').replace(TRAILING_PUNCTUATION, '');

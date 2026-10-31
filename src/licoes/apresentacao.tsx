@@ -1,5 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -166,6 +166,76 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'apresentacao-7', jp: 'こちらはたなかさんです。', kana: 'こちらはたなかさんです。', romaji: 'kochira wa tanaka-san desu.', pt: 'Este é o sr. Tanaka.' },
       { id: 'apresentacao-8', jp: 'たなかさんをごしょうかいします。', kana: 'たなかさんをごしょうかいします。', romaji: 'tanaka-san o goshoukai shimasu.', pt: 'Vou apresentar o sr. Tanaka.' },
     ],
+  },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'apresentacao-d1',
+    tokens: [
+      { texto: 'はじめまして', romaji: 'hajimemashite' },
+      { texto: 'ペドロ', romaji: 'pedoro' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'もうします', romaji: 'moushimasu' },
+    ],
+    pt: 'Muito prazer. Meu nome é Pedro.',
+  },
+  {
+    id: 'apresentacao-d2',
+    tokens: [
+      { texto: 'ブラジル', romaji: 'burajiru' },
+      { texto: 'から', romaji: 'kara', particula: true },
+      { texto: 'きました', romaji: 'kimashita' },
+    ],
+    pt: 'Vim do Brasil.',
+  },
+  {
+    id: 'apresentacao-d3',
+    tokens: [
+      { texto: 'しごと', romaji: 'shigoto' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'エンジニア', romaji: 'enjinia' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Trabalho como engenheiro.',
+  },
+  {
+    id: 'apresentacao-d4',
+    tokens: [
+      { texto: 'しゅみ', romaji: 'shumi' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'りょうり', romaji: 'ryouri' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Meu hobby é cozinhar.',
+  },
+  {
+    id: 'apresentacao-d5',
+    tokens: [
+      { texto: 'にほんご', romaji: 'nihongo' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'まだ', romaji: 'mada' },
+      { texto: 'へた', romaji: 'heta' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'がんばります', romaji: 'ganbarimasu' },
+    ],
+    pt: 'Meu japonês ainda é fraco, mas vou me esforçar.',
+  },
+  {
+    id: 'apresentacao-d6',
+    tokens: [
+      { texto: 'どうぞ', romaji: 'douzo' },
+      { texto: 'よろしく', romaji: 'yoroshiku' },
+      { texto: 'おねがいします', romaji: 'onegaishimasu' },
+    ],
+    pt: 'Conto com vocês. (fórmula para fechar a apresentação)',
   },
 ];
 

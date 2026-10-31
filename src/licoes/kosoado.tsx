@@ -1,5 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -214,6 +214,82 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'kosoado-20', jp: 'そう', kana: 'そう', romaji: 'sou', pt: 'assim (desse jeito) / sim, é isso' },
       { id: 'kosoado-21', jp: 'どう', kana: 'どう', romaji: 'dou', pt: 'como' },
     ],
+  },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'kosoado-d1',
+    tokens: [
+      { texto: 'その', romaji: 'sono' },
+      { texto: 'かばん', romaji: 'kaban' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'いくら', romaji: 'ikura' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Quanto custa essa bolsa (perto de você)?',
+  },
+  {
+    id: 'kosoado-d2',
+    tokens: [
+      { texto: 'トイレ', romaji: 'toire' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'どこ', romaji: 'doko' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Onde fica o banheiro?',
+  },
+  {
+    id: 'kosoado-d3',
+    tokens: [
+      { texto: 'あそこ', romaji: 'asoko' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'ねこ', romaji: 'neko' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'います', romaji: 'imasu' },
+    ],
+    pt: 'Tem um gato ali.',
+  },
+  {
+    id: 'kosoado-d4',
+    tokens: [
+      { texto: 'どんな', romaji: 'donna' },
+      { texto: 'えいが', romaji: 'eiga' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'すき', romaji: 'suki' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Que tipo de filme você gosta?',
+  },
+  {
+    id: 'kosoado-d5',
+    tokens: [
+      { texto: 'どれ', romaji: 'dore' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'たなかさん', romaji: 'tanaka-san' },
+      { texto: 'の', romaji: 'no', particula: true },
+      { texto: 'かさ', romaji: 'kasa' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Qual é o guarda-chuva do Tanaka?',
+  },
+  {
+    id: 'kosoado-d6',
+    tokens: [
+      { texto: 'こう', romaji: 'kou' },
+      { texto: 'かきます', romaji: 'kakimasu' },
+    ],
+    pt: 'Escreve-se assim.',
   },
 ];
 

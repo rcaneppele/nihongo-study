@@ -7,7 +7,8 @@ import { KANJI_N5 } from '../data/kanji';
 import { LEITURA_TEXTOS } from '../data/leitura/textos';
 import { LICOES } from '../licoes';
 import { buildReviewQueue } from '../features/flashcards/stages';
-import { useKnownWords } from '../features/leitura/knowledge';
+import { knownPercent, useKnownWords, type KnownWords } from '../features/leitura/knowledge';
+import type { ReadingProgress } from '../db/schema';
 import { PESO_LEITURA, useMetaDiaria, useResumoDia } from '../features/atividade/atividade';
 
 export default function Home() {
@@ -21,12 +22,16 @@ export default function Home() {
     0
   );
   const kanjiLearned = useLiveQuery(() => db.kanjiProgress.count(), [], 0);
+  const readingProgress = useLiveQuery(() => db.readingProgress.toArray(), []);
+  const sugestoes = sugerir(dueCards, kanjiDue, known, readingProgress);
 
   return (
     <div className="space-y-6">
       <section>
         <h1 className="font-display text-3xl font-semibold text-center">こんにちは</h1>
       </section>
+
+      {sugestoes.length > 0 && <ProximaAcao principal={sugestoes[0]} alternativa={sugestoes[1]} />}
 
       <Hoje />
 
@@ -147,6 +152,103 @@ function Hoje() {
         <p className="font-display text-3xl font-semibold text-indigo">{sequencia}</p>
         <p className="text-xs text-sage">{sequencia === 1 ? 'dia seguido' : 'dias seguidos'}</p>
         {!estudouHoje && sequencia > 0 && <p className="mt-1 text-xs text-hanko">estude hoje para manter</p>}
+      </div>
+    </section>
+  );
+}
+
+interface Sugestao {
+  to: string;
+  titulo: string;
+  porque: string;
+  /** Rótulo curto pra aparecer como alternativa ("ou: …"). */
+  curto: string;
+}
+
+const DIA_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Próxima ação sugerida, em ordem de prioridade: revisões vencidas (são o
+ * que segura o que já foi aprendido), depois leitura — input compreensível
+ * é o centro do estudo —, e por fim palavras novas. O texto sugerido é o de
+ * maior "% conhecido", penalizando os lidos nos últimos 3 dias e os já
+ * relidos várias vezes.
+ */
+function sugerir(
+  dueCards: number,
+  kanjiDue: number,
+  known: KnownWords | undefined,
+  progress: ReadingProgress[] | undefined
+): Sugestao[] {
+  const lista: Sugestao[] = [];
+  if (dueCards > 0) {
+    lista.push({
+      to: '/flashcards',
+      titulo: `Revisar ${dueCards} flash card(s)`,
+      porque: 'Revisão em dia é o que segura o que você já aprendeu — e leva poucos minutos.',
+      curto: `revisar ${dueCards} flash card(s)`,
+    });
+  }
+  if (kanjiDue > 0) {
+    lista.push({
+      to: '/kanji',
+      titulo: `Revisar ${kanjiDue} kanji`,
+      porque: 'Kanji vencidos para revisão.',
+      curto: `revisar ${kanjiDue} kanji`,
+    });
+  }
+  if (known && progress) {
+    const porId = new Map(progress.map((p) => [p.textId, p]));
+    const agora = Date.now();
+    let melhor: { id: string; title: string; percent: number; score: number } | null = null;
+    for (const t of LEITURA_TEXTOS) {
+      const percent = knownPercent(t, known);
+      const p = porId.get(t.id);
+      const recente = p && agora - p.lastReadAt < 3 * DIA_MS;
+      const score = percent - (recente ? 50 : 0) - (p?.timesRead ?? 0) * 5;
+      if (!melhor || score > melhor.score) melhor = { id: t.id, title: t.title, percent, score };
+    }
+    if (melhor) {
+      lista.push({
+        to: `/leitura/${melhor.id}`,
+        titulo: `Ler 「${melhor.title}」`,
+        porque:
+          melhor.percent >= 85
+            ? `Você conhece ~${melhor.percent}% das palavras — no ponto para ler com fluidez e ainda aprender algo.`
+            : melhor.percent > 0
+              ? `É o texto em que você mais conhece palavras (~${melhor.percent}%). Toque nas que não souber.`
+              : 'Ler textos curtos do seu nível é a forma mais natural de fixar vocabulário. Toque nas palavras que não souber.',
+        curto: 'ler um texto',
+      });
+    }
+  }
+  lista.push({
+    to: '/flashcards?tab=vocabulario',
+    titulo: 'Aprender palavras novas',
+    porque: 'O mapa de vocabulário sugere as próximas palavras mais úteis.',
+    curto: 'aprender palavras novas',
+  });
+  return lista;
+}
+
+/** Bloco "o que fazer agora": uma ação principal clara e uma alternativa discreta. */
+function ProximaAcao({ principal, alternativa }: { principal: Sugestao; alternativa?: Sugestao }) {
+  return (
+    <section className="card-surface flex flex-wrap items-center justify-between gap-4 border-indigo/40">
+      <div className="min-w-0">
+        <p className="text-xs uppercase tracking-wide text-sage">Sugestão para agora</p>
+        <p className="font-display text-xl font-semibold">{principal.titulo}</p>
+        <p className="text-sm text-sage">{principal.porque}</p>
+      </div>
+      <div className="flex flex-col items-end gap-1">
+        <Link to={principal.to} className="btn-primary">
+          Começar
+        </Link>
+        {alternativa && (
+          <Link to={alternativa.to} className="text-xs text-sage hover:text-indigo hover:underline">
+            ou {alternativa.curto}
+          </Link>
+        )}
       </div>
     </section>
   );

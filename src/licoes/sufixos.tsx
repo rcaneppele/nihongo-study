@@ -1,6 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import { FuriganaWord } from '../components/Furigana';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -184,6 +184,80 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'sufixos-12', jp: '主任', kana: 'しゅにん', romaji: 'shunin', pt: 'líder / responsável' },
       { id: 'sufixos-13', jp: '同僚', kana: 'どうりょう', romaji: 'douryou', pt: 'colega (mesmo nível)' },
     ],
+  },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'sufixos-d1',
+    tokens: [
+      { texto: 'すずきさん', romaji: 'suzuki-san' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'どこ', romaji: 'doko' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Onde está a sra. Suzuki?',
+  },
+  {
+    id: 'sufixos-d2',
+    tokens: [
+      { texto: 'ゆいちゃん', romaji: 'yui-chan' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'ろくさい', romaji: 'rokusai' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'A Yui (menina) tem seis anos.',
+  },
+  {
+    id: 'sufixos-d3',
+    tokens: [
+      { texto: 'やまだくん', romaji: 'yamada-kun' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'わたし', romaji: 'watashi' },
+      { texto: 'の', romaji: 'no', particula: true },
+      { texto: 'こうはい', romaji: 'kouhai' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'O Yamada é meu kouhai.',
+  },
+  {
+    id: 'sufixos-d4',
+    tokens: [
+      { texto: 'おきゃくさま', romaji: 'okyaku-sama' },
+      { texto: 'こちら', romaji: 'kochira' },
+      { texto: 'へ', romaji: 'e', particula: true },
+      { texto: 'どうぞ', romaji: 'douzo' },
+    ],
+    pt: 'Senhor(a), por aqui, por favor. (atendente falando com cliente)',
+  },
+  {
+    id: 'sufixos-d5',
+    tokens: [
+      { texto: 'たなかぶちょう', romaji: 'tanaka-buchou' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'いま', romaji: 'ima' },
+      { texto: 'かいぎ', romaji: 'kaigi' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'O diretor Tanaka está em reunião agora.',
+  },
+  {
+    id: 'sufixos-d6',
+    tokens: [
+      { texto: 'ごかぞく', romaji: 'go-kazoku' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'おげんき', romaji: 'o-genki' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Sua família está bem?',
   },
 ];
 

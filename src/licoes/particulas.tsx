@@ -1,5 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'particulas',
@@ -301,6 +301,87 @@ export const quiz: QuizLicao = {
 // Sem `kakitori`: partículas são morfemas gramaticais presos (は, が, を, に...), sem significado
 // isolado — não fazem sentido como item de ditado, nem mesmo encurtadas. O ditado desta lição foi
 // removido (fica só o quiz de "escolher partícula" acima).
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'particulas-d1',
+    tokens: [
+      { texto: 'まいにち', romaji: 'mainichi' },
+      { texto: 'バス', romaji: 'basu' },
+      { texto: 'で', romaji: 'de', particula: true },
+      { texto: 'がっこう', romaji: 'gakkou' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'いきます', romaji: 'ikimasu' },
+    ],
+    pt: 'Todo dia vou para a escola de ônibus.',
+  },
+  {
+    id: 'particulas-d2',
+    tokens: [
+      { texto: 'ともだち', romaji: 'tomodachi' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'こうえん', romaji: 'kouen' },
+      { texto: 'で', romaji: 'de', particula: true },
+      { texto: 'あそびます', romaji: 'asobimasu' },
+    ],
+    pt: 'Brinco no parque com os amigos.',
+  },
+  {
+    id: 'particulas-d3',
+    tokens: [
+      { texto: 'この', romaji: 'kono' },
+      { texto: 'ケーキ', romaji: 'keeki' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'おいしい', romaji: 'oishii' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'ね', romaji: 'ne', particula: true },
+    ],
+    pt: 'Este bolo é gostoso, né?',
+  },
+  {
+    id: 'particulas-d4',
+    tokens: [
+      { texto: 'あめ', romaji: 'ame' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'ふっています', romaji: 'futte imasu' },
+      { texto: 'から', romaji: 'kara', particula: true },
+      { texto: 'かさ', romaji: 'kasa' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'もっていきます', romaji: 'motte ikimasu' },
+    ],
+    pt: 'Como está chovendo, vou levar guarda-chuva.',
+  },
+  {
+    id: 'particulas-d5',
+    tokens: [
+      { texto: 'わたし', romaji: 'watashi' },
+      { texto: 'も', romaji: 'mo', particula: true },
+      { texto: 'コーヒー', romaji: 'koohii' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'すき', romaji: 'suki' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'よ', romaji: 'yo', particula: true },
+    ],
+    pt: 'Eu também gosto de café, viu?',
+  },
+  {
+    id: 'particulas-d6',
+    tokens: [
+      { texto: 'はは', romaji: 'haha' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'てがみ', romaji: 'tegami' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'かきました', romaji: 'kakimashita' },
+    ],
+    pt: 'Escrevi uma carta para a minha mãe.',
+  },
+];
 
 export default function Particulas() {
   return (

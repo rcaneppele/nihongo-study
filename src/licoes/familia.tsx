@@ -1,6 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import { FuriganaWord } from '../components/Furigana';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -186,6 +186,82 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'familia-19', jp: '叔母', kana: 'おば', romaji: 'oba', pt: 'tia (humilde)' },
       { id: 'familia-20', jp: 'おばさん', kana: 'おばさん', romaji: 'obasan', pt: 'tia (respeitoso)' },
     ],
+  },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'familia-d1',
+    tokens: [
+      { texto: 'わたし', romaji: 'watashi' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'さんにん', romaji: 'sannin' },
+      { texto: 'きょうだい', romaji: 'kyoudai' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Somos três irmãos.',
+  },
+  {
+    id: 'familia-d2',
+    tokens: [
+      { texto: 'あに', romaji: 'ani' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'とうきょう', romaji: 'toukyou' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'すんでいます', romaji: 'sunde imasu' },
+    ],
+    pt: 'Meu irmão mais velho mora em Tóquio.',
+  },
+  {
+    id: 'familia-d3',
+    tokens: [
+      { texto: 'おかあさん', romaji: 'okaasan' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'おげんき', romaji: 'o-genki' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Sua mãe está bem?',
+  },
+  {
+    id: 'familia-d4',
+    tokens: [
+      { texto: 'そふ', romaji: 'sofu' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'そぼ', romaji: 'sobo' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'ブラジル', romaji: 'burajiru' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'います', romaji: 'imasu' },
+    ],
+    pt: 'Meus avós estão no Brasil.',
+  },
+  {
+    id: 'familia-d5',
+    tokens: [
+      { texto: 'いもうと', romaji: 'imouto' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'だいがくせい', romaji: 'daigakusei' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Minha irmã mais nova é universitária.',
+  },
+  {
+    id: 'familia-d6',
+    tokens: [
+      { texto: 'おにいさん', romaji: 'oniisan' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'なんさい', romaji: 'nansai' },
+      { texto: 'です', romaji: 'desu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'Quantos anos tem o seu irmão mais velho?',
   },
 ];
 

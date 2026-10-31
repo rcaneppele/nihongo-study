@@ -7,8 +7,9 @@ import { freshSrs } from '../srs/fsrs';
  * "Diga em japonês": a frase aparece em português e o usuário a diz em
  * japonês (em voz alta ou de cabeça) antes de revelar — produção de frase
  * inteira, autoavaliada (sem reconhecimento de fala). O conteúdo são as
- * `quiz.frases` das lições (mesmas frases do "Reordenar frase" do Quiz),
- * então toda lição com frases de quiz já entra aqui sem conteúdo novo.
+ * `quiz.frases` das lições (mesmas do "Reordenar frase" do Quiz) mais as
+ * frases próprias de cada lição em `diga` — gramática da lição com
+ * vocabulário já visto, em contextos novos.
  */
 export interface ItemDiga {
   id: string;
@@ -27,8 +28,12 @@ export interface RegistroDiga {
 /** Categoria dos cards salvos a partir daqui. */
 export const CATEGORIA_FRASES = 'Frases';
 
+function frasesDaLicao(l: (typeof LICOES)[number]) {
+  return [...(l.diga ?? []), ...(l.quiz?.frases ?? [])];
+}
+
 export function licoesComFrases() {
-  return LICOES.filter((l) => (l.quiz?.frases?.length ?? 0) > 0);
+  return LICOES.filter((l) => frasesDaLicao(l).length > 0);
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -43,12 +48,12 @@ function shuffle<T>(arr: T[]): T[] {
 function montarPool(licaoIds: string[]): ItemDiga[] {
   return licoesComFrases()
     .filter((l) => licaoIds.includes(l.meta.id))
-    .flatMap(({ meta, quiz }) =>
-      (quiz?.frases ?? []).map((f) => ({
+    .flatMap((l) =>
+      frasesDaLicao(l).map((f) => ({
         id: f.id,
-        licaoId: meta.id,
-        origem: meta.title,
-        emoji: meta.emoji,
+        licaoId: l.meta.id,
+        origem: l.meta.title,
+        emoji: l.meta.emoji,
         pt: f.pt,
         tokens: f.tokens,
       }))

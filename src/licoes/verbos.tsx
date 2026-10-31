@@ -1,5 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 
 export const meta = {
   id: 'verbos',
@@ -264,6 +264,77 @@ export const quiz: QuizLicao = {
 
 // Sem `kakitori`: um verbo conjugado sozinho, fora de contexto, não é um item de vocabulário útil
 // pra memorizar de ouvido — é só uma forma gramatical. O ditado desta lição foi removido.
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'verbos-d1',
+    tokens: [
+      { texto: 'まいばん', romaji: 'maiban' },
+      { texto: 'ほん', romaji: 'hon' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'よみます', romaji: 'yomimasu' },
+    ],
+    pt: 'Leio um livro toda noite.',
+  },
+  {
+    id: 'verbos-d2',
+    tokens: [
+      { texto: 'きのう', romaji: 'kinou' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'テレビ', romaji: 'terebi' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'みませんでした', romaji: 'mimasen deshita' },
+    ],
+    pt: 'Ontem não assisti TV.',
+  },
+  {
+    id: 'verbos-d3',
+    tokens: [
+      { texto: 'あした', romaji: 'ashita' },
+      { texto: 'ともだち', romaji: 'tomodachi' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'うち', romaji: 'uchi' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'きます', romaji: 'kimasu' },
+    ],
+    pt: 'Amanhã um amigo vem aqui em casa.',
+  },
+  {
+    id: 'verbos-d4',
+    tokens: [
+      { texto: 'まど', romaji: 'mado' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'あけて', romaji: 'akete' },
+      { texto: 'ください', romaji: 'kudasai' },
+    ],
+    pt: 'Abra a janela, por favor.',
+  },
+  {
+    id: 'verbos-d5',
+    tokens: [
+      { texto: 'おさけ', romaji: 'o-sake' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'のまない', romaji: 'nomanai' },
+    ],
+    pt: 'Não bebo álcool. (casual)',
+  },
+  {
+    id: 'verbos-d6',
+    tokens: [
+      { texto: 'シャワー', romaji: 'shawaa' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'あびて', romaji: 'abite' },
+      { texto: 'ねました', romaji: 'nemashita' },
+    ],
+    pt: 'Tomei banho e fui dormir.',
+  },
+];
 
 export default function Verbos() {
   return (

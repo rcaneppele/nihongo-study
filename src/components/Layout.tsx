@@ -6,13 +6,29 @@ import { useTheme } from '../lib/useTheme';
 // numa tela estreita, "Flash cards" (o mais longo) quebra linha e desalinha
 // os ícones dos outros itens. Cai pra "Cards" só ali; a barra lateral do
 // desktop (mais espaço) sempre usa `label`.
-const NAV = [
+//
+// `group` agrupa os itens na barra lateral por intenção (aprender conteúdo
+// novo × praticar/revisar o que já viu). `sidebarOnly` fica fora da barra
+// inferior do celular, que já está no limite de itens — esses têm atalho na
+// Home.
+interface NavItem {
+  to: string;
+  label: string;
+  shortLabel?: string;
+  end: boolean;
+  icon: (props: SVGProps<SVGSVGElement>) => ReactNode;
+  group?: 'Aprender' | 'Praticar';
+  sidebarOnly?: boolean;
+}
+
+const NAV: NavItem[] = [
   { to: '/', label: 'Início', end: true, icon: IconHome },
-  { to: '/flashcards', label: 'Flash cards', shortLabel: 'Cards', end: false, icon: IconCards },
-  { to: '/kana', label: 'Kana', end: false, icon: IconKana },
-  { to: '/kanji', label: 'Kanji', end: false, icon: IconKanji },
-  { to: '/leitura', label: 'Leitura', shortLabel: 'Ler', end: false, icon: IconLeitura },
-  { to: '/licoes', label: 'Lições', end: false, icon: IconBook },
+  { to: '/licoes', label: 'Lições', end: false, icon: IconBook, group: 'Aprender' },
+  { to: '/leitura', label: 'Leitura', shortLabel: 'Ler', end: false, icon: IconLeitura, group: 'Aprender' },
+  { to: '/kanji', label: 'Kanji', end: false, icon: IconKanji, group: 'Aprender' },
+  { to: '/flashcards', label: 'Flash cards', shortLabel: 'Cards', end: false, icon: IconCards, group: 'Praticar' },
+  { to: '/kana', label: 'Kana', end: false, icon: IconKana, group: 'Praticar' },
+  { to: '/pontos-fracos', label: 'Pontos fracos', end: false, icon: IconTarget, group: 'Praticar', sidebarOnly: true },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -69,11 +85,16 @@ function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r border-line bg-surface/60 px-3 py-5 md:flex">
       <nav className="flex flex-1 flex-col gap-1">
-        {NAV.map((item) => (
-          <NavLink key={item.to} to={item.to} end={item.end} className={sidebarLinkClass}>
-            <item.icon className="h-5 w-5 shrink-0" />
-            {item.label}
-          </NavLink>
+        {NAV.map((item, i) => (
+          <div key={item.to}>
+            {item.group && item.group !== NAV[i - 1]?.group && (
+              <p className="mb-1 mt-4 px-3 text-xs font-medium uppercase tracking-wide text-sage">{item.group}</p>
+            )}
+            <NavLink to={item.to} end={item.end} className={sidebarLinkClass}>
+              <item.icon className="h-5 w-5 shrink-0" />
+              {item.label}
+            </NavLink>
+          </div>
         ))}
       </nav>
     </aside>
@@ -90,7 +111,7 @@ function sidebarLinkClass({ isActive }: { isActive: boolean }) {
 function BottomNav() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-paper/95 pb-[env(safe-area-inset-bottom,0px)] backdrop-blur md:hidden">
-      {NAV.map((item) => (
+      {NAV.filter((item) => !item.sidebarOnly).map((item) => (
         <NavLink key={item.to} to={item.to} end={item.end} className={bottomNavLinkClass}>
           <item.icon className="h-5 w-5" />
           {item.shortLabel ?? item.label}
@@ -170,6 +191,16 @@ function IconGear(props: SVGProps<SVGSVGElement>) {
       {GEAR_TEETH.map((deg) => (
         <rect key={deg} x="10.9" y="2.6" width="2.2" height="3.4" rx="0.6" transform={`rotate(${deg} 12 12)`} />
       ))}
+    </svg>
+  );
+}
+
+function IconTarget(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <circle cx="12" cy="12" r="4.5" />
+      <circle cx="12" cy="12" r="0.8" fill="currentColor" />
     </svg>
   );
 }

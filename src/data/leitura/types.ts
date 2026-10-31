@@ -12,8 +12,11 @@ export interface ReadingWord {
    * (ex.: `行きました` → `行く`). Identifica a palavra no vocabulário
    * passivo e vira a frente sugerida ao salvar como card — sem ela, usa a
    * forma do texto sem pontuação/partícula (ver `wordKey`). Opcional:
-   * preenchida aos poucos. */
+   * preenchida em todas as palavras cuja forma difere da de dicionário. */
   lemma?: string;
+  /** Leitura em kana do `lemma`, quando ele tem kanji (ex.: `行く` → `いく`).
+   * Vira a leitura sugerida do card. */
+  lemmaReading?: string;
 }
 
 /** Uma frase/linha do texto. */

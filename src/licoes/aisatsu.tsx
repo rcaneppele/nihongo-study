@@ -1,5 +1,5 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -193,6 +193,78 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'aisatsu-12', jp: 'こんばんは。おげんきですか。', kana: 'こんばんは。おげんきですか。', romaji: 'konbanwa. ogenki desu ka.', pt: 'Boa noite. Tem passado bem?' },
       { id: 'aisatsu-13', jp: 'ごめん！おくれちゃった。', kana: 'ごめん！おくれちゃった。', romaji: 'gomen! okurechatta.', pt: 'Desculpa! Acabei me atrasando.' },
     ],
+  },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'aisatsu-d1',
+    tokens: [
+      { texto: 'たべる', romaji: 'taberu' },
+      { texto: 'まえに', romaji: 'mae ni' },
+      { texto: 'いただきます', romaji: 'itadakimasu' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'いいます', romaji: 'iimasu' },
+    ],
+    pt: 'Antes de comer, digo "itadakimasu".',
+  },
+  {
+    id: 'aisatsu-d2',
+    tokens: [
+      { texto: 'うち', romaji: 'uchi' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'かえって', romaji: 'kaette' },
+      { texto: 'ただいま', romaji: 'tadaima' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'いいます', romaji: 'iimasu' },
+    ],
+    pt: 'Volto para casa e digo "tadaima".',
+  },
+  {
+    id: 'aisatsu-d3',
+    tokens: [
+      { texto: 'ねる', romaji: 'neru' },
+      { texto: 'まえに', romaji: 'mae ni' },
+      { texto: 'おやすみなさい', romaji: 'oyasuminasai' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'いいます', romaji: 'iimasu' },
+    ],
+    pt: 'Antes de dormir, digo "oyasuminasai".',
+  },
+  {
+    id: 'aisatsu-d4',
+    tokens: [
+      { texto: 'おくれて', romaji: 'okurete' },
+      { texto: 'すみません', romaji: 'sumimasen' },
+    ],
+    pt: 'Desculpe pelo atraso.',
+  },
+  {
+    id: 'aisatsu-d5',
+    tokens: [
+      { texto: 'おさきに', romaji: 'osaki ni' },
+      { texto: 'しつれいします', romaji: 'shitsurei shimasu' },
+      { texto: 'また', romaji: 'mata' },
+      { texto: 'あした', romaji: 'ashita' },
+    ],
+    pt: 'Com licença, vou indo na frente. Até amanhã. (saindo do trabalho)',
+  },
+  {
+    id: 'aisatsu-d6',
+    tokens: [
+      { texto: 'いってきます', romaji: 'ittekimasu' },
+      { texto: 'よる', romaji: 'yoru' },
+      { texto: 'しちじ', romaji: 'shichiji' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'かえります', romaji: 'kaerimasu' },
+    ],
+    pt: 'Estou saindo! Volto às sete da noite.',
   },
 ];
 

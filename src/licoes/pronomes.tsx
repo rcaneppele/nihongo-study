@@ -1,6 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import { FuriganaWord } from '../components/Furigana';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -208,6 +208,78 @@ export const kakitori: GrupoKakitori[] = [
       { id: 'pronomes-17', jp: 'あのかた', kana: 'あのかた', romaji: 'ano kata', pt: 'aquela pessoa (respeitoso)' },
       { id: 'pronomes-18', jp: 'みなさん', kana: 'みなさん', romaji: 'minasan', pt: 'pessoal / todos' },
     ],
+  },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'pronomes-d1',
+    tokens: [
+      { texto: 'ぼく', romaji: 'boku' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'サッカー', romaji: 'sakkaa' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'すき', romaji: 'suki' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Eu (homem, informal) gosto de futebol.',
+  },
+  {
+    id: 'pronomes-d2',
+    tokens: [
+      { texto: 'わたしたち', romaji: 'watashitachi' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'ブラジルじん', romaji: 'burajirujin' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Nós somos brasileiros.',
+  },
+  {
+    id: 'pronomes-d3',
+    tokens: [
+      { texto: 'かれ', romaji: 'kare' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'わたし', romaji: 'watashi' },
+      { texto: 'の', romaji: 'no', particula: true },
+      { texto: 'ともだち', romaji: 'tomodachi' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Ele é meu amigo.',
+  },
+  {
+    id: 'pronomes-d4',
+    tokens: [
+      { texto: 'みなさん', romaji: 'minasan' },
+      { texto: 'おはようございます', romaji: 'ohayou gozaimasu' },
+    ],
+    pt: 'Bom dia, pessoal.',
+  },
+  {
+    id: 'pronomes-d5',
+    tokens: [
+      { texto: 'じぶん', romaji: 'jibun' },
+      { texto: 'の', romaji: 'no', particula: true },
+      { texto: 'へや', romaji: 'heya' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'そうじします', romaji: 'souji shimasu' },
+    ],
+    pt: 'Limpo o meu próprio quarto.',
+  },
+  {
+    id: 'pronomes-d6',
+    tokens: [
+      { texto: 'たなかさん', romaji: 'tanaka-san' },
+      { texto: 'も', romaji: 'mo', particula: true },
+      { texto: 'いきます', romaji: 'ikimasu' },
+      { texto: 'か', romaji: 'ka', particula: true },
+    ],
+    pt: 'O senhor também vai, sr. Tanaka? (o nome no lugar de "você")',
   },
 ];
 

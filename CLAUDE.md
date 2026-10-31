@@ -112,7 +112,8 @@ toda mudança pede bump; julgue pelo impacto:
   `ReadingLine`, `ReadingText`); `src/data/leitura/textos.ts`
   (`LEITURA_TEXTOS`) — textos originais por nível (1: só kana; 2: kanji com
   furigana), pré-segmentados palavra a palavra (leitura+significado por
-  palavra), sem tokenizador em runtime.
+  palavra, `lemma` quando a forma não é a de dicionário), sem tokenizador
+  em runtime.
 - `src/routes/Leitura.tsx` / `LeituraTexto.tsx` — listagem por nível e tela
   de leitura (`/leitura`, `/leitura/:id`): toggle de furigana, cartão de
   palavra selecionada, `AudioButton` por linha.
@@ -143,7 +144,8 @@ toda mudança pede bump; julgue pelo impacto:
   compartilhada em `scripts/lib/kanjivg.mjs`).
 - `src/features/diga/` + `src/routes/Diga.tsx` — "Diga em japonês"
   (`/licoes/diga`): português → dizer a frase em japonês → conferir,
-  usando as `quiz.frases` das lições; frases erradas podem virar cards.
+  usando o `diga` de cada lição + as `quiz.frases`; frases erradas podem
+  virar cards.
 - `src/features/atividade/atividade.ts` — atividade por dia
   (`registrarAtividade`, chamado por cada módulo), meta diária e sequência
   de dias exibidas na Home.

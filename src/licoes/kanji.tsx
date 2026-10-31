@@ -1,6 +1,6 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import { FuriganaWord } from '../components/Furigana';
-import type { QuizLicao } from '../data/quiz/types';
+import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
 import type { ItemKakitoriFonte, GrupoKakitori } from '../data/kakitori/types';
 
 export const meta = {
@@ -876,6 +876,82 @@ export const kakitori: GrupoKakitori[] = [
   { id: 'kanji-horas', label: 'Kanji - Horas', itens: HORAS },
   { id: 'kanji-telefone', label: 'Kanji - Números de telefone', itens: TELEFONE },
   { id: 'kanji-perguntas-lugares', label: 'Kanji - Perguntas e lugares', itens: PERGUNTAS_E_LUGARES },
+];
+
+
+/**
+ * Frases do "Diga em japonês" (`src/features/diga/`) próprias desta lição,
+ * além das `quiz.frases`: a gramática da lição com vocabulário já visto,
+ * em contextos diferentes dos exemplos — pra não treinar sempre as mesmas.
+ */
+export const diga: FraseEstruturada[] = [
+  {
+    id: 'kanji-d1',
+    tokens: [
+      { texto: 'この', romaji: 'kono' },
+      { texto: 'シャツ', romaji: 'shatsu' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'にせんえん', romaji: "nisen'en" },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Esta camisa custa dois mil ienes.',
+  },
+  {
+    id: 'kanji-d2',
+    tokens: [
+      { texto: 'もくようび', romaji: 'mokuyoubi' },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'テスト', romaji: 'tesuto' },
+      { texto: 'が', romaji: 'ga', particula: true },
+      { texto: 'あります', romaji: 'arimasu' },
+    ],
+    pt: 'Tem prova na quinta-feira.',
+  },
+  {
+    id: 'kanji-d3',
+    tokens: [
+      { texto: 'いま', romaji: 'ima' },
+      { texto: 'さんじ', romaji: 'sanji' },
+      { texto: 'はん', romaji: 'han' },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'Agora são três e meia.',
+  },
+  {
+    id: 'kanji-d4',
+    tokens: [
+      { texto: 'りんご', romaji: 'ringo' },
+      { texto: 'を', romaji: 'o', particula: true },
+      { texto: 'みっつ', romaji: 'mittsu' },
+      { texto: 'ください', romaji: 'kudasai' },
+    ],
+    pt: 'Me dá três maçãs, por favor.',
+  },
+  {
+    id: 'kanji-d5',
+    tokens: [
+      { texto: 'えいが', romaji: 'eiga' },
+      { texto: 'は', romaji: 'wa', particula: true },
+      { texto: 'しちじ', romaji: 'shichiji' },
+      { texto: 'じゅっぷん', romaji: 'juppun' },
+      { texto: 'から', romaji: 'kara', particula: true },
+      { texto: 'です', romaji: 'desu' },
+    ],
+    pt: 'O filme é a partir das sete e dez.',
+  },
+  {
+    id: 'kanji-d6',
+    tokens: [
+      { texto: 'かようび', romaji: 'kayoubi' },
+      { texto: 'と', romaji: 'to', particula: true },
+      { texto: 'きんようび', romaji: "kin'youbi" },
+      { texto: 'に', romaji: 'ni', particula: true },
+      { texto: 'ジム', romaji: 'jimu' },
+      { texto: 'へ', romaji: 'e', particula: true },
+      { texto: 'いきます', romaji: 'ikimasu' },
+    ],
+    pt: 'Vou à academia às terças e sextas.',
+  },
 ];
 
 export default function Kanji() {

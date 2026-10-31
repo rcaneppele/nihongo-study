@@ -16,8 +16,8 @@ export default function Licao() {
     );
   }
 
-  const { meta, Component, quiz } = entry;
-  const temFrases = (quiz?.frases?.length ?? 0) > 0;
+  const { meta, Component, quiz, diga } = entry;
+  const temFrases = (quiz?.frases?.length ?? 0) + (diga?.length ?? 0) > 0;
 
   return (
     <div className="mx-auto max-w-2xl space-y-8">

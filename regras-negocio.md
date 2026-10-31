@@ -444,8 +444,13 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
     significado. Assim uma palavra lida e um card salvo dela batem.
     Palavras sem `meaning` (partículas/gramática) não contam. Sem `lemma`,
     formas conjugadas diferentes (`行きました`/`行きます`) contam como
-    palavras distintas — `ReadingWord.lemma` é opcional e vai sendo
-    preenchido aos poucos nos textos.
+    palavras distintas — por isso toda palavra cuja forma no texto difere
+    da de dicionário traz `lemma` (e `lemmaReading`, quando o lemma tem
+    kanji): verbo conjugado → dicionário (`いきました` → `いく`), adjetivo
+    flexionado → forma básica (`おいしかったです` → `おいしい`, `しずかで`
+    → `しずか`), substantivo + partícula/です → substantivo
+    (`とうきょうから` → `とうきょう`). Expressões fixas ficam sem lemma
+    (`はじめまして`, `いっしょに`). Texto novo deve seguir a mesma regra.
   - Tocar numa palavra marca ela como **consultada nesta leitura** (tocar
     em PT, a tradução da frase, não marca nada).
   - **"Terminei a leitura"** (fim da tela): para a leitura em voz alta, e
@@ -529,7 +534,7 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - `/licoes` → `src/routes/Licoes.tsx` — grade de cards com todas as lições.
 - `/licoes/:id` → `src/routes/Licao.tsx` — renderiza o componente da lição
   correspondente ao `id`; exibe mensagem de "não encontrada" se o id não existir.
-  Lições com `quiz.frases` terminam com o atalho "Pratique esta lição" →
+  Lições com `quiz.frases` ou `diga` terminam com o atalho "Pratique esta lição" →
   "Diga em japonês" só daquela lição.
 - `/licoes/diga` → `src/routes/Diga.tsx` — ver "Diga em japonês" abaixo.
 
@@ -538,9 +543,12 @@ Lógica em `src/features/diga/` (`gerador.ts`, `DigaSession.tsx`,
 `DigaResultado.tsx`). Treina **montar a frase inteira** em japonês, que o
 Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
 
-- **Conteúdo**: as `quiz.frases` das lições — as mesmas frases do
-  "Reordenar frase" do Quiz. Toda lição com frases de quiz entra
-  automaticamente; não há conteúdo próprio (ainda).
+- **Conteúdo**: as frases próprias de cada lição em `diga` (export da
+  lição, registrado em `LICOES` — 6 por lição: a gramática da lição com
+  vocabulário já visto, em contextos diferentes dos exemplos e do quiz)
+  mais as `quiz.frases` (as mesmas do "Reordenar frase" do Quiz). Mesmo
+  formato (`FraseEstruturada`); regras de romanização de
+  `docs/padrao-licoes.md` §8.3.
 - **Configuração**: escolher lições (chips, "Todas"/"Nenhuma") e
   quantidade, mesmo padrão do Quiz. `?licao=<id>` pré-seleciona só uma
   lição (atalho do fim de cada lição).
@@ -626,6 +634,23 @@ de 0).
   aparelhos; somar contaria duas vezes ao reimportar o mesmo arquivo, então
   fica o **maior valor de cada contador** — subestima um pouco, mas é
   idempotente.
+
+## 5d. Home — "Sugestão para agora" e navegação
+
+- **Sugestão para agora** (topo da Home, `sugerir` em
+  `src/routes/Home.tsx`): uma ação principal ("Começar") e uma alternativa
+  discreta ("ou …"), na ordem de prioridade:
+  1. flash cards vencidos (mesma fila do "Estudar");
+  2. kanji vencidos;
+  3. um texto de leitura — o de maior "% conhecido", com −50 se lido nos
+     últimos 3 dias e −5 por releitura; a explicação muda conforme o % (≥ 85%:
+     "no ponto para ler com fluidez");
+  4. palavras novas (aba Vocabulário de `/flashcards`).
+- **Navegação lateral** (desktop) agrupada por intenção: Início ·
+  *Aprender* (Lições, Leitura, Kanji) · *Praticar* (Flash cards, Kana,
+  Pontos fracos). A barra inferior do celular mostra os mesmos itens menos
+  Pontos fracos (`sidebarOnly` — a barra já está no limite; o atalho fica
+  na Home).
 
 ## 6. Dados e sincronização
 

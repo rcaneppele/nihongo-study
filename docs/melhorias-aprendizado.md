@@ -353,7 +353,7 @@ poucos, não feature técnica.
    quiz quando mexer nele.
 3. **Ícone ⓘ com definição** em cada `Stat` da Home e em `ProgressStats`
    (ex.: "Maduro = intervalo ≥ 21 dias").
-4. **Agrupar a navegação** em *Praticar* (Leitura, Kana, Kakitori) /
+4. ✅ **Agrupar a navegação** em *Praticar* (Leitura, Kana, Kakitori) /
    *Aprender* (Lições, Kanji, Vocabulário) / *Revisar* (Flash cards, Meus
    erros) / *Progresso* — hoje a sidebar é uma lista plana; com as novas
    telas (Vocabulário, Erros), ela vai crescer.
@@ -365,7 +365,7 @@ poucos, não feature técnica.
    sei dizer = `indigo`, domino = `sage`. **Não** usar `hanko` como cor de
    estágio (é reservado a destaque/perigo); o índigo continua sendo a cor
    da ação primária.
-7. **Home orientada a "o que fazer agora"**: em vez de 4 contadores + 5
+7. ✅ **Home orientada a "o que fazer agora"**: em vez de 4 contadores + 5
    atalhos de mesmo peso, um bloco principal com a próxima ação sugerida
    (revisões devidas → texto de leitura recomendado pelo % conhecido →
    próximas 10 palavras).
@@ -395,10 +395,16 @@ poucos, não feature técnica.
    vocabulário) — ✅ ambos feitos.
 6. ✅ **3.7**; ✅ **3.8**; ✅ **3.9**; ✅ **3.10**.
 
-Pendências abertas na branch: frases novas por lição para o "Diga em
-japonês" (3.7), `lemma` nos textos de leitura (3.4) e itens de UI da seção
-4 ainda não feitos (agrupar a navegação, Home orientada a "o que fazer
-agora").
+Pendências resolvidas depois, na mesma branch:
+- ✅ Frases novas para o "Diga em japonês": 6 por lição (`diga` em cada
+  arquivo de lição), somadas às do quiz.
+- ✅ `lemma`/`lemmaReading` em todas as palavras dos textos de leitura
+  fora da forma de dicionário (~1.130 ocorrências): as palavras únicas
+  caíram de ~1.120 para ~770 e as do deck N5 encontradas nos textos
+  subiram de 25 para 37.
+- ✅ UI: navegação lateral agrupada (Aprender / Praticar, com Pontos
+  fracos) e bloco "Sugestão para agora" no topo da Home (revisões vencidas
+  → texto de leitura no ponto certo → palavras novas).
 
 Ajustes de UI da seção 4 entram junto com a feature que mexe na mesma tela.
 
