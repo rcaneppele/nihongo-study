@@ -182,7 +182,17 @@ Também registra textos lidos (hoje "sem progresso persistido").
 **Esforço:** médio (parte técnica pequena; o trabalho é preencher `lemma`
 nos textos existentes onde a forma difere).
 
-### 3.5 Mapa de vocabulário por tema/nível — prioridade média
+### 3.5 Mapa de vocabulário por tema/nível — ✅ implementado (branch experimental)
+
+Feito como aba "Vocabulário" de `/flashcards` (não item novo no menu — a
+barra inferior do celular já está cheia). Ajustes em relação à proposta:
+sem escada de nível JLPT por enquanto (só existe o deck N5); "Ler sobre o
+tema" virou a lista de textos de leitura onde a palavra aparece, no painel
+da palavra; utilidade = em quantos textos de leitura a palavra aparece, com
+desempate por categoria "iniciante primeiro" (sem campo `order` curado);
+"Testar 10" testa as palavras já conhecidas. Detalhes em
+`regras-negocio.md` §1.
+
 
 **O quê**, sobre o deck N5 que já existe (`n5.json`, ~700 palavras, 8
 categorias):
@@ -352,7 +362,7 @@ poucos, não feature técnica.
 4. ✅ **3.3** (estágios Reconheço/Sei dizer/Domino) — a mudança estrutural;
    desenhar com calma e documentar em `regras-negocio.md`.
 5. ✅ **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
-   vocabulário) — dependem de 3.3 para brilhar.
+   vocabulário) — ✅ ambos feitos.
 6. **3.7**, **3.8**, **3.9**, **3.10** conforme houver conteúdo/tempo.
 
 Ajustes de UI da seção 4 entram junto com a feature que mexe na mesma tela.

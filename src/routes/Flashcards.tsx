@@ -4,21 +4,17 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
 import { freshSrs } from '../features/srs/fsrs';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
-import {
-  buildReviewQueue,
-  cardStage,
-  STAGE_HINTS,
-  STAGE_LABELS,
-  type Direction,
-  type StudyItem,
-} from '../features/flashcards/stages';
+import { buildReviewQueue, type Direction, type StudyItem } from '../features/flashcards/stages';
 import ProgressStats from '../features/flashcards/ProgressStats';
+import VocabularyMap from '../features/flashcards/VocabularyMap';
+import { StageAction, StageChip } from '../features/flashcards/StageControls';
 import AudioButton from '../components/AudioButton';
 
-type TabKey = 'estudar' | 'progresso';
+type TabKey = 'estudar' | 'vocabulario' | 'progresso';
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'estudar', label: 'Estudar' },
+  { key: 'vocabulario', label: 'Vocabulário' },
   { key: 'progresso', label: 'Progresso' },
 ];
 
@@ -152,6 +148,8 @@ export default function Flashcards() {
       <div role="tabpanel">
         {tab === 'progresso' ? (
           <ProgressStats />
+        ) : tab === 'vocabulario' ? (
+          <VocabularyMap onPractice={(items) => setSession({ mode: 'practice', items })} />
         ) : (
           <div className="space-y-6">
             {categories.length > 0 && (
@@ -338,50 +336,6 @@ const PRACTICE_DIRECTIONS: { key: Direction; label: string }[] = [
   { key: 'recognition', label: 'Reconhecer (japonês → português)' },
   { key: 'production', label: 'Dizer em japonês (português → japonês)' },
 ];
-
-function StageChip({ card }: { card: Card }) {
-  const stage = cardStage(card);
-  if (stage === 'novo') return null;
-  const style = stage === 'reconheco' ? 'border-line text-sage' : stage === 'seiDizer' ? 'border-indigo/40 text-indigo' : 'border-sage text-sage';
-  return (
-    <span className={`ml-2 rounded border px-2 py-0.5 text-xs ${style}`} title={STAGE_HINTS[stage]}>
-      {STAGE_LABELS[stage]}
-    </span>
-  );
-}
-
-/**
- * Mudança manual de estágio: "Treinar a dizer" adianta a promoção que o
- * FSRS faria sozinho (intervalo ≥ 7 dias); "voltar" tira a produção (volta
- * pra Reconheço — será promovido de novo quando o reconhecimento firmar)
- * ou, de Domino, reinicia a produção do zero.
- */
-function StageAction({ card }: { card: Card }) {
-  const stage = cardStage(card);
-  const now = Date.now();
-  if (stage === 'novo' || stage === 'reconheco') {
-    return (
-      <button
-        className="text-xs text-sage hover:text-indigo"
-        title="Já reconheço esta palavra — começar a treinar dizê-la em japonês (português → japonês)"
-        onClick={() => db.cards.update(card.id, { production: freshSrs(now), updatedAt: now })}
-      >
-        Treinar a dizer
-      </button>
-    );
-  }
-  return (
-    <button
-      className="text-xs text-sage hover:text-indigo"
-      title={stage === 'seiDizer' ? 'Parar de treinar a dizer e voltar só ao reconhecimento' : 'Recomeçar do zero o treino de dizer'}
-      onClick={() =>
-        db.cards.update(card.id, { production: stage === 'seiDizer' ? undefined : freshSrs(now), updatedAt: now })
-      }
-    >
-      Voltar um estágio
-    </button>
-  );
-}
 
 function AddCardForm() {
   const [front, setFront] = useState('');

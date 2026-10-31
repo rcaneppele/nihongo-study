@@ -77,6 +77,10 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/features/flashcards/stages.ts` — estágios de vocabulário (Novo →
   Reconheço → Sei dizer → Domino), promoção para a direção de produção
   (`Card.production`) e fila do "Estudar" (`buildReviewQueue`).
+- `src/features/flashcards/vocabulary.ts` + `VocabularyMap.tsx` — aba
+  "Vocabulário" de `/flashcards`: deck N5 por categoria com estado de cada
+  palavra, % conhecido, "Aprender as próximas 10" e painel da palavra;
+  `StageControls.tsx` tem o rótulo/ação de estágio usados na lista e no mapa.
 - `src/features/srs/GradeButtons.tsx` — botões de nota das revisões
   (flash cards e kanji), com legenda de intervalo e atalhos; modo 2/4
   botões em `gradeMode.ts`.

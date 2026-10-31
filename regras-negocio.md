@@ -147,6 +147,42 @@ O **estágio** é derivado, nunca gravado:
 - **Praticar** ganhou a escolha de direção (Reconhecer/Dizer em japonês), válida
   pra qualquer card selecionado, independente do estágio — não grava nada.
 
+### Mapa de vocabulário (aba "Vocabulário")
+Aba de `/flashcards` (`VocabularyMap.tsx`, lógica em
+`src/features/flashcards/vocabulary.ts`), sobre o deck N5 **sem kanji**
+(`N5_DECK`, mesmo filtro do import). Não tem tabela própria: cruza o deck
+com `cards` (pela `front`) e `wordKnowledge` (pela chave).
+
+- **Estado de cada palavra**: Nova (sem card, não marcada) · Na fila (card
+  ainda não revisado) · Reconheço (card revisado, ou compreendida na
+  leitura, ou "Já sei" no mapa) · Sei dizer · Domino (estágios do card).
+  Cores: neutro → índigo claro → índigo → sage; `hanko` não é usado.
+- **% conhecido** do filtro = (Reconheço + Sei dizer + Domino) ÷ palavras.
+- **Ordem de utilidade** (`byUsefulness`), usada na grade, no "Aprender" e
+  na sugestão: em quantos textos de leitura a palavra aparece (mesma chave
+  do vocabulário passivo — frequência no próprio corpus do app); desempate
+  pela categoria em ordem "iniciante primeiro" (Saudações, Pronomes,
+  Números/tempo, Verbos, Adjetivos, Advérbios, Partículas, Substantivos) e
+  depois a ordem do deck. Hoje só ~25 das 155 palavras aparecem nos
+  textos, então o desempate pesa.
+- **"Aprender as próximas 10"**: cria cards (estado FSRS novo, mesmo formato
+  do import do N5) das 10 palavras Novas mais úteis do filtro; elas entram
+  em "Estudar" na hora. É a alternativa gradual ao import por categoria em
+  Config, que continua existindo.
+- **"Testar 10 que já conheço"**: prática livre (não grava nada) com até 10
+  palavras sorteadas entre as conhecidas, direção reconhecimento. Palavras
+  conhecidas sem card (leitura/"Já sei") entram como card transitório, não
+  gravado.
+- **Painel da palavra** (por padrão, a próxima mais útil ainda Nova):
+  leitura, significado, áudio, estado, textos de leitura em que aparece
+  (com link) e ações — "Aprender (criar card)" e "Já sei esta palavra"
+  (Nova); "Criar card" e, se marcada no próprio mapa, "Desmarcar já sei"
+  (Reconheço sem card); controle de estágio do card (com card).
+- **"Já sei"** grava em `wordKnowledge` com status `compreendida` e
+  `seenCount` 0 — entra nas "Palavras compreendidas" da Home. Só pode ser
+  desmarcado enquanto a palavra não aparece numa leitura concluída (aí o
+  registro passa a ser da leitura).
+
 ### Importação
 `parseCardsFile()` (`src/features/flashcards/importCards.ts`) detecta o
 formato pelo nome do arquivo/conteúdo e chama o parser certo:
