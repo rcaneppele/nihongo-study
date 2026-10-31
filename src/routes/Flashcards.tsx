@@ -8,6 +8,7 @@ import { buildReviewQueue, type Direction, type StudyItem } from '../features/fl
 import ProgressStats from '../features/flashcards/ProgressStats';
 import VocabularyMap from '../features/flashcards/VocabularyMap';
 import { StageAction, StageChip } from '../features/flashcards/StageControls';
+import { NoteEditor } from '../features/flashcards/CardNote';
 import AudioButton from '../components/AudioButton';
 
 type TabKey = 'estudar' | 'vocabulario' | 'progresso';
@@ -187,7 +188,7 @@ export default function Flashcards() {
 
             <ul className="space-y-2">
               {visible.map((card) => (
-                <li key={card.id} className="card-surface flex items-center justify-between gap-4">
+                <li key={card.id} className="card-surface flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
                   <div className="flex items-center">
                     <span className="font-jp text-lg">{card.front}</span>
                     <AudioButton text={card.front} size="sm" />
@@ -201,6 +202,7 @@ export default function Flashcards() {
                     <StageChip card={card} />
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
+                    <NoteEditor key={card.updatedAt} card={card} />
                     <StageAction card={card} />
                     <button
                       className="text-sm text-sage hover:text-hanko"
@@ -342,6 +344,7 @@ function AddCardForm() {
   const [back, setBack] = useState('');
   const [reading, setReading] = useState('');
   const [category, setCategory] = useState('');
+  const [note, setNote] = useState('');
 
   async function add() {
     if (!front.trim() || !back.trim()) return;
@@ -352,6 +355,7 @@ function AddCardForm() {
       back: back.trim(),
       reading: reading.trim() || undefined,
       category: category.trim() || undefined,
+      note: note.trim() || undefined,
       tags: [],
       ...freshSrs(now),
       createdAt: now,
@@ -362,6 +366,7 @@ function AddCardForm() {
     setBack('');
     setReading('');
     setCategory('');
+    setNote('');
   }
 
   return (
@@ -390,6 +395,18 @@ function AddCardForm() {
             Categoria (opcional)
           </label>
           <input id="category" className="field" value={category} onChange={(e) => setCategory(e.target.value)} />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="label" htmlFor="note">
+            Nota (opcional)
+          </label>
+          <input
+            id="note"
+            className="field"
+            placeholder="Origem da palavra, uso, falso amigo…"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
         </div>
       </div>
       <button className="btn-primary" onClick={add} disabled={!front.trim() || !back.trim()}>

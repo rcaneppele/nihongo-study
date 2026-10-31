@@ -81,6 +81,9 @@ toda mudança pede bump; julgue pelo impacto:
   "Vocabulário" de `/flashcards`: deck N5 por categoria com estado de cada
   palavra, % conhecido, "Aprender as próximas 10" e painel da palavra;
   `StageControls.tsx` tem o rótulo/ação de estágio usados na lista e no mapa.
+- `src/features/flashcards/note.ts` + `CardNote.tsx` — nota de origem/uso
+  do card (`Card.note`, com a nota do deck N5 como reserva), exibição e
+  edição.
 - `src/features/srs/GradeButtons.tsx` — botões de nota das revisões
   (flash cards e kanji), com legenda de intervalo e atalhos; modo 2/4
   botões em `gradeMode.ts`.

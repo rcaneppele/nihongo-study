@@ -38,6 +38,12 @@ export interface Card {
   example?: CardExample;
   source?: CardSource;
   /**
+   * Nota de origem/uso (ex.: "vem do português 'pão'"), exibida no verso.
+   * String vazia = o usuário apagou a nota de propósito (esconde também a
+   * nota do deck N5 — ver `cardNote`).
+   */
+  note?: string;
+  /**
    * Estado FSRS da direção de **produção** (português → japonês), separado
    * do reconhecimento (campos de SRS abaixo, japonês → português). Só existe
    * a partir do estágio "Sei dizer" — ver src/features/flashcards/stages.ts.

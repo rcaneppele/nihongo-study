@@ -305,7 +305,14 @@ num app de um usuário.
 estudo (ou reaproveitar `wordKnowledge`/textos lidos de 3.4).
 **Esforço:** baixo.
 
-### 3.10 Notas de origem/etimologia no card — prioridade baixa
+### 3.10 Notas de origem/etimologia no card — ✅ implementado (branch experimental)
+
+Campo opcional `Card.note`, exibido no verso e no mapa de vocabulário,
+editável na lista de cards. Conteúdo inicial: ~40 notas no deck N5
+(empréstimos do português, falsos amigos, homônimos, usos que confundem
+lusófonos), que também aparecem em cards já importados. Detalhes em
+`regras-negocio.md` §1.
+
 
 O módulo de Kanji já tem radical/mnemônico. Estender para o vocabulário um
 campo opcional `nota` no card (composição do kanji, origem de gairaigo/
@@ -386,7 +393,12 @@ poucos, não feature técnica.
    desenhar com calma e documentar em `regras-negocio.md`.
 5. ✅ **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
    vocabulário) — ✅ ambos feitos.
-6. ✅ **3.7**; ✅ **3.8**; ✅ **3.9**, **3.10** conforme houver conteúdo/tempo.
+6. ✅ **3.7**; ✅ **3.8**; ✅ **3.9**; ✅ **3.10**.
+
+Pendências abertas na branch: frases novas por lição para o "Diga em
+japonês" (3.7), `lemma` nos textos de leitura (3.4) e itens de UI da seção
+4 ainda não feitos (agrupar a navegação, Home orientada a "o que fazer
+agora").
 
 Ajustes de UI da seção 4 entram junto com a feature que mexe na mesma tela.
 

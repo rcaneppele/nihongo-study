@@ -16,6 +16,13 @@ comportamento devem ser refletidas aqui.
   da frase, "Ver tradução da frase" sob demanda e "Leitura · título"
   (`CardExampleView.tsx`; a origem é só texto, não link, pra não perder a
   sessão em andamento).
+- Opcionalmente, **nota** (`note`): origem/uso da palavra (empréstimo do
+  português, falso amigo, homônimo…), exibida no verso do card nas duas
+  direções e no painel do mapa de vocabulário. Se o card não tem `note`
+  própria, vale a nota do deck N5 pela frente (`cardNote`, `n5Note`) — assim
+  cards importados antes das notas também as mostram. Editável na lista de
+  cards ("Nota"/"+ Nota") e no formulário de novo card; salvar vazio grava
+  `''`, que esconde inclusive a nota do N5.
 - Categoria é o eixo principal de filtro na tela de estudo.
 
 ### Lista de cards (aba "Estudar")
@@ -216,6 +223,11 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   repetir em kana no verso não ajudaria; nas ~555 entradas com kanji
   (hoje filtradas), `reading` continua em hiragana, já que ali serve de
   furigana pro kanji.
+- **Notas do deck** (`note` em `n5.json`): ~40 entradas sem kanji têm nota
+  — empréstimos do português (パン, ボタン, たばこ), falsos amigos
+  (ストーブ, ノート, アパート), abreviações e homônimos (デパート, コート,
+  マッチ) e palavras nativas com uso que confunde lusófonos (あなた, はい,
+  いいえ, ちょっと, はく/かぶる). Notas sem kanji, mesma regra das lições.
 - Em Config > Dados > "Vocabulário N5" (`src/routes/Config.tsx`), o usuário
   marca quais categorias quer e importa só essas — evita popular a fila de
   revisão com centenas de cards de uma vez só. Antes de importar, o app

@@ -5,6 +5,8 @@ import { db } from '../../db/schema';
 import { n5CategoryCounts } from '../../data/seed/n5';
 import AudioButton from '../../components/AudioButton';
 import { StageAction } from './StageControls';
+import { NoteBox } from './CardNote';
+import { cardNote } from './note';
 import type { StudyItem } from './stages';
 import {
   buildVocabulary,
@@ -172,6 +174,8 @@ function WordPanel({ word, isSuggestion }: { word: VocabWord; isSuggestion: bool
         <p className="text-sm text-sage">{entry.reading}</p>
         <p className="mt-1 text-lg">{entry.back}</p>
       </div>
+
+      {(card ? cardNote(card) : entry.note) && <NoteBox note={(card ? cardNote(card) : entry.note)!} />}
 
       <p className="text-sm">
         <span className="text-sage">Estado: </span>

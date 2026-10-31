@@ -7,6 +7,8 @@ import Furigana from '../../components/Furigana';
 import SessionHeader from '../../components/SessionHeader';
 import { useShortcuts } from '../../lib/useShortcuts';
 import CardExampleView from './CardExampleView';
+import { NoteBox } from './CardNote';
+import { cardNote } from './note';
 import { promotedProduction, type StudyItem } from './stages';
 import { registrarAtividade } from '../atividade/atividade';
 import { State } from 'ts-fsrs';
@@ -50,6 +52,7 @@ export default function StudySession({
   const item = items[index];
   const card = item?.card;
   const isProduction = item?.direction === 'production';
+  const note = card ? cardNote(card) : undefined;
   const canUndo = index > 0 && !grading;
 
   function advance() {
@@ -178,6 +181,11 @@ export default function StudySession({
                   <AudioButton text={card.front} />
                 </div>
                 {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
+                {note && (
+                  <div className="mt-4">
+                    <NoteBox note={note} />
+                  </div>
+                )}
                 {card.example && (
                   <div className="mt-4">
                     <CardExampleView example={card.example} source={card.source} />
@@ -196,6 +204,11 @@ export default function StudySession({
               <div className="mt-4 border-t border-line pt-4">
                 {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
                 <p className="text-xl">{card.back}</p>
+                {note && (
+                  <div className="mt-4">
+                    <NoteBox note={note} />
+                  </div>
+                )}
                 {card.example && (
                   <div className="mt-4">
                     <CardExampleView example={card.example} source={card.source} />

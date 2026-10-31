@@ -277,7 +277,8 @@
   "tags": [
    "n5",
    "pronome-interrogativo"
-  ]
+  ],
+  "note": "Cuidado: em japonês quase não se chama alguém de \"você\". Prefira o nome + さん. あなた pode soar distante ou até íntimo (esposas já usaram para chamar o marido)."
  },
  {
   "front": "兄",
@@ -307,7 +308,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Abreviação de \"apartment\". Costuma indicar prédio baixo e simples de aluguel; prédio de apartamentos mais moderno/de alto padrão é マンション — que não quer dizer \"mansão\"."
  },
  {
   "front": "あの",
@@ -447,7 +449,8 @@
   "tags": [
    "n5",
    "saudacao-expressao"
-  ]
+  ],
+  "note": "Na prática, um \"não\" seco soa duro. Para recusar, é comum dizer ちょっと… e deixar a frase no ar."
  },
  {
   "front": "言う",
@@ -497,7 +500,8 @@
   "tags": [
    "n5",
    "pronome-interrogativo"
-  ]
+  ],
+  "note": "\"Quantos?\" — quantidade. Também é usado para perguntar a idade: おいくつですか (educado)."
  },
  {
   "front": "いくら",
@@ -507,7 +511,8 @@
   "tags": [
    "n5",
    "pronome-interrogativo"
-  ]
+  ],
+  "note": "\"Quanto custa?\" — preço. Para quantidade de coisas, use いくつ."
  },
  {
   "front": "池",
@@ -807,7 +812,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "A casa (o lar, geralmente a própria). Também quer dizer \"nós/o nosso grupo\" — うちのかいしゃ = a nossa empresa."
  },
  {
   "front": "生まれる",
@@ -1327,7 +1333,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Jeito afetuoso de chamar o policial de bairro, que fica nos postinhos policiais (こうばん) espalhados pelas cidades."
  },
  {
   "front": "重い",
@@ -1587,7 +1594,8 @@
   "tags": [
    "n5",
    "verbo"
-  ]
+  ],
+  "note": "Verbo de muitos sentidos: ligar (でんわをかける), pôr óculos (めがねをかける), sentar (こしをかける)."
  },
  {
   "front": "傘",
@@ -1687,7 +1695,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Do inglês \"cup\": xícara ou caneca, normalmente com alça. Copo de vidro é コップ."
  },
  {
   "front": "家庭",
@@ -1737,7 +1746,8 @@
   "tags": [
    "n5",
    "verbo"
-  ]
+  ],
+  "note": "Pôr algo na cabeça (chapéu, boné). Compare: きる (parte de cima), はく (cintura para baixo e pés)."
  },
  {
   "front": "紙",
@@ -1827,7 +1837,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "O curry japonês (カレーライス) é espesso e mais adocicado que o indiano — um dos pratos caseiros mais populares do Japão."
  },
  {
   "front": "カレンダー",
@@ -1947,7 +1958,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Serve tanto para violão quanto para guitarra. Para deixar claro: アコースティックギター (violão) e エレキギター (guitarra elétrica)."
  },
  {
   "front": "汚い",
@@ -2117,7 +2129,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Pode ser quilograma ou quilômetro — o contexto decide. Por extenso: キログラム / キロメートル."
  },
  {
   "front": "キロメートル",
@@ -2487,7 +2500,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Casaco/sobretudo (\"coat\"). A mesma palavra também é quadra esportiva (\"court\")."
  },
  {
   "front": "コーヒー",
@@ -2587,7 +2601,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Copo (de vidro, sem alça). Origem provável no holandês \"kop\"; há quem aponte o português \"copo\". Não confunda com カップ (xícara/caneca, do inglês \"cup\")."
  },
  {
   "front": "今年",
@@ -3367,7 +3382,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Falso amigo: vem do inglês \"stove\", mas em japonês é aquecedor de ambiente (a gás, querosene ou elétrico), não fogão."
  },
  {
   "front": "スプーン",
@@ -3397,7 +3413,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Vem do francês \"jupon\" (anágua). Hoje também se ouve パンツ para calça, sobretudo entre os mais jovens e na moda."
  },
  {
   "front": "住む",
@@ -3887,7 +3904,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Vem do português \"tabaco\". Apesar da origem estrangeira, costuma ser escrita em hiragana. Hoje quer dizer principalmente \"cigarro\"."
  },
  {
   "front": "多分",
@@ -4087,7 +4105,8 @@
   "tags": [
    "n5",
    "adverbio"
-  ]
+  ],
+  "note": "Além de \"um pouco\", é a forma educada de recusar: ちょっと… sozinho já quer dizer \"não dá\"."
  },
  {
   "front": "使う",
@@ -4237,7 +4256,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Mesa de refeição/sala. Escrivaninha de estudo ou trabalho é つくえ."
  },
  {
   "front": "出かける",
@@ -4307,7 +4327,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Abreviação de \"department store\". As grandes デパート costumam ter um andar subterrâneo de comidas, a デパちか."
  },
  {
   "front": "でも",
@@ -4337,7 +4358,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Abreviação de テレビジョン (\"television\"). O japonês encurta muito as palavras estrangeiras."
  },
  {
   "front": "天気",
@@ -4417,7 +4439,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "De \"toilet\": o banheiro como cômodo. Forma mais educada: おてあらい."
  },
  {
   "front": "どう",
@@ -5057,7 +5080,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "De \"notebook\", mas significa caderno. O computador portátil é ノートパソコン."
  },
  {
   "front": "登る",
@@ -5127,7 +5151,8 @@
   "tags": [
    "n5",
    "saudacao-expressao"
-  ]
+  ],
+  "note": "Além de \"sim\", serve para mostrar que você está ouvindo (\"certo\", \"aham\") — não significa necessariamente concordar."
  },
  {
   "front": "～杯",
@@ -5177,7 +5202,8 @@
   "tags": [
    "n5",
    "verbo"
-  ]
+  ],
+  "note": "Vestir da cintura para baixo (calça, saia) e calçar (sapato, meia). Parte de cima do corpo é きる; cabeça é かぶる."
  },
  {
   "front": "箱",
@@ -5257,7 +5283,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Ônibus (\"bus\"). Também é \"banho\" (\"bath\") em compostos como バスタオル (toalha de banho)."
  },
  {
   "front": "バター",
@@ -5457,7 +5484,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Vem do português \"pão\" — chegou ao Japão no século XVI com os comerciantes e missionários portugueses."
  },
  {
   "front": "ハンカチ",
@@ -5467,7 +5495,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "De \"handkerchief\", encurtado. Muito usada no Japão para secar as mãos, porque muitos banheiros públicos não têm papel nem secador."
  },
  {
   "front": "番号",
@@ -5697,7 +5726,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Rolo de filme (fotografia/cinema), o material. \"Filme\" no sentido de obra de cinema é えいが."
  },
  {
   "front": "封筒",
@@ -5957,7 +5987,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "De \"ball-point pen\" — caneta esferográfica."
  },
  {
   "front": "ポケット",
@@ -5987,7 +6018,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Caixa de correio da rua (as vermelhas). A caixa de correspondência da casa é ゆうびんうけ."
  },
  {
   "front": "細い",
@@ -6007,7 +6039,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Vem do português \"botão\", da mesma época dos primeiros contatos com os portugueses (século XVI)."
  },
  {
   "front": "ホテル",
@@ -6167,7 +6200,8 @@
   "tags": [
    "n5",
    "adjetivo"
-  ]
+  ],
+  "note": "Comida ruim/sem gosto. Também quer dizer \"situação complicada\", como \"deu ruim\"."
  },
  {
   "front": "また",
@@ -6227,7 +6261,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Fósforo (\"match\"). Também aparece como \"partida\" esportiva, mas nesse sentido é mais comum しあい."
  },
  {
   "front": "窓",
@@ -6527,7 +6562,8 @@
   "tags": [
    "n5",
    "saudacao-expressao"
-  ]
+  ],
+  "note": "É o \"alô\" do telefone — não se usa para cumprimentar pessoalmente."
  },
  {
   "front": "持つ",
@@ -6677,7 +6713,8 @@
   "tags": [
    "n5",
    "verbo"
-  ]
+  ],
+  "note": "Versão casual de する (\"fazer\"). Também é \"dar\" para alguém de posição inferior, animais ou plantas (dar água às plantas)."
  },
  {
   "front": "夕方",
@@ -6897,7 +6934,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Rádio com toca-fitas. A forma mais usada é a abreviação ラジカセ."
  },
  {
   "front": "りっぱ",
@@ -7027,7 +7065,8 @@
   "tags": [
    "n5",
    "substantivo"
-  ]
+  ],
+  "note": "Do inglês \"white shirt\", mas vale para qualquer camisa social de botão, de qualquer cor."
  },
  {
   "front": "若い",
