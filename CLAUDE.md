@@ -141,6 +141,9 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/features/diga/` + `src/routes/Diga.tsx` — "Diga em japonês"
   (`/licoes/diga`): português → dizer a frase em japonês → conferir,
   usando as `quiz.frases` das lições; frases erradas podem virar cards.
+- `src/features/pontos-fracos/pontosFracos.ts` + `src/routes/PontosFracos.tsx`
+  — "Pontos fracos" (`/pontos-fracos`): o que mais erra em cards, kana,
+  kanji e leitura, com treino em prática livre.
 - `src/licoes/index.ts` — registro central das lições (`LICOES`): cada entrada
   tem `meta` (id, título, subtítulo, emoji, tags) e um `Component` React.
 - `src/licoes/*.tsx` — uma lição por arquivo (ex.: `kosoado.tsx`,

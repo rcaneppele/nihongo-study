@@ -43,7 +43,7 @@ export default function Home() {
         <Stat label="Kanji aprendidos" value={`${kanjiLearned}/${KANJI_N5.length}`} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Action
           to="/flashcards"
           title="Revisar flash cards"
@@ -57,6 +57,7 @@ export default function Home() {
         />
         <Action to="/leitura" title="Ler japonês" desc={`${LEITURA_TEXTOS.length} textos, com furigana`} />
         <Action to="/licoes" title="Lições" desc={`${LICOES.length} assuntos disponíveis`} />
+        <Action to="/pontos-fracos" title="Pontos fracos" desc="O que você mais erra, para reforçar" />
       </div>
     </div>
   );

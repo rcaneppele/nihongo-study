@@ -270,7 +270,13 @@ quisermos revisão espaçada de frases.
 
 **Esforço:** médio, quase todo de conteúdo.
 
-### 3.8 Aba "Meus erros" unificada — prioridade média (→ roadmap §4 "revisão de erros")
+### 3.8 Aba "Meus erros" unificada — ✅ implementado (branch experimental), como "Pontos fracos"
+
+Virou a tela `/pontos-fracos` (atalho na Home), não uma aba: junta módulos
+diferentes. Treino em prática livre (não mexe na agenda), misturando as
+origens. Quiz e "Diga em japonês" ficaram de fora por não guardarem
+histórico. Detalhes em `regras-negocio.md` §5b.
+
 
 **O quê:** uma lista única dos itens mais errados em **todos os módulos** —
 cards com mais `lapses`, kana com pior `romajiWrong/choiceWrong`, kanji com
@@ -373,7 +379,7 @@ poucos, não feature técnica.
    desenhar com calma e documentar em `regras-negocio.md`.
 5. ✅ **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
    vocabulário) — ✅ ambos feitos.
-6. ✅ **3.7**; **3.8**, **3.9**, **3.10** conforme houver conteúdo/tempo.
+6. ✅ **3.7**; ✅ **3.8**; **3.9**, **3.10** conforme houver conteúdo/tempo.
 
 Ajustes de UI da seção 4 entram junto com a feature que mexe na mesma tela.
 

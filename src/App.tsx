@@ -12,6 +12,7 @@ import Licao from './routes/Licao';
 import Quiz from './routes/Quiz';
 import Kakitori from './routes/Kakitori';
 import Diga from './routes/Diga';
+import PontosFracos from './routes/PontosFracos';
 import Config from './routes/Config';
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/licoes/kakitori" element={<Kakitori />} />
         <Route path="/licoes/diga" element={<Diga />} />
         <Route path="/licoes/:id" element={<Licao />} />
+        <Route path="/pontos-fracos" element={<PontosFracos />} />
         <Route path="/config" element={<Config />} />
       </Routes>
     </Layout>

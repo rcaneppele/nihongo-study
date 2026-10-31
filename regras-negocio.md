@@ -553,6 +553,34 @@ Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
 2. Importe e registre no array `LICOES` em `src/licoes/index.ts`.
 3. Não é necessário alterar rotas — o roteamento é dinâmico pelo `id`.
 
+## 5b. Pontos fracos
+
+`/pontos-fracos` (`src/routes/PontosFracos.tsx`, lógica em
+`src/features/pontos-fracos/pontosFracos.ts`), com atalho na Home. Junta o
+que o usuário mais erra em cada módulo, **só lendo dados que já existem**
+— nenhuma tabela nova, nada gravado.
+
+| Origem | Entra quando | Ordem (mais fraco primeiro) |
+|---|---|---|
+| Flash cards | `lapses` (reconhecimento) + `production.lapses` > 0 | lapsos totais, desempate pela `difficulty` do FSRS |
+| Kana | errou ≥ 1× e acerto < 85% (somando "digitar romaji" e "múltipla escolha") | menor taxa de acerto, depois mais erros |
+| Kanji | `lapses` > 0 no `kanjiProgress` | lapsos, desempate pela `difficulty` |
+| Leitura | `wordKnowledge.status === 'consultada'` (consultou na leitura mais recente) | mais consultas |
+
+Quiz e "Diga em japonês" não guardam histórico, então não entram.
+
+- Cada origem lista os 8 mais fracos (com "Mostrar todos") e o desempenho
+  ("esqueceu 3×", "acerto 40% · errou 5×", "consultou em 2 de 3
+  leituras").
+- **Treino = prática livre** (`StudySession` em modo `practice`): não mexe
+  no FSRS nem em `reviews`/`kanaProgress`. "Treinar meus pontos fracos"
+  mistura até 20 itens alternando as origens (um de cada por vez, pra não
+  virar só kana); "Treinar só estes" usa até 20 de uma origem. Kana, kanji
+  e palavras da leitura entram como cards transitórios (não gravados):
+  kana → romaji; kanji → significado + leituras; palavra → significado.
+  Cards cuja maior parte dos lapsos é na produção são treinados na direção
+  "dizer em japonês".
+
 ## 6. Dados e sincronização
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
