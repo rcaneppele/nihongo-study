@@ -106,6 +106,9 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/routes/Leitura.tsx` / `LeituraTexto.tsx` — listagem por nível e tela
   de leitura (`/leitura`, `/leitura/:id`): toggle de furigana, cartão de
   palavra selecionada, `AudioButton` por linha.
+- `src/features/leitura/useReadAloud.ts` + `ReadAloudBar.tsx` — "ouvir o
+  texto" na leitura (contínuo ou shadowing, linha destacada, escutar
+  primeiro); velocidade da fala global em `src/features/audio/speech.ts`.
 - `src/lib/useHoldToPauseAdvance.ts` — hook do auto-avanço cronometrado do
   treino de kana (barra de progresso; segurar a tela pausa a contagem).
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/

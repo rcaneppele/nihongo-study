@@ -338,6 +338,27 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - **Sem progresso persistido** nesta entrega — mesmo estado das lições
   ("não há progresso rastreado por lição, por ora"): é conteúdo estático,
   sem tabela nova no Dexie.
+- **Ouvir o texto** (`ReadAloudBar.tsx` + `useReadAloud.ts`, em
+  `src/features/leitura/`): lê as linhas em sequência via
+  `speakJapaneseAndWait()`, destacando a linha atual e rolando até ela.
+  - **Pausar** cancela a fala e lembra a linha; **Continuar** recomeça
+    essa linha (não usa `speechSynthesis.pause()`, instável no Android);
+    **Do início** reinicia. Sair da tela para a leitura.
+  - Qualquer outra fala no meio (botão de áudio de uma linha/palavra)
+    interrompe a leitura, que fica pausada naquela linha — `speech.ts`
+    numera cada fala (`generation`) pra quem espera saber que foi
+    interrompido, em vez de seguir pra próxima linha por cima.
+  - **Modo Shadowing**: depois de cada linha, pausa de 1,2× o tempo que a
+    linha levou (mínimo 1,5 s), com aviso "Sua vez — repita a frase em voz
+    alta" e barra de contagem. Sem reconhecimento de fala; a conferência é
+    de ouvido. O modo não muda durante a reprodução.
+  - **Escutar primeiro**: borra o texto (palavras e botão PT ficam
+    inclicáveis; o áudio por linha continua) até o usuário tocar "Mostrar
+    texto". Estado só da tela, não persistido.
+  - **Velocidade** (Normal 0,9 / Lenta 0,65): global — vale pra todo áudio
+    do app (AudioButton, kakitori, leitura). `db.meta`, chave
+    `speechSpeed`, entra no backup; `speech.ts` mantém em cache pra não
+    ler o banco a cada fala.
 - **Salvar palavra nos flash cards** (`SaveWordForm.tsx` +
   `src/features/flashcards/mining.ts`): o cartão da palavra tocada mostra
   "+ Salvar nos flash cards" (só em palavras com `meaning` — partículas

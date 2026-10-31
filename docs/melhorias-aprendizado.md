@@ -196,7 +196,11 @@ em seguida — hoje o vocabulário só existe como cards soltos.
 **Esforço:** médio. Depende de 3.3 para as cores de estágio fazerem sentido
 (dá para começar com "novo / em estudo / maduro" com o FSRS atual).
 
-### 3.6 Modo escuta e "ler acompanhando" nos textos — prioridade média
+### 3.6 Modo escuta e "ler acompanhando" nos textos — ✅ implementado (branch experimental)
+
+Feito como descrito abaixo. A velocidade ficou global (vale pra todo áudio
+do app, não só a leitura). Detalhes em `regras-negocio.md` §4.
+
 
 - **Tocar texto inteiro**, linha a linha, com a **linha atual destacada**
   (karaokê por frase — `SpeechSynthesis` dispara `onend` por utterance, e o
@@ -329,7 +333,7 @@ poucos, não feature técnica.
 1. ✅ **3.1** (revisão mais leve).
 2. ✅ **3.2** (salvar palavra da leitura com contexto) — fecha o ciclo
    leitura → SRS.
-3. **3.6** (modo escuta/shadowing) — barato e dá uso novo aos 30 textos.
+3. ✅ **3.6** (modo escuta/shadowing) — barato e dá uso novo aos 30 textos.
 4. **3.3** (estágios Reconheço/Produzo/Domino) — a mudança estrutural;
    desenhar com calma e documentar em `regras-negocio.md`.
 5. **3.4** (passivo implícito + % conhecido) e **3.5** (mapa de
