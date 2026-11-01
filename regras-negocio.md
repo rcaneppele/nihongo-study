@@ -839,6 +839,20 @@ de 0).
   mesclagem traria de volta tudo o que foi substituído.
 - **Relógio do aparelho**: as regras dependem das datas de cada aparelho;
   um relógio muito errado pode fazer uma alteração antiga vencer.
+- **Sincronizar com arquivo** (Config › Dados, "Sincronizar entre
+  aparelhos"): escolher o arquivo do outro aparelho mescla (modo Mesclar) e
+  gera o arquivo juntado, que a pessoa baixa ou compartilha pra levar de
+  volta. O arquivo não é baixado sozinho depois da mesclagem: o navegador
+  só permite baixar/compartilhar logo depois de um toque da pessoa.
+- **Compartilhar** (celular): `navigator.share` com o arquivo. O Chrome só
+  compartilha alguns tipos de arquivo; se não aceitar `.json`, vai como
+  `.txt` (mesmo conteúdo — o importar aceita os dois). Sem suporte, o botão
+  não aparece.
+- **Lembrete de backup**: `local.lastBackupAt` (só deste aparelho) é gravado
+  ao exportar, compartilhar ou salvar o arquivo sincronizado. A Home mostra
+  um aviso discreto depois de 7 dias sem backup (contando do primeiro dia
+  com atividade, se nunca houve backup); Config › Dados mostra a data do
+  último.
 - **UUID como chave** é obrigatório para a mesclagem funcionar sem colisão.
 - `schemaVersion` no backup permite migração futura na importação —
   migrações são incrementais por versão em `migrateBackup`

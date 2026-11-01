@@ -23,8 +23,9 @@ type Entradas = Record<string, Entrada>;
 function entradas(row: Record<string, unknown>, campos: readonly string[]): Entradas {
   if (row.porAparelho) return row.porAparelho as Entradas;
   const legado: Entrada = { updatedAt: 0 };
-  for (const c of campos) if (row[c] !== undefined) legado[c] = row[c] as number;
-  return { [LEGADO]: legado };
+  for (const c of campos) if (row[c]) legado[c] = row[c] as number;
+  // Registro novo (tudo zerado) não tem legado nenhum.
+  return Object.keys(legado).length > 1 ? { [LEGADO]: legado } : {};
 }
 
 function totais(por: Entradas, campos: readonly string[]): Record<string, number> {

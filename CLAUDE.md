@@ -72,6 +72,9 @@ toda mudança pede bump; julgue pelo impacto:
   aparelho, `setMeta()` (toda gravação em `db.meta`) e `apagar()` (toda
   exclusão de card/review/`wordKnowledge`, com lápide). Ver
   `regras-negocio.md` §6.
+- `src/features/backup/` — lembrete de backup da Home (`LembreteBackup`,
+  `useEstadoBackup`); o "Sincronizar com arquivo" e o compartilhar ficam em
+  `src/routes/Config.tsx` (aba Dados) + `shareBackup()` em `backup.ts`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
   `regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo

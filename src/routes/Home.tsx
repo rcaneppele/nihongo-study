@@ -9,6 +9,7 @@ import { PESO_LEITURA, useMetaDiaria, useResumoDia, type ResumoDia } from '../fe
 import { SECOES, type Secao, type SecaoId } from '../features/metodo/estrutura';
 import { usePendencias } from '../features/metodo/pendencias';
 import PlanoDoDia from '../features/metodo/PlanoDoDia';
+import LembreteBackup from '../features/backup/LembreteBackup';
 import ProgressRing from '../components/ProgressRing';
 import { TILE, type Cor } from '../lib/cores';
 
@@ -43,6 +44,8 @@ export default function Home() {
           <PlanoDoDia hoje={resumo.hoje} />
         </div>
       )}
+
+      <LembreteBackup />
 
       <section className="pt-3">
         <h2 className="mb-3 font-semibold">Seu método</h2>

@@ -1,8 +1,8 @@
 # Proposta — sincronização automática entre aparelhos (Google Drive)
 
 > **Status: em implementação** (branch `feature/sync-google-drive`).
-> Registrada em nov/2026. **Fase 1 (base de dados) feita** — ver
-> `regras-negocio.md` §6. Decisões tomadas na implementação:
+> Registrada em nov/2026. **Fases 1 (base de dados) e 2 (sincronização
+> manual melhorada) feitas** — ver `regras-negocio.md` §6. Decisões tomadas na implementação:
 > - além do previsto na §3: contadores por aparelho (`kanaProgress`,
 >   `activity`, `wordKnowledge`, `readingProgress` — antes um lado
 >   sobrescrevia o outro), carimbo por grupo de campos no card (editar a

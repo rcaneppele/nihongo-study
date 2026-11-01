@@ -23,6 +23,19 @@ export function getDeviceId(): Promise<string> {
   return deviceIdCache;
 }
 
+const LAST_BACKUP_KEY = 'lastBackupAt';
+
+/** Registra que um backup deste aparelho foi salvo ou compartilhado agora. */
+export function marcarBackup() {
+  return db.local.put({ key: LAST_BACKUP_KEY, value: Date.now() });
+}
+
+/** Quando foi o último backup deste aparelho (`undefined` = nunca). */
+export async function ultimoBackup(): Promise<number | undefined> {
+  const entry = await db.local.get(LAST_BACKUP_KEY);
+  return typeof entry?.value === 'number' ? entry.value : undefined;
+}
+
 /** Grava uma preferência (`db.meta`) com a data de alteração. */
 export function setMeta(key: string, value: unknown) {
   return db.meta.put({ key, value, updatedAt: Date.now() });

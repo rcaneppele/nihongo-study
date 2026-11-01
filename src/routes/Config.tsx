@@ -1,12 +1,22 @@
-import { BookOpen, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, TriangleAlert, Upload, User } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, Share2, TriangleAlert, Upload, User } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { db, newId } from '../db/schema';
-import { novaEpoca } from '../db/local';
+import { marcarBackup, novaEpoca } from '../db/local';
 import { freshSrs } from '../features/srs/fsrs';
-import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
+import {
+  exportData,
+  downloadBackup,
+  parseBackup,
+  importData,
+  canShareBackup,
+  shareBackup,
+  type BackupFile,
+  type ImportMode,
+} from '../db/backup';
+import { haQuantoTempo, useEstadoBackup } from '../features/backup/lembrete';
 import { parseCardsFile } from '../features/flashcards/importCards';
 import { useTheme, type ThemeMode } from '../lib/useTheme';
 import { setGradeMode, useGradeMode, type GradeMode } from '../features/srs/gradeMode';
@@ -71,18 +81,57 @@ function asTabKey(value: string | null): TabKey | null {
   return TABS.some((t) => t.key === value) ? (value as TabKey) : null;
 }
 
+/** O backup compartilhado pode ter virado .txt (ver `shareBackup`) — o conteúdo é o mesmo. */
+const BACKUP_ACCEPT = 'application/json,.json,text/plain,.txt';
+
 function DadosTab() {
   const [mode, setMode] = useState<ImportMode>('replace');
   const [msg, setMsg] = useState<string | null>(null);
   const [cardsHelpOpen, setCardsHelpOpen] = useState(false);
   const [backupHelpOpen, setBackupHelpOpen] = useState(false);
   const backupInput = useRef<HTMLInputElement>(null);
+  const syncInput = useRef<HTMLInputElement>(null);
   const cardsInput = useRef<HTMLInputElement>(null);
+  const [podeCompartilhar] = useState(canShareBackup);
+  const estadoBackup = useEstadoBackup();
+  // Arquivo já mesclado de "Sincronizar com arquivo", esperando a pessoa salvar/compartilhar.
+  // Não dá pra baixar sozinho: depois de ler e mesclar, o navegador já não considera mais
+  // que foi um toque da pessoa e pode bloquear o download/compartilhamento.
+  const [mesclado, setMesclado] = useState<BackupFile | null>(null);
 
   async function handleExport() {
-    const data = await exportData();
-    downloadBackup(data);
+    downloadBackup(await exportData());
+    await marcarBackup();
     setMsg('Backup exportado.');
+  }
+
+  async function handleShare(backup?: BackupFile) {
+    try {
+      if (await shareBackup(backup ?? (await exportData()))) {
+        await marcarBackup();
+        setMsg('Backup compartilhado.');
+        setMesclado(null);
+      }
+    } catch (err) {
+      setMsg(`Erro: ${(err as Error).message}`);
+    }
+  }
+
+  async function handleSyncFile(file: File) {
+    try {
+      await importData(parseBackup(await file.text()), 'merge');
+      setMesclado(await exportData());
+      setMsg(null);
+    } catch (err) {
+      setMsg(`Erro: ${(err as Error).message}`);
+    }
+  }
+
+  async function handleSaveMerged(backup: BackupFile) {
+    downloadBackup(backup);
+    await marcarBackup();
+    setMesclado(null);
+    setMsg('Arquivo sincronizado salvo. Leve-o ao outro aparelho e use "Sincronizar com arquivo" lá também.');
   }
 
   async function handleImportBackup(file: File) {
@@ -175,9 +224,52 @@ function DadosTab() {
   return (
     <div className="space-y-6">
       <p className="text-sm text-sage">
-        Sem servidor: exporte num aparelho e importe no outro para sincronizar. O backup também
-        protege contra perda de dados.
+        Sem servidor: os dados ficam só neste aparelho. Use um arquivo para levar o progresso para outro
+        aparelho e como cópia de segurança.
       </p>
+
+      <section className="card-surface space-y-3">
+        <SectionTitle icon={<ArrowLeftRight className="h-4 w-4" />} cor="sora">
+          Sincronizar entre aparelhos
+        </SectionTitle>
+        <ol className="list-decimal space-y-1 pl-5 text-sm text-sage">
+          <li>No outro aparelho, exporte (ou compartilhe) o backup.</li>
+          <li>
+            Aqui, toque em <span className="font-medium text-ink">Sincronizar com arquivo</span> e escolha esse
+            arquivo: o que há nos dois lados é juntado (nada se perde) e sai um arquivo novo.
+          </li>
+          <li>Leve o arquivo novo de volta ao outro aparelho e sincronize lá com ele.</li>
+        </ol>
+        {mesclado ? (
+          <div className="space-y-2 rounded-xl bg-sora/8 px-4 py-3">
+            <p className="text-sm text-ink">Dados juntados. Agora salve o arquivo novo para levar ao outro aparelho:</p>
+            <div className="flex flex-wrap gap-2">
+              {podeCompartilhar && (
+                <button className="btn-primary" onClick={() => handleShare(mesclado)}>
+                  <Share2 className="h-4 w-4" /> Compartilhar
+                </button>
+              )}
+              <button className={podeCompartilhar ? 'btn-ghost' : 'btn-primary'} onClick={() => handleSaveMerged(mesclado)}>
+                <Download className="h-4 w-4" /> Baixar arquivo
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button className="btn-primary" onClick={() => syncInput.current?.click()}>
+            Sincronizar com arquivo
+          </button>
+        )}
+        <input
+          ref={syncInput}
+          type="file"
+          accept={BACKUP_ACCEPT}
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files?.[0]) void handleSyncFile(e.target.files[0]);
+            e.target.value = '';
+          }}
+        />
+      </section>
 
       <section className="card-surface space-y-4">
         <div className="flex items-center gap-1.5">
@@ -195,9 +287,23 @@ function DadosTab() {
           <div className="space-y-2">
             <h3 className="text-sm font-semibold text-ink">Exportar</h3>
             <p className="text-sm text-sage">Baixa um arquivo com tudo que está salvo neste aparelho agora.</p>
-            <button className="btn-primary" onClick={handleExport}>
-              Exportar backup
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <button className="btn-primary" onClick={handleExport}>
+                Exportar backup
+              </button>
+              {podeCompartilhar && (
+                <button className="btn-ghost" onClick={() => handleShare()}>
+                  <Share2 className="h-4 w-4" /> Compartilhar
+                </button>
+              )}
+            </div>
+            {estadoBackup && (
+              <p className="text-xs text-sage">
+                {estadoBackup.ultimo === undefined
+                  ? 'Nenhum backup feito neste aparelho ainda.'
+                  : `Último backup: ${haQuantoTempo(estadoBackup.ultimo)}.`}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2 sm:pl-4">
@@ -224,7 +330,7 @@ function DadosTab() {
               <input
                 ref={backupInput}
                 type="file"
-                accept="application/json"
+                accept={BACKUP_ACCEPT}
                 className="hidden"
                 onChange={(e) => e.target.files?.[0] && handleImportBackup(e.target.files[0])}
               />
@@ -359,9 +465,10 @@ function DadosTab() {
                 "clonar" o estado de outro aparelho.
               </li>
               <li>
-                <strong className="text-ink">Mesclar</strong> — combina com o que já existe aqui;
-                quando um card se repete nos dois lados, vence o mais recente. Use pra juntar o
-                progresso de dois aparelhos usados separadamente.
+                <strong className="text-ink">Mesclar</strong> — combina com o que já existe aqui:
+                o estudo feito nos dois aparelhos é somado, o que foi apagado num lado sai do outro, e
+                quando a mesma coisa mudou nos dois vence a mudança mais recente. Pode mesclar o mesmo
+                arquivo de novo sem contar nada duas vezes.
               </li>
             </ul>
           </div>
@@ -369,9 +476,10 @@ function DadosTab() {
           <div className="space-y-1.5">
             <h3 className="text-sm font-medium">Sincronizar dois aparelhos</h3>
             <p className="text-sm text-sage">
-              Exporte no aparelho A, transfira o arquivo (e-mail, nuvem, cabo) e importe no
-              aparelho B com <strong className="text-ink">Mesclar</strong>. Repita no sentido
-              contrário se quiser manter os dois atualizados.
+              Use a seção <strong className="text-ink">Sincronizar entre aparelhos</strong>: ela
+              mescla o arquivo do outro aparelho e já gera o arquivo juntado para levar de volta. No
+              celular, <strong className="text-ink">Compartilhar</strong> manda o arquivo direto para
+              o Drive, WhatsApp ou e-mail.
             </p>
           </div>
         </HelpModal>
