@@ -19,12 +19,15 @@ escrever) · Revisar · Progresso —, não por módulo (ver
 ## Princípios de arquitetura (não quebrar sem combinar)
 
 - **Sem backend.** Tudo roda no navegador. Não introduza servidor, API remota
-  nem banco externo.
+  nem banco externo. **Única exceção, combinada:** a sincronização opcional com
+  o Google Drive do próprio usuário (`src/features/sync/`) — desligada por
+  padrão, sem servidor nosso, e o app funciona 100% sem ela.
 - **Offline-first / PWA.** Deve funcionar instalado e sem internet.
 - **Dados locais por dispositivo** no IndexedDB (via Dexie). Cada aparelho é
   independente.
-- **Sincronização é manual**, via exportar/importar JSON (`src/db/backup.ts`).
-  Esse arquivo também é o backup do usuário.
+- **Sincronização**: manual, via exportar/importar JSON (`src/db/backup.ts`),
+  que também é o backup do usuário; ou automática pelo Google Drive (opcional),
+  que usa o mesmo arquivo e a mesma mesclagem.
 - **Chaves primárias são UUID** (`newId()` em `src/db/schema.ts`), nunca
   auto-incremento — isso é o que torna a mesclagem entre dispositivos possível.
 
@@ -71,6 +74,14 @@ toda mudança pede bump; julgue pelo impacto:
   contadores por aparelho (`porAparelho`); `src/db/local.ts` — id do
   aparelho, `setMeta()` (toda gravação em `db.meta`) e `apagar()` (toda
   exclusão de card/review/`wordKnowledge`, com lápide). Ver
+  `regras-negocio.md` §6.
+- `src/features/sync/` — sincronização automática com o Google Drive:
+  `googleAuth.ts` (login por redirecionamento, token de ~1h; Client ID em
+  `VITE_GOOGLE_CLIENT_ID` — `.env.example`, variável `GOOGLE_CLIENT_ID` no
+  deploy), `googleDrive.ts` (API REST do Drive via `fetch`, arquivo gzip no
+  `appDataFolder`), `destino.ts` (interface pra outros destinos), `motor.ts`
+  (ciclo baixar → mesclar → subir, época dos dados, gatilhos, status),
+  `SyncCard.tsx` (Config › Dados) e `AvisoSync.tsx` (Home). Ver
   `regras-negocio.md` §6.
 - `src/features/backup/` — lembrete de backup da Home (`LembreteBackup`,
   `useEstadoBackup`); o "Sincronizar com arquivo" e o compartilhar ficam em

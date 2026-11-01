@@ -21,10 +21,11 @@ implementar.
 Herdadas de `CLAUDE.md` — nenhuma proposta abaixo as viola:
 
 - **Sem backend.** Nenhuma feature depende de servidor, API remota ou conta de
-  usuário.
+  usuário. Única exceção, combinada: a sincronização **opcional** com o Google
+  Drive do próprio usuário (ver "Dados e sincronização" abaixo).
 - **Offline-first.** Tudo precisa funcionar instalado, sem internet.
-- **Dados locais por dispositivo** (IndexedDB/Dexie); sincronização continua
-  manual via export/import de JSON.
+- **Dados locais por dispositivo** (IndexedDB/Dexie); sincronização manual via
+  export/import de JSON, ou automática (opcional) pelo Google Drive.
 - Reaproveitar infraestrutura existente sempre que possível (FSRS, dados
   KanjiVG, padrão de lição/kakitori) em vez de introduzir tecnologia nova sem
   necessidade.
@@ -254,8 +255,8 @@ funcionalidade nova, e que completariam o método:
   resultado; alimentaria Pontos fracos e o próximo passo de *Falar*.
 
 ### Dados e sincronização
-- **Sincronização automática entre aparelhos via Google Drive** — 📝
-  proposta (2026-11), não implementada: os dados são sincronizados sozinhos
+- **Sincronização automática entre aparelhos via Google Drive** — ✅
+  implementada (2026-11, v2.7.0): os dados são sincronizados sozinhos
   por um arquivo na pasta oculta do app no Drive do próprio usuário, sem
   servidor nosso e sem custo. Opcional e dispensável (o app segue 100%
   offline sem ela), mas é uma exceção explícita ao "sem API remota" da §1.

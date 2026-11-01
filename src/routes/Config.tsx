@@ -1,4 +1,4 @@
-import { ArrowLeftRight, BookOpen, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, Share2, TriangleAlert, Upload, User } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Cloud, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, Share2, TriangleAlert, Upload, User } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -17,6 +17,8 @@ import {
   type ImportMode,
 } from '../db/backup';
 import { haQuantoTempo, useEstadoBackup } from '../features/backup/lembrete';
+import SyncCard from '../features/sync/SyncCard';
+import { estadoSync } from '../features/sync/motor';
 import { parseCardsFile } from '../features/flashcards/importCards';
 import { useTheme, type ThemeMode } from '../lib/useTheme';
 import { setGradeMode, useGradeMode, type GradeMode } from '../features/srs/gradeMode';
@@ -205,7 +207,11 @@ function DadosTab() {
   }
 
   async function resetAll() {
-    if (!confirm('Apagar TODOS os dados deste dispositivo? Esta ação não pode ser desfeita.')) return;
+    const sincronizando = (await estadoSync()).conectado;
+    const aviso = sincronizando
+      ? '\n\nA sincronização com o Google Drive está ligada: a cópia no Drive também fica vazia, e os outros aparelhos vão perguntar se querem apagar também.'
+      : '';
+    if (!confirm(`Apagar TODOS os dados deste dispositivo? Esta ação não pode ser desfeita.${aviso}`)) return;
     await Promise.all([
       db.cards.clear(),
       db.reviews.clear(),
@@ -224,9 +230,17 @@ function DadosTab() {
   return (
     <div className="space-y-6">
       <p className="text-sm text-sage">
-        Sem servidor: os dados ficam só neste aparelho. Use um arquivo para levar o progresso para outro
-        aparelho e como cópia de segurança.
+        Sem servidor nosso: os dados ficam neste aparelho. Para levar o progresso a outro aparelho, sincronize
+        pelo Google Drive ou por arquivo — os dois também servem de cópia de segurança.
       </p>
+
+      <SyncCard
+        titulo={
+          <SectionTitle icon={<Cloud className="h-4 w-4" />} cor="sora">
+            Sincronizar com o Google Drive
+          </SectionTitle>
+        }
+      />
 
       <section className="card-surface space-y-3">
         <SectionTitle icon={<ArrowLeftRight className="h-4 w-4" />} cor="sora">

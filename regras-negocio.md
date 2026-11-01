@@ -848,6 +848,46 @@ de 0).
   compartilha alguns tipos de arquivo; se não aceitar `.json`, vai como
   `.txt` (mesmo conteúdo — o importar aceita os dois). Sem suporte, o botão
   não aparece.
+- **Sincronização automática com o Google Drive** (opcional, desligada por
+  padrão — `src/features/sync/`; Config › Dados). Só aparece se o build tiver
+  o Client ID (`VITE_GOOGLE_CLIENT_ID`).
+  - **Login**: por redirecionamento (sai do app, passa pela página do
+    Google e volta), sem popup e sem script do Google. Escopo só
+    `drive.appdata`: uma pasta oculta do app no Drive da pessoa. O token
+    dura ~1 hora e, sem servidor, não há como renovar em segundo plano —
+    renovar é passar de novo pelo Google (`prompt=none`: volta na hora, sem
+    tela, se a pessoa continua logada). O app faz isso **sozinho** só ao
+    abrir, ou ao voltar pra ele estando na Home — nunca no meio de uma
+    sessão de estudo (o recarregamento perderia a sessão) —, no máximo uma
+    vez a cada 10 min. Se o Google pedir login, não insiste: a Home mostra
+    "Sincronização pausada" com o botão Entrar.
+  - **Arquivo**: um só, `nihongo-study-sync.json.gz` (o backup comprimido),
+    no `appDataFolder`.
+  - **Ciclo**: baixar → mesclar aqui (a mesma mesclagem do Importar ›
+    Mesclar) → subir o resultado, **só se mudou algo** (comparação por
+    chave, sem depender da ordem). Antes de subir, confere se a versão
+    remota mudou no meio (outro aparelho gravou); se mudou, repete o ciclo
+    (até 3 vezes). Atalho: se nada mudou aqui e a versão remota é a mesma do
+    último ciclo, nem baixa — exceto ao abrir o app, que sempre faz o ciclo
+    completo (o aviso de alteração pendente só existe na memória).
+  - **Quando**: ao abrir o app; ao voltar pra ele (se há alteração pendente
+    ou faz mais de 5 min); 30 s depois da última gravação no banco (uma
+    sessão de estudo inteira vira um ciclo só); ao sair do app, se há
+    alteração pendente; ao voltar a internet; e no botão "Sincronizar
+    agora". Sem internet, não tenta.
+  - **Época dos dados**: se a época do arquivo remoto é diferente da local,
+    um dos aparelhos foi substituído por inteiro (Substituir/Apagar tudo).
+    Se foi **este**, sobe sem mesclar (sobrescreve o Drive). Se foi o
+    **outro**, pergunta: OK deixa este aparelho igual ao outro; Cancelar
+    junta os dois como numa sincronização normal. Na **primeira**
+    sincronização de um aparelho, sempre junta (é o que a tela promete ao
+    conectar).
+  - Sincronizar com sucesso conta como backup (lembrete da Home).
+  - **Desconectar** não apaga nada, nem aqui nem no Drive. **Apagar dados do
+    Drive** apaga o arquivo remoto e desconecta este aparelho (conectado, o
+    próximo ciclo o recriaria).
+  - No iPhone com o app instalado, o login pode não voltar para o app — a
+    tela de conectar avisa.
 - **Lembrete de backup**: `local.lastBackupAt` (só deste aparelho) é gravado
   ao exportar, compartilhar ou salvar o arquivo sincronizado. A Home mostra
   um aviso discreto depois de 7 dias sem backup (contando do primeiro dia

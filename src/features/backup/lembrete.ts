@@ -39,3 +39,14 @@ export function haQuantoTempo(ts: number): string {
   if (dias === 1) return 'ontem';
   return `há ${dias} dias`;
 }
+
+/** "agora há pouco", "há 5 min", "há 2 h", "ontem", "há 3 dias". */
+export function tempoDesde(ts: number): string {
+  const min = Math.floor((Date.now() - ts) / 60000);
+  if (min < 1) return 'agora há pouco';
+  if (min < 60) return `há ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `há ${h} h`;
+  const dias = Math.floor(h / 24);
+  return dias === 1 ? 'ontem' : `há ${dias} dias`;
+}

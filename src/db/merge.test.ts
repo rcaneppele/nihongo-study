@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { incrementar, mesclarContadores } from './contadores';
 import { carimbosCard, mesclarCard } from './merge';
 import { db, type Card } from './schema';
-import { exportData, importData, SCHEMA_VERSION, type BackupFile } from './backup';
+import { exportData, importData, mesmoConteudo, SCHEMA_VERSION, type BackupFile } from './backup';
 import { freshSrs } from '../features/srs/fsrs';
 
 const CAMPOS = ['n'] as const;
@@ -146,5 +146,15 @@ describe('importData (mesclar)', () => {
     await importData(antes, 'merge');
     const depois = await exportData();
     expect({ ...depois, exportedAt: 0 }).toEqual({ ...antes, exportedAt: 0 });
+  });
+});
+
+describe('mesmoConteudo', () => {
+  it('não depende da ordem dos registros nem da data de exportação', () => {
+    const a = backup({ cards: [card('a', 'いぬ', 1), card('b', 'ねこ', 1)], exportedAt: 1 });
+    const b = backup({ cards: [card('b', 'ねこ', 1), card('a', 'いぬ', 1)], exportedAt: 2 });
+    expect(mesmoConteudo(a, b)).toBe(true);
+    expect(mesmoConteudo(a, backup({ cards: [card('a', 'いぬ', 1)] }))).toBe(false);
+    expect(mesmoConteudo(a, backup({ cards: [card('a', 'いぬ', 1), card('b', 'ねこ', 2)] }))).toBe(false);
   });
 });

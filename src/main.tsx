@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ThemeProvider } from './lib/useTheme';
 import { setupPWAUpdate } from './lib/pwaUpdate';
+import { processarRetornoOAuth } from './features/sync/googleAuth';
+import { iniciarSync } from './features/sync/motor';
 // Fontes empacotadas no próprio app (não vêm do Google) — funcionam offline.
 // Versões variáveis: um arquivo cobre todos os pesos, o que deixa o CSS bem
 // menor (a Noto Sans JP é fatiada em ~120 faixas de caracteres por fonte).
@@ -13,12 +15,20 @@ import './index.css';
 
 setupPWAUpdate();
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ThemeProvider>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
-  </StrictMode>
-);
+void (async () => {
+  // Na volta do login do Google, guarda o token e limpa o endereço antes do
+  // roteador ler a URL (nas outras aberturas, não espera nada).
+  const retorno = await processarRetornoOAuth().catch(() => null);
+
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <ThemeProvider>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </StrictMode>
+  );
+
+  void iniciarSync(retorno);
+})();

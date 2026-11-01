@@ -215,6 +215,31 @@ function migrateV5ToV6(data: BackupFile): BackupFile {
   return { ...data, schemaVersion: 6, deleted: data.deleted ?? [] };
 }
 
+/** Chave de cada registro, por tabela do backup. */
+const CHAVES: { [T in Exclude<keyof BackupFile, 'app' | 'schemaVersion' | 'exportedAt'>]: (row: BackupFile[T][number]) => string } = {
+  cards: (r) => r.id,
+  reviews: (r) => r.id,
+  kanaProgress: (r) => r.char,
+  kanjiProgress: (r) => r.char,
+  wordKnowledge: (r) => r.key,
+  readingProgress: (r) => r.textId,
+  activity: (r) => r.day,
+  meta: (r) => r.key,
+  deleted: (r) => `${r.table}:${r.key}`,
+};
+
+/** Os dois backups têm os mesmos dados (sem depender da ordem dos registros nem da data de exportação). */
+export function mesmoConteudo(a: BackupFile, b: BackupFile): boolean {
+  return (Object.keys(CHAVES) as (keyof typeof CHAVES)[]).every((tabela) => {
+    const chave = CHAVES[tabela] as (row: unknown) => string;
+    const linhasA = a[tabela] as unknown[];
+    const linhasB = b[tabela] as unknown[];
+    if (linhasA.length !== linhasB.length) return false;
+    const porChave = new Map(linhasA.map((r) => [chave(r), r]));
+    return linhasB.every((r) => iguais(porChave.get(chave(r)), r));
+  });
+}
+
 export type ImportMode = 'replace' | 'merge';
 
 /** Lápides com mais tempo que isso são descartadas — um aparelho sem sincronizar há mais tempo pode ressuscitar o que foi apagado. */
