@@ -1,9 +1,10 @@
 # Proposta — sincronização automática entre aparelhos (Google Drive)
 
-> **Status: em implementação** (branch `feature/sync-google-drive`).
-> Registrada em nov/2026. **Fases 1 (base de dados), 2 (sincronização
-> manual melhorada) e 4 (Google Drive) feitas** — ver `regras-negocio.md` §6.
-> Falta: configurar o projeto no Google Cloud e o manual do usuário. Decisões tomadas na implementação:
+> **Status: implementada** (v2.7.0, nov/2026; ajustes na v2.7.1). Fases 1
+> (base de dados), 2 (sincronização manual melhorada), 4 (Google Drive) e 5
+> (manual do usuário, capítulos 2 e 9) feitas — regras em
+> `regras-negocio.md` §6. Projeto no Google Cloud configurado (Client ID na
+> variável `GOOGLE_CLIENT_ID` do repositório). Decisões tomadas na implementação:
 > - além do previsto na §3: contadores por aparelho (`kanaProgress`,
 >   `activity`, `wordKnowledge`, `readingProgress` — antes um lado
 >   sobrescrevia o outro), carimbo por grupo de campos no card (editar a
@@ -14,8 +15,13 @@
 >   usuários usa Android. A tela de configurar a sincronização avisa que no
 >   iPhone ela pode não funcionar bem (login que não volta ao app instalado,
 >   renovação do token exigindo um toque);
-> - o login será por redirecionamento, implementado à mão (sem o script do
->   Google Identity Services, que viria de CDN).
+> - o login é por redirecionamento, implementado à mão (sem o script do
+>   Google Identity Services, que viria de CDN). Sem client secret (o Google
+>   exige um para o fluxo com refresh token), o token dura ~1 h e renovar é
+>   passar de novo pelo Google: ao abrir o app, ou ao voltar pra ele / mudar
+>   de tela numa tela sem sessão de estudo;
+> - todo pedido ao Drive usa `cache: 'no-store'` (o cache HTTP do navegador
+>   podia devolver o arquivo de antes da última gravação de outro aparelho).
 
 Objetivo: quem estuda em mais de um aparelho (ex.: notebook e celular) não
 precisar exportar e importar o backup à mão. Os dados passam a ser

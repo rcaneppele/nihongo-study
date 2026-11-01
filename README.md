@@ -20,8 +20,13 @@ vez de por ferramenta:
 Princípios:
 
 - 100% client-side (PWA) — **sem backend**, sem servidor; funciona offline.
-- Dados salvos só no dispositivo (IndexedDB).
-- Sincronização entre aparelhos via **exportar/importar JSON** (que também é backup).
+- Dados salvos no dispositivo (IndexedDB).
+- Sincronização entre aparelhos **opcional e automática pelo Google Drive** do
+  próprio usuário (pasta oculta do app, sem servidor nosso), ou manual via
+  **arquivo JSON** (que também é backup).
+
+App publicado: <https://rcaneppele.github.io/nihongo-study/> — passo a passo
+para instalar no Android e no iPhone no manual do usuário (capítulo 2).
 - Pensado para rodar no PC e instalar no celular/tablet (Android e iPhone/iPad).
 
 ## Stack
@@ -52,10 +57,16 @@ só abrir o link no celular e "Adicionar à Tela de Início".
   (site em `usuario.github.io/nihongo-study/`) e há workflow em
   `.github/workflows/`.
 - **Netlify / Vercel / domínio próprio na raiz**: troque `base` para `'/'`.
+- **Sincronização com o Google Drive** (opcional): precisa de um OAuth Client
+  ID do Google (aplicativo da Web, escopo `drive.appdata`). Localmente, em
+  `.env.local` (ver `.env.example`); no deploy, na variável de repositório
+  `GOOGLE_CLIENT_ID` (Settings › Secrets and variables › Actions ›
+  Variables). Sem ele, o app funciona igual, só sem essa opção.
 
 > No iPhone/iPad a instalação é feita pelo **Safari** (menu Compartilhar →
 > Adicionar à Tela de Início). O iOS pode limpar dados locais sob pressão de
-> armazenamento — exporte um backup de vez em quando.
+> armazenamento — ligue a sincronização com o Google Drive ou exporte um
+> backup de vez em quando.
 
 ## Estrutura
 
@@ -71,7 +82,7 @@ src/
 │   ├── handwriting/ captura de traços e scoreDrawing() (reconhecimento + pontuação)
 │   └── …          kana, kanji, leitura, diga, quiz, kakitori, pontos-fracos, atividade
 ├── licoes/        uma lição por arquivo + registro central
-├── db/            schema (Dexie) e backup (export/import, migrações)
+├── db/            schema (Dexie), backup (export/import, migrações) e mesclagem
 └── data/          kana, kanji N5, textos de leitura, traços do KanjiVG, deck N5
 ```
 
@@ -79,7 +90,8 @@ src/
 
 - `docs/manual-do-usuario.pdf` — manual do usuário (guia ilustrado para quem
   vai usar o app). O app oferece este mesmo arquivo em Configurações › Sobre
-  o App; para atualizá-lo lá, basta substituir o PDF.
+  o App; para atualizá-lo lá, basta substituir o PDF. A fonte (HTML/CSS,
+  prints e o script que gera o PDF) fica em `docs/manual/`.
 - `CLAUDE.md` — contexto, mapa do código e convenções para desenvolver com o
   Claude Code.
 - `regras-negocio.md` — regras de domínio (SRS e estágios, kana, kanji,
@@ -87,9 +99,8 @@ src/
 - `docs/roadmap.md` — próximas features e o porquê de cada uma.
 - `docs/padrao-licoes.md` — padrão de conteúdo das lições.
 - `docs/proposta-*.md`, `docs/melhorias-aprendizado.md` — registros das
-  propostas já implementadas (visual, reorganização, melhorias) e da
-  sincronização via Google Drive (`proposta-sincronizacao.md`, melhoria
-  futura).
+  propostas já implementadas (visual, reorganização, melhorias e a
+  sincronização via Google Drive, `proposta-sincronizacao.md`).
 
 ## Licença
 

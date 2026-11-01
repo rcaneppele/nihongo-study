@@ -203,7 +203,10 @@ toda mudança pede bump; julgue pelo impacto:
   (Configurações › Sobre o App), importado em `src/routes/Config.tsx` com
   `?url`: o build publica o PDF com hash no nome, então basta substituir o
   arquivo em `docs/` para o app entregar a versão nova (fora do pré-cache do
-  PWA; guardado no cache `manual` na primeira abertura).
+  PWA; guardado no cache `manual` na primeira abertura). A fonte fica em
+  `docs/manual/` (HTML/CSS + prints; `node docs/manual/gerar.cjs` gera o
+  PDF — ver `docs/manual/README.md`). Ao mudar uma tela ou um fluxo que o
+  manual descreve, atualize o capítulo correspondente.
 
 ## Convenções
 

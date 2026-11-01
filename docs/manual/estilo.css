@@ -1,0 +1,126 @@
+@import url("../../node_modules/@fontsource-variable/inter/index.css");
+@import url("../../node_modules/@fontsource-variable/noto-sans-jp/index.css");
+:root{--ink:#1f2633;--indigo:#223c63;--hanko:#c3402f;--paper:#f6f3ec;--sage:#6b7280;--line:#e4e0d6;
+--matcha:#4f7a58;--sora:#3a6ea5;--fuji:#6c5aa3;--kin:#a97a26;--sakura:#bd5679;}
+@page{size:A4;margin:16mm 17mm 18mm 17mm}
+*{box-sizing:border-box}
+body{font-family:"Inter Variable","Noto Sans JP Variable",sans-serif;color:var(--ink);font-size:10.2pt;line-height:1.5;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cap{break-before:page}
+h1{font-size:21pt;letter-spacing:-.02em;margin:0 0 4mm;display:flex;align-items:center;gap:4mm;color:var(--indigo)}
+h1 .num{display:inline-grid;place-items:center;width:11mm;height:11mm;border-radius:3mm;background:var(--indigo);color:#fff;font-size:15pt}
+h2{font-size:13.5pt;margin:7mm 0 2mm;color:var(--indigo);break-after:avoid;border-bottom:1px solid var(--line);padding-bottom:1mm}
+h3{font-size:11pt;margin:5mm 0 1.5mm;break-after:avoid}
+p{margin:0 0 2.5mm}
+.lead{font-size:11pt;color:#374151}
+.pequeno{font-size:8.8pt;color:var(--sage)}
+ul,ol{margin:0 0 3mm;padding-left:6mm}
+li{margin-bottom:1mm}
+figure{margin:3mm 0 4mm;break-inside:avoid;text-align:center}
+figure img{max-width:100%;max-height:98mm;border:1px solid var(--line);border-radius:2.5mm;box-shadow:0 1mm 3mm rgba(0,0,0,.06)}
+figure.media img{max-height:70mm}
+figure.celular img{max-height:100mm}
+figcaption{font-size:8.6pt;color:var(--sage);margin-top:1.5mm;font-style:italic}
+table{width:100%;border-collapse:collapse;margin:2mm 0 4mm;font-size:9.4pt;break-inside:avoid}
+th{background:var(--indigo);color:#fff;text-align:left;padding:1.6mm 2.5mm;font-weight:600}
+td{padding:1.6mm 2.5mm;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even) td{background:#faf8f3}
+table.compacta{font-size:9pt}
+.caixa{border-radius:2.5mm;padding:2.8mm 3.5mm;margin:3mm 0 4mm;font-size:9.4pt;border-left:1.2mm solid;break-inside:avoid}
+.caixa.dica{background:#eef4ef;border-color:var(--matcha)}
+.caixa.nota{background:#eef2f8;border-color:var(--sora)}
+.caixa.atencao{background:#fbf0ec;border-color:var(--hanko)}
+.lado-a-lado{display:grid;grid-template-columns:62mm 1fr;gap:6mm;align-items:start;break-inside:avoid}
+.lado-a-lado.igual{grid-template-columns:1fr 1fr}
+.lado-a-lado figure{margin-top:0}
+.grade3{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin:3mm 0 4mm}
+.cartao{border:1px solid var(--line);border-radius:2.5mm;padding:3mm;font-size:9.2pt;background:#fcfbf8}
+.cartao-tit{font-weight:700;color:var(--indigo);margin-bottom:1mm}
+.tag{display:inline-block;padding:.3mm 2.2mm;border-radius:10mm;font-size:8.6pt;font-weight:600;white-space:nowrap}
+.tag.indigo{background:#e5eaf2;color:var(--indigo)}.tag.fuji{background:#ece8f5;color:var(--fuji)}.tag.matcha{background:#e7f0e9;color:var(--matcha)}
+.tag.sora{background:#e3edf7;color:var(--sora)}.tag.kin{background:#f6eedd;color:var(--kin)}.tag.sakura{background:#f7e6ec;color:var(--sakura)}
+.tag.hanko{background:#f8e4df;color:var(--hanko)}.tag.cinza{background:#ebe8e1;color:var(--sage)}.tag.sora-claro{background:#e3edf7;color:var(--sora)}.tag.sora-cheio{background:var(--sora);color:#fff}
+.ponto{display:inline-block;width:3mm;height:3mm;border-radius:50%;vertical-align:-.3mm;margin-right:1mm}
+.ponto.matcha{background:var(--matcha)}.ponto.kin{background:var(--kin)}.ponto.hanko{background:var(--hanko)}
+kbd{font-family:inherit;font-size:8.4pt;border:1px solid #cfcabd;border-bottom-width:2px;border-radius:1mm;padding:0 1.3mm;background:#fff}
+ol.passos{list-style:none;counter-reset:p;padding-left:0}
+ol.passos li{counter-increment:p;position:relative;padding-left:8mm;margin-bottom:1.8mm}
+ol.passos li::before{content:counter(p);position:absolute;left:0;top:.2mm;width:5.2mm;height:5.2mm;border-radius:50%;background:var(--indigo);color:#fff;font-size:8pt;font-weight:700;display:grid;place-items:center}
+.ciclo{display:flex;align-items:stretch;gap:2mm;margin:4mm 0 5mm}
+.etapa{flex:1;border-radius:2.5mm;padding:3mm;text-align:center;border-top:1.2mm solid}
+.etapa b{display:block;font-size:11pt;margin-bottom:1mm}.etapa span{font-size:8.6pt;color:#4b5563}
+.etapa.fuji{background:#f1eef8;border-color:var(--fuji)}.etapa.fuji b{color:var(--fuji)}
+.etapa.matcha{background:#edf4ef;border-color:var(--matcha)}.etapa.matcha b{color:var(--matcha)}
+.etapa.sora{background:#eaf1f9;border-color:var(--sora)}.etapa.sora b{color:var(--sora)}
+.etapa.kin{background:#f8f2e4;border-color:var(--kin)}.etapa.kin b{color:var(--kin)}
+.seta{align-self:center;color:var(--sage);font-size:14pt}
+dl.faq dt{font-weight:700;color:var(--indigo);margin-top:3mm;break-after:avoid}
+dl.faq dd{margin:.8mm 0 0 0;padding-left:4mm;border-left:.8mm solid var(--line)}
+.fim{margin-top:10mm;text-align:center;font-size:20pt;font-weight:700;color:var(--hanko)}
+.fim span{display:block;font-size:10pt;font-weight:400;color:var(--sage);margin-top:1mm}
+/* sumário */
+.titulo-sumario{color:var(--indigo)}
+ol.toc{list-style:none;padding:0;margin:6mm 0 10mm}
+ol.toc li{display:flex;align-items:baseline;gap:2mm;font-size:12pt;padding:2.6mm 0;border-bottom:1px dotted #cfcabd}
+ol.toc li span{flex:1}
+ol.toc li b{color:var(--indigo)}
+/* capa */
+.capa{height:263mm;display:flex;flex-direction:column;justify-content:space-between;padding:10mm 4mm}
+.capa .logo{width:34mm;height:34mm;border-radius:7mm;box-shadow:0 2mm 6mm rgba(0,0,0,.12)}
+.capa .jp{font-size:44pt;font-weight:800;color:var(--indigo);letter-spacing:.02em;margin:10mm 0 0}
+.capa .titulo{font-size:34pt;font-weight:800;letter-spacing:-.03em;margin:2mm 0 0;color:var(--ink)}
+.capa .sub{font-size:15pt;color:var(--hanko);font-weight:600;margin-top:2mm}
+.capa .desc{font-size:11.5pt;color:#4b5563;max-width:140mm;margin-top:8mm}
+.capa .faixa{display:flex;gap:2mm;margin-top:10mm}
+.capa .faixa i{flex:1;height:2.2mm;border-radius:2mm}
+.capa .rodape{font-size:9.5pt;color:var(--sage);border-top:1px solid var(--line);padding-top:3mm;display:flex;justify-content:space-between}
+/* v2.7: link do app + ilustrações de instalação (celulares esquemáticos) */
+.link-app{display:flex;align-items:center;gap:5mm;border:1px solid var(--line);border-radius:2.5mm;background:#fcfbf8;padding:3.5mm 4mm;margin:3mm 0 4mm;break-inside:avoid}
+.link-app img{width:26mm;height:26mm;flex:none}
+.link-app .rotulo{font-size:8.6pt;color:var(--sage);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.link-app a{display:block;font-size:13pt;font-weight:700;color:var(--indigo);text-decoration:none;margin:.5mm 0 1mm}
+.link-app p{margin:0;font-size:9pt;color:#4b5563}
+.telas{display:flex;justify-content:space-between;gap:3mm;margin:3mm 0 1mm;break-inside:avoid}
+.telas figcaption{text-align:center}
+.tela{flex:1;text-align:center}
+.tela .leg{font-size:8pt;color:#374151;margin-top:1.8mm;line-height:1.3}
+.tela .leg b{display:inline-grid;place-items:center;width:4.2mm;height:4.2mm;border-radius:50%;background:var(--hanko);color:#fff;font-size:7pt;margin-right:1mm;vertical-align:.2mm}
+.tel{width:37mm;height:70mm;margin:0 auto;border:1.4mm solid #1f2633;border-radius:5.5mm;background:#fff;position:relative;overflow:hidden;font-size:6pt;line-height:1.25;text-align:left;color:#1f2633}
+.tel .status{height:4mm;display:flex;justify-content:space-between;align-items:center;padding:0 2.5mm;font-size:5pt;font-weight:600}
+.tel .barra{display:flex;align-items:center;gap:1.2mm;padding:1mm 1.5mm;background:#f1f3f4}
+.tel .url{flex:1;background:#fff;border-radius:3mm;padding:.8mm 1.6mm;font-size:5.4pt;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tel .ico{width:4mm;height:4mm;display:grid;place-items:center;font-weight:700;font-size:7pt;color:#4b5563;flex:none}
+.tel .ico svg{width:3.4mm;height:3.4mm}
+.alvo{outline:.6mm solid var(--hanko);outline-offset:.3mm;border-radius:1mm;background:#fde8e4 !important}
+.tel .pagina{padding:2mm;opacity:.45}
+.tel .pagina i{display:block;height:2mm;border-radius:1mm;background:#d9dde3;margin:1.4mm 0}
+.tel .pagina i.bloco{height:9mm;border-radius:1.5mm;background:#e6e9ee}
+.tel .pagina i.curta{width:60%}
+.tel .menu{position:absolute;background:#fff;border-radius:1.6mm;box-shadow:0 .8mm 3mm rgba(0,0,0,.25);padding:.8mm 0;z-index:2}
+.tel .menu div{padding:1.15mm 2.2mm;white-space:nowrap}
+.tel .veu{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:1}
+.tel .folha{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:3mm 3mm 0 0;padding:2.5mm;z-index:2}
+.tel .appid{display:flex;align-items:center;gap:1.6mm;margin-bottom:2mm}
+.tel .appid img{width:6.5mm;height:6.5mm;border-radius:1.5mm}
+.tel .appid b{display:block;font-size:6.6pt}
+.tel .botoes{display:flex;justify-content:flex-end;gap:1.5mm}
+.tel .botoes span{padding:.8mm 2.2mm;border-radius:3mm;font-weight:600}
+.tel .botoes .pri{background:#1a73e8;color:#fff}
+.tel .inicio{position:absolute;inset:4mm 0 0;background:linear-gradient(160deg,#c9d6ea,#e9d8e4);padding:3mm 2mm;display:grid;grid-template-columns:repeat(4,1fr);gap:2.6mm 1mm;align-content:start}
+.tel .inicio span{display:flex;flex-direction:column;align-items:center;font-size:4.6pt;color:#1f2633;gap:.6mm}
+.tel .inicio span i{width:6mm;height:6mm;border-radius:50%;background:rgba(255,255,255,.75)}
+.tel .inicio span img{width:6mm;height:6mm;border-radius:1.5mm}
+.tel .inicio span.ios i{border-radius:1.5mm}
+.tel .rodape-ios{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:1.2mm;padding:1.4mm 1.6mm 2.6mm;background:#f2f2f7}
+.tel .rodape-ios .url{text-align:center}
+.tel .lista{background:#f2f2f7;border-radius:1.6mm;overflow:hidden;margin-top:1.5mm}
+.tel .lista div{display:flex;justify-content:space-between;align-items:center;padding:1.2mm 2mm;border-bottom:.2mm solid #e2e2e8;background:#fff}
+.tel .lista div:last-child{border-bottom:0}
+.tel .apps{display:flex;gap:1.6mm;margin:1.5mm 0}
+.tel .apps i{width:5.4mm;height:5.4mm;border-radius:1.3mm;background:#d9dde3;display:block}
+.tel .topo-ios{display:flex;justify-content:space-between;align-items:center;padding:1.5mm 1.8mm;font-size:5.6pt}
+.tel .topo-ios span{color:#007aff}
+.tel .chave{width:5mm;height:3mm;border-radius:2mm;background:#34c759;position:relative;flex:none}
+.tel .chave::after{content:"";position:absolute;right:.3mm;top:.3mm;width:2.4mm;height:2.4mm;border-radius:50%;background:#fff}
+.tel .botoes .pri.alvo{background:#1a73e8 !important}
+.tel .topo-ios b{font-size:5pt}
+.nova-pagina{break-before:page}
