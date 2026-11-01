@@ -23,6 +23,9 @@ export default defineConfig({
         // em vez disso, cada fatia baixada fica num cache próprio e passa a
         // funcionar offline dali em diante.
         globPatterns: ['**/*.{js,css,html}', 'assets/inter-latin-*.woff2'],
+        // Abrir o manual numa aba é uma navegação: sem isto, o fallback de SPA
+        // responde com o index.html (app sem rota, miolo em branco) em vez do PDF.
+        navigateFallbackDenylist: [/\.pdf$/],
         runtimeCaching: [
           // Manual do usuário (PDF de alguns MB): fora do pré-cache, guardado na
           // primeira abertura. O nome tem hash, então cada versão nova é outra
@@ -33,6 +36,9 @@ export default defineConfig({
             options: {
               cacheName: 'manual',
               expiration: { maxEntries: 1 },
+              // O leitor de PDF do navegador pede o arquivo em pedaços (Range);
+              // sem isto, a resposta em cache volta inteira em vez de 206.
+              rangeRequests: true,
               cacheableResponse: { statuses: [0, 200] },
             },
           },
