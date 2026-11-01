@@ -10,6 +10,7 @@ import KanjiReviewSession from '../features/kanji/KanjiReviewSession';
 import { buildReviewQueue, type StudyItem } from '../features/flashcards/stages';
 import { getDueKanji } from '../features/kanji/kanjiQueue';
 import { ATIVIDADES_REVISAR } from '../features/metodo/estrutura';
+import { HERO_BOTAO, HERO_TEXTO } from '../lib/hero';
 import { usePendencias } from '../features/metodo/pendencias';
 
 function shuffle<T>(arr: T[]): T[] {
@@ -92,21 +93,23 @@ export default function Revisar() {
       <section className="card-hero flex flex-wrap items-center gap-4">
         {total > 0 ? (
           <>
-            <span className="icon-tile h-12 w-12 rounded-2xl bg-sora/12 text-sora">
-              <CalendarClock className="h-6 w-6" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-wider text-sage">Revisão do dia</p>
-              <p className="text-xl font-semibold tracking-tight">{total} item(ns) para relembrar</p>
-              <p className="text-sm text-sage">{partes.join(' · ')} — em sequência, numa sessão só.</p>
+            <div className={HERO_TEXTO}>
+              <span className="icon-tile h-12 w-12 shrink-0 rounded-2xl bg-sora/12 text-sora">
+                <CalendarClock className="h-6 w-6" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-wider text-sage">Revisão do dia</p>
+                <p className="text-xl font-semibold tracking-tight">{total} item(ns) para relembrar</p>
+                <p className="text-sm text-sage">{partes.join(' · ')} — em sequência, numa sessão só.</p>
+              </div>
             </div>
-            <button className="btn-dark" onClick={comecar}>
+            <button className={HERO_BOTAO} onClick={comecar}>
               Começar revisão <ArrowRight className="h-4 w-4" />
             </button>
           </>
         ) : (
           <>
-            <span className="icon-tile h-12 w-12 rounded-2xl bg-matcha/12 text-matcha">
+            <span className="icon-tile h-12 w-12 shrink-0 rounded-2xl bg-matcha/12 text-matcha">
               <CheckCircle2 className="h-6 w-6" />
             </span>
             <div className="min-w-0 flex-1">

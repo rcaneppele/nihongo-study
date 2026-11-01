@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { BookOpenText, Copy, Dumbbell, PartyPopper, Target } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
+import { HERO_BOTAO, HERO_TEXTO } from '../lib/hero';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -79,15 +80,17 @@ export default function PontosFracos() {
         </div>
       ) : (
         <div className="card-hero flex flex-wrap items-center gap-4">
-          <span className="icon-tile h-11 w-11 rounded-2xl bg-sakura/12 text-sakura">
-            <Dumbbell className="h-5 w-5" />
-          </span>
-          <p className="min-w-0 flex-1 text-sm text-sage">
-            <span className="text-lg font-semibold text-ink">{total}</span> item(ns) para reforçar, de{' '}
-            {ORIGENS.filter((o) => dados[o].length > 0).length} parte(s) do app
-          </p>
+          <div className={HERO_TEXTO}>
+            <span className="icon-tile h-11 w-11 shrink-0 rounded-2xl bg-sakura/12 text-sakura">
+              <Dumbbell className="h-5 w-5" />
+            </span>
+            <p className="min-w-0 text-sm text-sage">
+              <span className="text-lg font-semibold text-ink">{total}</span> item(ns) para reforçar, de{' '}
+              {ORIGENS.filter((o) => dados[o].length > 0).length} parte(s) do app
+            </p>
+          </div>
           <button
-            className="btn-dark"
+            className={HERO_BOTAO}
             onClick={() => treinar(misturar(ORIGENS.map((o) => dados[o]), TREINO_MISTO))}
           >
             Treinar meus pontos fracos ({Math.min(TREINO_MISTO, total)})

@@ -49,13 +49,14 @@ function Logo({ className }: { className?: string }) {
   );
 }
 
-/** Celular: barra fina no topo (logo + nome + configurações) no lugar do antigo logo grande. */
+/** Celular: barra fina no topo (logo + nome + versão + configurações) no lugar do antigo logo grande. */
 function MobileTopBar() {
   return (
     <div className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-paper/90 px-4 py-2 backdrop-blur md:hidden">
       <NavLink to="/" className="flex items-center gap-2">
         <Logo className="h-8 w-8" />
         <span className="font-semibold tracking-tight">Nihongo Study</span>
+        <span className="text-[11px] text-sage">v{__APP_VERSION__}</span>
       </NavLink>
       <NavLink
         to="/config"

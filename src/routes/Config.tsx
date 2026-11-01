@@ -385,7 +385,7 @@ function DadosTab() {
           Vocabulário N5
         </SectionTitle>
         <div className="flex flex-wrap items-center gap-3 rounded-xl bg-sora/8 px-4 py-3">
-          <p className="min-w-0 flex-1 text-sm text-ink">
+          <p className="min-w-0 flex-1 basis-60 text-sm text-ink">
             O jeito recomendado de aprender o vocabulário N5 é em{' '}
             <span className="font-semibold">Aprender › Palavras novas</span>: 10 palavras por vez, das mais úteis
             para as menos, sem lotar a revisão.

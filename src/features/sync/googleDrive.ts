@@ -21,7 +21,13 @@ interface Metadados {
 
 export function googleDrive(token: string): DestinoSync {
   async function chamar(url: string, init: RequestInit = {}): Promise<Response> {
-    const res = await fetch(url, { ...init, headers: { ...init.headers, Authorization: `Bearer ${token}` } });
+    // `no-store`: o cache HTTP do navegador pode devolver o arquivo (ou a versão) de antes da última
+    // gravação de outro aparelho — e o ciclo mesclaria dados velhos achando que está em dia.
+    const res = await fetch(url, {
+      ...init,
+      cache: 'no-store',
+      headers: { ...init.headers, Authorization: `Bearer ${token}` },
+    });
     if (res.status === 401) throw new ErroAutorizacao();
     if (!res.ok) throw new Error(`Google Drive respondeu ${res.status}.`);
     return res;

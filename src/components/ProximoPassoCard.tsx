@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { TILE } from '../lib/cores';
+import { HERO_BOTAO, HERO_TEXTO } from '../lib/hero';
 import { useProximoPasso, type AlvoPasso } from '../features/metodo/proximoPasso';
 
 /**
@@ -14,15 +15,17 @@ export default function ProximoPassoCard({ alvo }: { alvo: AlvoPasso }) {
 
   return (
     <section className="card-hero flex flex-wrap items-center gap-4">
-      <span className={`icon-tile h-12 w-12 rounded-2xl ${TILE[passo.cor]}`}>
-        <Icone className="h-6 w-6" />
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold uppercase tracking-wider text-sage">Próximo passo</p>
-        <p className="text-lg font-semibold tracking-tight">{passo.titulo}</p>
-        <p className="text-sm text-sage">{passo.porque}</p>
+      <div className={HERO_TEXTO}>
+        <span className={`icon-tile h-12 w-12 shrink-0 rounded-2xl ${TILE[passo.cor]}`}>
+          <Icone className="h-6 w-6" />
+        </span>
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-wider text-sage">Próximo passo</p>
+          <p className="text-lg font-semibold tracking-tight">{passo.titulo}</p>
+          <p className="text-sm text-sage">{passo.porque}</p>
+        </div>
       </div>
-      <Link to={passo.to} className="btn-dark">
+      <Link to={passo.to} className={HERO_BOTAO}>
         Começar <ArrowRight className="h-4 w-4" />
       </Link>
     </section>
