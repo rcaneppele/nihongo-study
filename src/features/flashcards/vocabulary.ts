@@ -1,4 +1,5 @@
 import { db, newId, type Card, type WordKnowledge } from '../../db/schema';
+import { apagar } from '../../db/local';
 import { N5_DECK, type N5Entry } from '../../data/seed/n5';
 import { LEITURA_TEXTOS } from '../../data/leitura/textos';
 import type { ReadingText } from '../../data/leitura/types';
@@ -124,17 +125,18 @@ export async function learnWords(words: VocabWord[]): Promise<number> {
 export function markKnown(word: VocabWord) {
   const now = Date.now();
   return db.wordKnowledge.put({
+    seenCount: 0,
+    lookupCount: 0,
+    ...word.knowledge,
     key: word.entry.front,
     status: 'compreendida',
-    seenCount: word.knowledge?.seenCount ?? 0,
-    lookupCount: word.knowledge?.lookupCount ?? 0,
     updatedAt: now,
   });
 }
 
 /** Desfaz o "Já sei" — só quando a palavra nunca apareceu numa leitura concluída (senão o registro é da leitura). */
 export function unmarkKnown(word: VocabWord) {
-  return db.wordKnowledge.delete(word.entry.front);
+  return apagar('wordKnowledge', word.entry.front);
 }
 
 /**

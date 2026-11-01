@@ -60,12 +60,9 @@ function DrawQuestion({ entry, onNext }: { entry: KanjiEntry; onNext: () => void
     setResult(outcome);
     void registrarAtividade('praticas');
     const p = await db.kanjiProgress.get(entry.char);
-    if (p) {
-      await db.kanjiProgress.update(entry.char, {
-        drawBest: Math.max(p.drawBest ?? 0, outcome.score),
-        updatedAt: Date.now(),
-      });
-    }
+    // Sem mexer em `updatedAt`: ele é o carimbo do estado FSRS, e a melhor
+    // nota de caligrafia já mescla pelo maior (ver src/db/merge.ts).
+    if (p) await db.kanjiProgress.update(entry.char, { drawBest: Math.max(p.drawBest ?? 0, outcome.score) });
   }
 
   return (

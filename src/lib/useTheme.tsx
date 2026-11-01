@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { liveQuery } from 'dexie';
 import { db } from '../db/schema';
+import { setMeta } from '../db/local';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -22,10 +24,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(readCachedMode);
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => resolveTheme(readCachedMode()));
 
+  // Assinatura, não leitura única: o tema também pode mudar pela sincronização com outro aparelho.
   useEffect(() => {
-    db.meta.get(META_KEY).then((entry) => {
-      if (isThemeMode(entry?.value)) setModeState(entry.value);
+    const sub = liveQuery(() => db.meta.get(META_KEY)).subscribe((entry) => {
+      if (!isThemeMode(entry?.value)) return;
+      setModeState(entry.value);
+      localStorage.setItem(STORAGE_KEY, entry.value);
     });
+    return () => sub.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -49,7 +55,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   function setMode(next: ThemeMode) {
     setModeState(next);
     localStorage.setItem(STORAGE_KEY, next);
-    db.meta.put({ key: META_KEY, value: next });
+    void setMeta(META_KEY, next);
   }
 
   return <ThemeContext.Provider value={{ mode, resolvedTheme, setMode }}>{children}</ThemeContext.Provider>;

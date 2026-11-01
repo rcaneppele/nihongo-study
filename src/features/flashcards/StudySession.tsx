@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { db, type Card, newId } from '../../db/schema';
+import { apagar } from '../../db/local';
+import { carimbosCard } from '../../db/merge';
 import { applyFsrs, type Grade } from '../srs/fsrs';
 import GradeButtons from '../srs/GradeButtons';
 import AudioButton from '../../components/AudioButton';
@@ -86,15 +88,22 @@ export default function StudySession({
     let intervalAfter: number;
     if (isProduction) {
       const result = applyFsrs(card.production!, rating, now);
-      changes = { production: result };
+      changes = { production: result, ...carimbosCard(card, ['productionUpdatedAt'], now) };
       intervalAfter = result.scheduledDays;
     } else {
       const result = applyFsrs(card, rating, now);
-      changes = { ...result, production: promotedProduction(card, result.scheduledDays, now) };
+      const production = promotedProduction(card, result.scheduledDays, now);
+      // Só carimba a produção se a revisão a criou (promoção pra Sei dizer).
+      const promoted = production !== card.production;
+      changes = {
+        ...result,
+        ...(promoted ? { production } : {}),
+        ...carimbosCard(card, promoted ? ['srsUpdatedAt', 'productionUpdatedAt'] : ['srsUpdatedAt'], now),
+      };
       intervalAfter = result.scheduledDays;
     }
     await db.transaction('rw', db.cards, db.reviews, async () => {
-      await db.cards.update(card.id, { ...changes, updatedAt: now });
+      await db.cards.update(card.id, changes);
       await db.reviews.add({
         id: reviewId,
         cardId: card.id,
@@ -122,9 +131,11 @@ export default function StudySession({
       const last = undoStack[undoStack.length - 1];
       if (!last) return;
       setGrading(true);
-      await db.transaction('rw', db.cards, db.reviews, async () => {
-        await db.cards.put({ ...last.before, updatedAt: Date.now() });
-        await db.reviews.delete(last.reviewId);
+      await db.transaction('rw', db.cards, db.reviews, db.deleted, async () => {
+        const now = Date.now();
+        // O estado restaurado precisa vencer a nota desfeita na mesclagem: carimbo novo nos dois grupos de SRS.
+        await db.cards.put({ ...last.before, ...carimbosCard(last.before, ['srsUpdatedAt', 'productionUpdatedAt'], now) });
+        await apagar('reviews', last.reviewId);
       });
       setUndoStack((s) => s.slice(0, -1));
       void registrarAtividade('revisoes', -1);

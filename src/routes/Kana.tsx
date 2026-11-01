@@ -6,7 +6,10 @@ import ResultadoResumo from '../components/ResultadoResumo';
 import SessionHeader from '../components/SessionHeader';
 import { useEffect, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db, type KanaProgress, type KanaType } from '../db/schema';
+import { db, type KanaContador, type KanaProgress, type KanaType } from '../db/schema';
+import { incrementar } from '../db/contadores';
+import { getDeviceId } from '../db/local';
+import { KANA_CONTADORES } from '../db/merge';
 import {
   KANA_FAMILIES,
   familyPreview,
@@ -621,17 +624,7 @@ function DrawQuestion({
     const outcome = scoreDrawing(giveUp ? [] : strokes, entry.char, CANVAS_SIZE);
     setResult(outcome);
     void registrarAtividade('praticas');
-    const p = await db.kanaProgress.get(entry.char);
-    await db.kanaProgress.put({
-      char: entry.char,
-      type: entry.type,
-      romajiCorrect: p?.romajiCorrect ?? 0,
-      romajiWrong: p?.romajiWrong ?? 0,
-      choiceCorrect: p?.choiceCorrect,
-      choiceWrong: p?.choiceWrong,
-      drawBest: Math.max(p?.drawBest ?? 0, outcome.score),
-      lastPracticed: Date.now(),
-    });
+    await saveKanaProgress(entry, {}, outcome.score);
   }
 
   return (
@@ -774,31 +767,27 @@ function Segment({
 
 async function updateProgress(entry: KanaEntry, correct: boolean) {
   void registrarAtividade('praticas');
-  const p = await db.kanaProgress.get(entry.char);
-  await db.kanaProgress.put({
-    char: entry.char,
-    type: entry.type,
-    romajiCorrect: (p?.romajiCorrect ?? 0) + (correct ? 1 : 0),
-    romajiWrong: (p?.romajiWrong ?? 0) + (correct ? 0 : 1),
-    choiceCorrect: p?.choiceCorrect,
-    choiceWrong: p?.choiceWrong,
-    drawBest: p?.drawBest,
-    lastPracticed: Date.now(),
-  });
+  await saveKanaProgress(entry, correct ? { romajiCorrect: 1 } : { romajiWrong: 1 });
 }
 
 async function updateChoiceProgress(entry: KanaEntry, correct: boolean) {
   void registrarAtividade('praticas');
-  const p = await db.kanaProgress.get(entry.char);
-  await db.kanaProgress.put({
-    char: entry.char,
-    type: entry.type,
-    romajiCorrect: p?.romajiCorrect ?? 0,
-    romajiWrong: p?.romajiWrong ?? 0,
-    choiceCorrect: (p?.choiceCorrect ?? 0) + (correct ? 1 : 0),
-    choiceWrong: (p?.choiceWrong ?? 0) + (correct ? 0 : 1),
-    drawBest: p?.drawBest,
-    lastPracticed: Date.now(),
+  await saveKanaProgress(entry, correct ? { choiceCorrect: 1 } : { choiceWrong: 1 });
+}
+
+/** Soma acertos/erros (contados por aparelho, ver src/db/contadores.ts) e guarda a melhor nota de caligrafia. */
+async function saveKanaProgress(entry: KanaEntry, delta: Partial<Record<KanaContador, number>>, drawScore?: number) {
+  const deviceId = await getDeviceId();
+  await db.transaction('rw', db.kanaProgress, async () => {
+    const p = await db.kanaProgress.get(entry.char);
+    const now = Date.now();
+    await db.kanaProgress.put({
+      char: entry.char,
+      type: entry.type,
+      ...incrementar(p, delta, KANA_CONTADORES, deviceId, now),
+      drawBest: drawScore === undefined ? p?.drawBest : Math.max(p?.drawBest ?? 0, drawScore),
+      lastPracticed: now,
+    });
   });
 }
 

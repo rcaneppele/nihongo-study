@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../db/schema';
+import { setMeta } from '../../db/local';
 
 /**
  * Quantos botões de nota aparecem nas revisões (flash cards e kanji):
@@ -16,5 +17,5 @@ export function useGradeMode(): GradeMode {
 }
 
 export function setGradeMode(mode: GradeMode) {
-  return db.meta.put({ key: META_KEY, value: mode });
+  return setMeta(META_KEY, mode);
 }

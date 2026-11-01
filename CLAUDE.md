@@ -31,7 +31,8 @@ escrever) · Revisar · Progresso —, não por módulo (ver
 ## Stack e comandos
 
 - Vite + React + TypeScript + Tailwind + Dexie + vite-plugin-pwa.
-- `npm run dev` (desenvolvimento), `npm run build` (produção), `npm run lint`.
+- `npm run dev` (desenvolvimento), `npm run build` (produção), `npm run lint`,
+  `npm test` (Vitest — por ora, a mesclagem de backup em `src/db/`).
 
 ## Versionamento
 
@@ -61,9 +62,16 @@ toda mudança pede bump; julgue pelo impacto:
 ## Mapa do código
 
 - `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta`.
+  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta`,
+  `deleted` (lápides) e `local` (só do aparelho, fora do backup).
 - `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`;
   migrações incrementais por versão em `migrateBackup`.
+- `src/db/merge.ts` — regras de mesclagem por tabela (funções puras,
+  testadas em `merge.test.ts`; `npm test`); `src/db/contadores.ts` —
+  contadores por aparelho (`porAparelho`); `src/db/local.ts` — id do
+  aparelho, `setMeta()` (toda gravação em `db.meta`) e `apagar()` (toda
+  exclusão de card/review/`wordKnowledge`, com lápide). Ver
+  `regras-negocio.md` §6.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
   `regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo

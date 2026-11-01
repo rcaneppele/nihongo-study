@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePendencias } from '../features/metodo/pendencias';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card, newId } from '../db/schema';
+import { apagar } from '../db/local';
 import { freshSrs } from '../features/srs/fsrs';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
 import { buildReviewQueue, type Direction, type StudyItem } from '../features/flashcards/stages';
@@ -196,7 +197,7 @@ export default function Flashcards() {
                 <StageAction card={card} />
                 <button
                   className="grid h-8 w-8 place-items-center rounded-full text-sage transition-colors hover:bg-hanko/10 hover:text-hanko"
-                  onClick={() => db.cards.delete(card.id)}
+                  onClick={() => apagar('cards', card.id)}
                   aria-label={`Excluir ${card.front}`}
                   title="Excluir card"
                 >

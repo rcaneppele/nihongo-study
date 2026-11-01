@@ -1,6 +1,8 @@
 // Pronúncia via Web Speech API do navegador (sem backend).
 import { useLiveQuery } from 'dexie-react-hooks';
+import { liveQuery } from 'dexie';
 import { db } from '../../db/schema';
+import { setMeta } from '../../db/local';
 
 let voicesCache: SpeechSynthesisVoice[] = [];
 
@@ -50,7 +52,8 @@ const RATES: Record<SpeechSpeed, number> = { slow: 0.65, normal: 0.9 };
 const SPEED_META_KEY = 'speechSpeed';
 let currentSpeed: SpeechSpeed = 'normal';
 
-db.meta.get(SPEED_META_KEY).then((entry) => {
+// Assinatura (não leitura única) pra também pegar a mudança vinda de outro aparelho na sincronização.
+liveQuery(() => db.meta.get(SPEED_META_KEY)).subscribe((entry) => {
   if (entry?.value === 'slow' || entry?.value === 'normal') currentSpeed = entry.value;
 });
 
@@ -61,7 +64,7 @@ export function useSpeechSpeed(): SpeechSpeed {
 
 export function setSpeechSpeed(speed: SpeechSpeed) {
   currentSpeed = speed;
-  return db.meta.put({ key: SPEED_META_KEY, value: speed });
+  return setMeta(SPEED_META_KEY, speed);
 }
 
 // Cada fala nova (ou stopSpeaking) incrementa a geração — quem estava

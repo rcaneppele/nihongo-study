@@ -1,3 +1,4 @@
+import type { IndexableType, Table } from 'dexie';
 import {
   db,
   type Card,
@@ -8,8 +9,21 @@ import {
   type ReadingProgress,
   type Activity,
   type WordKnowledge,
+  type Tombstone,
 } from './schema';
 import { freshSrs } from '../features/srs/fsrs';
+import {
+  cardMantido,
+  iguais,
+  mesclarAtividade,
+  mesclarCard,
+  mesclarKana,
+  mesclarKanji,
+  mesclarLapide,
+  mesclarLeitura,
+  mesclarMeta,
+  mesclarPalavra,
+} from './merge';
 
 /**
  * Backup / sincronização manual entre dispositivos.
@@ -20,7 +34,7 @@ import { freshSrs } from '../features/srs/fsrs';
  * armazenamento.
  */
 
-export const SCHEMA_VERSION = 5;
+export const SCHEMA_VERSION = 6;
 
 export interface BackupFile {
   app: 'nihongo-study';
@@ -34,10 +48,11 @@ export interface BackupFile {
   readingProgress: ReadingProgress[];
   activity: Activity[];
   meta: Meta[];
+  deleted: Tombstone[];
 }
 
 export async function exportData(): Promise<BackupFile> {
-  const [cards, reviews, kanaProgress, kanjiProgress, wordKnowledge, readingProgress, activity, meta] = await Promise.all([
+  const [cards, reviews, kanaProgress, kanjiProgress, wordKnowledge, readingProgress, activity, meta, deleted] = await Promise.all([
     db.cards.toArray(),
     db.reviews.toArray(),
     db.kanaProgress.toArray(),
@@ -46,6 +61,7 @@ export async function exportData(): Promise<BackupFile> {
     db.readingProgress.toArray(),
     db.activity.toArray(),
     db.meta.toArray(),
+    db.deleted.toArray(),
   ]);
   return {
     app: 'nihongo-study',
@@ -59,6 +75,7 @@ export async function exportData(): Promise<BackupFile> {
     readingProgress,
     activity,
     meta,
+    deleted,
   };
 }
 
@@ -96,6 +113,7 @@ function migrateBackup(data: BackupFile): BackupFile {
   if (result.schemaVersion < 3) result = migrateV2ToV3(result);
   if (result.schemaVersion < 4) result = migrateV3ToV4(result);
   if (result.schemaVersion < 5) result = migrateV4ToV5(result);
+  if (result.schemaVersion < 6) result = migrateV5ToV6(result);
   return result;
 }
 
@@ -149,22 +167,35 @@ function migrateV4ToV5(data: BackupFile): BackupFile {
   return { ...data, schemaVersion: 5, activity: data.activity ?? [] };
 }
 
+/**
+ * v5 → v6: lápides de exclusão (`deleted`). Os campos novos dos registros
+ * (`porAparelho`, carimbos por grupo do card, `Meta.updatedAt`) são
+ * opcionais — ausentes valem como antes (ver src/db/merge.ts).
+ */
+function migrateV5ToV6(data: BackupFile): BackupFile {
+  return { ...data, schemaVersion: 6, deleted: data.deleted ?? [] };
+}
+
 export type ImportMode = 'replace' | 'merge';
 
+/** Lápides com mais tempo que isso são descartadas — um aparelho sem sincronizar há mais tempo pode ressuscitar o que foi apagado. */
+const LAPIDE_VALIDADE_MS = 180 * 24 * 60 * 60 * 1000;
+
 export async function importData(backup: BackupFile, mode: ImportMode = 'replace'): Promise<void> {
-  const tables = [db.cards, db.reviews, db.kanaProgress, db.kanjiProgress, db.wordKnowledge, db.readingProgress, db.activity, db.meta];
+  const tables = [
+    db.cards,
+    db.reviews,
+    db.kanaProgress,
+    db.kanjiProgress,
+    db.wordKnowledge,
+    db.readingProgress,
+    db.activity,
+    db.meta,
+    db.deleted,
+  ];
   await db.transaction('rw', tables, async () => {
     if (mode === 'replace') {
-      await Promise.all([
-        db.cards.clear(),
-        db.reviews.clear(),
-        db.kanaProgress.clear(),
-        db.kanjiProgress.clear(),
-        db.wordKnowledge.clear(),
-        db.readingProgress.clear(),
-        db.activity.clear(),
-        db.meta.clear(),
-      ]);
+      await Promise.all(tables.map((t) => t.clear()));
       await db.cards.bulkAdd(backup.cards);
       await db.reviews.bulkAdd(backup.reviews);
       await db.kanaProgress.bulkAdd(backup.kanaProgress);
@@ -173,51 +204,143 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
       await db.readingProgress.bulkAdd(backup.readingProgress);
       await db.activity.bulkAdd(backup.activity);
       await db.meta.bulkAdd(backup.meta);
+      await db.deleted.bulkAdd(backup.deleted);
       return;
     }
-
-    // merge: vence o registro mais recente; reviews são idempotentes pelo id.
-    for (const card of backup.cards) {
-      const existing = await db.cards.get(card.id);
-      if (!existing || card.updatedAt >= existing.updatedAt) await db.cards.put(card);
-    }
-    await db.reviews.bulkPut(backup.reviews);
-    for (const k of backup.kanaProgress) {
-      const existing = await db.kanaProgress.get(k.char);
-      if (!existing || (k.lastPracticed ?? 0) >= (existing.lastPracticed ?? 0)) {
-        await db.kanaProgress.put(k);
-      }
-    }
-    for (const k of backup.kanjiProgress) {
-      const existing = await db.kanjiProgress.get(k.char);
-      if (!existing || k.updatedAt >= existing.updatedAt) await db.kanjiProgress.put(k);
-    }
-    for (const w of backup.wordKnowledge) {
-      const existing = await db.wordKnowledge.get(w.key);
-      if (!existing || w.updatedAt >= existing.updatedAt) await db.wordKnowledge.put(w);
-    }
-    for (const r of backup.readingProgress) {
-      const existing = await db.readingProgress.get(r.textId);
-      if (!existing || r.updatedAt >= existing.updatedAt) await db.readingProgress.put(r);
-    }
-    // Atividade: o mesmo dia pode ter sido estudado em dois aparelhos. Somar
-    // contaria duas vezes ao reimportar o mesmo backup, então fica o maior
-    // valor de cada contador — subestima um pouco, mas é idempotente.
-    for (const a of backup.activity) {
-      const existing = await db.activity.get(a.day);
-      await db.activity.put(
-        existing
-          ? {
-              day: a.day,
-              revisoes: Math.max(a.revisoes, existing.revisoes),
-              praticas: Math.max(a.praticas, existing.praticas),
-              leituras: Math.max(a.leituras, existing.leituras),
-              novos: Math.max(a.novos, existing.novos),
-              updatedAt: Math.max(a.updatedAt, existing.updatedAt),
-            }
-          : a
-      );
-    }
-    await db.meta.bulkPut(backup.meta);
+    await mergeAll(backup);
   });
+}
+
+/**
+ * Mescla registro a registro com as regras de src/db/merge.ts, grava só o
+ * que mudou e aplica as exclusões dos dois lados. Roda dentro da transação
+ * de `importData`.
+ */
+async function mergeAll(backup: BackupFile): Promise<void> {
+  const now = Date.now();
+
+  // 1. Lápides primeiro: decidem o que entra e o que sai nas outras tabelas.
+  await mergeTable(db.deleted, backup.deleted, (t) => [t.table, t.key] as [string, string], mesclarLapide);
+  const lapides = new Map<string, Tombstone>();
+  for (const t of await db.deleted.toArray()) lapides.set(`${t.table}:${t.key}`, t);
+  const apagado = (table: Tombstone['table'], key: string, alteradoEm: number) => {
+    const t = lapides.get(`${table}:${key}`);
+    return t !== undefined && t.deletedAt >= alteradoEm;
+  };
+
+  // 2. Registros que podem ser apagados: o mais recente entre a alteração e a exclusão vence.
+  await mergeTable(
+    db.cards,
+    backup.cards.filter((c) => !apagado('cards', c.id, c.updatedAt)),
+    (c) => c.id,
+    mesclarCard
+  );
+  await mergeTable(
+    db.wordKnowledge,
+    backup.wordKnowledge.filter((w) => !apagado('wordKnowledge', w.key, w.updatedAt)),
+    (w) => w.key,
+    mesclarPalavra
+  );
+  await applyTombstones(db.cards, 'cards', lapides, (c) => c.updatedAt);
+  await applyTombstones(db.wordKnowledge, 'wordKnowledge', lapides, (w) => w.updatedAt);
+
+  // 3. Revisões: histórico imutável — só entra, ou sai por lápide (desfazer).
+  await db.reviews.bulkPut(backup.reviews.filter((r) => !apagado('reviews', r.id, r.reviewedAt)));
+  await applyTombstones(db.reviews, 'reviews', lapides, (r) => r.reviewedAt);
+
+  // 4. Tabelas sem exclusão individual.
+  await mergeTable(db.kanaProgress, backup.kanaProgress, (k) => k.char, mesclarKana);
+  await mergeTable(db.kanjiProgress, backup.kanjiProgress, (k) => k.char, mesclarKanji);
+  await mergeTable(db.readingProgress, backup.readingProgress, (r) => r.textId, mesclarLeitura);
+  await mergeTable(db.activity, backup.activity, (a) => a.day, mesclarAtividade);
+  await mergeTable(db.meta, backup.meta, (m) => m.key, mesclarMeta);
+
+  // 5. Duplicatas e revisões de cards juntados (dos dois lados).
+  await dedupeCards(now);
+  await remapReviews();
+
+  // 6. Limpeza das lápides antigas.
+  await db.deleted.filter((t) => now - t.deletedAt > LAPIDE_VALIDADE_MS).delete();
+}
+
+/** Mescla `incoming` na tabela: cria o que não existe, mescla o que existe, grava só o que mudou. */
+async function mergeTable<T, K extends IndexableType>(
+  table: Table<T, K>,
+  incoming: T[],
+  keyOf: (row: T) => K,
+  merge: (local: T, outro: T) => T
+): Promise<void> {
+  if (incoming.length === 0) return;
+  const locais = await table.bulkGet(incoming.map(keyOf));
+  const gravar: T[] = [];
+  incoming.forEach((row, i) => {
+    const local = locais[i];
+    const resultado = local ? merge(local, row) : row;
+    if (!local || !iguais(local, resultado)) gravar.push(resultado);
+  });
+  if (gravar.length > 0) await table.bulkPut(gravar);
+}
+
+/** Apaga os registros locais com lápide mais recente que a última alteração deles. */
+async function applyTombstones<T>(
+  table: Table<T, string>,
+  nome: Tombstone['table'],
+  lapides: Map<string, Tombstone>,
+  alteradoEm: (row: T) => number
+): Promise<void> {
+  const keys = [...lapides.values()].filter((t) => t.table === nome).map((t) => t.key);
+  if (keys.length === 0) return;
+  const rows = await table.bulkGet(keys);
+  const apagar = keys.filter((key, i) => {
+    const row = rows[i];
+    return row !== undefined && lapides.get(`${nome}:${key}`)!.deletedAt >= alteradoEm(row);
+  });
+  if (apagar.length > 0) await table.bulkDelete(apagar);
+}
+
+/**
+ * Junta cards com a mesma frente (mesmo critério de duplicata do resto do
+ * app — ver `findCardByFront`): a mesma palavra aprendida em dois aparelhos
+ * antes de sincronizar vira um card só, com o estado mais recente de cada
+ * grupo de campos. O outro fica com lápide apontando para o mantido.
+ */
+async function dedupeCards(now: number): Promise<void> {
+  const porFrente = new Map<string, Card[]>();
+  for (const c of await db.cards.toArray()) {
+    const grupo = porFrente.get(c.front);
+    if (grupo) grupo.push(c);
+    else porFrente.set(c.front, [c]);
+  }
+  for (const grupo of porFrente.values()) {
+    if (grupo.length < 2) continue;
+    const mantido = cardMantido(grupo);
+    let resultado = mantido;
+    for (const c of grupo) {
+      if (c.id === mantido.id) continue;
+      resultado = mesclarCard(resultado, { ...c, id: mantido.id, createdAt: mantido.createdAt });
+      await db.cards.delete(c.id);
+      await db.deleted.put({ table: 'cards', key: c.id, deletedAt: now, mergedInto: mantido.id });
+    }
+    await db.cards.put(resultado);
+  }
+}
+
+/** Revisões de cards juntados como duplicata (aqui ou no outro aparelho) passam para o card mantido. */
+async function remapReviews(): Promise<void> {
+  const destino = new Map<string, string>();
+  for (const t of await db.deleted.toArray()) {
+    if (t.table === 'cards' && t.mergedInto) destino.set(t.key, t.mergedInto);
+  }
+  if (destino.size === 0) return;
+  const final = (id: string) => {
+    // Segue a cadeia (A → B → C), com limite contra ciclo.
+    for (let i = 0; i < 10 && destino.has(id); i++) id = destino.get(id)!;
+    return id;
+  };
+  await db.reviews
+    .where('cardId')
+    .anyOf([...destino.keys()])
+    .modify((r) => {
+      r.cardId = final(r.cardId);
+    });
 }

@@ -783,14 +783,62 @@ de 0).
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
 - **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity` e `meta`. Serve de
-  sincronização e de backup.
+  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta` e
+  `deleted` (lápides). Serve de sincronização e de backup. A tabela `local`
+  (id do aparelho, estado da sincronização) **nunca** entra no backup.
 - **Importar**, dois modos:
-  - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e previsível.
-  - **Mesclar**: por `id` (UUID) ou pela chave primária da tabela; em conflito,
-    vence o registro com `updatedAt` mais recente (cards, kanjiProgress,
-    wordKnowledge, readingProgress) ou
-    `lastPracticed` mais recente (kana). `reviews` são idempotentes pelo `id`.
+  - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e
+    previsível. Marca uma nova "época" dos dados (`meta.dataEpoch`, ver abaixo).
+  - **Mesclar**: por `id` (UUID) ou pela chave primária da tabela, com uma
+    regra por tabela (`src/db/merge.ts`). Toda regra é **idempotente**
+    (mesclar o mesmo arquivo de novo não muda nada) e **não depende da
+    ordem** (A em B = B em A), pra dois aparelhos convergirem. Empate de
+    data mantém o local.
+- **Regras da mesclagem por tabela** (schemaVersion 6):
+  - `cards`: três grupos de campos, cada um com seu carimbo — conteúdo
+    (`contentUpdatedAt`: frente, verso, leitura, categoria, tags, exemplo,
+    origem, nota), reconhecimento (`srsUpdatedAt`: estado FSRS) e produção
+    (`productionUpdatedAt`). Cada grupo fica com o lado alterado por último,
+    independente dos outros — editar a nota num aparelho não desfaz uma
+    revisão feita no outro. Carimbo ausente (card anterior à v6) vale
+    `updatedAt`; por isso, ao alterar um grupo, os carimbos ausentes dos
+    outros são fixados com o `updatedAt` de antes (`carimbosCard`).
+  - **Duplicatas de card** (mesma `front`, o critério de duplicata do resto
+    do app): depois de mesclar, viram um card só. Fica o de `createdAt` mais
+    antigo (empate: menor `id`) — critério de campos que nunca mudam, pra
+    todo aparelho escolher o mesmo —, com o estado mais recente de cada
+    grupo; o outro é apagado com lápide `mergedInto`, e as revisões dele
+    passam para o mantido.
+  - `reviews`: histórico imutável — só entra (idempotente pelo `id`) ou sai
+    por lápide (desfazer uma nota).
+  - `kanjiProgress`: estado FSRS pelo `updatedAt` mais recente; `drawBest`
+    pelo maior. Praticar caligrafia **não** mexe em `updatedAt`.
+  - `kanaProgress`, `activity`, `wordKnowledge` (`seenCount`/`lookupCount`)
+    e `readingProgress` (`timesRead`): **contadores por aparelho**
+    (`porAparelho`, `src/db/contadores.ts`). Cada aparelho só escreve a
+    própria entrada; mesclar fica com a entrada mais recente de cada
+    aparelho, e o total (materializado nos campos de sempre) é a soma — o
+    mesmo dia estudado em dois aparelhos soma os dois. Os totais anteriores
+    à v6 viram a entrada `legado`, que mescla pelo maior valor (a regra
+    antiga). `drawBest`, `lastPracticed` e `lastReadAt` pelo maior;
+    `wordKnowledge.status` pelo `updatedAt` mais recente.
+  - `meta`: por chave, vence o `updatedAt` mais recente (ausente = 0). Gravar
+    sempre via `setMeta` (`src/db/local.ts`).
+- **Exclusões (lápides)**: apagar um card, desfazer uma nota (apaga o
+  review) e desmarcar "Já sei" (`wordKnowledge`) gravam uma lápide em
+  `deleted` (`{ table, key, deletedAt }`) via `apagar()` em
+  `src/db/local.ts` — nunca `.delete()` direto nessas tabelas. Na mesclagem,
+  a exclusão vence se `deletedAt` for igual ou mais recente que a última
+  alteração do registro; um registro alterado depois volta. Lápides com mais
+  de 180 dias são descartadas (um aparelho sem sincronizar há mais tempo
+  pode ressuscitar o que foi apagado). Apagar um card **não** apaga as
+  revisões dele — elas são histórico (Progresso).
+- **Época dos dados** (`meta.dataEpoch`): importar no modo Substituir e
+  "Apagar tudo" gravam uma época nova. Reservada para a sincronização
+  automática substituir (em vez de mesclar) nos outros aparelhos — senão a
+  mesclagem traria de volta tudo o que foi substituído.
+- **Relógio do aparelho**: as regras dependem das datas de cada aparelho;
+  um relógio muito errado pode fazer uma alteração antiga vencer.
 - **UUID como chave** é obrigatório para a mesclagem funcionar sem colisão.
 - `schemaVersion` no backup permite migração futura na importação —
   migrações são incrementais por versão em `migrateBackup`

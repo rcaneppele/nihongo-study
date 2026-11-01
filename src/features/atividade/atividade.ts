@@ -1,5 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Activity } from '../../db/schema';
+import { incrementar } from '../../db/contadores';
+import { getDeviceId, setMeta } from '../../db/local';
+import { ACTIVITY_CONTADORES } from '../../db/merge';
 
 /**
  * Atividade diária de estudo — base da meta diária e da sequência de dias.
@@ -27,9 +30,11 @@ function vazio(day: string): Activity {
 export async function registrarAtividade(tipo: TipoAtividade, n = 1): Promise<void> {
   if (n === 0) return;
   const day = diaLocal();
+  const deviceId = await getDeviceId();
   await db.transaction('rw', db.activity, async () => {
     const atual = (await db.activity.get(day)) ?? vazio(day);
-    await db.activity.put({ ...atual, [tipo]: Math.max(0, atual[tipo] + n), updatedAt: Date.now() });
+    const now = Date.now();
+    await db.activity.put({ ...atual, ...incrementar(atual, { [tipo]: n }, ACTIVITY_CONTADORES, deviceId, now), updatedAt: now });
   });
 }
 
@@ -44,7 +49,7 @@ export function useMetaDiaria(): number {
 }
 
 export function setMetaDiaria(meta: number) {
-  return db.meta.put({ key: META_KEY, value: meta });
+  return setMeta(META_KEY, meta);
 }
 
 export interface ResumoDia {

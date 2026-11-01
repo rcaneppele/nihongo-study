@@ -1,7 +1,20 @@
 # Proposta — sincronização automática entre aparelhos (Google Drive)
 
-> **Status: melhoria futura, não implementada.** Registrada em nov/2026.
-> Exige uma decisão explícita de arquitetura (ver §2) antes de começar.
+> **Status: em implementação** (branch `feature/sync-google-drive`).
+> Registrada em nov/2026. **Fase 1 (base de dados) feita** — ver
+> `regras-negocio.md` §6. Decisões tomadas na implementação:
+> - além do previsto na §3: contadores por aparelho (`kanaProgress`,
+>   `activity`, `wordKnowledge`, `readingProgress` — antes um lado
+>   sobrescrevia o outro), carimbo por grupo de campos no card (editar a
+>   nota não desfaz uma revisão do outro aparelho), duplicatas por `front`
+>   juntadas na mesclagem e época dos dados (`meta.dataEpoch`) pra
+>   Substituir/Apagar tudo não serem desfeitos pela mesclagem;
+> - a prova de conceito no iPhone (Fase 3) foi dispensada: a maioria dos
+>   usuários usa Android. A tela de configurar a sincronização avisa que no
+>   iPhone ela pode não funcionar bem (login que não volta ao app instalado,
+>   renovação do token exigindo um toque);
+> - o login será por redirecionamento, implementado à mão (sem o script do
+>   Google Identity Services, que viria de CDN).
 
 Objetivo: quem estuda em mais de um aparelho (ex.: notebook e celular) não
 precisar exportar e importar o backup à mão. Os dados passam a ser

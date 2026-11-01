@@ -1,6 +1,9 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
+import { incrementar } from '../../db/contadores';
+import { getDeviceId } from '../../db/local';
+import { READING_CONTADORES, WORD_CONTADORES } from '../../db/merge';
 import type { ReadingLine, ReadingText, ReadingWord } from '../../data/leitura/types';
 import { suggestCard } from '../flashcards/mining';
 import { cardStage } from '../flashcards/stages';
@@ -49,6 +52,7 @@ export function textWords(texto: ReadingText): WordOccurrence[] {
 export async function finishReading(texto: ReadingText, lookedUp: Set<string>): Promise<void> {
   const now = Date.now();
   const keys = textWords(texto).map((w) => w.key);
+  const deviceId = await getDeviceId();
   await db.transaction('rw', db.wordKnowledge, db.readingProgress, async () => {
     const existing = await db.wordKnowledge.bulkGet(keys);
     await db.wordKnowledge.bulkPut(
@@ -57,8 +61,7 @@ export async function finishReading(texto: ReadingText, lookedUp: Set<string>): 
         return {
           key,
           status: consulted ? 'consultada' : 'compreendida',
-          seenCount: (existing[i]?.seenCount ?? 0) + 1,
-          lookupCount: (existing[i]?.lookupCount ?? 0) + (consulted ? 1 : 0),
+          ...incrementar(existing[i], { seenCount: 1, lookupCount: consulted ? 1 : 0 }, WORD_CONTADORES, deviceId, now),
           updatedAt: now,
         } as const;
       })
@@ -66,7 +69,7 @@ export async function finishReading(texto: ReadingText, lookedUp: Set<string>): 
     const progress = await db.readingProgress.get(texto.id);
     await db.readingProgress.put({
       textId: texto.id,
-      timesRead: (progress?.timesRead ?? 0) + 1,
+      ...incrementar(progress, { timesRead: 1 }, READING_CONTADORES, deviceId, now),
       lastReadAt: now,
       updatedAt: now,
     });

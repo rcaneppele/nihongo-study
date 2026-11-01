@@ -4,6 +4,7 @@ import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { db, newId } from '../db/schema';
+import { novaEpoca } from '../db/local';
 import { freshSrs } from '../features/srs/fsrs';
 import { exportData, downloadBackup, parseBackup, importData, type ImportMode } from '../db/backup';
 import { parseCardsFile } from '../features/flashcards/importCards';
@@ -94,6 +95,7 @@ function DadosTab() {
     try {
       const backup = parseBackup(await file.text());
       await importData(backup, mode);
+      if (mode === 'replace') await novaEpoca();
       setMsg(`Backup importado (${mode === 'replace' ? 'substituiu tudo' : 'mesclado'}).`);
     } catch (err) {
       setMsg(`Erro: ${(err as Error).message}`);
@@ -164,7 +166,9 @@ function DadosTab() {
       db.readingProgress.clear(),
       db.activity.clear(),
       db.meta.clear(),
+      db.deleted.clear(),
     ]);
+    await novaEpoca();
     setMsg('Todos os dados foram apagados.');
   }
 

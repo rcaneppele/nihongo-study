@@ -59,7 +59,16 @@ export interface Card {
   dueDate: number; // timestamp da próxima revisão
   lastReviewedAt?: number;
   createdAt: number;
-  updatedAt: number; // usado na mesclagem (vence o mais recente)
+  /** Última alteração de qualquer campo. */
+  updatedAt: number;
+  /**
+   * Carimbos por grupo de campos, pra mesclagem entre aparelhos não deixar
+   * uma edição de nota desfazer uma revisão feita no outro (ver
+   * src/db/merge.ts). Ausente = vale `updatedAt` (cards anteriores à v6).
+   */
+  contentUpdatedAt?: number; // front/back/reading/category/tags/example/source/note
+  srsUpdatedAt?: number; // estado FSRS do reconhecimento
+  productionUpdatedAt?: number; // `production`
 }
 
 /** Campos de estado do FSRS, mesmo formato dos que ficam direto no Card (reconhecimento). */
@@ -86,6 +95,16 @@ export interface Review {
 
 export type KanaType = 'hiragana' | 'katakana';
 
+/**
+ * Contadores de um registro separados por aparelho (`deviceId` → valores),
+ * pra mesclagem somar o que cada aparelho fez em vez de ficar só com um lado
+ * (ver src/db/contadores.ts). Os totais continuam materializados nos campos
+ * do próprio registro — quem só lê não precisa saber disso. Cada entrada só
+ * é escrita pelo próprio aparelho, então vence a de `updatedAt` maior; a
+ * entrada `legado` guarda os totais anteriores à v6.
+ */
+export type PorAparelho<K extends string> = Record<string, Partial<Record<K, number>> & { updatedAt: number }>;
+
 export interface KanaProgress {
   char: string; // ex.: "あ" (chave primária)
   type: KanaType;
@@ -95,11 +114,38 @@ export interface KanaProgress {
   choiceWrong?: number;
   drawBest?: number; // melhor pontuação de caligrafia (0..100)
   lastPracticed?: number;
+  porAparelho?: PorAparelho<KanaContador>;
 }
 
+export type KanaContador = 'romajiCorrect' | 'romajiWrong' | 'choiceCorrect' | 'choiceWrong';
+
+/** Preferências sincronizadas (tema, meta diária…). Entra no backup. */
 export interface Meta {
   key: string;
   value: unknown;
+  updatedAt?: number; // ausente = 0 (anterior à v6); na mesclagem vence o mais recente
+}
+
+/** Estado só deste aparelho (id do aparelho, sincronização). Nunca entra no backup. */
+export interface LocalState {
+  key: string;
+  value: unknown;
+}
+
+/** Tabelas em que um registro pode ser apagado individualmente. */
+export type DeletableTable = 'cards' | 'reviews' | 'wordKnowledge';
+
+/**
+ * Registro de exclusão ("lápide"), pra exclusão se propagar na mesclagem em
+ * vez de o registro voltar do outro aparelho. Vence o registro se
+ * `deletedAt` for mais recente que a última alteração dele.
+ */
+export interface Tombstone {
+  table: DeletableTable;
+  key: string;
+  deletedAt: number;
+  /** Card apagado por ser duplicata de outro: as revisões dele passam para este id. */
+  mergedInto?: string;
 }
 
 /**
@@ -119,9 +165,10 @@ export interface KanjiProgress {
   scheduledDays: number;
   dueDate: number;
   lastReviewedAt?: number;
-  drawBest?: number; // melhor nota de caligrafia (0..100) — independente do ciclo de FSRS, mesmo padrão de KanaProgress.drawBest
+  drawBest?: number; // melhor nota de caligrafia (0..100) — independente do ciclo de FSRS, mesmo padrão de KanaProgress.drawBest; mesclado pelo maior
   createdAt: number;
-  updatedAt: number; // usado na mesclagem de backup, igual a Card.updatedAt
+  /** Última alteração do estado FSRS — praticar caligrafia não mexe nele (ver src/db/merge.ts). */
+  updatedAt: number;
 }
 
 /**
@@ -137,6 +184,7 @@ export interface WordKnowledge {
   seenCount: number; // em quantas leituras concluídas a palavra apareceu
   lookupCount: number; // em quantas delas foi consultada
   updatedAt: number;
+  porAparelho?: PorAparelho<'seenCount' | 'lookupCount'>;
 }
 
 /** Textos de leitura concluídos ("Terminei a leitura"). Chave = id do texto. */
@@ -145,6 +193,7 @@ export interface ReadingProgress {
   timesRead: number;
   lastReadAt: number;
   updatedAt: number;
+  porAparelho?: PorAparelho<'timesRead'>;
 }
 
 /**
@@ -158,7 +207,10 @@ export interface Activity {
   leituras: number; // textos de leitura concluídos
   novos: number; // itens aprendidos pela primeira vez (primeira revisão de um card, kanji aprendido)
   updatedAt: number;
+  porAparelho?: PorAparelho<ActivityContador>;
 }
+
+export type ActivityContador = 'revisoes' | 'praticas' | 'leituras' | 'novos';
 
 export class NihongoDB extends Dexie {
   cards!: Table<Card, string>;
@@ -169,6 +221,8 @@ export class NihongoDB extends Dexie {
   readingProgress!: Table<ReadingProgress, string>;
   activity!: Table<Activity, string>;
   meta!: Table<Meta, string>;
+  deleted!: Table<Tombstone, [string, string]>;
+  local!: Table<LocalState, string>;
 
   constructor() {
     super('nihongo-study');
@@ -213,6 +267,14 @@ export class NihongoDB extends Dexie {
     // v5: atividade por dia (meta diária e sequência). Só tabela nova.
     this.version(5).stores({
       activity: 'day',
+    });
+    // v6: base da sincronização entre aparelhos — lápides de exclusão e o
+    // estado local do aparelho (fora do backup). Os campos novos dos
+    // registros (`porAparelho`, carimbos por grupo, `Meta.updatedAt`) são
+    // opcionais: ausentes valem como antes, nada a migrar.
+    this.version(6).stores({
+      deleted: '[table+key]',
+      local: 'key',
     });
   }
 }
