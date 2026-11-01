@@ -1,4 +1,4 @@
-import { Code, DatabaseBackup, Goal, Info, Layers, Library, Palette, Settings, TriangleAlert, Upload, User } from 'lucide-react';
+import { BookOpen, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, TriangleAlert, Upload, User } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -11,6 +11,9 @@ import { useTheme, type ThemeMode } from '../lib/useTheme';
 import { setGradeMode, useGradeMode, type GradeMode } from '../features/srs/gradeMode';
 import { META_OPCOES, PESO_LEITURA, setMetaDiaria, useMetaDiaria } from '../features/atividade/atividade';
 import { N5_DECK, n5CategoryCounts } from '../data/seed/n5';
+// O manual vive em docs/ (fonte única); o `?url` faz o build publicá-lo com hash no nome,
+// então trocar o PDF e publicar o app já entrega a versão nova, sem cache velho.
+import manualUrl from '../../docs/manual-do-usuario.pdf?url';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
 
@@ -572,6 +575,27 @@ function SobreTab() {
         <img src={`${import.meta.env.BASE_URL}${logoFile}`} alt="Nihongo Study" className="h-32 object-contain" />
         <p className="text-sage">Flash cards, kana, kanji, leitura e lições</p>
         <p className="badge bg-indigo/8 text-indigo">versão {__APP_VERSION__}</p>
+      </section>
+
+      <section className="card-surface space-y-3">
+        <SectionTitle icon={<BookOpen className="h-4 w-4" />} cor="indigo">
+          Manual do usuário
+        </SectionTitle>
+        <p className="text-sm text-sage">
+          Um guia ilustrado de todo o app: o método, cada tela, a revisão, o backup e perguntas
+          frequentes. Em PDF, para ler na tela ou imprimir. Depois de aberto uma vez, fica
+          disponível também sem internet.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a href={manualUrl} target="_blank" rel="noreferrer" className="btn-primary">
+            <BookOpen className="h-4 w-4" />
+            Abrir o manual
+          </a>
+          <a href={manualUrl} download="Nihongo Study - Manual do usuario.pdf" className="btn-ghost">
+            <Download className="h-4 w-4" />
+            Baixar PDF
+          </a>
+        </div>
       </section>
 
       <section className="card-surface space-y-3">

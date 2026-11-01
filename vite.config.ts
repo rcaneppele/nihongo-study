@@ -24,6 +24,18 @@ export default defineConfig({
         // funcionar offline dali em diante.
         globPatterns: ['**/*.{js,css,html}', 'assets/inter-latin-*.woff2'],
         runtimeCaching: [
+          // Manual do usuário (PDF de alguns MB): fora do pré-cache, guardado na
+          // primeira abertura. O nome tem hash, então cada versão nova é outra
+          // entrada e a antiga sai pelo limite de 1.
+          {
+            urlPattern: /\.pdf$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'manual',
+              expiration: { maxEntries: 1 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
           {
             urlPattern: /\.woff2?$/,
             handler: 'CacheFirst',

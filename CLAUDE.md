@@ -177,6 +177,11 @@ toda mudança pede bump; julgue pelo impacto:
   `src/features/leitura/recomendacao.ts` e `src/features/kana/desempenho.ts`,
   também usados pela Home e pelo treino de kana).
 - `src/routes/` — uma página por arquivo.
+- `docs/manual-do-usuario.pdf` — manual do usuário, também oferecido no app
+  (Configurações › Sobre o App), importado em `src/routes/Config.tsx` com
+  `?url`: o build publica o PDF com hash no nome, então basta substituir o
+  arquivo em `docs/` para o app entregar a versão nova (fora do pré-cache do
+  PWA; guardado no cache `manual` na primeira abertura).
 
 ## Convenções
 

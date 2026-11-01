@@ -78,7 +78,8 @@ src/
 ## Documentação
 
 - `docs/manual-do-usuario.pdf` — manual do usuário (guia ilustrado para quem
-  vai usar o app).
+  vai usar o app). O app oferece este mesmo arquivo em Configurações › Sobre
+  o App; para atualizá-lo lá, basta substituir o PDF.
 - `CLAUDE.md` — contexto, mapa do código e convenções para desenvolver com o
   Claude Code.
 - `regras-negocio.md` — regras de domínio (SRS e estágios, kana, kanji,
