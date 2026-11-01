@@ -5,6 +5,7 @@ import { PILULA, TEXTO } from '../lib/cores';
 import { SECOES, secaoDaRota, type Secao } from '../features/metodo/estrutura';
 import { usePendencias } from '../features/metodo/pendencias';
 import { aoMudarDeTela, useEstadoSync } from '../features/sync/motor';
+import { PRIVACIDADE_URL } from '../lib/privacidade';
 
 // Navegação pelo método (Hoje · Aprender · Praticar · Revisar · Progresso),
 // definida em src/features/metodo/estrutura.ts. A seção ativa vem da rota
@@ -35,6 +36,10 @@ export default function Layout({ children }: { children: ReactNode }) {
 
         <footer className="border-t border-line py-4 text-center text-xs text-sage">
           Estudo de japonês · {sincronizado ? 'dados sincronizados com o Google Drive' : 'dados salvos só neste dispositivo'}
+          {' · '}
+          <a href={PRIVACIDADE_URL} target="_blank" rel="noreferrer" className="underline underline-offset-2 hover:text-ink">
+            Privacidade
+          </a>
         </footer>
       </div>
 

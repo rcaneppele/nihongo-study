@@ -1,4 +1,4 @@
-import { ArrowLeftRight, BookOpen, Cloud, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, Share2, TriangleAlert, Upload, User } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Cloud, Code, DatabaseBackup, Download, Goal, Info, Layers, Library, Palette, Settings, Share2, ShieldCheck, TriangleAlert, Upload, User } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -27,6 +27,7 @@ import { N5_DECK, n5CategoryCounts } from '../data/seed/n5';
 // O manual vive em docs/ (fonte única); o `?url` faz o build publicá-lo com hash no nome,
 // então trocar o PDF e publicar o app já entrega a versão nova, sem cache velho.
 import manualUrl from '../../docs/manual-do-usuario.pdf?url';
+import { PRIVACIDADE_URL } from '../lib/privacidade';
 
 const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
 
@@ -737,8 +738,22 @@ function SobreTab() {
         </p>
         <p className="text-sm text-sage">
           É um projeto pessoal e sem fins comerciais: roda inteiramente no navegador, sem servidor,
-          e os dados ficam salvos só no seu aparelho.
+          e os dados ficam salvos no seu aparelho — e, se você ligar a sincronização, no seu Google Drive.
         </p>
+      </section>
+
+      <section className="card-surface space-y-3">
+        <SectionTitle icon={<ShieldCheck className="h-4 w-4" />} cor="indigo">
+          Privacidade
+        </SectionTitle>
+        <p className="text-sm text-sage">
+          O app não coleta nenhum dado: não tem cadastro, servidor, analytics nem anúncios. A política completa
+          explica o que fica no aparelho e o que vai para o seu Google Drive quando a sincronização está ligada.
+        </p>
+        <a href={PRIVACIDADE_URL} target="_blank" rel="noreferrer" className="btn-ghost">
+          <ShieldCheck className="h-4 w-4" />
+          Política de privacidade
+        </a>
       </section>
 
       <section className="card-surface space-y-3">

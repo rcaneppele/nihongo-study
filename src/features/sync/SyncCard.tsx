@@ -13,6 +13,7 @@ import {
 } from './motor';
 import { entrarNoGoogle } from './googleAuth';
 import { tempoDesde } from '../backup/lembrete';
+import { PRIVACIDADE_URL } from '../../lib/privacidade';
 
 function textoStatus(status: StatusSync, estado: EstadoSync): string {
   const pendente = status.pendente ? ' · há alterações a enviar' : '';
@@ -71,7 +72,11 @@ export default function SyncCard({ titulo }: { titulo: ReactNode }) {
           </p>
           <p className="text-sm text-sage">
             Ao conectar, os dados deste aparelho e os que já estiverem no Drive são <strong className="text-ink">juntados</strong>{' '}
-            — nada é apagado.
+            — nada é apagado. Detalhes na{' '}
+            <a href={PRIVACIDADE_URL} target="_blank" rel="noreferrer" className="text-indigo underline underline-offset-2">
+              política de privacidade
+            </a>
+            .
           </p>
           <p className="rounded-xl bg-kin/10 px-3 py-2 text-xs text-ink/80">
             No iPhone, com o app instalado na tela de início, a sincronização pode não funcionar bem (o login do Google

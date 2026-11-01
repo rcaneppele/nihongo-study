@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de privacidade — Nihongo Study</title>
+<meta name="description" content="Política de privacidade do Nihongo Study, app gratuito de estudo de japonês.">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  /* Página estática, fora do app React (precisa abrir direto por URL, inclusive para o Google). Cores = tokens do app. */
+  :root { --ink:#1f2633; --indigo:#223c63; --paper:#f6f3ec; --sage:#6b7280; --line:#e4e0d6; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  header img { width: 48px; height: 48px; border-radius: 12px; }
+  h1 { font-size: 1.7rem; color: var(--indigo); margin: 0; line-height: 1.2; }
+  h2 { font-size: 1.15rem; color: var(--indigo); margin: 32px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+  p, li { margin: 0 0 10px; }
+  ul { padding-left: 22px; }
+  a { color: var(--indigo); }
+  .data { color: var(--sage); font-size: .9rem; margin: 0 0 24px; }
+  .resumo { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+  .resumo ul { margin: 0; }
+  code { font-size: .9em; background: #ebe8e1; border-radius: 4px; padding: 1px 5px; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 48px 0 0; }
+  .voltar { margin-top: 32px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icons/icon-192.png" alt="">
+    <h1>Política de privacidade — Nihongo Study</h1>
+  </header>
+  <p class="data">Última atualização: 1 de novembro de 2026</p>
+
+  <div class="resumo">
+    <strong>Resumo</strong>
+    <ul>
+      <li>O Nihongo Study não tem servidor, não pede cadastro e não coleta nenhum dado seu.</li>
+      <li>O seu progresso de estudo fica guardado no próprio aparelho, no navegador.</li>
+      <li>Se você ligar a sincronização com o Google Drive (opcional), uma cópia desse progresso vai para uma pasta
+        oculta do app no <strong>seu</strong> Google Drive — e para nenhum outro lugar.</li>
+      <li>Nada é vendido, compartilhado ou usado para publicidade.</li>
+    </ul>
+  </div>
+
+  <h2>Quem somos</h2>
+  <p>O Nihongo Study (<a href="https://rcaneppele.github.io/nihongo-study/">rcaneppele.github.io/nihongo-study</a>)
+  é um app gratuito e de código aberto para estudar japonês, feito por Rodrigo Caneppele como projeto pessoal, sem
+  fins comerciais. Contato: <a href="mailto:r.caneppele@gmail.com">r.caneppele@gmail.com</a>.</p>
+
+  <h2>Que dados o app guarda</h2>
+  <p>Apenas o que você faz no app: cards de vocabulário e o histórico de revisões, progresso em kana, kanji e
+  leituras, atividade por dia e preferências (tema, meta diária etc.). Esses dados ficam no armazenamento do navegador
+  do seu aparelho (IndexedDB) e não são enviados para nenhum servidor do app — ele não tem servidor.</p>
+  <p>O app não usa contas próprias, cookies de rastreamento, ferramentas de análise (analytics) nem anúncios.</p>
+
+  <h2>Sincronização com o Google Drive (opcional)</h2>
+  <p>A sincronização vem desligada. Se você escolher ligá-la (Configurações › Dados › Conectar com o Google):</p>
+  <ul>
+    <li>Você entra com a sua conta Google na página do próprio Google e autoriza o acesso. O app pede só a permissão
+      <code>drive.appdata</code>, que dá acesso a uma <strong>pasta oculta e exclusiva do app</strong> no seu Drive.
+      O app não vê, não lê e não altera nenhum outro arquivo seu.</li>
+    <li>Nessa pasta o app grava um único arquivo (<code>nihongo-study-sync.json.gz</code>) com o seu progresso de
+      estudo, para manter seus aparelhos iguais.</li>
+    <li>O app lê o endereço de e-mail da conta conectada apenas para mostrar, na tela, com qual conta você está
+      sincronizando. Ele fica guardado só no seu aparelho.</li>
+    <li>O acesso concedido pelo Google (um token válido por cerca de 1 hora) fica guardado só no seu aparelho.</li>
+    <li>Os dados vão direto do seu aparelho para o seu Google Drive, sem passar por nenhum servidor intermediário. O
+      desenvolvedor do app não tem acesso ao seu Drive nem aos seus dados.</li>
+  </ul>
+  <p>O uso e a transferência de informações recebidas das APIs do Google seguem a
+  <a href="https://developers.google.com/terms/api-services-user-data-policy">Política de Dados do Usuário dos
+  Serviços de API do Google</a>, incluindo os requisitos de Uso Limitado. Esses dados são usados exclusivamente para
+  sincronizar o seu progresso entre os seus aparelhos — nunca para publicidade, nunca vendidos ou repassados a
+  terceiros, e nunca lidos por pessoas.</p>
+
+  <h2>Como apagar seus dados</h2>
+  <ul>
+    <li><strong>Neste aparelho:</strong> Configurações › Dados › Zona de risco › Apagar todos os dados (ou limpar os dados do site no
+      navegador, ou desinstalar o app).</li>
+    <li><strong>No Google Drive:</strong> Configurações › Dados › Sincronizar com o Google Drive › Apagar a cópia no
+      Drive. Isso remove o arquivo do app do seu Drive e desconecta o aparelho.</li>
+    <li><strong>Remover a permissão do app:</strong> em Desconectar, no próprio app, ou a qualquer momento em
+      <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</li>
+  </ul>
+
+  <h2>Outros serviços envolvidos</h2>
+  <ul>
+    <li><strong>Hospedagem:</strong> o app é servido pelo GitHub Pages. Como qualquer site, o GitHub pode registrar
+      dados técnicos de acesso (como o endereço IP), conforme a
+      <a href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement">declaração
+      de privacidade do GitHub</a>.</li>
+    <li><strong>Áudio em japonês:</strong> a leitura em voz alta usa as vozes do seu sistema/navegador. Dependendo do
+      navegador e da voz escolhida, o texto lido pode ser processado online pelo fornecedor da voz (por exemplo,
+      Google, Apple ou Microsoft), conforme a política dele. O app não envia nada por conta própria.</li>
+  </ul>
+
+  <h2>Crianças</h2>
+  <p>O app não coleta dados de ninguém, de nenhuma idade.</p>
+
+  <h2>Mudanças nesta política</h2>
+  <p>Se esta política mudar, a nova versão será publicada nesta mesma página, com a data de atualização no topo.</p>
+
+  <hr>
+
+  <h2 id="english">Privacy policy (English summary)</h2>
+  <p>Nihongo Study is a free, open-source Japanese study app with no backend server, no accounts, no analytics and no
+  ads. Your study progress is stored only in your browser on your device (IndexedDB).</p>
+  <p>Optional Google Drive sync (off by default) uses the <code>drive.appdata</code> scope only: the app can access
+  just its own hidden app folder in your Google Drive, where it stores a single file with your study progress. It reads
+  your account e-mail address only to show which account is connected. The access token and e-mail stay on your device.
+  Data goes directly from your device to your own Google Drive; the developer has no access to it.</p>
+  <p>Nihongo Study's use and transfer of information received from Google APIs adheres to the
+  <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data
+  Policy</a>, including the Limited Use requirements. This data is used solely to sync your progress across your own
+  devices; it is never used for advertising, sold, shared with third parties, or read by humans.</p>
+  <p>To delete your data: in the app, use Configurações › Dados › "Apagar todos os dados" (device) and "Apagar a cópia no Drive"
+  (Google Drive); you can revoke access at any time at
+  <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.
+  Contact: <a href="mailto:r.caneppele@gmail.com">r.caneppele@gmail.com</a>.</p>
+
+  <p class="voltar"><a href="./">← Abrir o Nihongo Study</a></p>
+</main>
+</body>
+</html>

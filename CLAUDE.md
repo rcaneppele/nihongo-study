@@ -199,6 +199,12 @@ toda mudança pede bump; julgue pelo impacto:
   `src/features/leitura/recomendacao.ts` e `src/features/kana/desempenho.ts`,
   também usados pela Home e pelo treino de kana).
 - `src/routes/` — uma página por arquivo.
+- `public/privacidade.html` — política de privacidade (página estática, fora
+  do React, para abrir direto pela URL; é o link cadastrado na tela de
+  consentimento OAuth do Google). URL em `src/lib/privacidade.ts`, linkada no
+  rodapé, em Config › Sobre o App e no cartão do Google Drive. Se a
+  sincronização passar a usar outro escopo ou dado do Google, atualize a
+  página.
 - `docs/manual-do-usuario.pdf` — manual do usuário, também oferecido no app
   (Configurações › Sobre o App), importado em `src/routes/Config.tsx` com
   `?url`: o build publica o PDF com hash no nome, então basta substituir o
