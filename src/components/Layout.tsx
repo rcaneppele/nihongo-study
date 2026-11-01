@@ -1,10 +1,10 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Settings } from 'lucide-react';
 import { PILULA, TEXTO } from '../lib/cores';
 import { SECOES, secaoDaRota, type Secao } from '../features/metodo/estrutura';
 import { usePendencias } from '../features/metodo/pendencias';
-import { useEstadoSync } from '../features/sync/motor';
+import { aoMudarDeTela, useEstadoSync } from '../features/sync/motor';
 
 // Navegação pelo método (Hoje · Aprender · Praticar · Revisar · Progresso),
 // definida em src/features/metodo/estrutura.ts. A seção ativa vem da rota
@@ -16,6 +16,11 @@ export default function Layout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const ativa = secaoDaRota(location.pathname, location.search);
   const sincronizado = useEstadoSync()?.conectado;
+
+  // Acesso ao Google vencido com o app aberto: renova ao chegar numa tela sem sessão de estudo.
+  useEffect(() => {
+    void aoMudarDeTela();
+  }, [location.pathname]);
 
   return (
     <div className="flex min-h-full">

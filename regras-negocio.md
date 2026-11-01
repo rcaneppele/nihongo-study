@@ -857,9 +857,12 @@ de 0).
     dura ~1 hora e, sem servidor, não há como renovar em segundo plano —
     renovar é passar de novo pelo Google (`prompt=none`: volta na hora, sem
     tela, se a pessoa continua logada). O app faz isso **sozinho** só ao
-    abrir, ou ao voltar pra ele estando na Home — nunca no meio de uma
-    sessão de estudo (o recarregamento perderia a sessão) —, no máximo uma
-    vez a cada 10 min. Se o Google pedir login, não insiste: a Home mostra
+    abrir, ou — com o app aberto — ao voltar pra ele (aba visível ou janela
+    em foco) ou mudar de tela, estando numa tela sem sessão de estudo (Hoje,
+    Aprender, Praticar e suas habilidades, Lições, Progresso, Config) —
+    nunca no meio de uma sessão (o recarregamento perderia a sessão; por
+    isso Revisar e as telas de treino ficam de fora) —, no máximo uma vez a
+    cada 10 min. Se o Google pedir login, não insiste: a Home mostra
     "Sincronização pausada" com o botão Entrar.
   - **Arquivo**: um só, `nihongo-study-sync.json.gz` (o backup comprimido),
     no `appDataFolder`.

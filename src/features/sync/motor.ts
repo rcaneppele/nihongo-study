@@ -85,7 +85,7 @@ export function useEstadoSync(): EstadoSync | undefined {
 
 // --- ciclo ------------------------------------------------------------------
 
-export type MotivoSync = 'abertura' | 'foco' | 'alteracao' | 'saida' | 'online' | 'manual';
+export type MotivoSync = 'abertura' | 'foco' | 'navegacao' | 'alteracao' | 'saida' | 'online' | 'manual';
 
 let emAndamento: Promise<void> | null = null;
 let deNovo = false;
@@ -246,17 +246,40 @@ function decidirEpoca(
 }
 
 /**
+ * Telas sem sessão de estudo em andamento (hubs, Progresso, Config): ir ao
+ * Google e voltar recarrega a página, mas ali não se perde nada. Revisar
+ * fica de fora — a revisão do dia roda dentro da própria rota.
+ */
+const TELA_SEM_SESSAO = /^\/(aprender|praticar(\/[^/]+)?|progresso|config|licoes)?\/?$/;
+
+function telaSemSessao(): boolean {
+  const rota = location.pathname.slice(import.meta.env.BASE_URL.length - 1);
+  return TELA_SEM_SESSAO.test(rota);
+}
+
+/**
  * Sem token válido, renovar é passar pelo Google (sai do app e volta). Só
- * faz isso sozinho onde não atrapalha: ao abrir o app, ou ao voltar pra
- * ele estando na Home — nunca no meio de uma sessão de estudo, que se
- * perderia no recarregamento. E não insiste se o Google já pediu login.
+ * faz isso sozinho onde não atrapalha: ao abrir o app, ou ao voltar pra ele
+ * / mudar de tela estando numa tela sem sessão de estudo — nunca no meio de
+ * uma sessão, que se perderia no recarregamento. E não insiste se o Google
+ * já pediu login.
  */
 function podeIrAoGoogleSozinho(motivo: MotivoSync): boolean {
   if (sessionStorage.getItem(LOGIN_FALHOU)) return false;
   const ultimo = Number(sessionStorage.getItem(ULTIMO_LOGIN) ?? 0);
   if (Date.now() - ultimo < INTERVALO_LOGIN_MS) return false;
   if (motivo === 'abertura') return true;
-  return motivo === 'foco' && location.pathname === import.meta.env.BASE_URL;
+  return (motivo === 'foco' || motivo === 'navegacao') && telaSemSessao();
+}
+
+/**
+ * Chamado pelo Layout a cada troca de tela: com o app aberto por mais de
+ * 1 hora (o token venceu sem a pessoa sair dele), renova ao entrar numa
+ * tela sem sessão de estudo.
+ */
+export async function aoMudarDeTela(): Promise<void> {
+  if (status.fase === 'desligado' || status.fase === 'sincronizando' || !telaSemSessao()) return;
+  if (!(await tokenAtual())) void sincronizar('navegacao');
 }
 
 // --- ligar/desligar ---------------------------------------------------------
@@ -335,13 +358,22 @@ export async function iniciarSync(retorno: RetornoOAuth): Promise<void> {
     table.hook('deleting', marcarAlteracao);
   }
 
+  // Voltar pro app: aba/app de novo visível ou, no computador, a janela de novo em foco (trocar de
+  // janela nem sempre esconde a aba). Os dois eventos costumam vir juntos — um ciclo só.
+  let ultimaVolta = 0;
+  function aoVoltar() {
+    if (Date.now() - ultimaVolta < 2000) return;
+    ultimaVolta = Date.now();
+    if (status.pendente || status.fase === 'precisaLogin' || Date.now() - ultimoCiclo > INTERVALO_FOCO_MS) {
+      void sincronizar('foco');
+    }
+  }
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       if (status.pendente) void sincronizar('saida');
-    } else if (status.pendente || Date.now() - ultimoCiclo > INTERVALO_FOCO_MS) {
-      void sincronizar('foco');
-    }
+    } else aoVoltar();
   });
+  window.addEventListener('focus', aoVoltar);
   window.addEventListener('online', () => void sincronizar('online'));
 
   await sincronizar('abertura');
