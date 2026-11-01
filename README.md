@@ -86,7 +86,9 @@ src/
 - `docs/roadmap.md` — próximas features e o porquê de cada uma.
 - `docs/padrao-licoes.md` — padrão de conteúdo das lições.
 - `docs/proposta-*.md`, `docs/melhorias-aprendizado.md` — registros das
-  propostas já implementadas (visual, reorganização, melhorias).
+  propostas já implementadas (visual, reorganização, melhorias) e da
+  sincronização via Google Drive (`proposta-sincronizacao.md`, melhoria
+  futura).
 
 ## Licença
 

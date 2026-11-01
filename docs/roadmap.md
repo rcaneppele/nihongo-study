@@ -253,6 +253,16 @@ funcionalidade nova, e que completariam o método:
 - **Histórico do Quiz e do Diga em japonês**: hoje não guardam
   resultado; alimentaria Pontos fracos e o próximo passo de *Falar*.
 
+### Dados e sincronização
+- **Sincronização automática entre aparelhos via Google Drive** — 📝
+  proposta (2026-11), não implementada: os dados são sincronizados sozinhos
+  por um arquivo na pasta oculta do app no Drive do próprio usuário, sem
+  servidor nosso e sem custo. Opcional e dispensável (o app segue 100%
+  offline sem ela), mas é uma exceção explícita ao "sem API remota" da §1.
+  Antes dela, corrigir a mesclagem (registro de exclusões e data nas
+  preferências), o que já melhora o modo Mesclar manual. Detalhes, riscos,
+  alternativas e fases em `docs/proposta-sincronizacao.md`.
+
 ---
 
 ## 5. Fases sugeridas
