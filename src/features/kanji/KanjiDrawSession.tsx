@@ -1,11 +1,10 @@
 import SessionHeader from '../../components/SessionHeader';
 import { useState } from 'react';
-import { db } from '../../db/schema';
 import type { KanjiEntry } from '../../data/kanji';
 import { scoreDrawing, type DrawScore, type Stroke } from '../handwriting/strokes';
 import StrokeReferenceFigure from '../handwriting/StrokeReferenceFigure';
 import KanaCanvas from '../../components/KanaCanvas';
-import { registrarAtividade } from '../atividade/atividade';
+import { registrarCaligrafiaKanji } from './progresso';
 
 const CANVAS_SIZE = 280;
 
@@ -58,11 +57,7 @@ function DrawQuestion({ entry, onNext }: { entry: KanjiEntry; onNext: () => void
     if (result) return;
     const outcome = scoreDrawing(giveUp ? [] : strokes, entry.char, CANVAS_SIZE);
     setResult(outcome);
-    void registrarAtividade('praticas');
-    const p = await db.kanjiProgress.get(entry.char);
-    // Sem mexer em `updatedAt`: ele é o carimbo do estado FSRS, e a melhor
-    // nota de caligrafia já mescla pelo maior (ver src/db/merge.ts).
-    if (p) await db.kanjiProgress.update(entry.char, { drawBest: Math.max(p.drawBest ?? 0, outcome.score) });
+    await registrarCaligrafiaKanji(entry.char, outcome.score);
   }
 
   return (

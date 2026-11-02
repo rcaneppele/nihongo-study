@@ -88,7 +88,7 @@ export const quiz: QuizLicao = {
         { texto: 'あなた', romaji: 'anata' },
         { texto: 'の', romaji: 'no', particula: true },
         { texto: 'いけん', romaji: 'iken' },
-        { texto: 'を', romaji: 'o', particula: true },
+        { texto: 'を', romaji: 'o' },
         { texto: 'おしえてください', romaji: 'oshiete kudasai' },
       ],
       pt: 'Conte-nos sua opinião.',

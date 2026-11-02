@@ -35,9 +35,10 @@ escrever) · Revisar · Progresso —, não por módulo (ver
 
 - Vite + React + TypeScript + Tailwind + Dexie + vite-plugin-pwa.
 - `npm run dev` (desenvolvimento), `npm run build` (produção), `npm run lint`,
-  `npm test` (Vitest — a mesclagem de backup em `src/db/`, o parser de CSV
-  da importação de cards e a consistência dos dados de leitura e de
-  gramática em contexto).
+  `npm run typecheck`, `npm test` (Vitest em Node), `npm run test:browser`
+  (componentes no Chromium), `npm run test:e2e` (Playwright),
+  `npm run test:visual`, `npm run coverage`, `npm run test:mutation`
+  (Stryker) e `npm run test:all` (lint + tipos + Node + browser + E2E).
 
 ## Versionamento
 
@@ -71,8 +72,12 @@ toda mudança pede bump; julgue pelo impacto:
   `deleted` (lápides), `exerciseResults` (histórico dos exercícios),
   `lessonProgress`, `achievements` (conquistas), `journal` (diário) e
   `local` (só do aparelho, fora do backup).
-- `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`;
-  migrações incrementais por versão em `migrateBackup`.
+- `src/db/backup.ts` — exportar/importar (modos `replace` e `merge`),
+  `importarBackup`, `apagarTudo` e `TABELAS_SINCRONIZADAS` (fonte única da
+  lista de tabelas do backup); migrações por versão em `migracoes.ts`
+  (fixtures congeladas por versão em `src/db/__fixtures__/`); mesclagem no
+  banco em `mesclarNoBanco.ts`; baixar/compartilhar o arquivo em
+  `src/features/backup/arquivo.ts`.
 - `src/db/merge.ts` — regras de mesclagem por tabela (funções puras,
   testadas em `merge.test.ts`; `npm test`); `src/db/contadores.ts` —
   contadores por aparelho (`porAparelho`); `src/db/local.ts` — id do
@@ -84,7 +89,9 @@ toda mudança pede bump; julgue pelo impacto:
   `VITE_GOOGLE_CLIENT_ID` — `.env.example`, variável `GOOGLE_CLIENT_ID` no
   deploy), `googleDrive.ts` (API REST do Drive via `fetch`, arquivo gzip no
   `appDataFolder`), `destino.ts` (interface pra outros destinos), `motor.ts`
-  (ciclo baixar → mesclar → subir, época dos dados, gatilhos, status),
+  (ciclo baixar → mesclar → subir, época dos dados, gatilhos, status;
+  dependências externas injetáveis via `definirDependenciasSync`, que os
+  testes usam com um Drive em memória),
   `SyncCard.tsx` (Config › Dados) e `AvisoSync.tsx` (Home). Ver
   `regras-negocio.md` §6.
 - `src/features/backup/` — lembrete de backup da Home (`LembreteBackup`,
@@ -99,7 +106,11 @@ toda mudança pede bump; julgue pelo impacto:
   JSON ou texto exportado do Anki ("Notas em Texto Simples"/"Cartões em
   Texto Simples"); `parseCardsFile()` detecta o formato pelo nome do
   arquivo/conteúdo.
-- `src/features/flashcards/StudySession.tsx` — sessão de revisão/prática.
+- `src/features/flashcards/StudySession.tsx` — sessão de revisão/prática;
+  a nota e o desfazer são do serviço `revisao.ts` (`calcularRevisao` pura +
+  `registrarRevisao`/`desfazerRevisao`). `cards.ts` — criar/editar/apagar
+  card (`novoCard`, `adicionarCardsNovos`, `cardPorFrente`, `mudarEstagio`):
+  toda gravação de card fora da revisão passa por ele.
 - `src/features/flashcards/mining.ts` + `SaveWordForm.tsx` — salvar palavra
   tocada na leitura como card, com a frase de contexto (`Card.example`) e
   a origem (`Card.source`); `CardExampleView.tsx` mostra essa frase no
@@ -131,7 +142,8 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/data/kanji.ts` — dataset `KANJI_N5` (~110 kanji): leituras,
   radicais/mnemônico, exemplos e ordem pedagógica de introdução.
 - `src/features/kanji/kanjiQueue.ts` — consultas de fila (kanji devidos,
-  disponíveis para aprender, já iniciados).
+  disponíveis para aprender, já iniciados); `progresso.ts` — aprender,
+  revisar/desfazer e caligrafia de kanji (gravação).
 - `src/features/kanji/KanjiLearn.tsx`, `KanjiReviewSession.tsx`,
   `KanjiDrawSession.tsx` — telas de aprender/revisar/praticar caligrafia do
   módulo de Kanji. Aprender e caligrafia ficam em `/kanji`; a revisão roda
@@ -225,7 +237,16 @@ toda mudança pede bump; julgue pelo impacto:
   `proximoPasso.ts` calcula o "Próximo passo" de cada hub (com
   `src/features/leitura/recomendacao.ts` e `src/features/kana/desempenho.ts`,
   também usados pela Home e pelo treino de kana).
-- `src/routes/` — uma página por arquivo.
+- `src/routes/` — uma página por arquivo; a tabela de rotas fica em
+  `src/rotas.ts` (o `App` monta as rotas dela). Treino de kana:
+  `src/features/kana/` (`treino.ts` regras puras, `progresso.ts` gravação,
+  `KanaConfig`/`KanaTeste`/`KanaResultado` telas). Configurações:
+  `src/features/config/` (uma aba por arquivo).
+- `src/lib/aleatorio.ts` (`embaralhar`/`sortear` com `rng` injetável) e
+  `src/lib/conjuntos.ts` (`alternar` seleção) — utilitários genéricos.
+- Testes: `src/test/` (fábricas, banco limpo, aparelhos simulados),
+  `*.test.ts(x)` em Node, `*.browser.test.tsx` no navegador, `e2e/` (Playwright).
+  Ver `docs/estrategia-testes.md`.
 - `public/privacidade.html` — política de privacidade (página estática, fora
   do React, para abrir direto pela URL; é o link cadastrado na tela de
   consentimento OAuth do Google). URL em `src/lib/privacidade.ts`, linkada no
@@ -253,7 +274,8 @@ toda mudança pede bump; julgue pelo impacto:
   lições, `kin` kana, `sakura` pontos fracos; kanji usa `hanko`) só em
   pequenas áreas: ícones, `icon-tile` (fundo `/12`), `badge`, barras finas —
   nunca em fundos grandes. Visão completa em `docs/guia-visual.md`.
-- Componentes visuais compartilhados: `PageHeader` (cabeçalho de página com
+- Componentes visuais compartilhados: `Segmentado` (escolha única em
+  botões, com `aria-pressed`), `Chip` (filtro em pílula), `PageHeader` (cabeçalho de página com
   ícone na cor do módulo, título, subtítulo e ações), `StatCard` (contador com ícone,
   selo de crescimento ou barra), `ProgressRing` (anel 0–1), `StudyCard`
   (card das sessões de estudo, efeito de pilha + etiqueta), em
@@ -306,6 +328,19 @@ toda mudança pede bump; julgue pelo impacto:
   completo, com critérios de profundidade, arquétipos de lição, romanização
   e checklist, em `docs/padrao-licoes.md` — consulte antes de criar ou
   expandir uma lição.
+
+## Testes e boas práticas (obrigatório)
+
+- Todo código novo segue `docs/boas-praticas.md` (regra pura separada da
+  gravação, componente não grava no banco, `now`/`rng` como parâmetro,
+  nada duplicado, dependência externa atrás de interface).
+- Toda funcionalidade nova vem com testes das camadas pertinentes
+  (`docs/estrategia-testes.md`): regra → unitário; serviço → integração
+  (fake-indexeddb); tela/fluxo → jornada E2E em `e2e/jornadas/`; dado novo
+  → teste de integridade; mudança de schema → nova fixture em
+  `src/db/__fixtures__/` (nunca editar as existentes).
+- Correção de bug começa por um teste que falha.
+- Antes de considerar pronto: `npm run test:all` (lint, tipos, Node e E2E).
 
 ## Regras de negócio
 

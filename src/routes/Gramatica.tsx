@@ -10,6 +10,7 @@ import QuizSession from '../features/quiz/QuizSession';
 import QuizResultado from '../features/quiz/QuizResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
 import { registrarResultados } from '../features/exercicios/historico';
+import { alternar } from '../lib/conjuntos';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -34,12 +35,7 @@ export default function Gramatica() {
   const quantidade = Math.min(quantidadeDesejada, Math.max(disponiveis, 1));
 
   function toggle(id: string) {
-    setPontoIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    setPontoIds((prev) => alternar(prev, id));
   }
 
   function gerar() {
@@ -122,7 +118,7 @@ export default function Gramatica() {
             </p>
             <div className="flex flex-wrap gap-2">
               {pontos.map((p) => (
-                <button key={p.id} onClick={() => toggle(p.id)} className={`chip ${pontoIds.has(p.id) ? 'chip-active' : ''}`}>
+                <button key={p.id} aria-pressed={pontoIds.has(p.id)} onClick={() => toggle(p.id)} className={`chip ${pontoIds.has(p.id) ? 'chip-active' : ''}`}>
                   {p.titulo}
                 </button>
               ))}

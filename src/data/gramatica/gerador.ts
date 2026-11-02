@@ -1,14 +1,6 @@
 import type { PerguntaCompletar, Token } from '../quiz/types';
 import { FRASES_GRAMATICA, PONTOS_GRAMATICA, type FraseGramatica } from './frases';
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+import { embaralhar } from '../../lib/aleatorio';
 
 function token(bloco: string): Token {
   const [texto, romaji = ''] = bloco.split('|');
@@ -46,7 +38,7 @@ export function perguntaDaFrase(f: FraseGramatica): PerguntaCompletar {
     ponto: ponto.titulo,
     antes,
     depois,
-    alternativas: shuffle([correta.texto, ...f.distratoras]),
+    alternativas: embaralhar([correta.texto, ...f.distratoras]),
     correta: correta.texto,
     pt: f.pt,
     explicacao: f.explicacao,
@@ -59,7 +51,7 @@ export function contarFrases(pontoIds: string[]): number {
 
 /** Sorteia `quantidade` frases dos pontos escolhidos. */
 export function gerarGramatica(pontoIds: string[], quantidade: number): PerguntaCompletar[] {
-  return shuffle(FRASES_GRAMATICA.filter((f) => pontoIds.includes(f.ponto)))
+  return embaralhar(FRASES_GRAMATICA.filter((f) => pontoIds.includes(f.ponto)))
     .slice(0, quantidade)
     .map(perguntaDaFrase);
 }

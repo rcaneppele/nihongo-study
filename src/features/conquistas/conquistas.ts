@@ -1,5 +1,4 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
 import { HIRAGANA_KANA, KATAKANA_KANA } from '../../data/kana';
 import { KANJI_N5 } from '../../data/kanji';
@@ -8,7 +7,7 @@ import { N5_DECK } from '../../data/seed/n5';
 import { LICOES } from '../../licoes';
 import type { Cor } from '../../lib/cores';
 import { buildVocabulary } from '../flashcards/vocabulary';
-import { cardStage } from '../flashcards/stages';
+import { palavrasConhecidas } from '../leitura/knowledge';
 import { diasEstudados, sequenciaDeDias } from '../atividade/atividade';
 
 /**
@@ -88,20 +87,14 @@ export async function carregarNumeros(): Promise<Numeros> {
     db.journal.count(),
   ]);
 
-  const compreendidas = new Set(knowledge.filter((k) => k.status === 'compreendida').map((k) => k.key));
-  let seiDizer = 0;
-  for (const card of cards) {
-    if (card.state !== State.New || card.production) compreendidas.add(card.front);
-    const stage = cardStage(card);
-    if (stage === 'seiDizer' || stage === 'domino') seiDizer++;
-  }
+  const { understood, canSay } = palavrasConhecidas(knowledge, cards, reviews);
   const reconhecidos = new Set(kana.filter((k) => k.romajiCorrect > 0 || (k.choiceCorrect ?? 0) > 0).map((k) => k.char));
   const textos = new Set(LEITURA_TEXTOS.map((t) => t.id));
   const idsLicoes = new Set(LICOES.map((l) => l.meta.id));
 
   return {
-    compreendidas: compreendidas.size,
-    seiDizer,
+    compreendidas: understood.size,
+    seiDizer: canSay.size,
     n5: buildVocabulary(cards, knowledge).filter((w) => w.state !== 'nova' && w.state !== 'naFila').length,
     hiragana: HIRAGANA_KANA.filter((k) => reconhecidos.has(k.char)).length,
     katakana: KATAKANA_KANA.filter((k) => reconhecidos.has(k.char)).length,

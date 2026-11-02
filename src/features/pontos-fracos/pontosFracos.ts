@@ -4,7 +4,7 @@ import { KANJI_N5 } from '../../data/kanji';
 import { LEITURA_TEXTOS } from '../../data/leitura/textos';
 import type { ReadingWord } from '../../data/leitura/types';
 import { textWords } from '../leitura/knowledge';
-import { freshSrs } from '../srs/fsrs';
+import { novoCard } from '../flashcards/cards';
 import type { StudyItem } from '../flashcards/stages';
 import { desempenhoPorItem } from '../exercicios/historico';
 import { conteudoDoItem } from '../exercicios/conteudo';
@@ -54,8 +54,7 @@ const EXERCICIO_ACERTO_MINIMO = 0.7;
 const KANA_ACERTO_MINIMO = 0.85;
 
 function cardTransitorio(id: string, front: string, back: string, reading?: string): Card {
-  const now = Date.now();
-  return { id, front, back, reading, tags: [], ...freshSrs(now), createdAt: now, updatedAt: now };
+  return novoCard({ front, back, reading }, Date.now(), id);
 }
 
 /** Palavras dos textos de leitura por chave, pra recuperar o significado das consultadas. */

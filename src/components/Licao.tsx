@@ -76,7 +76,13 @@ export function GrammarTable({
   jpCols?: number[];
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-line/70 bg-surface shadow-card">
+    // Focável: no celular a tabela rola na horizontal, e pelo teclado também precisa dar.
+    <div
+      tabIndex={0}
+      role="region"
+      aria-label={`Tabela: ${headers.join(', ')}`}
+      className="overflow-x-auto rounded-2xl border border-line/70 bg-surface shadow-card"
+    >
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-line bg-fuji/8">

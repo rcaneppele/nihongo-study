@@ -87,7 +87,7 @@ export const quiz: QuizLicao = {
         { texto: 'かいぎ', romaji: 'kaigi' },
         { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'さんじ', romaji: 'sanji' },
-        { texto: 'から', romaji: 'kara', particula: true },
+        { texto: 'から', romaji: 'kara' },
         { texto: 'です', romaji: 'desu' },
       ],
       pt: 'A reunião é a partir das 3 horas.',
@@ -147,9 +147,9 @@ export const quiz: QuizLicao = {
         { texto: 'すいようび', romaji: 'suiyoubi' },
         { texto: 'の', romaji: 'no', particula: true },
         { texto: 'よる', romaji: 'yoru' },
-        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'に', romaji: 'ni' },
         { texto: 'ジム', romaji: 'jimu' },
-        { texto: 'へ', romaji: 'e', particula: true },
+        { texto: 'へ', romaji: 'e' },
         { texto: 'いきます', romaji: 'ikimasu' },
       ],
       pt: 'Vou à academia na quarta à noite.',
@@ -161,7 +161,7 @@ export const quiz: QuizLicao = {
         { texto: 'の', romaji: 'no', particula: true },
         { texto: 'よる', romaji: 'yoru' },
         { texto: 'ともだち', romaji: 'tomodachi' },
-        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'と', romaji: 'to' },
         { texto: 'のみます', romaji: 'nomimasu' },
       ],
       pt: 'Sexta à noite, bebo com amigos.',
@@ -172,7 +172,7 @@ export const quiz: QuizLicao = {
         { texto: 'どようび', romaji: 'doyoubi' },
         { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'かいもの', romaji: 'kaimono' },
-        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'に', romaji: 'ni' },
         { texto: 'いきます', romaji: 'ikimasu' },
       ],
       pt: 'Sábado vou às compras.',
@@ -183,7 +183,7 @@ export const quiz: QuizLicao = {
         { texto: 'にちようび', romaji: 'nichiyoubi' },
         { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'かぞく', romaji: 'kazoku' },
-        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'と', romaji: 'to' },
         { texto: 'すごします', romaji: 'sugoshimasu' },
       ],
       pt: 'Domingo passo com a família.',
@@ -242,7 +242,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f23',
       tokens: [
-        { texto: 'これは', romaji: 'kore wa', particula: true },
+        { texto: 'これ', romaji: 'kore' },
+        { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'ひゃくえん', romaji: 'hyakuen' },
         { texto: 'です', romaji: 'desu' },
       ],
@@ -252,7 +253,8 @@ export const quiz: QuizLicao = {
       id: 'kanji-f24',
       tokens: [
         { texto: 'すみません', romaji: 'sumimasen' },
-        { texto: 'これは', romaji: 'kore wa', particula: true },
+        { texto: 'これ', romaji: 'kore' },
+        { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'いくら', romaji: 'ikura' },
         { texto: 'ですか', romaji: 'desu ka' },
       ],
@@ -261,7 +263,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f25',
       tokens: [
-        { texto: 'このほんは', romaji: 'kono hon wa', particula: true },
+        { texto: 'このほん', romaji: 'kono hon' },
+        { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'さんぜんえん', romaji: "sanzen'en" },
         { texto: 'です', romaji: 'desu' },
       ],
@@ -270,7 +273,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f26',
       tokens: [
-        { texto: 'あたらしいじてんしゃは', romaji: 'atarashii jitensha wa', particula: true },
+        { texto: 'あたらしいじてんしゃ', romaji: 'atarashii jitensha' },
+        { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'いちまんえん', romaji: "ichiman'en" },
         { texto: 'でした', romaji: 'deshita' },
       ],
@@ -279,7 +283,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f27',
       tokens: [
-        { texto: 'ひゃくえんショップは', romaji: 'hyakuen shoppu wa', particula: true },
+        { texto: 'ひゃくえんショップ', romaji: 'hyakuen shoppu' },
+        { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'べんり', romaji: 'benri' },
         { texto: 'です', romaji: 'desu' },
       ],
@@ -288,7 +293,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f28',
       tokens: [
-        { texto: 'なにを', romaji: 'nani o', particula: true },
+        { texto: 'なに', romaji: 'nani' },
+        { texto: 'を', romaji: 'o', particula: true },
         { texto: 'たべますか', romaji: 'tabemasu ka' },
       ],
       pt: 'O que você vai comer?',
@@ -304,7 +310,8 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f30',
       tokens: [
-        { texto: 'きょうは', romaji: 'kyou wa', particula: true },
+        { texto: 'きょう', romaji: 'kyou' },
+        { texto: 'は', romaji: 'wa', particula: true },
         { texto: 'なんようびですか', romaji: "nan'youbi desu ka" },
       ],
       pt: 'Que dia da semana é hoje?',
@@ -312,8 +319,10 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f31',
       tokens: [
-        { texto: 'にちようびに', romaji: 'nichiyoubi ni', particula: true },
-        { texto: 'やまへ', romaji: 'yama e', particula: true },
+        { texto: 'にちようび', romaji: 'nichiyoubi' },
+        { texto: 'に', romaji: 'ni', particula: true },
+        { texto: 'やま', romaji: 'yama' },
+        { texto: 'へ', romaji: 'e' },
         { texto: 'いきます', romaji: 'ikimasu' },
       ],
       pt: 'Domingo eu vou à montanha.',
@@ -321,8 +330,10 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f32',
       tokens: [
-        { texto: 'ふじさんの', romaji: 'fujisan no', particula: true },
-        { texto: 'しゃしんを', romaji: 'shashin o', particula: true },
+        { texto: 'ふじさん', romaji: 'fujisan' },
+        { texto: 'の', romaji: 'no', particula: true },
+        { texto: 'しゃしん', romaji: 'shashin' },
+        { texto: 'を', romaji: 'o' },
         { texto: 'とりました', romaji: 'torimashita' },
       ],
       pt: 'Tirei uma foto do Monte Fuji.',
@@ -330,8 +341,10 @@ export const quiz: QuizLicao = {
     {
       id: 'kanji-f33',
       tokens: [
-        { texto: 'たなかさんと', romaji: 'tanaka-san to', particula: true },
-        { texto: 'なかたさんは', romaji: 'nakata-san wa', particula: true },
+        { texto: 'たなかさん', romaji: 'tanaka-san' },
+        { texto: 'と', romaji: 'to', particula: true },
+        { texto: 'なかたさん', romaji: 'nakata-san' },
+        { texto: 'は', romaji: 'wa' },
         { texto: 'どうりょうです', romaji: 'douryou desu' },
       ],
       pt: 'Tanaka e Nakata são colegas de trabalho.',

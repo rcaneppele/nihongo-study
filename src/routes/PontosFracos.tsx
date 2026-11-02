@@ -15,6 +15,7 @@ import {
   type Origem,
   type PontoFraco,
 } from '../features/pontos-fracos/pontosFracos';
+import { embaralhar } from '../lib/aleatorio';
 
 const ORIGENS: Origem[] = ['cards', 'kana', 'kanji', 'leitura', 'licoes'];
 
@@ -28,15 +29,6 @@ const ORIGEM_ESTILO: Record<Origem, { cor: Cor; icon: ReactNode }> = {
 };
 const TREINO_MISTO = 20;
 const VISIVEIS_POR_ORIGEM = 8;
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
 
 /**
  * "Pontos fracos" (/pontos-fracos): o que mais erra em cada módulo, com
@@ -54,7 +46,7 @@ export default function PontosFracos() {
   const total = ORIGENS.reduce((n, o) => n + dados[o].length, 0);
 
   function treinar(itens: PontoFraco[]) {
-    setSessao(shuffle(itens.map((p) => p.item)));
+    setSessao(embaralhar(itens.map((p) => p.item)));
   }
 
   return (

@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePendencias } from '../features/metodo/pendencias';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db, type Card, newId } from '../db/schema';
-import { apagar } from '../db/local';
-import { freshSrs } from '../features/srs/fsrs';
+import { db, type Card } from '../db/schema';
+import { apagarCard, criarCard } from '../features/flashcards/cards';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
 import { buildReviewQueue, type Direction, type StudyItem } from '../features/flashcards/stages';
 import { StageAction, StageChip } from '../features/flashcards/StageControls';
@@ -12,6 +11,9 @@ import { NoteEditor } from '../features/flashcards/CardNote';
 import AudioButton from '../components/AudioButton';
 import { Layers, Play, Plus, Search, Shuffle, Sparkles, Trash2 } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
+import { embaralhar } from '../lib/aleatorio';
+import { alternar } from '../lib/conjuntos';
+import Chip from '../components/Chip';
 
 // Abas que existiam aqui e viraram páginas do método: links antigos
 // (`/flashcards?tab=…`) redirecionam pro lugar novo.
@@ -84,7 +86,7 @@ export default function Flashcards() {
   // Na prática livre, qualquer card serve nas duas direções (nada é
   // gravado), independente do estágio.
   function startPractice(pool: Card[], direction: Direction) {
-    setSession({ mode: 'practice', items: shuffle(pool).map((card) => ({ card, direction })) });
+    setSession({ mode: 'practice', items: embaralhar(pool).map((card) => ({ card, direction })) });
     setConfiguringPractice(false);
   }
 
@@ -197,7 +199,7 @@ export default function Flashcards() {
                 <StageAction card={card} />
                 <button
                   className="grid h-8 w-8 place-items-center rounded-full text-sage transition-colors hover:bg-hanko/10 hover:text-hanko"
-                  onClick={() => apagar('cards', card.id)}
+                  onClick={() => apagarCard(card.id)}
                   aria-label={`Excluir ${card.front}`}
                   title="Excluir card"
                 >
@@ -259,12 +261,7 @@ function PracticeConfigScreen({
   const [selected, setSelected] = useState<Set<string>>(new Set(allKeys));
 
   function toggle(key: string) {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
+    setSelected((prev) => alternar(prev, key));
   }
 
   const matching = cards.filter((c) => selected.has(c.category || UNCATEGORIZED));
@@ -297,6 +294,7 @@ function PracticeConfigScreen({
                 <button
                   key={key}
                   onClick={() => toggle(key)}
+                  aria-pressed={active}
                   className={`chip ${active ? 'chip-active' : ''}`}
                 >
                   {key === UNCATEGORIZED ? 'Sem categoria' : key} ({count})
@@ -349,20 +347,13 @@ function AddCardForm({ onClose }: { onClose: () => void }) {
 
   async function add() {
     if (!front.trim() || !back.trim()) return;
-    const now = Date.now();
-    const card: Card = {
-      id: newId(),
+    await criarCard({
       front: front.trim(),
       back: back.trim(),
       reading: reading.trim() || undefined,
       category: category.trim() || undefined,
       note: note.trim() || undefined,
-      tags: [],
-      ...freshSrs(now),
-      createdAt: now,
-      updatedAt: now,
-    };
-    await db.cards.add(card);
+    });
     setFront('');
     setBack('');
     setReading('');
@@ -421,32 +412,4 @@ function AddCardForm({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
-}
-
-function Chip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`chip ${active ? 'chip-active' : ''}`}
-    >
-      {children}
-    </button>
-  );
-}
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
 }

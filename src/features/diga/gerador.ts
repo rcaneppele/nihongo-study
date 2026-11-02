@@ -1,7 +1,8 @@
 import { LICOES } from '../../licoes';
 import type { Token } from '../../data/quiz/types';
-import { db, newId } from '../../db/schema';
+import { adicionarCardsNovos } from '../flashcards/cards';
 import { freshSrs } from '../srs/fsrs';
+import { embaralhar } from '../../lib/aleatorio';
 
 /**
  * "Diga em japonês": a frase aparece em português e o usuário a diz em
@@ -36,15 +37,6 @@ export function licoesComFrases() {
   return LICOES.filter((l) => frasesDaLicao(l).length > 0);
 }
 
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
 function montarPool(licaoIds: string[]): ItemDiga[] {
   return licoesComFrases()
     .filter((l) => licaoIds.includes(l.meta.id))
@@ -61,7 +53,7 @@ function montarPool(licaoIds: string[]): ItemDiga[] {
 }
 
 export function gerarDiga(licaoIds: string[], quantidade: number): ItemDiga[] {
-  return shuffle(montarPool(licaoIds)).slice(0, quantidade);
+  return embaralhar(montarPool(licaoIds)).slice(0, quantidade);
 }
 
 export function contarDisponiveis(licaoIds: string[]): number {
@@ -104,21 +96,16 @@ export function romaji(tokens: Token[]): string {
  */
 export async function salvarFrasesComoCards(itens: ItemDiga[]): Promise<number> {
   const now = Date.now();
-  const existentes = new Set((await db.cards.toArray()).map((c) => c.front));
-  const novos = itens.filter((it) => !existentes.has(kanaExibicao(it.tokens)));
-  await db.cards.bulkAdd(
-    novos.map((it) => ({
-      id: newId(),
+  const { criados } = await adicionarCardsNovos(
+    itens.map((it) => ({
       front: kanaExibicao(it.tokens),
       back: it.pt,
       reading: romaji(it.tokens),
       category: CATEGORIA_FRASES,
       tags: ['frase', it.licaoId],
-      ...freshSrs(now),
       production: freshSrs(now),
-      createdAt: now,
-      updatedAt: now,
-    }))
+    })),
+    now
   );
-  return novos.length;
+  return criados;
 }

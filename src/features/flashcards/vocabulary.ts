@@ -1,10 +1,10 @@
-import { db, newId, type Card, type WordKnowledge } from '../../db/schema';
+import { db, type Card, type WordKnowledge } from '../../db/schema';
 import { apagar } from '../../db/local';
 import { N5_DECK, type N5Entry } from '../../data/seed/n5';
 import { LEITURA_TEXTOS } from '../../data/leitura/textos';
 import type { ReadingText } from '../../data/leitura/types';
-import { wordKey } from '../leitura/knowledge';
-import { freshSrs } from '../srs/fsrs';
+import { textWords } from '../leitura/knowledge';
+import { adicionarCardsNovos, novoCard } from './cards';
 import { cardStage } from './stages';
 
 /**
@@ -52,12 +52,7 @@ export interface VocabWord {
 const TEXTS_BY_KEY: Map<string, ReadingText[]> = (() => {
   const map = new Map<string, ReadingText[]>();
   for (const texto of LEITURA_TEXTOS) {
-    const keys = new Set<string>();
-    for (const line of texto.lines) for (const word of line.words) {
-      const key = wordKey(word);
-      if (key) keys.add(key);
-    }
-    for (const key of keys) map.set(key, [...(map.get(key) ?? []), texto]);
+    for (const { key } of textWords(texto)) map.set(key, [...(map.get(key) ?? []), texto]);
   }
   return map;
 })();
@@ -113,12 +108,8 @@ function categoryRank(category: string): number {
 
 /** Cria cards (estado FSRS novo) para as palavras dadas — mesmo formato do import do N5. */
 export async function learnWords(words: VocabWord[]): Promise<number> {
-  const now = Date.now();
-  const toAdd = words.filter((w) => !w.card);
-  await db.cards.bulkAdd(
-    toAdd.map((w) => ({ id: newId(), ...w.entry, ...freshSrs(now), createdAt: now, updatedAt: now }))
-  );
-  return toAdd.length;
+  const { criados } = await adicionarCardsNovos(words.filter((w) => !w.card).map((w) => w.entry));
+  return criados;
 }
 
 /** "Já sei": marca a palavra como compreendida sem criar card (vai pro vocabulário passivo). */
@@ -145,6 +136,5 @@ export function unmarkKnown(word: VocabWord) {
  */
 export function practiceCard(word: VocabWord): Card {
   if (word.card) return word.card;
-  const now = Date.now();
-  return { id: `vocab-${word.entry.front}`, ...word.entry, ...freshSrs(now), createdAt: now, updatedAt: now };
+  return novoCard(word.entry, Date.now(), `vocab-${word.entry.front}`);
 }

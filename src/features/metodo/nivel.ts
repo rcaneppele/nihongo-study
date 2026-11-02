@@ -1,8 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../../db/schema';
+import { db, type ExerciseResult, type KanaProgress, type KanjiProgress } from '../../db/schema';
 import { ALL_KANA } from '../../data/kana';
 import { LEITURA_TEXTOS } from '../../data/leitura/textos';
-import { useKnownWords } from '../leitura/knowledge';
+import { useKnownWords, type KnownWords } from '../leitura/knowledge';
 import { CATEGORIA_FRASES } from '../diga/gerador';
 import { acertoRecente, JANELA_ACERTO } from '../exercicios/historico';
 import type { Cor } from '../../lib/cores';
@@ -47,6 +47,20 @@ export function useNivel(id: HabilidadeId): Nivel | undefined {
     return { leituras, kana, kanji, frases, exercicios, diario };
   }, []);
   if (!dados || !known) return undefined;
+  return calcularNivel(id, dados, known);
+}
+
+/** O que `calcularNivel` lê do banco. */
+export interface DadosNivel {
+  leituras: number;
+  kana: KanaProgress[];
+  kanji: KanjiProgress[];
+  frases: number;
+  exercicios: ExerciseResult[];
+  diario: number;
+}
+
+export function calcularNivel(id: HabilidadeId, dados: DadosNivel, known: KnownWords): Nivel {
   const { leituras, kana, kanji, frases, exercicios, diario } = dados;
   const escutas = exercicios.filter((r) => r.kind === 'escuta');
   const textosShadowing = new Set(exercicios.filter((r) => r.kind === 'shadowing').map((r) => r.itemId));

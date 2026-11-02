@@ -1,6 +1,5 @@
-import { db, type Card } from '../../db/schema';
-import { carimbosCard } from '../../db/merge';
-import { freshSrs } from '../srs/fsrs';
+import type { Card } from '../../db/schema';
+import { mudarEstagio } from './cards';
 import { cardStage, STAGE_BADGE, STAGE_HINTS, STAGE_LABELS } from './stages';
 
 /** Rótulo do estágio do card (Reconheço / Sei dizer / Domino), com a explicação no tooltip. */
@@ -22,15 +21,12 @@ export function StageChip({ card }: { card: Card }) {
  */
 export function StageAction({ card }: { card: Card }) {
   const stage = cardStage(card);
-  // Hora do clique (não do render), pra valer como carimbo da produção na mesclagem.
-  const setProduction = (production: Card['production']) =>
-    db.cards.update(card.id, { production, ...carimbosCard(card, ['productionUpdatedAt'], Date.now()) });
   if (stage === 'novo' || stage === 'reconheco') {
     return (
       <button
         className="text-xs text-sage hover:text-indigo"
         title="Já reconheço esta palavra — começar a treinar dizê-la em japonês (português → japonês)"
-        onClick={() => setProduction(freshSrs(Date.now()))}
+        onClick={() => mudarEstagio(card)}
       >
         Treinar a dizer
       </button>
@@ -40,7 +36,7 @@ export function StageAction({ card }: { card: Card }) {
     <button
       className="text-xs text-sage hover:text-indigo"
       title={stage === 'seiDizer' ? 'Parar de treinar a dizer e voltar só ao reconhecimento' : 'Recomeçar do zero o treino de dizer'}
-      onClick={() => setProduction(stage === 'seiDizer' ? undefined : freshSrs(Date.now()))}
+      onClick={() => mudarEstagio(card)}
     >
       Voltar um estágio
     </button>

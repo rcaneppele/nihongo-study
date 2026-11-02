@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { ReadingLine, ReadingText, ReadingWord } from '../../data/leitura/types';
-import { exampleFromLine, findCardByFront, saveMinedCard, sourceFromText, suggestCard } from './mining';
+import { exampleFromLine, saveMinedCard, sourceFromText, suggestCard } from './mining';
+import { cardPorFrente } from './cards';
 
 /**
  * "Salvar nos flash cards" no cartão da palavra tocada na leitura. Abre um
@@ -25,7 +26,7 @@ export default function SaveWordForm({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(suggestion);
   const [error, setError] = useState<string | null>(null);
-  const existing = useLiveQuery(() => findCardByFront(suggestion.front), [suggestion.front]);
+  const existing = useLiveQuery(() => cardPorFrente(suggestion.front), [suggestion.front]);
 
   if (existing) {
     return <p className="text-xs text-sage">✓ Já está nos seus flash cards</p>;
@@ -42,7 +43,7 @@ export default function SaveWordForm({
   async function save() {
     const front = draft.front.trim();
     if (!front || !draft.back.trim()) return;
-    if (await findCardByFront(front)) {
+    if (await cardPorFrente(front)) {
       setError(`Você já tem um card com "${front}".`);
       return;
     }

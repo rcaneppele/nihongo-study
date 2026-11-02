@@ -9,6 +9,7 @@ import QuizSession from '../features/quiz/QuizSession';
 import QuizResultado from '../features/quiz/QuizResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
 import { registrarResultados } from '../features/exercicios/historico';
+import { alternar } from '../lib/conjuntos';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -30,21 +31,11 @@ export default function Quiz() {
   const quantidade = Math.min(quantidadeDesejada, Math.max(disponiveis, 1));
 
   function toggleLicao(id: string) {
-    setLicaoIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    setLicaoIds((prev) => alternar(prev, id));
   }
 
   function toggleTipo(tipo: TipoQuiz) {
-    setTipos((prev) => {
-      const next = new Set(prev);
-      if (next.has(tipo)) next.delete(tipo);
-      else next.add(tipo);
-      return next;
-    });
+    setTipos((prev) => alternar(prev, tipo));
   }
 
   function gerar() {
@@ -127,6 +118,7 @@ export default function Quiz() {
                 <button
                   key={meta.id}
                   onClick={() => toggleLicao(meta.id)}
+                  aria-pressed={active}
                   className={`chip ${active ? 'chip-active' : ''}`}
                 >
                   {meta.emoji} {meta.title}

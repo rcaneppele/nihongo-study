@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { db, type Card, newId } from '../../db/schema';
-import { apagar } from '../../db/local';
-import { carimbosCard } from '../../db/merge';
-import { applyFsrs, type Grade } from '../srs/fsrs';
+import type { Card } from '../../db/schema';
+import type { Grade } from '../srs/fsrs';
 import GradeButtons from '../srs/GradeButtons';
 import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
@@ -13,9 +11,9 @@ import { useShortcuts } from '../../lib/useShortcuts';
 import CardExampleView from './CardExampleView';
 import { NoteBox } from './CardNote';
 import { cardNote } from './note';
-import { promotedProduction, type StudyItem } from './stages';
+import type { StudyItem } from './stages';
 import { registrarAtividade } from '../atividade/atividade';
-import { State } from 'ts-fsrs';
+import { desfazerRevisao, registrarRevisao, type RevisaoFeita } from './revisao';
 
 /**
  * "review" usa a nota pra atualizar o FSRS (stability/difficulty/dueDate) —
@@ -29,12 +27,6 @@ import { State } from 'ts-fsrs';
  * e autoavaliada, igual ao reconhecimento.
  */
 export type StudyMode = 'review' | 'practice';
-
-/** O que precisa ser revertido ao desfazer uma nota: o card como estava antes e a linha de `reviews` criada. */
-interface UndoEntry {
-  before: Card;
-  reviewId: string;
-}
 
 export default function StudySession({
   items,
@@ -58,7 +50,7 @@ export default function StudySession({
   // Pilha de notas dadas nesta sessão (só no modo review). Os objetos em
   // `items` são a foto de antes da sessão, então servem de "estado anterior"
   // pra restaurar no desfazer.
-  const [undoStack, setUndoStack] = useState<UndoEntry[]>([]);
+  const [undoStack, setUndoStack] = useState<RevisaoFeita[]>([]);
 
   const item = items[index];
   const card = item?.card;
@@ -82,41 +74,8 @@ export default function StudySession({
     // o próximo card sem revisar (advance() chamado duas vezes).
     if (grading || !card) return;
     setGrading(true);
-    const now = Date.now();
-    const reviewId = newId();
-    let changes: Partial<Card>;
-    let intervalAfter: number;
-    if (isProduction) {
-      const result = applyFsrs(card.production!, rating, now);
-      changes = { production: result, ...carimbosCard(card, ['productionUpdatedAt'], now) };
-      intervalAfter = result.scheduledDays;
-    } else {
-      const result = applyFsrs(card, rating, now);
-      const production = promotedProduction(card, result.scheduledDays, now);
-      // Só carimba a produção se a revisão a criou (promoção pra Sei dizer).
-      const promoted = production !== card.production;
-      changes = {
-        ...result,
-        ...(promoted ? { production } : {}),
-        ...carimbosCard(card, promoted ? ['srsUpdatedAt', 'productionUpdatedAt'] : ['srsUpdatedAt'], now),
-      };
-      intervalAfter = result.scheduledDays;
-    }
-    await db.transaction('rw', db.cards, db.reviews, async () => {
-      await db.cards.update(card.id, changes);
-      await db.reviews.add({
-        id: reviewId,
-        cardId: card.id,
-        ...(isProduction ? { direction: 'production' as const } : {}),
-        reviewedAt: now,
-        quality: rating,
-        intervalAfter,
-      });
-    });
-    setUndoStack((s) => [...s, { before: card, reviewId }]);
-    // Primeira revisão de reconhecimento de um card = palavra nova aprendida hoje.
-    void registrarAtividade('revisoes');
-    if (!isProduction && card.state === State.New) void registrarAtividade('novos');
+    const feita = await registrarRevisao(card, item.direction, rating);
+    setUndoStack((st) => [...st, feita]);
     setGrading(false);
     advance();
   }
@@ -131,17 +90,8 @@ export default function StudySession({
       const last = undoStack[undoStack.length - 1];
       if (!last) return;
       setGrading(true);
-      await db.transaction('rw', db.cards, db.reviews, db.deleted, async () => {
-        const now = Date.now();
-        // O estado restaurado precisa vencer a nota desfeita na mesclagem: carimbo novo nos dois grupos de SRS.
-        await db.cards.put({ ...last.before, ...carimbosCard(last.before, ['srsUpdatedAt', 'productionUpdatedAt'], now) });
-        await apagar('reviews', last.reviewId);
-      });
-      setUndoStack((s) => s.slice(0, -1));
-      void registrarAtividade('revisoes', -1);
-      if (items[index - 1]?.direction === 'recognition' && last.before.state === State.New) {
-        void registrarAtividade('novos', -1);
-      }
+      await desfazerRevisao(last);
+      setUndoStack((st) => st.slice(0, -1));
       setGrading(false);
     } else {
       void registrarAtividade('praticas', -1);
@@ -215,16 +165,7 @@ export default function StudySession({
                   <AudioButton text={card.front} />
                 </div>
                 {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
-                {note && (
-                  <div className="mt-4">
-                    <NoteBox note={note} />
-                  </div>
-                )}
-                {card.example && (
-                  <div className="mt-4">
-                    <CardExampleView example={card.example} source={card.source} />
-                  </div>
-                )}
+                <NotaEExemplo card={card} note={note} />
               </div>
             )}
           </div>
@@ -238,16 +179,7 @@ export default function StudySession({
               <div className="mt-4 border-t border-line pt-4">
                 {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
                 <p className="text-xl">{card.back}</p>
-                {note && (
-                  <div className="mt-4">
-                    <NoteBox note={note} />
-                  </div>
-                )}
-                {card.example && (
-                  <div className="mt-4">
-                    <CardExampleView example={card.example} source={card.source} />
-                  </div>
-                )}
+                <NotaEExemplo card={card} note={note} />
               </div>
             )}
           </div>
@@ -266,6 +198,24 @@ export default function StudySession({
         </button>
       )}
     </div>
+  );
+}
+
+/** Nota e frase de contexto do card, no verso das duas direções. */
+function NotaEExemplo({ card, note }: { card: Card; note?: string }) {
+  return (
+    <>
+      {note && (
+        <div className="mt-4">
+          <NoteBox note={note} />
+        </div>
+      )}
+      {card.example && (
+        <div className="mt-4">
+          <CardExampleView example={card.example} source={card.source} />
+        </div>
+      )}
+    </>
   );
 }
 

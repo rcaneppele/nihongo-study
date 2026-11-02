@@ -3,6 +3,7 @@ import AudioButton from '../../components/AudioButton';
 import SessionHeader from '../../components/SessionHeader';
 import StudyCard from '../../components/StudyCard';
 import { useShortcuts } from '../../lib/useShortcuts';
+import { embaralhar } from '../../lib/aleatorio';
 import { speakJapanese } from '../audio/speech';
 import { kanaAudio, kanaExibicao, romaji, type ItemDiga, type RegistroDiga } from './gerador';
 
@@ -28,7 +29,7 @@ export default function DigaSession({
   const item = itens[index];
 
   const embaralhadas = useMemo(
-    () => (item ? [...item.tokens].map((t) => t.texto).sort(() => Math.random() - 0.5) : []),
+    () => (item ? embaralhar(item.tokens.map((t) => t.texto)) : []),
     [item]
   );
 

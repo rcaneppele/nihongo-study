@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'dev-dist'] },
+  { ignores: ['dist', 'dev-dist', 'coverage', 'test-results', 'playwright-report', 'reports', '.stryker-tmp'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -28,5 +28,12 @@ export default tseslint.config(
     // O padrão é intencional — o custo é só recarregar a página inteira no dev.
     files: ['src/licoes/**/*.tsx', 'src/lib/useTheme.tsx'],
     rules: { 'react-refresh/only-export-components': 'off' },
+  },
+  {
+    // Testes ponta a ponta rodam no Node (Playwright): o `use` das fixtures
+    // não é hook do React.
+    files: ['e2e/**/*.ts'],
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
   }
 );

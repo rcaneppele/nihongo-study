@@ -70,17 +70,26 @@ export function carimbosCard(card: Card, alterados: GrupoCard[], now: number): P
 export function mesclarCard(local: Card, outro: Card): Card {
   const r = { ...local } as unknown as Record<string, unknown>;
   const o = outro as unknown as Record<string, unknown>;
+  const updatedAt = Math.max(local.updatedAt, outro.updatedAt);
   for (const g of GRUPOS_CARD) {
     const tLocal = local[g.carimbo] ?? local.updatedAt;
     const tOutro = outro[g.carimbo] ?? outro.updatedAt;
-    if (tOutro <= tLocal) continue;
-    for (const c of g.campos) {
-      if (o[c] === undefined) delete r[c];
-      else r[c] = o[c];
+    const vencedor = tOutro > tLocal ? outro : local;
+    if (vencedor === outro) {
+      for (const c of g.campos) {
+        if (o[c] === undefined) delete r[c];
+        else r[c] = o[c];
+      }
     }
-    r[g.carimbo] = tOutro;
+    // Carimbo ausente vale o `updatedAt` do card. Se o `updatedAt` do
+    // resultado subiu, o carimbo precisa ficar explícito — senão o grupo
+    // pareceria alterado agora e venceria, com o estado velho, uma revisão
+    // feita noutro aparelho.
+    const t = Math.max(tLocal, tOutro);
+    if (vencedor[g.carimbo] === undefined && t === updatedAt) delete r[g.carimbo];
+    else r[g.carimbo] = t;
   }
-  r.updatedAt = Math.max(local.updatedAt, outro.updatedAt);
+  r.updatedAt = updatedAt;
   r.createdAt = Math.min(local.createdAt, outro.createdAt);
   return r as unknown as Card;
 }

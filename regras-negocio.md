@@ -373,13 +373,19 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   de Kanji, ver seção 3) compara com os dados de traço do KanjiVG
   (`src/data/kanjivg/kana-strokes.json`, gerado por
   `scripts/build-kana-strokes.mjs`):
-  - nº de traços (esperado x feito) — penaliza por diferença;
-  - forma de cada traço, pareado por índice — distância média ponto a ponto
-    após normalizar posição/escala pela caixa delimitadora do desenho
-    (desenhar menor/deslocado no canvas não penaliza por si só);
-  - direção de cada traço (ângulo do ponto inicial ao final).
-  - pontuação 0–100; ≥ `DRAW_PASS_THRESHOLD` (65) conta como acerto no teste.
-    A melhor pontuação de cada kana é gravada em `kanaProgress.drawBest`.
+  - a **nota** (0–100) é a forma do desenho inteiro: nuvem de pontos do
+    usuário × da referência, depois de normalizar posição/escala pela caixa
+    delimitadora (desenhar menor/deslocado no canvas não penaliza). Número,
+    ordem e direção dos traços **não** mudam a nota;
+  - ≥ `DRAW_PASS_THRESHOLD` (60) conta como acerto no teste. A melhor nota
+    de cada kana fica em `kanaProgress.drawBest`;
+  - **dicas** (só orientativas, até 3): número de traços diferente do
+    oficial; com o mesmo número, por traço pareado por índice — "confira a
+    direção" quando a forma do traço está certa nos dois sentidos mas foi
+    feita ao contrário, "siga a forma" quando a forma não bate;
+  - **combinados (yōon, ex.: きゃ)**: a referência é a de cada kana, lado a
+    lado (cada um com metade da largura); o kana pequeno já vem pequeno e
+    embaixo no próprio KanjiVG.
 - Após verificar, `StrokeReferenceFigure`
   (`src/features/handwriting/StrokeReferenceFigure.tsx`) anima o traçado
   correto na ordem certa (com botão de repetir a animação) como feedback; o

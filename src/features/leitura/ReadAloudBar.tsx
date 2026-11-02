@@ -125,7 +125,9 @@ function Segmented({ label, children }: { label: string; children: ReactNode }) 
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-sage">{label}</span>
-      <div className="segmented">{children}</div>
+      <div className="segmented" role="group" aria-label={label}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -145,6 +147,8 @@ function SegmentButton({
 }) {
   return (
     <button
+      type="button"
+      aria-pressed={active}
       className={`segmented-item px-2.5 py-1 text-xs ${active ? 'segmented-item-active' : ''}`}
       disabled={disabled}
       title={title}

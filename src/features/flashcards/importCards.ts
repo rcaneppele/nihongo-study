@@ -1,5 +1,5 @@
-import { type Card, newId } from '../../db/schema';
-import { freshSrs } from '../srs/fsrs';
+import { db, type Card } from '../../db/schema';
+import { novoCard } from './cards';
 
 /**
  * Quebra um CSV em linhas e colunas (RFC 4180): campo entre aspas pode ter
@@ -60,17 +60,16 @@ export function parseCardsCsv(text: string): Card[] {
   return rows.map((line) => {
     const cols = line.map((c) => c.trim());
     const [front = '', back = '', reading = '', category = '', tags = ''] = cols;
-    return {
-      id: newId(),
-      front,
-      back,
-      reading: reading || undefined,
-      category: category || undefined,
-      tags: tags ? tags.split(';').map((t) => t.trim()).filter(Boolean) : [],
-      ...freshSrs(now),
-      createdAt: now,
-      updatedAt: now,
-    } satisfies Card;
+    return novoCard(
+      {
+        front,
+        back,
+        reading: reading || undefined,
+        category: category || undefined,
+        tags: tags ? tags.split(';').map((t) => t.trim()).filter(Boolean) : [],
+      },
+      now
+    );
   });
 }
 
@@ -79,21 +78,16 @@ export function parseCardsJson(text: string): Card[] {
   const data = JSON.parse(text);
   if (!Array.isArray(data)) throw new Error('JSON de cards deve ser um array.');
   const now = Date.now();
-  return data.map((raw: Partial<Card>) => ({
-    // Sempre gera um id novo, mesmo se o JSON trouxer um: preservar o id
-    // do arquivo só criaria risco de colidir com um card existente (o
-    // bulkAdd falha pra tudo no lote) sem nenhum ganho — essa importação
-    // sempre insere cards novos, nunca faz merge por id (isso é o backup).
-    id: newId(),
-    front: raw.front ?? '',
-    back: raw.back ?? '',
-    reading: raw.reading,
-    category: raw.category,
-    tags: raw.tags ?? [],
-    ...freshSrs(now),
-    createdAt: now,
-    updatedAt: now,
-  }));
+  // Sempre gera um id novo, mesmo se o JSON trouxer um: preservar o id do
+  // arquivo só criaria risco de colidir com um card existente (o bulkAdd
+  // falha pra tudo no lote) sem nenhum ganho — essa importação sempre insere
+  // cards novos, nunca faz merge por id (isso é o backup).
+  return data.map((raw: Partial<Card>) =>
+    novoCard(
+      { front: raw.front ?? '', back: raw.back ?? '', reading: raw.reading, category: raw.category, tags: raw.tags ?? [] },
+      now
+    )
+  );
 }
 
 const ANKI_SEPARATOR_NAMES: Record<string, string> = {
@@ -185,16 +179,7 @@ export function parseAnkiText(text: string): Card[] {
       const tags =
         tagsColumn !== null && cols[tagsColumn] ? cols[tagsColumn].trim().split(/\s+/).filter(Boolean) : [];
 
-      return {
-        id: newId(),
-        front,
-        back,
-        reading: reading || undefined,
-        tags,
-        ...freshSrs(now),
-        createdAt: now,
-        updatedAt: now,
-      } satisfies Card;
+      return novoCard({ front, back, reading: reading || undefined, tags }, now);
     })
     .filter((c) => c.front || c.back);
 }
@@ -206,4 +191,12 @@ export function parseCardsFile(text: string, filename: string): Card[] {
   const firstLine = text.split(/\r?\n/).find((l) => l.trim().length > 0) ?? '';
   const looksLikeAnkiExport = /^#(separator|html|notetype|deck|tags|guid|columns)\b/i.test(firstLine) || firstLine.includes('\t');
   return looksLikeAnkiExport ? parseAnkiText(text) : parseCardsCsv(text);
+}
+
+/** Lê o arquivo de cards (CSV, JSON ou texto do Anki) e cria os cards. Devolve quantos. */
+export async function importarArquivoDeCards(texto: string, nomeDoArquivo: string): Promise<number> {
+  const cards = parseCardsFile(texto, nomeDoArquivo);
+  if (cards.length === 0) throw new Error('Nenhum card encontrado no arquivo.');
+  await db.cards.bulkAdd(cards);
+  return cards.length;
 }

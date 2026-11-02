@@ -22,18 +22,17 @@ export function diaLocal(ts: number = Date.now()): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-function vazio(day: string): Activity {
-  return { day, revisoes: 0, praticas: 0, leituras: 0, novos: 0, updatedAt: Date.now() };
+function vazio(day: string, now: number = Date.now()): Activity {
+  return { day, revisoes: 0, praticas: 0, leituras: 0, novos: 0, updatedAt: now };
 }
 
 /** Soma `n` (negativo no desfazer, sem passar de 0) ao contador do dia de hoje. */
-export async function registrarAtividade(tipo: TipoAtividade, n = 1): Promise<void> {
+export async function registrarAtividade(tipo: TipoAtividade, n = 1, now: number = Date.now()): Promise<void> {
   if (n === 0) return;
-  const day = diaLocal();
+  const day = diaLocal(now);
   const deviceId = await getDeviceId();
   await db.transaction('rw', db.activity, async () => {
-    const atual = (await db.activity.get(day)) ?? vazio(day);
-    const now = Date.now();
+    const atual = (await db.activity.get(day)) ?? vazio(day, now);
     await db.activity.put({ ...atual, ...incrementar(atual, { [tipo]: n }, ACTIVITY_CONTADORES, deviceId, now), updatedAt: now });
   });
 }
@@ -74,10 +73,10 @@ export function diasEstudados(atividades: Activity[], reviews: Review[]): Set<st
 }
 
 /** Dias seguidos com estudo até hoje. Hoje sem atividade ainda não quebra a sequência (o dia não acabou). */
-export function sequenciaDeDias(dias: Set<string>): number {
+export function sequenciaDeDias(dias: Set<string>, now: number = Date.now()): number {
   let sequencia = 0;
-  const cursor = new Date();
-  if (!dias.has(diaLocal())) cursor.setDate(cursor.getDate() - 1);
+  const cursor = new Date(now);
+  if (!dias.has(diaLocal(now))) cursor.setDate(cursor.getDate() - 1);
   while (dias.has(diaLocal(cursor.getTime()))) {
     sequencia++;
     cursor.setDate(cursor.getDate() - 1);
@@ -85,21 +84,23 @@ export function sequenciaDeDias(dias: Set<string>): number {
   return sequencia;
 }
 
+/** Resumo do dia (meta, sequência e semana) a partir do que está gravado. */
+export function resumoDoDia(atividades: Activity[], reviews: Review[], now: number = Date.now()): ResumoDia {
+  const dias = diasEstudados(atividades, reviews);
+  const hojeKey = diaLocal(now);
+  const hoje = atividades.find((a) => a.day === hojeKey) ?? vazio(hojeKey, now);
+  const semana = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() - (6 - i));
+    const day = diaLocal(d.getTime());
+    return { day, diaDoMes: d.getDate(), diaDaSemana: d.getDay(), estudou: dias.has(day) };
+  });
+  return { hoje, pontos: pontos(hoje), sequencia: sequenciaDeDias(dias, now), estudouHoje: dias.has(hojeKey), semana };
+}
+
 export function useResumoDia(): ResumoDia | undefined {
   return useLiveQuery(async () => {
     const [atividades, reviews] = await Promise.all([db.activity.toArray(), db.reviews.toArray()]);
-    const dias = diasEstudados(atividades, reviews);
-
-    const hojeKey = diaLocal();
-    const hoje = atividades.find((a) => a.day === hojeKey) ?? vazio(hojeKey);
-    const estudouHoje = dias.has(hojeKey);
-    const sequencia = sequenciaDeDias(dias);
-    const semana = Array.from({ length: 7 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - (6 - i));
-      const day = diaLocal(d.getTime());
-      return { day, diaDoMes: d.getDate(), diaDaSemana: d.getDay(), estudou: dias.has(day) };
-    });
-    return { hoje, pontos: pontos(hoje), sequencia, estudouHoje, semana };
+    return resumoDoDia(atividades, reviews);
   }, []);
 }

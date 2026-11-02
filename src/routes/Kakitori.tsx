@@ -9,6 +9,7 @@ import KakitoriSession from '../features/kakitori/KakitoriSession';
 import KakitoriResultado from '../features/kakitori/KakitoriResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
 import { registrarResultados } from '../features/exercicios/historico';
+import { alternar } from '../lib/conjuntos';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -29,12 +30,7 @@ export default function Kakitori() {
   const quantidade = Math.min(quantidadeDesejada, Math.max(disponiveis, 1));
 
   function toggleFonte(id: string) {
-    setFonteIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    setFonteIds((prev) => alternar(prev, id));
   }
 
   function gerar() {
@@ -142,6 +138,7 @@ export default function Kakitori() {
                 <button
                   key={fonte.id}
                   onClick={() => toggleFonte(fonte.id)}
+                  aria-pressed={active}
                   className={`chip ${active ? 'chip-active' : ''}`}
                 >
                   {fonte.emoji} {fonte.label}

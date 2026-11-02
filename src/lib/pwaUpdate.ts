@@ -40,10 +40,12 @@ export function setupPWAUpdate(): void {
   const hadController = Boolean(navigator.serviceWorker.controller);
 
   window.addEventListener('load', async () => {
-    const registration = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`, {
-      scope: import.meta.env.BASE_URL,
-      updateViaCache: 'none',
-    });
+    // O registro pode falhar (modo privado de alguns navegadores, service
+    // worker bloqueado): o app segue funcionando, só sem modo offline.
+    const registration = await navigator.serviceWorker
+      .register(`${import.meta.env.BASE_URL}sw.js`, { scope: import.meta.env.BASE_URL, updateViaCache: 'none' })
+      .catch(() => undefined);
+    if (!registration) return;
 
     function activateWaitingWorker(worker: ServiceWorker) {
       worker.postMessage({ type: 'SKIP_WAITING' });

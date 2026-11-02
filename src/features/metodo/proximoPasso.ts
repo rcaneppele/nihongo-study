@@ -38,7 +38,7 @@ export interface Passo {
 
 export type AlvoPasso = 'aprender' | 'praticar' | HabilidadeId;
 
-interface Dados {
+export interface Dados {
   cards: Card[];
   knowledge: WordKnowledge[];
   leituras: ReadingProgress[];
@@ -70,9 +70,9 @@ function passoLicao(licoes: LessonProgress[], porqueExtra: string): Passo | null
   };
 }
 
-function passoAprender({ cards, knowledge, kanji, licoes }: Dados): Passo {
+function passoAprender({ cards, knowledge, kanji, licoes }: Dados, now: number): Passo {
   const { ultimoEstudo } = trilhaDeLicoes(new Map(licoes.map((l) => [l.lessonId, l])));
-  if (Date.now() - ultimoEstudo > INTERVALO_LICAO_MS) {
+  if (now - ultimoEstudo > INTERVALO_LICAO_MS) {
     const licao = passoLicao(
       licoes,
       'As lições explicam a gramática que as palavras e os textos usam — vale alternar com as palavras novas.'
@@ -116,8 +116,8 @@ function passoAprender({ cards, knowledge, kanji, licoes }: Dados): Passo {
   };
 }
 
-function passoLer({ leituras }: Dados, known: KnownWords): Passo {
-  const t = recomendarTexto(known, leituras);
+function passoLer({ leituras }: Dados, known: KnownWords, now: number): Passo {
+  const t = recomendarTexto(known, leituras, { agora: now });
   if (!t) return { titulo: 'Ler um texto', porque: porqueDoTexto(0), to: '/leitura', icone: BookOpenText, cor: 'matcha' };
   return {
     titulo: `Ler 「${t.texto.title}」`,
@@ -128,8 +128,8 @@ function passoLer({ leituras }: Dados, known: KnownWords): Passo {
   };
 }
 
-function passoOuvir({ leituras }: Dados, known: KnownWords): Passo {
-  const t = recomendarTexto(known, leituras, { soLidos: true });
+function passoOuvir({ leituras }: Dados, known: KnownWords, now: number): Passo {
+  const t = recomendarTexto(known, leituras, { soLidos: true, agora: now });
   if (t) {
     return {
       titulo: `Escutar 「${t.texto.title}」 sem ler`,
@@ -149,8 +149,8 @@ function passoOuvir({ leituras }: Dados, known: KnownWords): Passo {
 }
 
 /** Lição com mais frases erradas no "Diga em japonês" nos últimos dias. */
-function licaoComMaisErros(diga: ExerciseResult[]): { id: string; erros: number } | null {
-  const desde = Date.now() - JANELA_ERROS_DIGA_MS;
+function licaoComMaisErros(diga: ExerciseResult[], now: number): { id: string; erros: number } | null {
+  const desde = now - JANELA_ERROS_DIGA_MS;
   const erros = new Map<string, number>();
   for (const r of diga) {
     if (r.doneAt < desde || r.score === undefined || r.score >= 1 || !r.lessonId) continue;
@@ -161,8 +161,8 @@ function licaoComMaisErros(diga: ExerciseResult[]): { id: string; erros: number 
   return pior;
 }
 
-function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords): Passo {
-  const producao = buildReviewQueue(cards).filter((i) => i.direction === 'production').length;
+function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords, now: number): Passo {
+  const producao = buildReviewQueue(cards, now).filter((i) => i.direction === 'production').length;
   if (producao > 0) {
     return {
       titulo: `Dizer ${producao} palavra(s) em japonês`,
@@ -172,7 +172,7 @@ function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords): Passo 
       cor: 'sakura',
     };
   }
-  const pior = licaoComMaisErros(diga);
+  const pior = licaoComMaisErros(diga, now);
   const licao = pior && LICOES.find((l) => l.meta.id === pior.id);
   if (pior && licao) {
     return {
@@ -183,7 +183,7 @@ function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords): Passo 
       cor: 'fuji',
     };
   }
-  const t = recomendarTexto(known, leituras, { soLidos: true });
+  const t = recomendarTexto(known, leituras, { soLidos: true, agora: now });
   if (t) {
     return {
       titulo: `Shadowing de 「${t.texto.title}」`,
@@ -249,23 +249,23 @@ function passoEscrever({ kana, kanji }: Dados): Passo {
  * Praticar (as 4 habilidades): input primeiro — sem leitura concluída nos
  * últimos 2 dias, o passo é ler; senão, escutar um texto já lido.
  */
-function passoPraticar(dados: Dados, known: KnownWords): Passo {
+function passoPraticar(dados: Dados, known: KnownWords, now: number): Passo {
   const ultimaLeitura = Math.max(0, ...dados.leituras.map((l) => l.lastReadAt));
-  return Date.now() - ultimaLeitura > 2 * DIA_MS ? passoLer(dados, known) : passoOuvir(dados, known);
+  return now - ultimaLeitura > 2 * DIA_MS ? passoLer(dados, known, now) : passoOuvir(dados, known, now);
 }
 
-export function calcularPasso(alvo: AlvoPasso, dados: Dados, known: KnownWords): Passo {
+export function calcularPasso(alvo: AlvoPasso, dados: Dados, known: KnownWords, now: number = Date.now()): Passo {
   switch (alvo) {
     case 'aprender':
-      return passoAprender(dados);
+      return passoAprender(dados, now);
     case 'praticar':
-      return passoPraticar(dados, known);
+      return passoPraticar(dados, known, now);
     case 'ler':
-      return passoLer(dados, known);
+      return passoLer(dados, known, now);
     case 'ouvir':
-      return passoOuvir(dados, known);
+      return passoOuvir(dados, known, now);
     case 'falar':
-      return passoFalar(dados, known);
+      return passoFalar(dados, known, now);
     case 'escrever':
       return passoEscrever(dados);
   }

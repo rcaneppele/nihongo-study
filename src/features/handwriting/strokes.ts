@@ -113,13 +113,26 @@ const REFERENCE_DATA: Record<string, { strokes: ReferenceStrokes }> = {
   ...(kanjiStrokesData as Record<string, { strokes: ReferenceStrokes }>),
 };
 
-export function hasReference(char: string): boolean {
-  return char in REFERENCE_DATA;
+/**
+ * Combinados (yōon, ex.: きゃ) não existem no KanjiVG como um caractere só:
+ * a referência é a de cada kana, lado a lado, cada um com 1/n da largura e
+ * centrado na altura — o kana pequeno (ゃ) já vem pequeno e embaixo no
+ * próprio KanjiVG, como se escreve à mão.
+ */
+function referenciaComposta(texto: string): ReferenceStrokes | undefined {
+  const partes = [...texto].map((c) => REFERENCE_DATA[c]?.strokes);
+  if (partes.length < 2 || partes.some((p) => !p)) return undefined;
+  const n = partes.length;
+  return partes.flatMap((tracos, i) => tracos!.map((traco) => traco.map(([x, y]) => [(i + x) / n, (y + (n - 1) / 2) / n])));
 }
 
-/** Traços de referência (ordem correta, coordenadas em [0,1]) — para exibir como dica/feedback. */
+/** Traços de referência (ordem correta, coordenadas em [0,1]) — para a nota e para exibir como feedback. */
 export function getReferenceStrokes(char: string): ReferenceStrokes | undefined {
-  return REFERENCE_DATA[char]?.strokes;
+  return REFERENCE_DATA[char]?.strokes ?? referenciaComposta(char);
+}
+
+export function hasReference(char: string): boolean {
+  return getReferenceStrokes(char) !== undefined;
 }
 
 export interface DrawScore {
@@ -131,7 +144,7 @@ export interface DrawScore {
 }
 
 export function scoreDrawing(strokes: Stroke[], char: string, canvasSize: number): DrawScore {
-  const reference = REFERENCE_DATA[char]?.strokes;
+  const reference = getReferenceStrokes(char);
   const given = strokes.filter((s) => s.length > 1);
 
   if (!reference || reference.length === 0) {
@@ -158,7 +171,9 @@ export function scoreDrawing(strokes: Stroke[], char: string, canvasSize: number
     hints.push(`O traçado oficial usa ${reference.length} traço(s) (você fez ${given.length}) — dá uma olhada na ordem certa.`);
   } else {
     for (let i = 0; i < reference.length; i++) {
-      const strokeShape = shapeScore(userNorm[i], refNorm[i]);
+      // Forma nos dois sentidos: um traço certo feito ao contrário tem a forma
+      // certa — a dica é de direção, não de forma.
+      const strokeShape = Math.max(shapeScore(userNorm[i], refNorm[i]), shapeScore([...userNorm[i]].reverse(), refNorm[i]));
       const direction = angleScore(strokeVector(userNorm[i]), strokeVector(refNorm[i]));
       if (direction < 0.4 && strokeShape >= 0.4) {
         hints.push(`Traço ${i + 1}: confira a direção (de onde a caneta começa e termina).`);

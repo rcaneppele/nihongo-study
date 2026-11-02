@@ -7,6 +7,7 @@ import DigaSession from '../features/diga/DigaSession';
 import DigaResultado from '../features/diga/DigaResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
 import { registrarResultados } from '../features/exercicios/historico';
+import { alternar } from '../lib/conjuntos';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -31,12 +32,7 @@ export default function Diga() {
   const quantidade = Math.min(quantidadeDesejada, Math.max(disponiveis, 1));
 
   function toggleLicao(id: string) {
-    setLicaoIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    setLicaoIds((prev) => alternar(prev, id));
   }
 
   function iniciar() {
@@ -106,7 +102,8 @@ export default function Diga() {
               <button
                 key={meta.id}
                 onClick={() => toggleLicao(meta.id)}
-                className={`chip ${active ? 'chip-active' : ''}`}
+                aria-pressed={active}
+                  className={`chip ${active ? 'chip-active' : ''}`}
               >
                 {meta.emoji} {meta.title}
               </button>

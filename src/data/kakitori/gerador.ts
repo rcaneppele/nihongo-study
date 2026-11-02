@@ -1,18 +1,6 @@
 import { LICOES } from '../../licoes';
 import type { FonteKakitori, ItemKakitori, ItemKakitoriFonte, KakitoriConfig } from './types';
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function pickN<T>(arr: T[], n: number): T[] {
-  return shuffle(arr).slice(0, n);
-}
+import { sortear } from '../../lib/aleatorio';
 
 function itemDeFonte(item: ItemKakitoriFonte, origemLabel: string, licaoId: string): ItemKakitori {
   return {
@@ -56,7 +44,7 @@ function montarPool(fonteIds: string[]): ItemKakitori[] {
 /** Monta um ditado aleatório a partir das fontes (lições/grupos) escolhidas pelo usuário. */
 export function gerarKakitori(config: KakitoriConfig): ItemKakitori[] {
   const pool = montarPool(config.fonteIds);
-  return pickN(pool, Math.min(config.quantidade, pool.length));
+  return sortear(pool, Math.min(config.quantidade, pool.length));
 }
 
 /** Quantos itens essa combinação de fontes consegue gerar, sem montar o ditado. */

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type KanjiProgress } from '../../db/schema';
-import { applyFsrs, type Grade } from '../srs/fsrs';
+import type { Grade } from '../srs/fsrs';
 import GradeButtons from '../srs/GradeButtons';
 import type { KanjiEntry } from '../../data/kanji';
 import AudioButton from '../../components/AudioButton';
@@ -9,7 +9,7 @@ import Furigana from '../../components/Furigana';
 import SessionHeader from '../../components/SessionHeader';
 import StudyCard from '../../components/StudyCard';
 import { useShortcuts } from '../../lib/useShortcuts';
-import { registrarAtividade } from '../atividade/atividade';
+import { desfazerRevisaoKanji, registrarRevisaoKanji } from './progresso';
 
 /**
  * Revisão espaçada dos kanji já aprendidos — mesmo padrão auto-graded de
@@ -42,13 +42,8 @@ export default function KanjiReviewSession({
   async function grade(rating: Grade) {
     if (grading || !entry) return;
     setGrading(true);
-    const before = await db.kanjiProgress.get(entry.char);
-    if (before) {
-      const result = applyFsrs(before, rating);
-      await db.kanjiProgress.update(entry.char, { ...result, updatedAt: Date.now() });
-      setUndoStack((s) => [...s, before]);
-      void registrarAtividade('revisoes');
-    }
+    const before = await registrarRevisaoKanji(entry.char, rating);
+    if (before) setUndoStack((s) => [...s, before]);
     setGrading(false);
     setShowBack(false);
     setIndex((i) => i + 1);
@@ -59,9 +54,8 @@ export default function KanjiReviewSession({
     const last = undoStack[undoStack.length - 1];
     if (last) {
       setGrading(true);
-      await db.kanjiProgress.put({ ...last, updatedAt: Date.now() });
+      await desfazerRevisaoKanji(last);
       setUndoStack((s) => s.slice(0, -1));
-      void registrarAtividade('revisoes', -1);
       setGrading(false);
     }
     setIndex((i) => i - 1);

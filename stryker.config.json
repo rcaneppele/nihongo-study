@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "Testes de mutação do núcleo (docs/estrategia-testes.md, camada 7): o Stryker altera o código e confere se algum teste falha. Rodar: npm run test:mutation (demora; relatório em reports/mutation/).",
+  "testRunner": "vitest",
+  "vitest": { "configFile": "vitest.stryker.config.ts" },
+  "plugins": ["@stryker-mutator/vitest-runner"],
+  "mutate": [
+    "src/db/merge.ts",
+    "src/db/contadores.ts",
+    "src/db/backup.ts",
+    "src/db/migracoes.ts",
+    "src/db/mesclarNoBanco.ts",
+    "src/features/srs/fsrs.ts",
+    "src/features/flashcards/stages.ts",
+    "src/features/flashcards/revisao.ts",
+    "src/features/flashcards/cards.ts",
+    "src/features/kana/treino.ts",
+    "src/features/atividade/atividade.ts",
+    "src/features/sync/motor.ts",
+    "src/features/handwriting/strokes.ts"
+  ],
+  "coverageAnalysis": "perTest",
+  "reporters": ["clear-text", "progress", "html"],
+  "htmlReporter": { "fileName": "reports/mutation/index.html" },
+  "thresholds": { "high": 90, "low": 80, "break": 70 },
+  "concurrency": 4,
+  "timeoutMS": 20000,
+  "incremental": true,
+  "incrementalFile": "reports/stryker-incremental.json"
+}

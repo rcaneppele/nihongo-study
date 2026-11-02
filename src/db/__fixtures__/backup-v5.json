@@ -1,0 +1,94 @@
+{
+  "app": "nihongo-study",
+  "schemaVersion": 5,
+  "exportedAt": 1767268800000,
+  "cards": [
+    {
+      "id": "c-neko",
+      "front": "ねこ",
+      "back": "gato",
+      "reading": "neko",
+      "category": "Animais",
+      "tags": [
+        "n5"
+      ],
+      "stability": 8.5,
+      "difficulty": 5.1,
+      "state": 2,
+      "reps": 4,
+      "lapses": 0,
+      "scheduledDays": 9,
+      "dueDate": 1768046400000,
+      "lastReviewedAt": 1767268800000,
+      "createdAt": 1766404800000,
+      "updatedAt": 1767268800000
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r-1",
+      "cardId": "c-neko",
+      "reviewedAt": 1767182400000,
+      "quality": 4,
+      "intervalAfter": 6
+    }
+  ],
+  "kanaProgress": [
+    {
+      "char": "あ",
+      "type": "hiragana",
+      "romajiCorrect": 5,
+      "romajiWrong": 1,
+      "lastPracticed": 1767096000000
+    }
+  ],
+  "meta": [
+    {
+      "key": "theme",
+      "value": "dark"
+    }
+  ],
+  "kanjiProgress": [
+    {
+      "char": "日",
+      "stability": 3.2,
+      "difficulty": 6,
+      "state": 2,
+      "reps": 2,
+      "lapses": 0,
+      "scheduledDays": 3,
+      "dueDate": 1767528000000,
+      "lastReviewedAt": 1767268800000,
+      "drawBest": 72,
+      "createdAt": 1766836800000,
+      "updatedAt": 1767268800000
+    }
+  ],
+  "wordKnowledge": [
+    {
+      "key": "ねこ",
+      "status": "compreendida",
+      "seenCount": 2,
+      "lookupCount": 0,
+      "updatedAt": 1767268800000
+    }
+  ],
+  "readingProgress": [
+    {
+      "textId": "n1-jikoshoukai",
+      "timesRead": 2,
+      "lastReadAt": 1767268800000,
+      "updatedAt": 1767268800000
+    }
+  ],
+  "activity": [
+    {
+      "day": "2026-01-01",
+      "revisoes": 12,
+      "praticas": 5,
+      "leituras": 1,
+      "novos": 3,
+      "updatedAt": 1767268800000
+    }
+  ]
+}

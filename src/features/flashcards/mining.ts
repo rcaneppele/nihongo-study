@@ -1,5 +1,5 @@
-import { db, newId, type Card, type CardExample, type CardSource } from '../../db/schema';
-import { freshSrs } from '../srs/fsrs';
+import type { CardExample, CardSource } from '../../db/schema';
+import { criarCard } from './cards';
 import type { ReadingLine, ReadingText, ReadingWord } from '../../data/leitura/types';
 
 /** Categoria dos cards criados a partir da leitura extensiva. */
@@ -57,15 +57,8 @@ export function sourceFromText(texto: ReadingText): CardSource {
   return { kind: 'leitura', id: texto.id, title: texto.title };
 }
 
-/** Card já existente com essa frente (mesmo critério de duplicata do import do N5). */
-export function findCardByFront(front: string): Promise<Card | undefined> {
-  return db.cards.filter((c) => c.front === front).first();
-}
-
 export async function saveMinedCard(draft: CardDraft, example: CardExample, source: CardSource): Promise<void> {
-  const now = Date.now();
-  await db.cards.add({
-    id: newId(),
+  await criarCard({
     front: draft.front.trim(),
     back: draft.back.trim(),
     reading: draft.reading.trim() || undefined,
@@ -73,8 +66,5 @@ export async function saveMinedCard(draft: CardDraft, example: CardExample, sour
     tags: ['leitura'],
     example,
     source,
-    ...freshSrs(now),
-    createdAt: now,
-    updatedAt: now,
   });
 }

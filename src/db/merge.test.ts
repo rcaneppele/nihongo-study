@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { incrementar, mesclarContadores } from './contadores';
-import { carimbosCard, mesclarCard, mesclarConquista, mesclarLicao } from './merge';
+import { cardMantido, carimbosCard, mesclarCard, mesclarConquista, mesclarLicao } from './merge';
 import { db, type Card } from './schema';
 import { exportData, importData, mesmoConteudo, SCHEMA_VERSION, type BackupFile } from './backup';
 import { freshSrs } from '../features/srs/fsrs';
@@ -73,6 +73,32 @@ describe('mesclarCard', () => {
       expect(r.note).toBe('gato');
       expect(r.updatedAt).toBe(300);
     }
+  });
+});
+
+describe('mesclarCard — card sem carimbos por grupo (novo ou anterior à v6)', () => {
+  // Regressão (achada pelo teste de propriedade em merge.propriedades.test.ts):
+  // o aparelho do meio subia o `updatedAt` sem gravar os carimbos ausentes, e
+  // o estado velho do SRS passava a vencer a revisão feita noutro aparelho.
+  it('revisão num aparelho não se perde quando um terceiro mescla uma edição de nota antes', () => {
+    const base = card('c', 'ねこ', 100);
+    const revisadoEmC = { ...base, reps: 1, state: 2, ...carimbosCard(base, ['srsUpdatedAt'], 1000) };
+    const notaEmA = { ...base, note: 'nota', ...carimbosCard(base, ['contentUpdatedAt'], 1001) };
+    const b = mesclarCard(base, notaEmA);
+    expect(mesclarCard(b, revisadoEmC)).toMatchObject({ reps: 1, state: 2, note: 'nota' });
+    expect(mesclarCard(revisadoEmC, b)).toMatchObject({ reps: 1, state: 2, note: 'nota' });
+  });
+});
+
+describe('cardMantido (duplicatas da mesma frente)', () => {
+  it('fica o criado primeiro; no empate, o de menor id — o mesmo em qualquer aparelho e em qualquer ordem', () => {
+    const a = card('b-id', 'ねこ', 10);
+    const b = card('a-id', 'ねこ', 10);
+    const c = card('c-id', 'ねこ', 5);
+    expect(cardMantido([a, b]).id).toBe('a-id');
+    expect(cardMantido([b, a]).id).toBe('a-id');
+    expect(cardMantido([a, b, c]).id).toBe('c-id');
+    expect(cardMantido([c, b, a]).id).toBe('c-id');
   });
 });
 

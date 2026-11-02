@@ -8,6 +8,7 @@ import ProgressRing from '../../components/ProgressRing';
 import { Shuffle, Sparkles } from 'lucide-react';
 import { StageAction } from './StageControls';
 import { NoteBox } from './CardNote';
+import { sortear } from '../../lib/aleatorio';
 import { cardNote } from './note';
 import type { StudyItem } from './stages';
 import {
@@ -23,6 +24,7 @@ import {
   type VocabWord,
   type WordState,
 } from './vocabulary';
+import Chip from '../../components/Chip';
 
 const BATCH = 10;
 
@@ -92,7 +94,7 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
   }
 
   function testKnown() {
-    const pool = [...knownWords].sort(() => Math.random() - 0.5).slice(0, BATCH);
+    const pool = sortear(knownWords, BATCH);
     onPractice(pool.map((w) => ({ card: practiceCard(w), direction: 'recognition' })));
   }
 
@@ -252,16 +254,5 @@ function WordPanel({ word, isSuggestion }: { word: VocabWord; isSuggestion: bool
         )}
       </div>
     </aside>
-  );
-}
-
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`chip ${active ? 'chip-active' : ''}`}
-    >
-      {children}
-    </button>
   );
 }

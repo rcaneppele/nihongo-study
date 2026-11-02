@@ -258,7 +258,7 @@ export default function LeituraTexto() {
                 type="button"
                 onClick={() => select({ kind: 'line', line })}
                 className="inline-flex h-6 shrink-0 items-center justify-center rounded-full px-1.5 text-[10px] font-bold tracking-wide text-sage transition-colors hover:bg-matcha/10 hover:text-matcha"
-                aria-label="Ver tradução da frase completa"
+                aria-label="PT — ver tradução da frase completa"
                 title="Ver tradução da frase completa"
               >
                 PT

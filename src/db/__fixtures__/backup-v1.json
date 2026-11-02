@@ -1,0 +1,47 @@
+{
+  "app": "nihongo-study",
+  "schemaVersion": 1,
+  "exportedAt": 1767268800000,
+  "cards": [
+    {
+      "id": "c-neko",
+      "front": "ねこ",
+      "back": "gato",
+      "reading": "neko",
+      "category": "Animais",
+      "tags": [
+        "n5"
+      ],
+      "ef": 2.6,
+      "interval": 6,
+      "repetitions": 2,
+      "dueDate": 1767700800000,
+      "createdAt": 1766404800000,
+      "updatedAt": 1767182400000
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r-1",
+      "cardId": "c-neko",
+      "reviewedAt": 1767182400000,
+      "quality": 4,
+      "intervalAfter": 6
+    }
+  ],
+  "kanaProgress": [
+    {
+      "char": "あ",
+      "type": "hiragana",
+      "romajiCorrect": 5,
+      "romajiWrong": 1,
+      "lastPracticed": 1767096000000
+    }
+  ],
+  "meta": [
+    {
+      "key": "theme",
+      "value": "dark"
+    }
+  ]
+}

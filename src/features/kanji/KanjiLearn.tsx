@@ -1,18 +1,16 @@
 import { Lightbulb } from 'lucide-react';
 import SessionHeader from '../../components/SessionHeader';
 import { useState } from 'react';
-import { db } from '../../db/schema';
-import { freshSrs } from '../srs/fsrs';
 import type { KanjiEntry } from '../../data/kanji';
 import AudioButton from '../../components/AudioButton';
 import Furigana from '../../components/Furigana';
-import { registrarAtividade } from '../atividade/atividade';
+import { aprenderKanji } from './progresso';
 
 /**
  * Tela de "aprender" um kanji novo, antes dele entrar no ciclo de revisão do
  * FSRS — mostra radicais/mnemônico, leituras e exemplos de uso de uma vez
  * (diferente da revisão, que esconde a resposta). Ao confirmar, cria a linha
- * em kanjiProgress com freshSrs() — igual ao card novo de flash cards.
+ * em kanjiProgress (`aprenderKanji`).
  */
 export default function KanjiLearn({ entries, onDone }: { entries: KanjiEntry[]; onDone: () => void }) {
   const [index, setIndex] = useState(0);
@@ -35,9 +33,7 @@ export default function KanjiLearn({ entries, onDone }: { entries: KanjiEntry[];
   async function confirm() {
     if (saving) return;
     setSaving(true);
-    const now = Date.now();
-    await db.kanjiProgress.put({ char: entry.char, ...freshSrs(now), createdAt: now, updatedAt: now });
-    void registrarAtividade('novos');
+    await aprenderKanji(entry.char);
     setSaving(false);
     setIndex((i) => i + 1);
   }

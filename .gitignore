@@ -32,3 +32,10 @@ pnpm-debug.log*
 
 # PWA gerado
 dev-dist/
+
+# Testes
+coverage/
+test-results/
+playwright-report/
+reports/
+.stryker-tmp/

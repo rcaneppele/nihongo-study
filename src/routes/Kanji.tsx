@@ -12,6 +12,8 @@ import { KANJI_N5, type KanjiEntry } from '../data/kanji';
 import { getAvailableNewKanji, getStartedKanji } from '../features/kanji/kanjiQueue';
 import KanjiLearn from '../features/kanji/KanjiLearn';
 import KanjiDrawSession from '../features/kanji/KanjiDrawSession';
+import { embaralhar } from '../lib/aleatorio';
+import Segmentado from '../components/Segmentado';
 
 const NEW_BATCH_SIZES = [5, 10, 20];
 
@@ -29,7 +31,7 @@ export default function Kanji() {
     if (!caligrafiaDireto || jaAbriu.current) return;
     jaAbriu.current = true;
     void getStartedKanji().then((entries) => {
-      if (entries.length > 0) setSession({ mode: 'caligrafia', entries: shuffle(entries) });
+      if (entries.length > 0) setSession({ mode: 'caligrafia', entries: embaralhar(entries) });
     });
   }, [caligrafiaDireto]);
 
@@ -47,7 +49,7 @@ export default function Kanji() {
   }
 
   async function startDraw() {
-    const entries = shuffle(await getStartedKanji());
+    const entries = embaralhar(await getStartedKanji());
     setSession({ mode: 'caligrafia', entries });
   }
 
@@ -101,17 +103,12 @@ export default function Kanji() {
               </p>
             </div>
           </div>
-          <div className="segmented">
-            {NEW_BATCH_SIZES.map((n) => (
-              <button
-                key={n}
-                onClick={() => setBatchSize(n)}
-                className={['segmented-item', batchSize === n ? 'segmented-item-active' : ''].join(' ')}
-              >
-                {n}
-              </button>
-            ))}
-          </div>
+          <Segmentado
+            rotulo="Quantos kanji aprender"
+            opcoes={NEW_BATCH_SIZES.map((n) => ({ valor: n, rotulo: n }))}
+            valor={batchSize}
+            onChange={setBatchSize}
+          />
         </div>
         <button className="btn-primary w-full" disabled={availableNew === 0} onClick={startLearn}>
           Aprender {Math.min(batchSize, availableNew)} kanji novos
@@ -185,11 +182,3 @@ function AcaoKanji({
   );
 }
 
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}

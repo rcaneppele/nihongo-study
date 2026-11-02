@@ -8,30 +8,18 @@ import type {
   TipoQuiz,
   Token,
 } from './types';
+import { embaralhar, sortear } from '../../lib/aleatorio';
 
-const PARTICULAS_COMUNS = [
+export const PARTICULAS_COMUNS = [
   'は', 'が', 'を', 'に', 'で', 'の', 'と', 'や', 'など', 'も', 'へ', 'から', 'まで', 'しか', 'だけ', 'ごろ', 'ぐらい',
 ];
 
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function pickN<T>(arr: T[], n: number): T[] {
-  return shuffle(arr).slice(0, n);
-}
-
 function embaralharTokens(tokens: Token[]): Token[] {
   if (tokens.length < 2) return tokens;
-  let tentativa = shuffle(tokens);
+  let tentativa = embaralhar(tokens);
   let tentativas = 0;
   while (tentativa.every((t, i) => t === tokens[i]) && tentativas < 10) {
-    tentativa = shuffle(tokens);
+    tentativa = embaralhar(tokens);
     tentativas++;
   }
   return tentativa;
@@ -53,7 +41,7 @@ function gerarParticula(frase: FraseEstruturada, licaoId: string): PerguntaParti
   if (indice === -1) return null;
 
   const correta = frase.tokens[indice].texto;
-  const distratoras = pickN(
+  const distratoras = sortear(
     PARTICULAS_COMUNS.filter((p) => p !== correta),
     3
   );
@@ -64,7 +52,7 @@ function gerarParticula(frase: FraseEstruturada, licaoId: string): PerguntaParti
     licaoId,
     antes: frase.tokens.slice(0, indice),
     depois: frase.tokens.slice(indice + 1),
-    alternativas: shuffle([correta, ...distratoras]),
+    alternativas: embaralhar([correta, ...distratoras]),
     correta,
     pt: frase.pt,
   };
@@ -102,7 +90,7 @@ function montarPool(licaoIds: string[], tipos: TipoQuiz[]): PerguntaGerada[] {
 /** Monta um quiz aleatório a partir das lições e tipos escolhidos pelo usuário. */
 export function gerarQuiz(config: QuizConfig): PerguntaGerada[] {
   const pool = montarPool(config.licaoIds, config.tipos);
-  return pickN(pool, Math.min(config.quantidade, pool.length));
+  return sortear(pool, Math.min(config.quantidade, pool.length));
 }
 
 /** Quantas perguntas essa combinação de lições e tipos consegue gerar, sem montar o quiz. */

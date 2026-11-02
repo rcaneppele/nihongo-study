@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { db, type Card } from '../../db/schema';
-import { carimbosCard } from '../../db/merge';
+import type { Card } from '../../db/schema';
+import { editarNota } from './cards';
 import { cardNote } from './note';
 
 /** Bloco da nota no verso do card (sessão de estudo) e no painel do mapa de vocabulário. */
@@ -39,7 +39,7 @@ export function NoteEditor({ card }: { card: Card }) {
   }
 
   async function save() {
-    await db.cards.update(card.id, { note: text.trim(), ...carimbosCard(card, ['contentUpdatedAt'], Date.now()) });
+    await editarNota(card, text);
     setEditing(false);
   }
 

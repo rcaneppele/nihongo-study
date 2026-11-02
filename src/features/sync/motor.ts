@@ -46,9 +46,45 @@ export interface StatusSync {
 
 export const syncDisponivel = Boolean(CLIENT_ID);
 
+// --- dependências externas --------------------------------------------------
+
+/**
+ * O que o motor usa de fora: o destino (Google Drive), o token e o login do
+ * Google, e o diálogo de confirmação. Os testes trocam por implementações em
+ * memória com `definirDependenciasSync` — o resto do motor não sabe disso.
+ */
+export interface DependenciasSync {
+  destino: (token: string) => DestinoSync;
+  tokenAtual: () => Promise<string | null>;
+  entrarNoGoogle: (silencioso: boolean, conta?: string) => void;
+  confirmar: (mensagem: string) => boolean;
+}
+
+const PADRAO: DependenciasSync = {
+  destino: googleDrive,
+  tokenAtual,
+  entrarNoGoogle,
+  confirmar: (mensagem) => confirm(mensagem),
+};
+let deps: DependenciasSync = PADRAO;
+
+/** Troca dependências do motor (testes) e zera o estado em memória dele. */
+export function definirDependenciasSync(parcial: Partial<DependenciasSync>): void {
+  deps = { ...PADRAO, ...parcial };
+  status = { fase: 'desligado', pendente: false };
+  emAndamento = null;
+  deNovo = false;
+  ultimoCiclo = 0;
+}
+
 // --- status observável pela tela --------------------------------------------
 
 let status: StatusSync = { fase: 'desligado', pendente: false };
+
+/** Status atual (fora do React — a tela usa `useStatusSync`). */
+export function statusSync(): StatusSync {
+  return status;
+}
 const ouvintes = new Set<() => void>();
 
 function setStatus(parcial: Partial<StatusSync>) {
@@ -127,11 +163,11 @@ async function ciclo(motivo: MotivoSync): Promise<void> {
     setStatus({ fase: 'offline' });
     return;
   }
-  const token = await tokenAtual();
+  const token = await deps.tokenAtual();
   if (!token) {
     if (podeIrAoGoogleSozinho(motivo)) {
       sessionStorage.setItem(ULTIMO_LOGIN, String(Date.now()));
-      entrarNoGoogle(true, estado.conta); // sai do app e volta em seguida
+      deps.entrarNoGoogle(true, estado.conta); // sai do app e volta em seguida
     }
     setStatus({ fase: 'precisaLogin', erro: sessionStorage.getItem(LOGIN_FALHOU) ?? undefined });
     return;
@@ -140,7 +176,7 @@ async function ciclo(motivo: MotivoSync): Promise<void> {
   ultimoCiclo = Date.now();
   setStatus({ fase: 'sincronizando', erro: undefined });
   try {
-    const destino = googleDrive(token);
+    const destino = deps.destino(token);
     for (let i = 0; i < TENTATIVAS; i++) {
       if (await tentar(destino, estado, motivo)) {
         setStatus({ fase: 'ocioso' });
@@ -180,7 +216,10 @@ async function tentar(destino: DestinoSync, estado: EstadoSync, motivo: MotivoSy
   setStatus({ pendente: false }); // o que mudar daqui em diante entra no próximo ciclo
   let subir = true;
   if (remoto) {
-    const acao = decidirEpoca(remoto.backup, await epocaLocal(), estado.versaoRemota !== undefined);
+    const epocaRemota = epocaDoBackup(remoto.backup);
+    const decisao = decidirEpoca(epocaRemota, await epocaLocal(), estado.versaoRemota !== undefined);
+    const acao =
+      decisao === 'perguntar' ? (deps.confirmar(mensagemDeEpoca(epocaRemota)) ? 'substituir-local' : 'mesclar') : decisao;
     aplicandoRemoto = true;
     try {
       if (acao === 'substituir-local') {
@@ -227,22 +266,28 @@ async function epocaLocal(): Promise<number> {
  * que foi substituído. Na primeira sincronização do aparelho, sempre
  * mescla (é o que a tela promete ao conectar: nada se perde).
  */
-function decidirEpoca(
-  remoto: BackupFile,
-  local: number,
+export function decidirEpoca(
+  epocaRemota: number,
+  epocaLocal: number,
   jaSincronizou: boolean
-): 'mesclar' | 'substituir-local' | 'substituir-remoto' {
-  const valor = remoto.meta.find((m) => m.key === DATA_EPOCH_KEY)?.value;
-  const epocaRemota = typeof valor === 'number' ? valor : 0;
-  if (!jaSincronizou || epocaRemota === local) return 'mesclar';
-  if (local > epocaRemota) return 'substituir-remoto';
+): 'mesclar' | 'substituir-remoto' | 'perguntar' {
+  if (!jaSincronizou || epocaRemota === epocaLocal) return 'mesclar';
+  return epocaLocal > epocaRemota ? 'substituir-remoto' : 'perguntar';
+}
+
+function epocaDoBackup(backup: BackupFile): number {
+  const valor = backup.meta.find((m) => m.key === DATA_EPOCH_KEY)?.value;
+  return typeof valor === 'number' ? valor : 0;
+}
+
+/** A época remota é mais nova: o outro aparelho foi substituído — a pessoa decide se este acompanha. */
+function mensagemDeEpoca(epocaRemota: number): string {
   const quando = new Date(epocaRemota).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-  const substituir = confirm(
+  return (
     `Os dados foram substituídos (ou apagados) em outro aparelho em ${quando}.\n\n` +
-      'OK: deixar este aparelho igual ao outro (o que só existe aqui é descartado).\n' +
-      'Cancelar: juntar os dados deste aparelho com os do outro, como numa sincronização normal.'
+    'OK: deixar este aparelho igual ao outro (o que só existe aqui é descartado).\n' +
+    'Cancelar: juntar os dados deste aparelho com os do outro, como numa sincronização normal.'
   );
-  return substituir ? 'substituir-local' : 'mesclar';
 }
 
 /**
@@ -279,7 +324,7 @@ function podeIrAoGoogleSozinho(motivo: MotivoSync): boolean {
  */
 export async function aoMudarDeTela(): Promise<void> {
   if (status.fase === 'desligado' || status.fase === 'sincronizando' || !telaSemSessao()) return;
-  if (!(await tokenAtual())) void sincronizar('navegacao');
+  if (!(await deps.tokenAtual())) void sincronizar('navegacao');
 }
 
 // --- ligar/desligar ---------------------------------------------------------
@@ -287,12 +332,12 @@ export async function aoMudarDeTela(): Promise<void> {
 /** Conectar: vai ao Google (com tela de escolha de conta); a volta é tratada em `iniciarSync`. */
 export function conectar(): void {
   sessionStorage.removeItem(LOGIN_FALHOU);
-  entrarNoGoogle(false);
+  deps.entrarNoGoogle(false);
 }
 
 /** "Entrar de novo" depois que o acesso venceu e a renovação sozinha não deu: já sugere a conta conectada. */
 export async function entrarDeNovo(): Promise<void> {
-  entrarNoGoogle(false, (await lerEstado()).conta);
+  deps.entrarNoGoogle(false, (await lerEstado()).conta);
 }
 
 /** Desconectar: não apaga nada, nem aqui nem no Drive. */
@@ -308,9 +353,9 @@ export async function desconectar(): Promise<void> {
  * ciclo recriaria o arquivo). Os dados deste aparelho ficam.
  */
 export async function apagarDoDrive(): Promise<void> {
-  const token = await tokenAtual();
+  const token = await deps.tokenAtual();
   if (!token) throw new ErroAutorizacao();
-  await googleDrive(token).apagar();
+  await deps.destino(token).apagar();
   await desconectar();
 }
 
@@ -347,9 +392,9 @@ export async function iniciarSync(retorno: RetornoOAuth): Promise<void> {
   setStatus({ fase: 'ocioso' });
 
   if (retorno?.ok && !estado.conta) {
-    const token = await tokenAtual();
+    const token = await deps.tokenAtual();
     if (token) {
-      const conta = await googleDrive(token)
+      const conta = await deps.destino(token)
         .conta()
         .catch(() => undefined);
       await gravarEstado({ conta });

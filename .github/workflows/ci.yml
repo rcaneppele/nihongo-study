@@ -1,0 +1,110 @@
+name: CI
+
+# Testes no GitHub Actions (ver docs/estrategia-testes.md › "Onde cada
+# camada roda"). Roda em todo push fora da main e em PR; na main, o
+# deploy.yml chama este workflow e só publica se ele passar.
+#
+# - Sempre: lint, tipos, Node + cobertura, componentes e E2E no Chromium
+#   (com o PWA offline).
+# - Só na main e em PR: E2E também no celular, Firefox e WebKit — numa
+#   branch de trabalho isso só atrasaria o retorno.
+# - Nunca aqui: regressão visual (as imagens dependem da máquina) e
+#   mutação (Stryker, ~35 min) — rodam local (`npm run test:visual`,
+#   `npm run test:mutation`).
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Um push novo na mesma branch cancela a rodada anterior (o deploy tem a
+# própria trava de concorrência).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  estatica-e-node:
+    name: Lint, tipos e testes em Node
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cobertura
+          path: coverage/
+          retention-days: 14
+
+  componentes:
+    name: Componentes no navegador
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: playwright
+        run: echo "versao=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ steps.playwright.outputs.versao }}-chromium
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+
+  e2e:
+    name: Ponta a ponta (${{ matrix.navegador }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # Branch de trabalho: só Chromium. Main (deploy) e PR: os quatro.
+        navegador: ${{ fromJSON(github.event_name == 'push' && github.ref != 'refs/heads/main' && '["chromium"]' || '["chromium","celular","firefox","webkit"]') }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: playwright
+        run: |
+          echo "versao=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+          echo "browser=${{ matrix.navegador == 'celular' && 'chromium' || matrix.navegador }}" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ steps.playwright.outputs.versao }}-${{ steps.playwright.outputs.browser }}
+      - name: Navegador do Playwright
+        run: npx playwright install --with-deps ${{ steps.playwright.outputs.browser }}
+      - name: Testes
+        # O projeto `pwa` (service worker ligado) roda junto do Chromium.
+        run: npx playwright test --project=${{ matrix.navegador }} ${{ matrix.navegador == 'chromium' && '--project=pwa' || '' }}
+        env:
+          E2E_NAVEGADORES: ${{ matrix.navegador }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: relatorio-e2e-${{ matrix.navegador }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

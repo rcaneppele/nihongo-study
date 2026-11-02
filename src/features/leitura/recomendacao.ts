@@ -21,10 +21,9 @@ export interface TextoRecomendado {
 export function recomendarTexto(
   known: KnownWords,
   progress: ReadingProgress[],
-  { soLidos = false }: { soLidos?: boolean } = {}
+  { soLidos = false, agora = Date.now() }: { soLidos?: boolean; agora?: number } = {}
 ): TextoRecomendado | null {
   const porId = new Map(progress.map((p) => [p.textId, p]));
-  const agora = Date.now();
   let melhor: (TextoRecomendado & { score: number }) | null = null;
   for (const texto of LEITURA_TEXTOS) {
     const p = porId.get(texto.id);

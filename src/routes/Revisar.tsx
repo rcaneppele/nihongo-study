@@ -12,15 +12,7 @@ import { getDueKanji } from '../features/kanji/kanjiQueue';
 import { ATIVIDADES_REVISAR } from '../features/metodo/estrutura';
 import { HERO_BOTAO, HERO_TEXTO } from '../lib/hero';
 import { usePendencias } from '../features/metodo/pendencias';
-
-function shuffle<T>(arr: T[]): T[] {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
+import { embaralhar } from '../lib/aleatorio';
 
 type Etapa =
   | { tipo: 'hub' }
@@ -41,8 +33,8 @@ export default function Revisar() {
   const totalCards = useLiveQuery(() => db.cards.count(), [], 0);
 
   async function comecar() {
-    const cards = shuffle(buildReviewQueue(await db.cards.toArray()));
-    const kanji = shuffle(await getDueKanji());
+    const cards = embaralhar(buildReviewQueue(await db.cards.toArray()));
+    const kanji = embaralhar(await getDueKanji());
     setConcluida(false);
     if (cards.length > 0) setEtapa({ tipo: 'cards', cards, kanji });
     else if (kanji.length > 0) setEtapa({ tipo: 'kanji', kanji });

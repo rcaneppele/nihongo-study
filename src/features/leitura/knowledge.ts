@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { State } from 'ts-fsrs';
-import { db } from '../../db/schema';
+import { db, type Card, type Review, type WordKnowledge } from '../../db/schema';
 import { incrementar } from '../../db/contadores';
 import { getDeviceId } from '../../db/local';
 import { READING_CONTADORES, WORD_CONTADORES } from '../../db/merge';
@@ -102,34 +102,43 @@ export function useKnownWords(): KnownWords | undefined {
       db.cards.toArray(),
       db.reviews.toArray(),
     ]);
-    const desde = Date.now() - SEMANA_MS;
-
-    // Primeira revisão de cada card, por direção.
-    const primeiraRec = new Map<string, number>();
-    const primeiraProd = new Map<string, number>();
-    for (const r of reviews) {
-      const mapa = r.direction === 'production' ? primeiraProd : primeiraRec;
-      const atual = mapa.get(r.cardId);
-      if (atual === undefined || r.reviewedAt < atual) mapa.set(r.cardId, r.reviewedAt);
-    }
-
-    const understood = new Set(knowledge.filter((k) => k.status === 'compreendida').map((k) => k.key));
-    const novasNaSemana = new Set(
-      knowledge.filter((k) => k.status === 'compreendida' && k.seenCount === 1 && k.updatedAt >= desde).map((k) => k.key)
-    );
-    const canSay = new Set<string>();
-    let canSayWeek = 0;
-    for (const card of cards) {
-      if (card.state !== State.New || card.production) understood.add(card.front);
-      if ((primeiraRec.get(card.id) ?? 0) >= desde) novasNaSemana.add(card.front);
-      const stage = cardStage(card);
-      if (stage === 'seiDizer' || stage === 'domino') {
-        canSay.add(card.front);
-        if ((primeiraProd.get(card.id) ?? 0) >= desde) canSayWeek++;
-      }
-    }
-    return { understood, canSay, understoodWeek: novasNaSemana.size, canSayWeek };
+    return palavrasConhecidas(knowledge, cards, reviews);
   }, []);
+}
+
+export function palavrasConhecidas(
+  knowledge: WordKnowledge[],
+  cards: Card[],
+  reviews: Review[],
+  now: number = Date.now()
+): KnownWords {
+  const desde = now - SEMANA_MS;
+
+  // Primeira revisão de cada card, por direção.
+  const primeiraRec = new Map<string, number>();
+  const primeiraProd = new Map<string, number>();
+  for (const r of reviews) {
+    const mapa = r.direction === 'production' ? primeiraProd : primeiraRec;
+    const atual = mapa.get(r.cardId);
+    if (atual === undefined || r.reviewedAt < atual) mapa.set(r.cardId, r.reviewedAt);
+  }
+
+  const understood = new Set(knowledge.filter((k) => k.status === 'compreendida').map((k) => k.key));
+  const novasNaSemana = new Set(
+    knowledge.filter((k) => k.status === 'compreendida' && k.seenCount === 1 && k.updatedAt >= desde).map((k) => k.key)
+  );
+  const canSay = new Set<string>();
+  let canSayWeek = 0;
+  for (const card of cards) {
+    if (card.state !== State.New || card.production) understood.add(card.front);
+    if ((primeiraRec.get(card.id) ?? 0) >= desde) novasNaSemana.add(card.front);
+    const stage = cardStage(card);
+    if (stage === 'seiDizer' || stage === 'domino') {
+      canSay.add(card.front);
+      if ((primeiraProd.get(card.id) ?? 0) >= desde) canSayWeek++;
+    }
+  }
+  return { understood, canSay, understoodWeek: novasNaSemana.size, canSayWeek };
 }
 
 /** Porcentagem (0–100) das palavras únicas do texto que o usuário já compreende. */
