@@ -33,6 +33,12 @@ export default {
         kin: withOpacity('--color-kin'),
         sakura: withOpacity('--color-sakura'),
       },
+      // Texto em ouro/rosa usa um tom mais escuro (contraste WCAG AA); o resto das
+      // classes (bg-, border-, stroke-…) segue a cor do módulo (ver src/index.css).
+      textColor: {
+        kin: withOpacity('--color-kin-texto'),
+        sakura: withOpacity('--color-sakura-texto'),
+      },
       opacity: {
         8: '0.08',
         12: '0.12',

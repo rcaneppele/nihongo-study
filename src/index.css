@@ -10,16 +10,22 @@
     --color-ink: 27 36 48;
     --color-indigo: 30 58 95;
     --color-indigo-soft: 45 74 124;
-    --color-hanko: 215 71 47;
-    --color-sage: 124 138 126;
+    /* Texto em hanko, sage e nas cores de módulo passa no contraste WCAG AA (4,5:1)
+       sobre o papel, a superfície e o próprio fundo tingido dos selos (~12–20%). */
+    --color-hanko: 161 53 35;
+    --color-sage: 95 106 97;
     --color-line: 228 223 212;
     /* Cores de apoio, uma por módulo (ver docs/guia-visual.md §1): só em
        pequenas áreas — ícones, tiles de ícone (fundo a ~12%), badges, barras finas. */
-    --color-sora: 61 111 168; /* céu — flash cards, revisões */
-    --color-matcha: 79 122 90; /* leitura, "compreendida", meta batida */
-    --color-fuji: 117 99 168; /* lições */
+    --color-sora: 52 94 142; /* céu — flash cards, revisões */
+    --color-matcha: 65 100 74; /* leitura, "compreendida", meta batida */
+    --color-fuji: 98 83 141; /* lições */
     --color-kin: 183 131 47; /* ouro — kana, práticas */
     --color-sakura: 194 87 122; /* pontos fracos */
+    /* Ouro e rosa claros demais para texto: `text-kin`/`text-sakura` usam estes tons
+       (tailwind.config.js); fundos, bordas e barras ficam com a cor de cima. */
+    --color-kin-texto: 127 91 33;
+    --color-sakura-texto: 150 67 95;
     --shadow-color: 27 36 48;
     color-scheme: light;
   }
@@ -41,6 +47,8 @@
     --color-fuji: 172 156 222;
     --color-kin: 224 180 102;
     --color-sakura: 230 140 170;
+    --color-kin-texto: 224 180 102;
+    --color-sakura-texto: 230 140 170;
     --shadow-color: 0 0 0;
     color-scheme: dark;
   }

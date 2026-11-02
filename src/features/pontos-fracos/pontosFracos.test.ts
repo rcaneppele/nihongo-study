@@ -62,3 +62,92 @@ describe('misturar', () => {
     expect(misturar([], 5)).toEqual([]);
   });
 });
+
+describe('carregarPontosFracos — ordem, bordas e o que vai pro treino', () => {
+  it('cards: mais esquecidos primeiro; empatados, o mais difícil; empate entre direções treina o reconhecimento', async () => {
+    await db.cards.bulkAdd([
+      umCard({ id: 'facil', front: 'fácil', lapses: 1, difficulty: 2 }),
+      umCard({ id: 'dificil', front: 'difícil', lapses: 1, difficulty: 8 }),
+      umCard({ id: 'muitos', front: 'muitos', lapses: 2, difficulty: 1 }),
+      umCard({ id: 'empate', front: 'empate', lapses: 1, difficulty: 1, production: { ...umCard(), lapses: 1 } }),
+    ]);
+    const { cards } = await carregarPontosFracos();
+    expect(cards.map((p) => p.jp)).toEqual(['empate', 'muitos', 'difícil', 'fácil']);
+    expect(cards[0]).toMatchObject({ detalhe: 'esqueceu 2×', item: { direction: 'recognition' } });
+  });
+
+  it('kana: soma digitar e múltipla escolha; exatamente 85% não é ponto fraco; nunca praticado também não', async () => {
+    await db.kanaProgress.bulkAdd([
+      umKanaProgress('あ', { romajiCorrect: 0, romajiWrong: 1, choiceCorrect: 10 }), // 91%
+      umKanaProgress('い', { romajiCorrect: 1, choiceWrong: 2 }), // 33%
+      umKanaProgress('う', { romajiCorrect: 17, romajiWrong: 3 }), // 85%
+      umKanaProgress('え'),
+      umKanaProgress('お', { romajiCorrect: 1, romajiWrong: 1 }), // 50%
+    ]);
+    const { kana } = await carregarPontosFracos();
+    expect(kana.map((p) => p.jp)).toEqual(['い', 'お']);
+    expect(kana[0]).toMatchObject({ pt: 'i', detalhe: 'acerto 33% · errou 2×', item: { card: { front: 'い', back: 'i' } } });
+  });
+
+  it('kanji: sem lapso não entra; kanji fora do N5 é ignorado; o card de treino traz significado e leituras', async () => {
+    const [k1, k2, k3] = KANJI_N5;
+    await db.kanjiProgress.bulkAdd([
+      umKanjiProgress(k1.char, { lapses: 1, difficulty: 9 }),
+      umKanjiProgress(k2.char, { lapses: 2, difficulty: 1 }),
+      umKanjiProgress(k3.char, { lapses: 0 }),
+      umKanjiProgress('龘', { lapses: 5 }),
+    ]);
+    const { kanji } = await carregarPontosFracos();
+    expect(kanji.map((p) => p.jp)).toEqual([k2.char, k1.char]);
+    const leituras = [...k2.kunyomi, ...k2.onyomi].map((r) => r.kana).join('、');
+    expect(kanji[0]).toMatchObject({
+      pt: k2.meaning,
+      reading: leituras,
+      detalhe: 'esqueceu 2×',
+      item: { card: { front: k2.char, back: k2.meaning, reading: leituras } },
+    });
+  });
+
+  it('leitura: só consultadas e conhecidas dos textos; mais consultas primeiro, e no empate a mais consultada proporcionalmente', async () => {
+    const palavra = (key: string, lookupCount: number, seenCount: number, status: 'consultada' | 'compreendida' = 'consultada') => ({
+      key,
+      status,
+      seenCount,
+      lookupCount,
+      updatedAt: 1,
+    });
+    await db.wordKnowledge.bulkAdd([
+      palavra('わたし', 2, 5),
+      palavra('ねこ', 2, 2),
+      palavra('いぬ', 3, 9),
+      palavra('がっこう', 4, 4, 'compreendida'),
+      palavra('não-existe-nos-textos', 9, 9),
+    ]);
+    const { leitura } = await carregarPontosFracos();
+    expect(leitura.map((p) => p.jp)).toEqual(['いぬ', 'ねこ', 'わたし']);
+    expect(leitura[1]).toMatchObject({ detalhe: 'consultou em 2 de 2 leitura(s)', item: { card: { front: 'ねこ' } } });
+    expect(leitura[1].pt).toBeTruthy();
+  });
+
+  it('lições: acerto abaixo de 70% entra mesmo com a última certa; exatamente 70%, não; errada por último vem primeiro', async () => {
+    const [p1, p2, p3] = LICOES.flatMap((l) => l.quiz?.perguntas ?? []);
+    const resultados = (itemId: string, scores: number[]) =>
+      scores.map((score, i) => ({ id: `${itemId}-${i}`, kind: 'quiz' as const, itemId, score, doneAt: i + 1 }));
+    await db.exerciseResults.bulkAdd([
+      ...resultados(p1.id, [0, 1]), // 50%, última certa
+      ...resultados(p2.id, [0, 0, 0, 1, 1, 1, 1, 1, 1, 1]), // 70%, última certa
+      ...resultados(p3.id, [1, 0]), // 50%, última errada
+      ...resultados('pergunta-que-nao-existe', [0]),
+    ]);
+    const { licoes } = await carregarPontosFracos();
+    expect(licoes.map((p) => p.id)).toEqual([`quiz-${p3.id}`, `quiz-${p1.id}`]);
+    expect(licoes[1]).toMatchObject({ detalhe: 'quiz · errou 1 de 2', item: { card: { front: licoes[1].jp, back: licoes[1].pt } } });
+  });
+});
+
+describe('misturar — limite no meio de uma rodada', () => {
+  const p = (id: string) => ({ id }) as PontoFraco;
+  it('para exatamente no limite, mesmo no meio da rodada', () => {
+    expect(misturar([[p('a1'), p('a2')], [p('b1'), p('b2')]], 3).map((x) => x.id)).toEqual(['a1', 'b1', 'a2']);
+  });
+});

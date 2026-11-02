@@ -133,6 +133,9 @@ export function parseAnkiText(text: string): Card[] {
   let guidColumn: number | null = null;
   let columnNames: string[] | null = null;
 
+  // Linhas em branco antes do cabeçalho (arquivo editado à mão) não escondem o cabeçalho.
+  while (i < lines.length && lines[i].trim() === '') i++;
+  const inicio = i;
   while (i < lines.length && lines[i].startsWith('#')) {
     const [rawKey, ...rest] = lines[i].slice(1).split(':');
     const key = rawKey.trim().toLowerCase();
@@ -150,7 +153,7 @@ export function parseAnkiText(text: string): Card[] {
   const rows = lines.slice(i).filter((l) => l.trim().length > 0);
   if (rows.length === 0) return [];
   // Sem cabeçalho: detecta o separador pelo conteúdo da primeira linha.
-  if (i === 0) separator = rows[0].includes('\t') ? '\t' : rows[0].includes(',') ? ',' : separator;
+  if (i === inicio) separator = rows[0].includes('\t') ? '\t' : rows[0].includes(',') ? ',' : separator;
 
   const skip = new Set(
     [notetypeColumn, deckColumn, guidColumn, tagsColumn].filter((v): v is number => v !== null)

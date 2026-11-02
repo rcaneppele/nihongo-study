@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db, type JournalEntry, type WordKnowledge } from './schema';
 import { importData } from './backup';
+import { mesclarNoBanco } from './mesclarNoBanco';
 import { limparBanco } from '../test/banco';
 import { AGORA, DIA, umBackup, umCard, umKanaProgress, umaReview } from '../test/fabricas';
 
@@ -72,6 +73,31 @@ describe('lápide daqui contra registro do outro aparelho', () => {
     expect(await db.deleted.get(['cards', 'antiga'])).toBeUndefined();
     expect(await db.deleted.get(['cards', 'quase'])).toBeDefined();
   });
+
+  it('lápide daqui mais nova que a do outro aparelho: fica a daqui', async () => {
+    const agora = Date.now();
+    await db.deleted.put({ table: 'cards', key: 'a', deletedAt: agora - 5 });
+    await mesclar({ deleted: [{ table: 'cards', key: 'a', deletedAt: agora - 10 }] });
+    expect((await db.deleted.get(['cards', 'a']))?.deletedAt).toBe(agora - 5);
+  });
+
+  it('lápide com exatamente 180 dias ainda vale', async () => {
+    await db.deleted.put({ table: 'cards', key: 'a', deletedAt: AGORA - 180 * DIA });
+    await mesclarNoBanco(umBackup(), AGORA);
+    expect(await db.deleted.get(['cards', 'a'])).toBeDefined();
+  });
+
+  it('registro daqui alterado no mesmo instante da exclusão de lá: sai', async () => {
+    await db.journal.put(diario('j', AGORA));
+    await mesclar({ deleted: [{ table: 'journal', key: 'j', deletedAt: AGORA }] });
+    expect(await db.journal.count()).toBe(0);
+  });
+
+  it('lápide de uma tabela não apaga registro de outra com a mesma chave', async () => {
+    await db.cards.put(umCard({ id: 'x' }));
+    await mesclar({ deleted: [{ table: 'journal', key: 'x', deletedAt: Date.now() }] });
+    expect(await db.cards.get('x')).toBeDefined();
+  });
 });
 
 describe('registro que já existe aqui é mesclado, não sobrescrito', () => {
@@ -93,10 +119,12 @@ describe('registro que já existe aqui é mesclado, não sobrescrito', () => {
     expect(await db.lessonProgress.get('desu')).toEqual({ lessonId: 'desu', viewedAt: 30, completedAt: 10, updatedAt: 10 });
   });
 
-  it('conquista: fica a data mais antiga', async () => {
+  it('conquista: fica a data mais antiga, venha de onde vier', async () => {
     await db.achievements.put({ id: 'x', unlockedAt: 20 });
-    await mesclar({ achievements: [{ id: 'x', unlockedAt: 10 }] });
+    await db.achievements.put({ id: 'y', unlockedAt: 10 });
+    await mesclar({ achievements: [{ id: 'x', unlockedAt: 10 }, { id: 'y', unlockedAt: 20 }] });
     expect((await db.achievements.get('x'))?.unlockedAt).toBe(10);
+    expect((await db.achievements.get('y'))?.unlockedAt).toBe(10);
   });
 
   it('palavra e diário: vence a alteração mais recente; contadores da palavra somam', async () => {
@@ -115,5 +143,41 @@ describe('registro que já existe aqui é mesclado, não sobrescrito', () => {
     await db.cards.put(card);
     await mesclar({});
     expect(await db.cards.get(card.id)).toEqual(card);
+  });
+});
+
+describe('revisões de cards juntados como duplicata', () => {
+  it('passam para o card mantido; as de um card só apagado ficam como estão', async () => {
+    await db.reviews.bulkPut([umaReview('juntado', { id: 'r1' }), umaReview('apagado', { id: 'r2' })]);
+    await mesclar({
+      deleted: [
+        { table: 'cards', key: 'juntado', deletedAt: Date.now(), mergedInto: 'mantido' },
+        { table: 'cards', key: 'apagado', deletedAt: Date.now() },
+      ],
+    });
+    expect((await db.reviews.get('r1'))?.cardId).toBe('mantido');
+    expect((await db.reviews.get('r2'))?.cardId).toBe('apagado');
+  });
+
+  it('segue a cadeia de cards juntados (A → B → C)', async () => {
+    await db.reviews.put(umaReview('a', { id: 'r1' }));
+    await mesclar({
+      deleted: [
+        { table: 'cards', key: 'a', deletedAt: Date.now(), mergedInto: 'b' },
+        { table: 'cards', key: 'b', deletedAt: Date.now(), mergedInto: 'c' },
+      ],
+    });
+    expect((await db.reviews.get('r1'))?.cardId).toBe('c');
+  });
+
+  it('um ciclo de cards juntados (A → B → A) não trava a mesclagem', async () => {
+    await db.reviews.put(umaReview('a', { id: 'r1' }));
+    await mesclar({
+      deleted: [
+        { table: 'cards', key: 'a', deletedAt: Date.now(), mergedInto: 'b' },
+        { table: 'cards', key: 'b', deletedAt: Date.now(), mergedInto: 'a' },
+      ],
+    });
+    expect(['a', 'b']).toContain((await db.reviews.get('r1'))?.cardId);
   });
 });

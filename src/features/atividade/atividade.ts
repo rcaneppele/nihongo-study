@@ -42,9 +42,14 @@ export function pontos(a: Activity | undefined): number {
   return a.revisoes + a.praticas + a.novos + a.leituras * PESO_LEITURA;
 }
 
+/** Meta diária a partir do valor gravado: número positivo, senão a padrão (nunca gravada ou valor estranho num backup). */
+export function metaDiaria(valor: unknown): number {
+  return typeof valor === 'number' && valor > 0 ? valor : META_PADRAO;
+}
+
 export function useMetaDiaria(): number {
   const entry = useLiveQuery(() => db.meta.get(META_KEY), []);
-  return typeof entry?.value === 'number' && entry.value > 0 ? entry.value : META_PADRAO;
+  return metaDiaria(entry?.value);
 }
 
 export function setMetaDiaria(meta: number) {

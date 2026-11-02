@@ -22,13 +22,38 @@ import type {
  * dependem da ordem (mesclar A em B dá o mesmo que B em A), pra dois
  * aparelhos sincronizando sempre chegarem ao mesmo estado.
  *
- * Empate de data mantém o local.
+ * Empate de data (a mesma coisa alterada nos dois aparelhos no mesmo
+ * milissegundo) é decidido pelo conteúdo, não pelo lado — ver `vencedorPor`.
  */
 
 export const KANA_CONTADORES: readonly KanaContador[] = ['romajiCorrect', 'romajiWrong', 'choiceCorrect', 'choiceWrong'];
 export const ACTIVITY_CONTADORES: readonly ActivityContador[] = ['revisoes', 'praticas', 'leituras', 'novos'];
 export const WORD_CONTADORES = ['seenCount', 'lookupCount'] as const;
 export const READING_CONTADORES = ['timesRead'] as const;
+
+/** Texto canônico do valor (chaves em ordem, sem `undefined`): o mesmo em qualquer aparelho. */
+function canonico(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(canonico).join(',')}]`;
+  if (v !== null && typeof v === 'object') {
+    const r = v as Record<string, unknown>;
+    const chaves = Object.keys(r)
+      .filter((k) => r[k] !== undefined)
+      .sort();
+    return `{${chaves.map((k) => `${JSON.stringify(k)}:${canonico(r[k])}`).join(',')}}`;
+  }
+  return JSON.stringify(v) ?? 'null';
+}
+
+/**
+ * Vence o carimbo mais recente. No empate, decide o conteúdo (`decide`: só
+ * os campos que a regra escolhe pelo vencedor, não os que ela combina) —
+ * assim os dois aparelhos escolhem o mesmo; mantendo sempre o local, cada
+ * um ficaria com o seu e nunca convergiriam.
+ */
+function vencedorPor<T>(local: T, outro: T, tLocal: number, tOutro: number, decide: (x: T) => unknown = (x) => x): T {
+  if (tOutro !== tLocal) return tOutro > tLocal ? outro : local;
+  return canonico(decide(outro)) > canonico(decide(local)) ? outro : local;
+}
 
 function maxOpt(a: number | undefined, b: number | undefined): number | undefined {
   if (a === undefined) return b;
@@ -74,7 +99,7 @@ export function mesclarCard(local: Card, outro: Card): Card {
   for (const g of GRUPOS_CARD) {
     const tLocal = local[g.carimbo] ?? local.updatedAt;
     const tOutro = outro[g.carimbo] ?? outro.updatedAt;
-    const vencedor = tOutro > tLocal ? outro : local;
+    const vencedor = vencedorPor(local, outro, tLocal, tOutro, (c) => g.campos.map((campo) => c[campo]));
     if (vencedor === outro) {
       for (const c of g.campos) {
         if (o[c] === undefined) delete r[c];
@@ -115,7 +140,7 @@ export function mesclarKana(local: KanaProgress, outro: KanaProgress): KanaProgr
 
 /** Estado FSRS: vence o `updatedAt` mais recente. Caligrafia: fica a melhor nota dos dois. */
 export function mesclarKanji(local: KanjiProgress, outro: KanjiProgress): KanjiProgress {
-  const vencedor = outro.updatedAt > local.updatedAt ? outro : local;
+  const vencedor = vencedorPor(local, outro, local.updatedAt, outro.updatedAt, (k) => ({ ...k, drawBest: undefined, createdAt: undefined }));
   return {
     ...vencedor,
     drawBest: maxOpt(local.drawBest, outro.drawBest),
@@ -125,7 +150,7 @@ export function mesclarKanji(local: KanjiProgress, outro: KanjiProgress): KanjiP
 
 /** Situação (compreendida/consultada) da leitura mais recente; contadores somados por aparelho. */
 export function mesclarPalavra(local: WordKnowledge, outro: WordKnowledge): WordKnowledge {
-  const vencedor = outro.updatedAt > local.updatedAt ? outro : local;
+  const vencedor = vencedorPor(local, outro, local.updatedAt, outro.updatedAt, (w) => w.status);
   return {
     key: local.key,
     status: vencedor.status,
@@ -153,11 +178,11 @@ export function mesclarAtividade(local: Activity, outro: Activity): Activity {
 }
 
 export function mesclarMeta(local: Meta, outro: Meta): Meta {
-  return (outro.updatedAt ?? 0) > (local.updatedAt ?? 0) ? outro : local;
+  return vencedorPor(local, outro, local.updatedAt ?? 0, outro.updatedAt ?? 0);
 }
 
 export function mesclarLapide(local: Tombstone, outro: Tombstone): Tombstone {
-  return outro.deletedAt > local.deletedAt ? outro : local;
+  return vencedorPor(local, outro, local.deletedAt, outro.deletedAt);
 }
 
 /**
@@ -165,7 +190,7 @@ export function mesclarLapide(local: Tombstone, outro: Tombstone): Tombstone {
  * concluída vence pelo `updatedAt` mais recente.
  */
 export function mesclarLicao(local: LessonProgress, outro: LessonProgress): LessonProgress {
-  const vence = outro.updatedAt > local.updatedAt ? outro : local;
+  const vence = vencedorPor(local, outro, local.updatedAt, outro.updatedAt, (l) => l.completedAt);
   const resultado: LessonProgress = {
     lessonId: local.lessonId,
     viewedAt: Math.max(local.viewedAt, outro.viewedAt),
@@ -182,7 +207,7 @@ export function mesclarConquista(local: Achievement, outro: Achievement): Achiev
 
 /** Entrada do diário: vence a edição mais recente. */
 export function mesclarDiario(local: JournalEntry, outro: JournalEntry): JournalEntry {
-  return outro.updatedAt > local.updatedAt ? outro : local;
+  return vencedorPor(local, outro, local.updatedAt, outro.updatedAt);
 }
 
 /** Comparação de registros sem depender da ordem das chaves — evita regravar o que não mudou. */

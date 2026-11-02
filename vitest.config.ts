@@ -47,8 +47,8 @@ export default mergeConfig(
         // suba o número. A lógica (.ts) é coberta em Node; as telas (.tsx),
         // pelos testes de componente e pelo E2E.
         thresholds: {
-          'src/db/**/*.ts': { lines: 93, branches: 93, functions: 95, statements: 93 },
-          'src/features/**/*.ts': { lines: 77, branches: 92, functions: 73, statements: 77 },
+          'src/db/**/*.ts': { lines: 97, branches: 96, functions: 99, statements: 97 },
+          'src/features/**/*.ts': { lines: 89, branches: 94, functions: 83, statements: 89 },
         },
       },
     },

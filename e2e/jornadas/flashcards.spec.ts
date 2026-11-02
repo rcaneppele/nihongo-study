@@ -7,7 +7,7 @@ test.describe('Aprender palavras e revisar', () => {
   test('aprender as próximas 10, revisar todas e ver o dia contado na Home', async ({ app, page }) => {
     await app.abrir('/aprender/palavras');
     await page.getByRole('button', { name: 'Aprender as próximas 10' }).click();
-    await expect(page.getByText(/10 card\(s\) criado\(s\)/)).toBeVisible();
+    await expect(page.getByText(/10 card\(s\) criado\(s\) — já estão na Revisão do dia/)).toBeVisible();
 
     await app.abrir('/revisar');
     await expect(page.getByText('10 item(ns) para relembrar')).toBeVisible();

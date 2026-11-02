@@ -121,7 +121,7 @@ function AvancarAuto({
           style={{ animationDuration: `${ms}ms` }}
         />
       </div>
-      <p className="text-center text-[11px] text-sage/70">
+      <p className="text-center text-[11px] text-sage">
         {paused ? 'Pausado — solte para continuar' : 'Toque e segure para pausar'}
       </p>
     </div>

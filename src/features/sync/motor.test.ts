@@ -7,6 +7,7 @@ import { apagarCard, criarCard } from '../flashcards/cards';
 import { registrarRevisao } from '../flashcards/revisao';
 import { Rating } from '../srs/fsrs';
 import { limparBanco } from '../../test/banco';
+import { umBackup, umCard } from '../../test/fabricas';
 import { ArmazenamentoEmMemoria, bancoVazio, DriveEmMemoria, fotografarBanco, restaurarBanco, type FotoDoBanco } from '../../test/aparelhos';
 
 let drive: DriveEmMemoria;
@@ -102,6 +103,7 @@ describe('ciclo de sincronização', () => {
     expect(drive.conteudo()?.cards.map((c) => c.front)).toEqual(['ねこ']);
     expect((await estadoSync()).ultimoSync).toBeDefined();
     expect((await estadoSync()).versaoRemota).toBe('1');
+    expect(drive.chamadas.baixar).toBe(1);
   });
 
   it('nada mudou aqui nem lá: o atalho só consulta a versão', async () => {
@@ -137,6 +139,96 @@ describe('ciclo de sincronização', () => {
     expect(drive.chamadas.baixar).toBeGreaterThanOrEqual(3);
     expect(drive.conteudo()?.cards.map((c) => c.front).sort()).toEqual(['いぬ', 'とり', 'ねこ']);
     expect(await fronts()).toEqual(['いぬ', 'とり', 'ねこ']);
+  });
+
+  it('nunca conectado: o estado guardado é "desconectado"', async () => {
+    expect(await estadoSync()).toEqual({ conectado: false });
+  });
+
+  it('desconectado depois de ter sincronizado: o status volta a "desligado"', async () => {
+    await conectar();
+    await sincronizar('manual');
+    expect(statusSync().fase).toBe('ocioso');
+    await db.local.put({ key: 'sync', value: { conectado: false } });
+    await sincronizar('manual');
+    expect(statusSync().fase).toBe('desligado');
+  });
+
+  it('durante o ciclo o status é "sincronizando"', async () => {
+    await conectar();
+    await sincronizar('manual');
+    let fase: string | undefined;
+    drive.aoBaixar = () => void (fase = statusSync().fase);
+    await sincronizar('manual');
+    expect(fase).toBe('sincronizando');
+  });
+
+  it('pedido durante um ciclo: não roda junto, mas garante mais um ciclo depois', async () => {
+    await conectar();
+    const primeiro = sincronizar('manual');
+    const segundo = sincronizar('manual');
+    expect(segundo).toBe(primeiro);
+    await primeiro;
+    expect(drive.chamadas.baixar).toBe(2);
+    await sincronizar('manual');
+    expect(drive.chamadas.baixar).toBe(3);
+  });
+
+  it('com Web Locks: o ciclo roda dentro da trava entre abas', async () => {
+    await conectar();
+    const travas: string[] = [];
+    vi.stubGlobal('navigator', {
+      onLine: true,
+      locks: { request: (nome: string, fn: () => Promise<void>) => (travas.push(nome), fn()) },
+    });
+    await sincronizar('manual');
+    expect(travas).toEqual(['nihongo-study-sync']);
+    expect(drive.chamadas.subir).toBe(1);
+  });
+
+  it('ao abrir o app não usa o atalho: baixa mesmo sem nada mudado', async () => {
+    await conectar();
+    await sincronizar('abertura');
+    await sincronizar('abertura');
+    expect(drive.chamadas.baixar).toBe(2);
+  });
+
+  it('primeira sincronização deste aparelho, com dados no Drive: baixa (o atalho precisa de uma versão conhecida)', async () => {
+    drive.gravarDireto(umBackup({ cards: [umCard({ front: 'いぬ' })] }));
+    await conectar();
+    await sincronizar('foco');
+    expect(await fronts()).toEqual(['いぬ']);
+  });
+
+  it('primeira sincronização com épocas diferentes: mescla, nunca substitui', async () => {
+    drive.gravarDireto(umBackup({ cards: [umCard({ front: 'いぬ' })] }));
+    await apagarTudo(); // época local mais nova que a do Drive
+    await criarCard({ front: 'ねこ', back: 'gato' });
+    await conectar();
+    await sincronizar('abertura');
+    expect(await fronts()).toEqual(['いぬ', 'ねこ']);
+    expect(drive.conteudo()?.cards.map((c) => c.front).sort()).toEqual(['いぬ', 'ねこ']);
+  });
+
+  it('a época vem só da chave dela no meta (outras preferências numéricas não contam)', async () => {
+    await conectar();
+    await sincronizar('abertura');
+    const atual = drive.conteudo()!;
+    drive.gravarDireto({ ...atual, meta: [{ key: 'dailyGoal', value: 40, updatedAt: 1 }, ...atual.meta] });
+    await sincronizar('manual');
+    expect(perguntas).toEqual([]);
+  });
+
+  it('outro aparelho gravando sem parar: desiste depois de 3 tentativas, sem subir e sem perder o pendente', async () => {
+    await conectar();
+    await sincronizar('abertura');
+    await criarCard({ front: 'ねこ', back: 'gato' });
+    drive.aoBaixar = () => drive.gravarDireto(drive.conteudo()!);
+    const antes = { ...drive.chamadas };
+    await sincronizar('manual');
+    expect(drive.chamadas.baixar - antes.baixar).toBe(3);
+    expect(drive.chamadas.subir).toBe(antes.subir);
+    expect(statusSync()).toMatchObject({ fase: 'ocioso', pendente: false });
   });
 
   it('acesso vencido no meio: pede login e mantém a alteração pendente', async () => {
@@ -216,6 +308,13 @@ describe('dois aparelhos', () => {
     respostaConfirmar = true;
     await b.sync('foco');
     expect(perguntas).toHaveLength(1);
+    const epoca = drive.conteudo()!.meta.find((m) => m.key === 'dataEpoch')!.value as number;
+    const quando = new Date(epoca).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+    expect(perguntas[0]).toBe(
+      `Os dados foram substituídos (ou apagados) em outro aparelho em ${quando}.\n\n` +
+        'OK: deixar este aparelho igual ao outro (o que só existe aqui é descartado).\n' +
+        'Cancelar: juntar os dados deste aparelho com os do outro, como numa sincronização normal.'
+    );
     expect(await b.usar(fronts)).toEqual([]);
     expect(drive.conteudo()?.cards).toEqual([]);
   });
@@ -225,11 +324,12 @@ describe('dois aparelhos', () => {
     await a.sync();
     await b.sync();
     await a.usar(apagarTudo);
+    await a.usar(() => criarCard({ front: 'novo-em-a', back: 'x' }));
     await a.sync();
 
     respostaConfirmar = false;
     await b.sync('foco');
-    expect(await b.usar(fronts)).toEqual(['ねこ']);
-    expect(drive.conteudo()?.cards.map((c) => c.front)).toEqual(['ねこ']);
+    expect(await b.usar(fronts)).toEqual(['novo-em-a', 'ねこ']);
+    expect(drive.conteudo()?.cards.map((c) => c.front).sort()).toEqual(['novo-em-a', 'ねこ']);
   });
 });

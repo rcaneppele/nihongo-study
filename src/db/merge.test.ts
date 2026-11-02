@@ -1,10 +1,23 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { incrementar, mesclarContadores } from './contadores';
-import { cardMantido, carimbosCard, mesclarCard, mesclarConquista, mesclarLicao } from './merge';
+import {
+  cardMantido,
+  carimbosCard,
+  iguais,
+  mesclarAtividade,
+  mesclarCard,
+  mesclarConquista,
+  mesclarKana,
+  mesclarKanji,
+  mesclarLeitura,
+  mesclarLicao,
+  mesclarPalavra,
+} from './merge';
 import { db, type Card } from './schema';
 import { exportData, importData, mesmoConteudo, SCHEMA_VERSION, type BackupFile } from './backup';
 import { freshSrs } from '../features/srs/fsrs';
+import { umKanaProgress, umKanjiProgress } from '../test/fabricas';
 
 const CAMPOS = ['n'] as const;
 
@@ -40,6 +53,18 @@ describe('contadores por aparelho', () => {
     const r = incrementar({ n: 5 }, { n: 2 }, CAMPOS, 'A', 100);
     expect(r.n).toBe(7);
     expect(r.porAparelho.legado.n).toBe(5);
+  });
+
+  it('registro antigo zerado não cria entrada de legado', () => {
+    expect(mesclarContadores({ n: 0 }, { n: 0 }, CAMPOS)).toEqual({ n: 0, porAparelho: {} });
+    expect(incrementar({ n: 0 }, { n: 1 }, CAMPOS, 'A', 100).porAparelho).toEqual({ A: { n: 1, updatedAt: 100 } });
+  });
+
+  it('legado dos dois lados com campos diferentes: junta os campos, sem inventar os que nenhum tem', () => {
+    const campos = ['n', 'm', 'k'] as const;
+    const r = mesclarContadores({ n: 3 }, { m: 2 }, campos);
+    expect(r.porAparelho).toEqual({ legado: { updatedAt: 0, n: 3, m: 2 } });
+    expect(r).toMatchObject({ n: 3, m: 2, k: 0 });
   });
 
   it('dois aparelhos somam, e mesclar de novo não conta duas vezes', () => {
@@ -221,5 +246,86 @@ describe('mesmoConteudo', () => {
     expect(mesmoConteudo(a, b)).toBe(true);
     expect(mesmoConteudo(a, backup({ cards: [card('a', 'いぬ', 1)] }))).toBe(false);
     expect(mesmoConteudo(a, backup({ cards: [card('a', 'いぬ', 1), card('b', 'ねこ', 2)] }))).toBe(false);
+  });
+});
+
+describe('datas que não dependem de quem venceu', () => {
+  it('card e kanji: fica a criação mais antiga, de qualquer lado', () => {
+    expect(mesclarCard(card('x', 'ねこ', 20), card('x', 'ねこ', 10)).createdAt).toBe(10);
+    expect(mesclarCard(card('x', 'ねこ', 10), card('x', 'ねこ', 20)).createdAt).toBe(10);
+    const kanji = (createdAt: number, updatedAt: number) => umKanjiProgress('日', { createdAt, updatedAt });
+    expect(mesclarKanji(kanji(20, 5), kanji(10, 1)).createdAt).toBe(10);
+    expect(mesclarKanji(kanji(10, 1), kanji(20, 5)).createdAt).toBe(10);
+  });
+
+  it('leitura e atividade: fica a alteração mais recente, de qualquer lado', () => {
+    const leitura = (updatedAt: number) => ({ textId: 't', timesRead: 1, lastReadAt: 1, updatedAt });
+    expect(mesclarLeitura(leitura(10), leitura(20)).updatedAt).toBe(20);
+    expect(mesclarLeitura(leitura(20), leitura(10)).updatedAt).toBe(20);
+    const dia = (updatedAt: number) => ({ day: '2026-11-02', revisoes: 1, novos: 0, praticas: 0, leituras: 0, updatedAt });
+    expect(mesclarAtividade(dia(10), dia(20)).updatedAt).toBe(20);
+    expect(mesclarAtividade(dia(20), dia(10)).updatedAt).toBe(20);
+  });
+});
+
+describe('mesclarPalavra e mesclarKana', () => {
+  it('palavra: a situação da leitura mais recente vence, venha de onde vier', () => {
+    const palavra = (status: 'compreendida' | 'consultada', updatedAt: number) => ({
+      key: 'ねこ',
+      status,
+      seenCount: 1,
+      lookupCount: 0,
+      updatedAt,
+    });
+    expect(mesclarPalavra(palavra('consultada', 10), palavra('compreendida', 20))).toMatchObject({
+      status: 'compreendida',
+      updatedAt: 20,
+    });
+    expect(mesclarPalavra(palavra('compreendida', 20), palavra('consultada', 10))).toMatchObject({
+      status: 'compreendida',
+      updatedAt: 20,
+    });
+  });
+
+  it('kana: os quatro contadores somam por aparelho', () => {
+    const lado = (aparelho: string) =>
+      umKanaProgress('あ', {
+        romajiCorrect: 1,
+        romajiWrong: 2,
+        choiceCorrect: 3,
+        choiceWrong: 4,
+        porAparelho: { [aparelho]: { romajiCorrect: 1, romajiWrong: 2, choiceCorrect: 3, choiceWrong: 4, updatedAt: 1 } },
+      });
+    expect(mesclarKana(lado('A'), lado('B'))).toMatchObject({
+      romajiCorrect: 2,
+      romajiWrong: 4,
+      choiceCorrect: 6,
+      choiceWrong: 8,
+    });
+  });
+
+  it('kana: melhor desenho e última prática ficam mesmo se só um lado tiver', () => {
+    const com = umKanaProgress('あ', { drawBest: 70, lastPracticed: 50 });
+    const sem = umKanaProgress('あ');
+    expect(mesclarKana(sem, com)).toMatchObject({ drawBest: 70, lastPracticed: 50 });
+    expect(mesclarKana(com, sem)).toMatchObject({ drawBest: 70, lastPracticed: 50 });
+    expect(mesclarKana(sem, sem).drawBest).toBeUndefined();
+  });
+});
+
+describe('iguais', () => {
+  it.each([
+    ['objetos com as mesmas chaves em outra ordem', { a: 1, b: { c: [1, 2] } }, { b: { c: [1, 2] }, a: 1 }, true],
+    ['chave com undefined conta como ausente', { a: 1, b: undefined }, { a: 1 }, true],
+    ['uma chave a mais', { a: 1 }, { a: 1, b: 2 }, false],
+    ['valor diferente lá dentro', { a: { b: 1 } }, { a: { b: 2 } }, false],
+    ['objeto contra número', {}, 1, false],
+    ['número contra objeto', 1, {}, false],
+    ['null contra objeto', null, {}, false],
+    ['objeto contra null', {}, null, false],
+    ['lista contra objeto com as mesmas chaves', [1], { 0: 1 }, false],
+    ['objeto contra lista', { 0: 1 }, [1], false],
+  ])('%s', (_caso, a, b, esperado) => {
+    expect(iguais(a, b)).toBe(esperado);
   });
 });

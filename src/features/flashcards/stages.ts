@@ -26,6 +26,7 @@ export const MASTERED_DAYS = 21;
  */
 export const NEW_PRODUCTION_PER_SESSION = 20;
 
+// Stryker disable all: rótulos e cores de interface (não é lógica) — cobertos pelo E2E e pelo teste visual.
 export const STAGE_LABELS: Record<Stage, string> = {
   novo: 'Novo',
   reconheco: 'Reconheço',
@@ -57,6 +58,7 @@ export const STAGE_BAR: Record<Stage, string> = {
   seiDizer: 'bg-sora',
   domino: 'bg-matcha',
 };
+// Stryker restore all
 
 export function cardStage(card: Card): Stage {
   if (card.production) {

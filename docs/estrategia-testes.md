@@ -85,7 +85,7 @@ teste dependente da máquina travar a publicação.
 | E2E Chromium + PWA offline | ~3 min | ✅ | ✅ | ✅ |
 | E2E celular, Firefox, WebKit | ~3–4 min cada, em paralelo | — | ✅ | ✅ |
 | Regressão visual | ~35 s | — | — | `npm run test:visual` |
-| Mutação (Stryker) | ~35 min | — | — | `npm run test:mutation` |
+| Mutação (Stryker) | ~10 min | — | — | `npm run test:mutation` |
 
 - Os jobs rodam em paralelo: o deploy espera uns 5 minutos.
 - Um push novo na mesma branch cancela a rodada anterior.
@@ -130,7 +130,8 @@ teste dependente da máquina travar a publicação.
   (`docs/boas-praticas.md`).
 - [x] **Fase 2 — núcleo em Node**: FSRS e estágios, fila de revisão
   (propriedades), revisar/desfazer, migrações por fixture, motor de sync
-  com Drive em memória, atividade/sequência com relógio fixo, nota de
+  com Drive em memória (e os gatilhos dele — foco, saída, online,
+  alteração no banco, troca de tela — em `motor.gatilhos.test.ts`), atividade/sequência com relógio fixo, nota de
   caligrafia contra o próprio KanjiVG, geradores, próximo passo, pontos
   fracos, conquistas, conhecimento de palavras.
 - [x] **Fase 3 — integridade de conteúdo**: lições (exemplos sem kanji, com
@@ -147,30 +148,43 @@ teste dependente da máquina travar a publicação.
 
 ## Linha de base da mutação (novembro/2026)
 
-Stryker no núcleo: **70,8%** de mutações mortas (78,6% do código coberto);
-o mínimo configurado (`thresholds.break`) é 70 — suba junto quando o
-número subir. Por arquivo: `fsrs.ts` 92, `cards.ts` 89, `revisao.ts` 87,
-`treino.ts` 86, `merge.ts` 83, `migracoes.ts` 82, `contadores.ts` 81,
-`stages.ts` 79 (o resto são rótulos/cores), `backup.ts` 75,
-`mesclarNoBanco.ts` 72, `atividade.ts` 72, `strokes.ts` 69,
-`motor.ts` 47 (os gatilhos — foco, online, saída, hooks do banco — não têm
-teste: próximo alvo).
+Stryker em 19 arquivos de lógica (`mutate` em `stryker.config.json`):
+**86,0%** de mutações mortas (87,8% do código coberto), numa rodada completa
+(sem cache incremental); o mínimo configurado (`thresholds.break`) é 80 —
+suba junto quando o número subir. Por arquivo: `stages.ts` 99, `contadores.ts`
+98, `backup.ts` 98, `googleAuth.ts` 93, `fsrs.ts` 92, `cards.ts` 89,
+`merge.ts` 89, `motor.ts` 88, `importCards.ts` 87, `atividade.ts` 87,
+`treino.ts` 86, `revisao.ts` 84, `lembrete.ts` 83, `mesclarNoBanco.ts` 82,
+`migracoes.ts` 82, `knowledge.ts` 82, `historico.ts` 81, `strokes.ts` 80,
+`pontosFracos.ts` 80.
+
+- **Fora da mutação, de propósito:** `conquistas.ts`, `proximoPasso.ts` e
+  `nivel.ts` — a maioria dos mutantes é texto de interface (títulos,
+  explicações). Têm testes unitários; entram se a lógica deles crescer.
+  Em `stages.ts`, os rótulos e cores dos estágios estão marcados com
+  `// Stryker disable all` pelo mesmo motivo.
+- **Sobreviventes que não valem teste (equivalentes):** em
+  `mesclarNoBanco.ts`, o filtro de lápides antes do `bulkPut` (o
+  `applyTombstones` logo depois apaga de novo) e os retornos antecipados
+  que só evitam gravar à toa; em `migracoes.ts`, rodar de novo uma
+  migração já aplicada (as de v2 em diante são idempotentes; a perigosa,
+  v1→v2, que resetaria o FSRS, é coberta); em `merge.ts`, variações do
+  texto canônico do desempate (qualquer variação continua escolhendo o
+  mesmo vencedor dos dois lados, o que os testes de propriedade de empate
+  garantem); em `strokes.ts`, detalhe geométrico interno da reamostragem e
+  da normalização — os testes cobrem o efeito visível (proporção, desenho
+  incompleto, traços ligados, ordem, dicas).
+- **Variação entre rodadas:** um ou dois mutantes por arquivo podem mudar
+  de uma rodada completa para outra (ex.: `revisao.ts` 87 → 84 sem mudança
+  no código). Uma queda grande é sinal de outra coisa: a rodada de 68%
+  registrada durante a Fase 6 mediu um estado intermediário do código (antes
+  do commit da refatoração), não o código final. Compare sempre rodadas
+  completas, sobre código commitado ou com o diff à vista.
 
 ## Pendências
 
-- **Contraste de cor (WCAG AA):** o texto secundário `sage` (#7c8a7e) tem
-  contraste 3,3–3,6 sobre o papel claro (mínimo 4,5); `kin` como texto
-  também fica abaixo. Corrigir = escurecer os tokens (decisão de design).
-  Até lá, `e2e/jornadas/acessibilidade.spec.ts` desliga só a regra
-  `color-contrast`.
-- **WebKit local:** precisa de `sudo npx playwright install-deps webkit`
-  (na CI já roda).
 - **Browser Mode no Vitest 3.2** ainda é experimental (estável no Vitest
   4, que pede Vite 6+): ao atualizar Vite/vite-plugin-pwa, subir junto.
-- **Gatilhos do motor de sync** (`iniciarSync`: foco, online, saída,
-  alteração no banco com atraso) sem teste — dá pra cobrir em Node com
-  `vi.useFakeTimers()` e eventos de `document`/`window` simulados, ou num
-  E2E com a API do Drive falsa via `page.route()`.
 - **Cobertura de telas**: as `.tsx` de páginas são cobertas pelo E2E, que
-  não entra no relatório de cobertura — o número geral (~31%) reflete só
+  não entra no relatório de cobertura — o número geral (~33%) reflete só
   Node. Os limites valem para a lógica (`src/db`, `src/features/**/*.ts`).

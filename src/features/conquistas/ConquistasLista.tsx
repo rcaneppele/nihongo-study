@@ -27,12 +27,12 @@ export default function ConquistasLista() {
               .map(({ conquista: c, valor, unlockedAt }) => {
                 const feita = unlockedAt !== undefined;
                 return (
-                  <div key={c.id} className={`card-surface flex items-center gap-3 p-3 ${feita ? '' : 'opacity-70'}`}>
+                  <div key={c.id} className="card-surface flex items-center gap-3 p-3">
                     <span className={`icon-tile h-9 w-9 shrink-0 rounded-xl ${feita ? TILE[c.cor] : 'bg-line/70 text-sage'}`}>
                       {feita ? <Trophy className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
                     </span>
                     <div className="min-w-0 flex-1 space-y-1">
-                      <p className="text-sm font-medium text-ink">{c.titulo}</p>
+                      <p className={`text-sm font-medium ${feita ? 'text-ink' : 'text-sage'}`}>{c.titulo}</p>
                       <p className="text-xs text-sage">{c.descricao}</p>
                       {feita ? (
                         <p className="text-[11px] text-sage">em {new Date(unlockedAt).toLocaleDateString('pt-BR')}</p>

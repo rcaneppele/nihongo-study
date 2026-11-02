@@ -375,12 +375,19 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   `scripts/build-kana-strokes.mjs`):
   - a **nota** (0–100) é a forma do desenho inteiro: nuvem de pontos do
     usuário × da referência, depois de normalizar posição/escala pela caixa
-    delimitadora (desenhar menor/deslocado no canvas não penaliza). Número,
-    ordem e direção dos traços **não** mudam a nota;
-  - ≥ `DRAW_PASS_THRESHOLD` (60) conta como acerto no teste. A melhor nota
-    de cada kana fica em `kanaProgress.drawBest`;
-  - **dicas** (só orientativas, até 3): número de traços diferente do
-    oficial; com o mesmo número, por traço pareado por índice — "confira a
+    delimitadora (desenhar menor/deslocado no canvas não penaliza). Ordem e
+    direção dos traços **não** mudam a nota, nem ligar traços sem levantar
+    a caneta;
+  - **desenho incompleto**: com menos traços que o oficial e algum traço da
+    referência sem quase nada desenhado por perto, a nota cai na proporção
+    dos traços feitos e o desenho **não passa** (antes, metade de 日 tirava
+    72). Traço esquecido colado a outro (ex.: um dos dois risquinhos do
+    ゛) não dá pra ver pela forma e passa despercebido;
+  - ≥ `DRAW_PASS_THRESHOLD` (60), e completo, conta como acerto no teste. A
+    melhor nota de cada kana fica em `kanaProgress.drawBest`;
+  - **dicas** (só orientativas, até 3): "ficou faltando traço" no desenho
+    incompleto; senão, número de traços diferente do oficial; com o mesmo
+    número, por traço pareado por índice — "confira a
     direção" quando a forma do traço está certa nos dois sentidos mas foi
     feita ao contrário, "siga a forma" quando a forma não bate;
   - **combinados (yōon, ex.: きゃ)**: a referência é a de cada kana, lado a
@@ -972,7 +979,9 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
     regra por tabela (`src/db/merge.ts`). Toda regra é **idempotente**
     (mesclar o mesmo arquivo de novo não muda nada) e **não depende da
     ordem** (A em B = B em A), pra dois aparelhos convergirem. Empate de
-    data mantém o local.
+    data (a mesma coisa alterada nos dois no mesmo milissegundo) é
+    decidido pelo conteúdo, não pelo lado: os dois escolhem o mesmo
+    vencedor (manter sempre o local faria cada um ficar com o seu).
 - **Regras da mesclagem por tabela** (schemaVersion 7):
   - `cards`: três grupos de campos, cada um com seu carimbo — conteúdo
     (`contentUpdatedAt`: frente, verso, leitura, categoria, tags, exemplo,

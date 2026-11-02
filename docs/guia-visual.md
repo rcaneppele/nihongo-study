@@ -40,6 +40,17 @@ Cada módulo tem um tom "dono", usado **só em pequenas áreas**: ícones,
 | `sakura` | rosa | pontos fracos |
 | `hanko` | vermelho | kanji (o carimbo) |
 
+**Contraste (WCAG AA, 4,5:1 para texto):** no tema claro, `sage`, `hanko`
+e as cores de módulo têm tons escuros o bastante para servir de texto sobre
+o papel, a superfície e o próprio fundo tingido dos selos. Ouro e rosa
+claros demais para texto: `text-kin` e `text-sakura` usam um tom mais
+escuro (`--color-kin-texto`, `--color-sakura-texto`, ligados em
+`tailwind.config.js`), e fundos, bordas e barras continuam com a cor do
+módulo. Não apagar texto com opacidade (`text-ink/40`, `opacity-70` no
+cartão inteiro): para indicar "inativo", use `text-sage` ou um ícone. O
+teste de acessibilidade (`e2e/jornadas/acessibilidade.spec.ts`) confere o
+contraste nas telas principais, nos dois temas.
+
 Combinações prontas em `src/lib/cores.ts` (`TILE`, `TEXTO`, `PILULA`) —
 escritas por extenso porque o Tailwind só gera classes que aparecem
 inteiras no código. Cores dos estágios de vocabulário em `STAGE_BADGE`/

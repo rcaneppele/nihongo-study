@@ -106,6 +106,23 @@ const CLOUD_SHAPE_THRESHOLD = 0.12;
 
 export const DRAW_PASS_THRESHOLD = 60;
 
+/**
+ * Desenho incompleto: a nota de forma (acima) mede o desenho como um todo,
+ * e o que falta perto do que foi feito pesa pouco — metade de 日 tirava 72.
+ * Quando a pessoa fez menos traços que o oficial e algum traço da
+ * referência ficou com menos de `COBERTURA_MINIMA_TRACO` dos pontos
+ * desenhados a até `COBERTURA_RAIO`, o desenho está incompleto: a nota cai
+ * na proporção dos traços feitos e não passa. Só com menos traços, pra não
+ * acusar um desenho completo mas tremido; quem liga traços sem levantar a
+ * caneta desenha tudo, e passa. Não dá pra dizer *qual* traço faltou: sem
+ * a parte que falta, a caixa do desenho muda e o alinhamento com a
+ * referência também. Calibrado com o mesmo tremor simulado: pega ~2/3 dos
+ * traços esquecidos (os colados a outro traço não dá pra ver pela forma) e
+ * ~93% dos desenhos pela metade.
+ */
+const COBERTURA_RAIO = 0.08;
+const COBERTURA_MINIMA_TRACO = 0.5;
+
 export type ReferenceStrokes = number[][][]; // [traço][ponto][x, y], normalizado em [0,1]
 
 const REFERENCE_DATA: Record<string, { strokes: ReferenceStrokes }> = {
@@ -162,12 +179,16 @@ export function scoreDrawing(strokes: Stroke[], char: string, canvasSize: number
   const userCloud = buildPointCloud(userNorm);
   const refCloud = buildPointCloud(refNorm);
   const shape = chamferShapeScore(userCloud, refCloud);
-  const score = Math.max(0, Math.min(100, Math.round(100 * shape)));
+  const incompleto = given.length < reference.length && algumTracoFaltando(userNorm, refNorm);
+  const proporcao = incompleto ? given.length / reference.length : 1;
+  const score = Math.max(0, Math.min(100, Math.round(100 * shape * proporcao)));
 
   // Dicas: pareamento traço a traço por índice, só orientativo — não afeta a nota.
   const diff = Math.abs(given.length - reference.length);
   const hints: string[] = [];
-  if (diff !== 0) {
+  if (incompleto) {
+    hints.push(`Ficou faltando traço: o traçado oficial usa ${reference.length} (você fez ${given.length}) — veja a animação.`);
+  } else if (diff !== 0) {
     hints.push(`O traçado oficial usa ${reference.length} traço(s) (você fez ${given.length}) — dá uma olhada na ordem certa.`);
   } else {
     for (let i = 0; i < reference.length; i++) {
@@ -185,11 +206,21 @@ export function scoreDrawing(strokes: Stroke[], char: string, canvasSize: number
 
   return {
     score,
-    passed: score >= DRAW_PASS_THRESHOLD,
+    passed: score >= DRAW_PASS_THRESHOLD && !incompleto,
     expectedStrokes: reference.length,
     givenStrokes: given.length,
     hints: hints.slice(0, 3),
   };
+}
+
+/** Algum traço da referência ficou sem quase nada desenhado por perto? */
+function algumTracoFaltando(desenho: ReferenceStrokes, referencia: ReferenceStrokes): boolean {
+  const pontos = desenho.flat();
+  return referencia.some((traco) => {
+    const amostra = resamplePolyline2D(traco, REFERENCE_N);
+    const perto = amostra.filter(([x, y]) => pontos.some(([ux, uy]) => Math.hypot(x - ux, y - uy) <= COBERTURA_RAIO));
+    return perto.length / amostra.length < COBERTURA_MINIMA_TRACO;
+  });
 }
 
 function toUnitSquareStrokes(strokes: Stroke[], canvasSize: number): ReferenceStrokes {

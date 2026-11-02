@@ -39,3 +39,6 @@ test-results/
 playwright-report/
 reports/
 .stryker-tmp/
+
+# Cache do TypeScript (tsc -b)
+*.tsbuildinfo

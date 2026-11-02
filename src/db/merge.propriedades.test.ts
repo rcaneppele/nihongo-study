@@ -13,6 +13,7 @@ import {
   mesclarLapide,
   mesclarLicao,
   mesclarMeta,
+  mesclarPalavra,
   type GrupoCard,
 } from './merge';
 import type { Activity, Card } from './schema';
@@ -191,6 +192,65 @@ describe('mesclagens de "um vence"', () => {
     fc.assert(
       fc.property(instantes, ([t1, t2, t3]) => {
         const [a, b, c] = [fazer(t1), fazer(t2), fazer(t3)];
+        expect(m(a, b)).toEqual(m(b, a));
+        expect(m(m(a, b), c)).toEqual(m(a, m(b, c)));
+        expect(m(a, a)).toEqual(a);
+      })
+    );
+  });
+});
+
+/**
+ * Empate: o mesmo registro alterado nos dois aparelhos no mesmo instante,
+ * com conteúdos diferentes. Sem um desempate que não dependa do lado, cada
+ * aparelho ficaria com o seu e nunca convergiriam.
+ */
+describe('empate de horário: todo aparelho escolhe o mesmo vencedor', () => {
+  const instantes = fc.array(fc.integer({ min: 1, max: 3 }), { minLength: 3, maxLength: 3 });
+  const valores = fc.array(fc.integer({ min: 0, max: 1e6 }), { minLength: 3, maxLength: 3 });
+
+  const casos = [
+    { nome: 'kanji', fazer: (t: number, v: number) => umKanjiProgress('日', { updatedAt: t, reps: v }), mesclar: mesclarKanji },
+    { nome: 'meta', fazer: (t: number, v: number) => ({ key: 'tema', value: v, updatedAt: t }), mesclar: mesclarMeta },
+    {
+      nome: 'lápide',
+      fazer: (t: number, v: number) => ({ table: 'cards' as const, key: 'x', deletedAt: t, ...(v % 2 ? { mergedInto: `c${v}` } : {}) }),
+      mesclar: mesclarLapide,
+    },
+    {
+      nome: 'lição',
+      fazer: (t: number, v: number) => ({ lessonId: 'desu', viewedAt: 5, updatedAt: t, ...(v % 2 ? { completedAt: v } : {}) }),
+      mesclar: mesclarLicao,
+    },
+    {
+      nome: 'diário',
+      fazer: (t: number, v: number) => ({ id: 'j', promptId: 'p', text: `texto ${v}`, checked: [], createdAt: 1, updatedAt: t }),
+      mesclar: mesclarDiario,
+    },
+    {
+      nome: 'palavra',
+      fazer: (t: number, v: number) => ({
+        key: 'ねこ',
+        status: v % 2 ? ('compreendida' as const) : ('consultada' as const),
+        seenCount: 1,
+        lookupCount: 0,
+        porAparelho: { A: { seenCount: 1, lookupCount: 0, updatedAt: 1 } },
+        updatedAt: t,
+      }),
+      mesclar: mesclarPalavra,
+    },
+    {
+      nome: 'card',
+      fazer: (t: number, v: number) => umCard({ id: 'c', front: 'ねこ', back: `significado ${v}`, reps: v, createdAt: 1, updatedAt: t }),
+      mesclar: mesclarCard,
+    },
+  ];
+
+  it.each(casos)('$nome', ({ fazer, mesclar }) => {
+    const m = mesclar as (a: unknown, b: unknown) => unknown;
+    fc.assert(
+      fc.property(instantes, valores, (ts, vs) => {
+        const [a, b, c] = ts.map((t, i) => fazer(t, vs[i]));
         expect(m(a, b)).toEqual(m(b, a));
         expect(m(m(a, b), c)).toEqual(m(a, m(b, c)));
         expect(m(a, a)).toEqual(a);

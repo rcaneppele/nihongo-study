@@ -53,7 +53,7 @@ export default function Flashcards() {
   const filtered = all.filter((c) => category === 'todas' || c.category === category);
   // due é sempre sobre TODOS os cards, não sobre `filtered` — o chip de
   // categoria é só um filtro de exibição da lista abaixo (ver
-  // regras-negocio.md), não deve reduzir silenciosamente o que "Estudar"
+  // regras-negocio.md), não deve reduzir silenciosamente o que a Revisão do dia
   // revisa. Quem quer estudar por categoria usa "Praticar" (tem seleção de
   // categoria própria e explícita, sem afetar o SRS). Inclui as duas
   // direções (reconhecimento e produção) — ver stages.ts.

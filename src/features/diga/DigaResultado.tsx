@@ -18,7 +18,7 @@ export default function DigaResultado({ registros }: { registros: RegistroDiga[]
     setMsg(
       n === 0
         ? 'Essas frases já estavam nos seus flash cards.'
-        : `${n} frase(s) salva(s) em Flash cards, categoria "Frases" — elas vão aparecer em "Estudar" para você treinar dizer.`
+        : `${n} frase(s) salva(s) em Flash cards, categoria "Frases" — elas entram na Revisão do dia, em Revisar, para você treinar dizer.`
     );
   }
 

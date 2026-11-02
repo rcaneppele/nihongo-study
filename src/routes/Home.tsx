@@ -160,7 +160,7 @@ function Hoje({ resumo, meta }: { resumo: ResumoDia; meta: number }) {
               key={d.day}
               className={[
                 'rounded-2xl py-2',
-                ehHoje ? 'bg-ink text-paper' : d.estudou ? 'bg-indigo/8 text-indigo' : 'text-ink/40',
+                ehHoje ? 'bg-ink text-paper' : d.estudou ? 'bg-indigo/8 text-indigo' : 'text-sage',
               ].join(' ')}
               title={d.estudou ? 'Dia com estudo' : 'Sem estudo'}
             >

@@ -11,15 +11,15 @@ export async function salvarEntrada(
   promptId: string,
   text: string,
   checked: string[],
-  existente?: JournalEntry
+  existente?: JournalEntry,
+  now: number = Date.now()
 ): Promise<void> {
-  const now = Date.now();
   if (existente) {
     await db.journal.put({ ...existente, text, checked, updatedAt: now });
     return;
   }
   await db.journal.add({ id: newId(), promptId, text, checked, createdAt: now, updatedAt: now });
-  await registrarAtividade('praticas', 1);
+  await registrarAtividade('praticas', 1, now);
 }
 
 export function apagarEntrada(id: string): Promise<void> {

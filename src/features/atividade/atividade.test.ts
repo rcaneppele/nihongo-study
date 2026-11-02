@@ -1,6 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../../db/schema';
-import { diaLocal, diasEstudados, pontos, PESO_LEITURA, registrarAtividade, resumoDoDia, sequenciaDeDias } from './atividade';
+import {
+  diaLocal,
+  diasEstudados,
+  META_PADRAO,
+  metaDiaria,
+  pontos,
+  PESO_LEITURA,
+  registrarAtividade,
+  resumoDoDia,
+  sequenciaDeDias,
+  setMetaDiaria,
+} from './atividade';
 import { limparBanco } from '../../test/banco';
 import { AGORA, DIA, umaAtividade, umaReview } from '../../test/fabricas';
 
@@ -93,5 +104,24 @@ describe('registrarAtividade', () => {
       [dia(0), 1],
       [dia(1), 1],
     ]);
+  });
+});
+
+describe('meta diária', () => {
+  it.each([
+    [40, 40],
+    [undefined, META_PADRAO],
+    [0, META_PADRAO],
+    [-10, META_PADRAO],
+    ['40', META_PADRAO],
+  ])('valor gravado %j → meta %i', (valor, meta) => {
+    expect(metaDiaria(valor)).toBe(meta);
+  });
+
+  it('a meta escolhida fica nas preferências (entra no backup)', async () => {
+    await setMetaDiaria(40);
+    const gravada = await db.meta.get('metaDiaria');
+    expect(metaDiaria(gravada?.value)).toBe(40);
+    expect(gravada?.updatedAt).toBeTypeOf('number');
   });
 });

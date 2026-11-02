@@ -115,6 +115,7 @@ test.describe('Exercícios das lições', () => {
     await page.getByRole('button', { name: /Mostrar resposta/ }).click();
     await page.getByRole('button', { name: /^Acertei/ }).click();
     await page.getByRole('button', { name: /Salvar as 1 que errei/ }).click();
+    await expect(page.getByText(/1 frase\(s\) salva\(s\).*na Revisão do dia/)).toBeVisible();
     const [card] = await app.lerTabela<{ category: string; production?: unknown }>('cards');
     expect(card.category).toBe('Frases');
     expect(card.production).toBeDefined();

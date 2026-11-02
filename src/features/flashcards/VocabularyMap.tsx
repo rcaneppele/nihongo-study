@@ -90,7 +90,7 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
   async function learnNext() {
     const batch = nextNew.slice(0, BATCH);
     const n = await learnWords(batch);
-    setMsg(`${n} card(s) criado(s) — já estão em "Estudar", no topo da página.`);
+    setMsg(`${n} card(s) criado(s) — já estão na Revisão do dia, em Revisar.`);
   }
 
   function testKnown() {

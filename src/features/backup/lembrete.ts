@@ -19,16 +19,21 @@ export interface EstadoBackup {
   lembrar: boolean;
 }
 
+/**
+ * Dias sem backup e se é hora de lembrar. `primeiroDia`: o dia mais antigo
+ * com atividade (`AAAA-MM-DD`), usado quando nunca houve backup.
+ */
+export function estadoBackup(ultimo: number | undefined, primeiroDia: string | undefined, now: number = Date.now()): EstadoBackup {
+  const desde = ultimo ?? (primeiroDia ? new Date(`${primeiroDia}T00:00:00`).getTime() : undefined);
+  const dias = desde === undefined ? undefined : Math.floor((now - desde) / DIA_MS);
+  return { ultimo, dias, lembrar: dias !== undefined && dias >= DIAS_LEMBRETE };
+}
+
 export function useEstadoBackup(): EstadoBackup | undefined {
   return useLiveQuery(async () => {
     const ultimo = await ultimoBackup();
-    let desde = ultimo;
-    if (desde === undefined) {
-      const primeiroDia = (await db.activity.orderBy('day').first())?.day;
-      if (primeiroDia) desde = new Date(`${primeiroDia}T00:00:00`).getTime();
-    }
-    const dias = desde === undefined ? undefined : Math.floor((Date.now() - desde) / DIA_MS);
-    return { ultimo, dias, lembrar: dias !== undefined && dias >= DIAS_LEMBRETE };
+    const primeiroDia = ultimo === undefined ? (await db.activity.orderBy('day').first())?.day : undefined;
+    return estadoBackup(ultimo, primeiroDia);
   }, []);
 }
 
