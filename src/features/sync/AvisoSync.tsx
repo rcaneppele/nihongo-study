@@ -1,7 +1,6 @@
 import { CloudOff } from 'lucide-react';
 import { TILE } from '../../lib/cores';
-import { entrarNoGoogle } from './googleAuth';
-import { useEstadoSync, useStatusSync } from './motor';
+import { entrarDeNovo, useEstadoSync, useStatusSync } from './motor';
 
 /**
  * Aviso na Home quando a sincronização parou e precisa da pessoa: o Google
@@ -20,7 +19,7 @@ export default function AvisoSync() {
         <span className="block text-sm font-medium text-ink">Sincronização pausada</span>
         <span className="block text-xs text-sage">O acesso ao Google venceu. O que você estudar fica guardado aqui.</span>
       </span>
-      <button className="btn-ghost shrink-0" onClick={() => entrarNoGoogle(false)}>
+      <button className="btn-ghost shrink-0" onClick={() => void entrarDeNovo()}>
         Entrar
       </button>
     </div>

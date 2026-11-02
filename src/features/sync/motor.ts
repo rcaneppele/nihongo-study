@@ -23,7 +23,7 @@ const ATRASO_ALTERACAO_MS = 30 * 1000; // depois da última alteração (fim de 
 const INTERVALO_FOCO_MS = 5 * 60 * 1000; // ao voltar pro app, se faz mais tempo que isso
 const INTERVALO_LOGIN_MS = 10 * 60 * 1000; // entre idas automáticas ao Google
 const TENTATIVAS = 3;
-const LOGIN_FALHOU = 'nihongo-study:sync-login-falhou'; // sessionStorage
+const LOGIN_FALHOU = 'nihongo-study:sync-login-falhou'; // sessionStorage: o código de erro que o Google devolveu
 const ULTIMO_LOGIN = 'nihongo-study:sync-ultimo-login'; // sessionStorage
 
 /** Estado guardado em `db.local` (só deste aparelho). */
@@ -131,9 +131,9 @@ async function ciclo(motivo: MotivoSync): Promise<void> {
   if (!token) {
     if (podeIrAoGoogleSozinho(motivo)) {
       sessionStorage.setItem(ULTIMO_LOGIN, String(Date.now()));
-      entrarNoGoogle(true); // sai do app e volta em seguida
+      entrarNoGoogle(true, estado.conta); // sai do app e volta em seguida
     }
-    setStatus({ fase: 'precisaLogin' });
+    setStatus({ fase: 'precisaLogin', erro: sessionStorage.getItem(LOGIN_FALHOU) ?? undefined });
     return;
   }
 
@@ -290,6 +290,11 @@ export function conectar(): void {
   entrarNoGoogle(false);
 }
 
+/** "Entrar de novo" depois que o acesso venceu e a renovação sozinha não deu: já sugere a conta conectada. */
+export async function entrarDeNovo(): Promise<void> {
+  entrarNoGoogle(false, (await lerEstado()).conta);
+}
+
 /** Desconectar: não apaga nada, nem aqui nem no Drive. */
 export async function desconectar(): Promise<void> {
   await revogarAcesso();
@@ -331,7 +336,7 @@ export async function iniciarSync(retorno: RetornoOAuth): Promise<void> {
   if (!syncDisponivel) return;
 
   if (retorno && !retorno.ok) {
-    sessionStorage.setItem(LOGIN_FALHOU, '1'); // não insiste sozinho; a tela oferece "Entrar de novo"
+    sessionStorage.setItem(LOGIN_FALHOU, retorno.erro); // não insiste sozinho; a tela oferece "Entrar de novo"
   } else if (retorno?.ok) {
     sessionStorage.removeItem(LOGIN_FALHOU);
     if (!retorno.silencioso) await gravarEstado({ conectado: true });

@@ -41,9 +41,11 @@ function redirectUri(): string {
 /**
  * Sai do app para a página do Google. `silencioso`: não mostra tela se der
  * pra evitar — falha (e volta com erro) se precisar de login ou
- * autorização.
+ * autorização. `conta`: o e-mail já conectado — sem ele, com mais de uma
+ * conta Google no navegador, a renovação silenciosa falha (o Google não
+ * sabe qual usar e pede pra escolher).
  */
-export function entrarNoGoogle(silencioso = false): void {
+export function entrarNoGoogle(silencioso = false, conta?: string): void {
   if (!CLIENT_ID) throw new Error('Sincronização com o Google não configurada nesta versão.');
   const pendente: LoginPendente = {
     state: crypto.randomUUID(),
@@ -60,6 +62,7 @@ export function entrarNoGoogle(silencioso = false): void {
     include_granted_scopes: 'true',
     prompt: silencioso ? 'none' : 'select_account',
   });
+  if (conta) params.set('login_hint', conta);
   location.assign(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
 }
 

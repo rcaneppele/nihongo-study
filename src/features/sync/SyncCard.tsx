@@ -3,6 +3,7 @@ import { ErroAutorizacao } from './destino';
 import {
   apagarDoDrive,
   conectar,
+  entrarDeNovo,
   desconectar,
   sincronizar,
   syncDisponivel,
@@ -11,7 +12,6 @@ import {
   type EstadoSync,
   type StatusSync,
 } from './motor';
-import { entrarNoGoogle } from './googleAuth';
 import { tempoDesde } from '../backup/lembrete';
 import { PRIVACIDADE_URL } from '../../lib/privacidade';
 
@@ -23,7 +23,8 @@ function textoStatus(status: StatusSync, estado: EstadoSync): string {
     case 'offline':
       return `Sem internet — sincroniza quando a conexão voltar${pendente}.`;
     case 'precisaLogin':
-      return `O acesso ao Google venceu — entre de novo para continuar sincronizando${pendente}.`;
+      // O código do Google (ex.: interaction_required) ajuda a entender por que a renovação sozinha não deu.
+      return `O acesso ao Google venceu — entre de novo para continuar sincronizando${pendente}.${status.erro ? ` (Google: ${status.erro})` : ''}`;
     case 'erro':
       return `Não deu para sincronizar: ${status.erro}${pendente}`;
     default:
@@ -98,7 +99,7 @@ export default function SyncCard({ titulo }: { titulo: ReactNode }) {
           </p>
           <div className="flex flex-wrap gap-2">
             {status.fase === 'precisaLogin' ? (
-              <button className="btn-primary" onClick={() => entrarNoGoogle(false)}>
+              <button className="btn-primary" onClick={() => void entrarDeNovo()}>
                 Entrar de novo no Google
               </button>
             ) : (

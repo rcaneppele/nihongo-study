@@ -862,8 +862,11 @@ de 0).
     Aprender, Praticar e suas habilidades, Lições, Progresso, Config) —
     nunca no meio de uma sessão (o recarregamento perderia a sessão; por
     isso Revisar e as telas de treino ficam de fora) —, no máximo uma vez a
-    cada 10 min. Se o Google pedir login, não insiste: a Home mostra
-    "Sincronização pausada" com o botão Entrar.
+    cada 10 min. Sempre com a conta conectada como sugestão (`login_hint`):
+    sem isso, com mais de uma conta Google no navegador, o `prompt=none`
+    falha. Se o Google pedir login, não insiste: a Home mostra
+    "Sincronização pausada" com o botão Entrar (e Config › Dados mostra o
+    código de erro devolvido pelo Google).
   - **Arquivo**: um só, `nihongo-study-sync.json.gz` (o backup comprimido),
     no `appDataFolder`.
   - **Ciclo**: baixar → mesclar aqui (a mesma mesclagem do Importar ›
