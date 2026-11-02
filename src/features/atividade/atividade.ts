@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db, type Activity } from '../../db/schema';
+import { db, type Activity, type Review } from '../../db/schema';
 import { incrementar } from '../../db/contadores';
 import { getDeviceId, setMeta } from '../../db/local';
 import { ACTIVITY_CONTADORES } from '../../db/merge';
@@ -63,28 +63,37 @@ export interface ResumoDia {
 }
 
 /**
- * Sequência de dias: conta qualquer dia com atividade registrada **ou** com
- * revisão de flash card em `reviews` — o histórico de revisões é anterior a
- * esta tabela, então assim a sequência de quem já estudava não zera.
- * Hoje sem atividade ainda não quebra a sequência (o dia não acabou).
+ * Dias com estudo: qualquer dia com atividade registrada **ou** com revisão
+ * de flash card em `reviews` — o histórico de revisões é anterior à tabela
+ * `activity`, então assim a sequência de quem já estudava não zera.
  */
+export function diasEstudados(atividades: Activity[], reviews: Review[]): Set<string> {
+  const dias = new Set(atividades.filter((a) => pontos(a) > 0).map((a) => a.day));
+  for (const r of reviews) dias.add(diaLocal(r.reviewedAt));
+  return dias;
+}
+
+/** Dias seguidos com estudo até hoje. Hoje sem atividade ainda não quebra a sequência (o dia não acabou). */
+export function sequenciaDeDias(dias: Set<string>): number {
+  let sequencia = 0;
+  const cursor = new Date();
+  if (!dias.has(diaLocal())) cursor.setDate(cursor.getDate() - 1);
+  while (dias.has(diaLocal(cursor.getTime()))) {
+    sequencia++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return sequencia;
+}
+
 export function useResumoDia(): ResumoDia | undefined {
   return useLiveQuery(async () => {
     const [atividades, reviews] = await Promise.all([db.activity.toArray(), db.reviews.toArray()]);
-    const dias = new Set(atividades.filter((a) => pontos(a) > 0).map((a) => a.day));
-    for (const r of reviews) dias.add(diaLocal(r.reviewedAt));
+    const dias = diasEstudados(atividades, reviews);
 
     const hojeKey = diaLocal();
     const hoje = atividades.find((a) => a.day === hojeKey) ?? vazio(hojeKey);
     const estudouHoje = dias.has(hojeKey);
-
-    let sequencia = 0;
-    const cursor = new Date();
-    if (!estudouHoje) cursor.setDate(cursor.getDate() - 1);
-    while (dias.has(diaLocal(cursor.getTime()))) {
-      sequencia++;
-      cursor.setDate(cursor.getDate() - 1);
-    }
+    const sequencia = sequenciaDeDias(dias);
     const semana = Array.from({ length: 7 }, (_, i) => {
       const d = new Date();
       d.setDate(d.getDate() - (6 - i));

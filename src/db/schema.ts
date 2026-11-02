@@ -133,7 +133,7 @@ export interface LocalState {
 }
 
 /** Tabelas em que um registro pode ser apagado individualmente. */
-export type DeletableTable = 'cards' | 'reviews' | 'wordKnowledge';
+export type DeletableTable = 'cards' | 'reviews' | 'wordKnowledge' | 'journal';
 
 /**
  * Registro de exclusão ("lápide"), pra exclusão se propagar na mesclagem em
@@ -212,6 +212,53 @@ export interface Activity {
 
 export type ActivityContador = 'revisoes' | 'praticas' | 'leituras' | 'novos';
 
+/** Exercícios que guardam resultado por item (ver src/features/exercicios/historico.ts). */
+export type ExerciseKind = 'quiz' | 'diga' | 'kakitori' | 'gramatica' | 'escuta' | 'shadowing';
+
+/**
+ * Resultado de um item de exercício fora do FSRS — uma linha por resposta,
+ * histórico imutável como `reviews`. Alimenta Pontos fracos, o "Próximo
+ * passo" e o nível de Ouvir/Falar.
+ */
+export interface ExerciseResult {
+  id: string;
+  kind: ExerciseKind;
+  /** Pergunta, frase ou item de ditado; na escuta e no shadowing, o id do texto de leitura. */
+  itemId: string;
+  lessonId?: string;
+  /** 0..1 — 1 acertou, 0 errou; escuta: 1 entendeu quase tudo, 0,5 uma parte, 0 pouco. Ausente = sem avaliação (shadowing). */
+  score?: number;
+  doneAt: number;
+}
+
+/** Progresso de uma lição (`src/licoes/`). Chave = id da lição. */
+export interface LessonProgress {
+  lessonId: string;
+  /** Última vez que a lição foi aberta. */
+  viewedAt: number;
+  /** Quando foi marcada como concluída; ausente = não concluída. */
+  completedAt?: number;
+  /** Última alteração de `completedAt` (marcar/desmarcar) — abrir a lição não conta. */
+  updatedAt: number;
+}
+
+/** Conquista desbloqueada (ver src/features/conquistas/conquistas.ts). Chave = id da conquista. */
+export interface Achievement {
+  id: string;
+  unlockedAt: number;
+}
+
+/** Entrada do diário guiado (ver src/features/diario/). */
+export interface JournalEntry {
+  id: string;
+  promptId: string;
+  text: string;
+  /** Itens do checklist de autoavaliação que o usuário marcou (índices como string). */
+  checked: string[];
+  createdAt: number;
+  updatedAt: number;
+}
+
 export class NihongoDB extends Dexie {
   cards!: Table<Card, string>;
   reviews!: Table<Review, string>;
@@ -223,6 +270,10 @@ export class NihongoDB extends Dexie {
   meta!: Table<Meta, string>;
   deleted!: Table<Tombstone, [string, string]>;
   local!: Table<LocalState, string>;
+  exerciseResults!: Table<ExerciseResult, string>;
+  lessonProgress!: Table<LessonProgress, string>;
+  achievements!: Table<Achievement, string>;
+  journal!: Table<JournalEntry, string>;
 
   constructor() {
     super('nihongo-study');
@@ -275,6 +326,15 @@ export class NihongoDB extends Dexie {
     this.version(6).stores({
       deleted: '[table+key]',
       local: 'key',
+    });
+    // v7: histórico dos exercícios (quiz, diga, ditado, gramática, escuta,
+    // shadowing), progresso das lições, conquistas e diário guiado. Só
+    // tabelas novas, nada a migrar.
+    this.version(7).stores({
+      exerciseResults: 'id, kind, itemId, doneAt',
+      lessonProgress: 'lessonId',
+      achievements: 'id',
+      journal: 'id, promptId, createdAt',
     });
   }
 }

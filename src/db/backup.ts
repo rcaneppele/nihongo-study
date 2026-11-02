@@ -10,6 +10,10 @@ import {
   type Activity,
   type WordKnowledge,
   type Tombstone,
+  type ExerciseResult,
+  type LessonProgress,
+  type Achievement,
+  type JournalEntry,
 } from './schema';
 import { freshSrs } from '../features/srs/fsrs';
 import {
@@ -17,10 +21,13 @@ import {
   iguais,
   mesclarAtividade,
   mesclarCard,
+  mesclarConquista,
+  mesclarDiario,
   mesclarKana,
   mesclarKanji,
   mesclarLapide,
   mesclarLeitura,
+  mesclarLicao,
   mesclarMeta,
   mesclarPalavra,
 } from './merge';
@@ -34,7 +41,7 @@ import {
  * armazenamento.
  */
 
-export const SCHEMA_VERSION = 6;
+export const SCHEMA_VERSION = 7;
 
 export interface BackupFile {
   app: 'nihongo-study';
@@ -49,10 +56,28 @@ export interface BackupFile {
   activity: Activity[];
   meta: Meta[];
   deleted: Tombstone[];
+  exerciseResults: ExerciseResult[];
+  lessonProgress: LessonProgress[];
+  achievements: Achievement[];
+  journal: JournalEntry[];
 }
 
 export async function exportData(): Promise<BackupFile> {
-  const [cards, reviews, kanaProgress, kanjiProgress, wordKnowledge, readingProgress, activity, meta, deleted] = await Promise.all([
+  const [
+    cards,
+    reviews,
+    kanaProgress,
+    kanjiProgress,
+    wordKnowledge,
+    readingProgress,
+    activity,
+    meta,
+    deleted,
+    exerciseResults,
+    lessonProgress,
+    achievements,
+    journal,
+  ] = await Promise.all([
     db.cards.toArray(),
     db.reviews.toArray(),
     db.kanaProgress.toArray(),
@@ -62,6 +87,10 @@ export async function exportData(): Promise<BackupFile> {
     db.activity.toArray(),
     db.meta.toArray(),
     db.deleted.toArray(),
+    db.exerciseResults.toArray(),
+    db.lessonProgress.toArray(),
+    db.achievements.toArray(),
+    db.journal.toArray(),
   ]);
   return {
     app: 'nihongo-study',
@@ -76,6 +105,10 @@ export async function exportData(): Promise<BackupFile> {
     activity,
     meta,
     deleted,
+    exerciseResults,
+    lessonProgress,
+    achievements,
+    journal,
   };
 }
 
@@ -153,6 +186,7 @@ function migrateBackup(data: BackupFile): BackupFile {
   if (result.schemaVersion < 4) result = migrateV3ToV4(result);
   if (result.schemaVersion < 5) result = migrateV4ToV5(result);
   if (result.schemaVersion < 6) result = migrateV5ToV6(result);
+  if (result.schemaVersion < 7) result = migrateV6ToV7(result);
   return result;
 }
 
@@ -215,6 +249,18 @@ function migrateV5ToV6(data: BackupFile): BackupFile {
   return { ...data, schemaVersion: 6, deleted: data.deleted ?? [] };
 }
 
+/** v6 → v7: histórico de exercícios, progresso das lições, conquistas e diário — backups antigos não têm linhas. */
+function migrateV6ToV7(data: BackupFile): BackupFile {
+  return {
+    ...data,
+    schemaVersion: 7,
+    exerciseResults: data.exerciseResults ?? [],
+    lessonProgress: data.lessonProgress ?? [],
+    achievements: data.achievements ?? [],
+    journal: data.journal ?? [],
+  };
+}
+
 /** Chave de cada registro, por tabela do backup. */
 const CHAVES: { [T in Exclude<keyof BackupFile, 'app' | 'schemaVersion' | 'exportedAt'>]: (row: BackupFile[T][number]) => string } = {
   cards: (r) => r.id,
@@ -226,6 +272,10 @@ const CHAVES: { [T in Exclude<keyof BackupFile, 'app' | 'schemaVersion' | 'expor
   activity: (r) => r.day,
   meta: (r) => r.key,
   deleted: (r) => `${r.table}:${r.key}`,
+  exerciseResults: (r) => r.id,
+  lessonProgress: (r) => r.lessonId,
+  achievements: (r) => r.id,
+  journal: (r) => r.id,
 };
 
 /** Os dois backups têm os mesmos dados (sem depender da ordem dos registros nem da data de exportação). */
@@ -256,6 +306,10 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
     db.activity,
     db.meta,
     db.deleted,
+    db.exerciseResults,
+    db.lessonProgress,
+    db.achievements,
+    db.journal,
   ];
   await db.transaction('rw', tables, async () => {
     if (mode === 'replace') {
@@ -269,6 +323,10 @@ export async function importData(backup: BackupFile, mode: ImportMode = 'replace
       await db.activity.bulkAdd(backup.activity);
       await db.meta.bulkAdd(backup.meta);
       await db.deleted.bulkAdd(backup.deleted);
+      await db.exerciseResults.bulkAdd(backup.exerciseResults);
+      await db.lessonProgress.bulkAdd(backup.lessonProgress);
+      await db.achievements.bulkAdd(backup.achievements);
+      await db.journal.bulkAdd(backup.journal);
       return;
     }
     await mergeAll(backup);
@@ -305,12 +363,21 @@ async function mergeAll(backup: BackupFile): Promise<void> {
     (w) => w.key,
     mesclarPalavra
   );
+  await mergeTable(
+    db.journal,
+    backup.journal.filter((j) => !apagado('journal', j.id, j.updatedAt)),
+    (j) => j.id,
+    mesclarDiario
+  );
   await applyTombstones(db.cards, 'cards', lapides, (c) => c.updatedAt);
   await applyTombstones(db.wordKnowledge, 'wordKnowledge', lapides, (w) => w.updatedAt);
+  await applyTombstones(db.journal, 'journal', lapides, (j) => j.updatedAt);
 
   // 3. Revisões: histórico imutável — só entra, ou sai por lápide (desfazer).
   await db.reviews.bulkPut(backup.reviews.filter((r) => !apagado('reviews', r.id, r.reviewedAt)));
   await applyTombstones(db.reviews, 'reviews', lapides, (r) => r.reviewedAt);
+  // Resultados de exercícios: histórico imutável, sem exclusão — só entra.
+  await db.exerciseResults.bulkPut(backup.exerciseResults);
 
   // 4. Tabelas sem exclusão individual.
   await mergeTable(db.kanaProgress, backup.kanaProgress, (k) => k.char, mesclarKana);
@@ -318,6 +385,8 @@ async function mergeAll(backup: BackupFile): Promise<void> {
   await mergeTable(db.readingProgress, backup.readingProgress, (r) => r.textId, mesclarLeitura);
   await mergeTable(db.activity, backup.activity, (a) => a.day, mesclarAtividade);
   await mergeTable(db.meta, backup.meta, (m) => m.key, mesclarMeta);
+  await mergeTable(db.lessonProgress, backup.lessonProgress, (l) => l.lessonId, mesclarLicao);
+  await mergeTable(db.achievements, backup.achievements, (a) => a.id, mesclarConquista);
 
   // 5. Duplicatas e revisões de cards juntados (dos dois lados).
   await dedupeCards(now);

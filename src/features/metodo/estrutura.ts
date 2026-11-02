@@ -12,7 +12,9 @@ import {
   ListChecks,
   MessageCircle,
   Mic,
+  NotebookPen,
   PenLine,
+  Puzzle,
   Sparkles,
   Target,
 } from 'lucide-react';
@@ -188,6 +190,13 @@ export const HABILIDADES: Record<HabilidadeId, Habilidade> = {
         icone: PenLine,
         cor: 'kin',
       },
+      {
+        titulo: 'Diário guiado',
+        desc: 'Escreva frases suas com o que aprendeu em cada lição e confira por um checklist.',
+        to: '/licoes/diario',
+        icone: NotebookPen,
+        cor: 'kin',
+      },
     ],
   },
 };
@@ -243,6 +252,13 @@ export const ATIVIDADES_REVISAR: Atividade[] = [
     cor: 'fuji',
   },
   {
+    titulo: 'Gramática em contexto',
+    desc: 'Frases novas, fora das lições, para completar. Mostra se você pegou a regra ou só decorou o exemplo.',
+    to: '/licoes/gramatica',
+    icone: Puzzle,
+    cor: 'fuji',
+  },
+  {
     titulo: 'Meus cards',
     desc: 'Ver, buscar, criar e praticar livremente os seus flash cards.',
     to: '/flashcards',
@@ -288,6 +304,7 @@ export const SECOES: Secao[] = [
       { to: '/revisar', label: 'Revisão do dia' },
       { to: '/pontos-fracos', label: 'Pontos fracos' },
       { to: '/licoes/quiz', label: 'Testar lições' },
+      { to: '/licoes/gramatica', label: 'Gramática' },
       { to: '/flashcards', label: 'Meus cards' },
     ],
   },
@@ -310,8 +327,8 @@ export function secaoDaRota(pathname: string, search = ''): SecaoId | null {
   }
   if (p === '/flashcards' && q.get('praticar') === 'producao') return 'praticar';
   if (p.startsWith('/aprender') || p === '/kana' || p === '/kanji') return 'aprender';
-  if (p === '/licoes/quiz') return 'revisar';
-  if (p === '/licoes/kakitori' || p === '/licoes/diga') return 'praticar';
+  if (p === '/licoes/quiz' || p === '/licoes/gramatica') return 'revisar';
+  if (p === '/licoes/kakitori' || p === '/licoes/diga' || p === '/licoes/diario') return 'praticar';
   if (p.startsWith('/licoes')) return 'aprender';
   if (p === '/flashcards') return 'revisar';
   if (p.startsWith('/praticar') || p.startsWith('/leitura')) return 'praticar';

@@ -28,10 +28,13 @@ export interface ReadingLine {
   translation: string;
 }
 
+/** 0 = primeiros passos (curtíssimos, só kana); 1 = só kana; 2 = kanji com furigana; 3 = textos longos, N4. */
+export type NivelLeitura = 0 | 1 | 2 | 3;
+
 export interface ReadingText {
   id: string;
   title: string;
-  level: 1 | 2;
+  level: NivelLeitura;
   /** Nº aproximado de palavras únicas — indicador de dificuldade na listagem. */
   wordCount: number;
   /** Resumo em português, exibido na listagem. */

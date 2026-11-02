@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, ChevronRight, Headphones, ListChecks, MessageCircle } from 'lucide-react';
+import { BookOpen, CheckCircle2, ChevronRight, Headphones, ListChecks, MessageCircle } from 'lucide-react';
 import { LICOES } from '../licoes';
 import { TILE, type Cor } from '../lib/cores';
+import TrilhaLicoes from '../features/licoes/TrilhaLicoes';
+import { useProgressoLicoes } from '../features/licoes/progresso';
 
 // Cor da etiqueta pelo tipo de lição — o tipo vem na primeira tag de cada
 // lição (`meta.tags`). Etiquetas sem cor própria (nível, assunto) ficam neutras.
@@ -14,6 +16,8 @@ const COR_DA_TAG: Record<string, Cor> = {
 };
 
 export default function Licoes() {
+  const progresso = useProgressoLicoes();
+
   return (
     <div className="space-y-8">
       <div className="flex items-start gap-3">
@@ -25,6 +29,8 @@ export default function Licoes() {
           <p className="text-sm text-sage">Explicações detalhadas sobre gramática, vocabulário e cultura</p>
         </div>
       </div>
+
+      <TrilhaLicoes />
 
       <div className="card-surface flex flex-wrap items-center gap-x-4 gap-y-2 py-4 text-sm">
         <span className="text-sage">Estudou uma lição? Próximo passo do ciclo:</span>
@@ -58,6 +64,14 @@ export default function Licoes() {
                 <div className="font-medium text-ink">{meta.title}</div>
                 <div className="mt-0.5 text-sm text-sage">{meta.subtitle}</div>
                 <div className="mt-2 flex flex-wrap gap-1">
+                  {progresso?.get(meta.id)?.completedAt !== undefined ? (
+                    <span className="badge bg-matcha/12 text-matcha">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Concluída
+                    </span>
+                  ) : (
+                    progresso?.has(meta.id) && <span className="badge bg-line/70 text-sage">Em andamento</span>
+                  )}
                   {meta.tags.slice(0, 2).map((tag) => (
                     <span key={tag} className={`badge ${COR_DA_TAG[tag] ? TILE[COR_DA_TAG[tag]] : 'bg-line/70 text-sage'}`}>
                       {tag}

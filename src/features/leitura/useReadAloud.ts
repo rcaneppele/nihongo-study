@@ -25,10 +25,12 @@ const MIN_SHADOW_PAUSE_MS = 1500;
  * Qualquer outra fala no meio (ex.: botão de áudio de uma linha) interrompe
  * a leitura, que fica pausada naquela linha.
  */
-export function useReadAloud(lines: string[], mode: ReadAloudMode) {
+export function useReadAloud(lines: string[], mode: ReadAloudMode, onFinish?: (mode: ReadAloudMode) => void) {
   const [state, setState] = useState<ReadAloudState>({ status: 'idle', line: 0, shadowPauseMs: null });
   // Token da execução atual — pausar/parar/recomeçar invalida o loop antigo.
   const runRef = useRef(0);
+  const onFinishRef = useRef(onFinish);
+  onFinishRef.current = onFinish;
 
   // Sair da tela para a leitura em andamento.
   useEffect(() => {
@@ -64,7 +66,10 @@ export function useReadAloud(lines: string[], mode: ReadAloudMode) {
         }
       }
     }
-    if (alive()) setState({ status: 'idle', line: 0, shadowPauseMs: null });
+    if (!alive()) return;
+    setState({ status: 'idle', line: 0, shadowPauseMs: null });
+    // Só quando chega ao fim do texto (pausar ou parar no meio não conta).
+    onFinishRef.current?.(mode);
   }
 
   function play() {

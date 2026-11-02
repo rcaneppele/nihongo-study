@@ -4,6 +4,7 @@
 export interface ItemKakitori {
   id: string;
   origemLabel: string;
+  licaoId: string;
   audioText: string;
   kana: string;
   kanji?: string;

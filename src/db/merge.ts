@@ -1,11 +1,14 @@
 import { mesclarContadores } from './contadores';
 import type {
+  Achievement,
   Activity,
   ActivityContador,
   Card,
   KanaContador,
   KanaProgress,
+  JournalEntry,
   KanjiProgress,
+  LessonProgress,
   Meta,
   ReadingProgress,
   Tombstone,
@@ -146,6 +149,31 @@ export function mesclarMeta(local: Meta, outro: Meta): Meta {
 
 export function mesclarLapide(local: Tombstone, outro: Tombstone): Tombstone {
   return outro.deletedAt > local.deletedAt ? outro : local;
+}
+
+/**
+ * Lição: abrir só avança `viewedAt` (fica o maior); marcar/desmarcar como
+ * concluída vence pelo `updatedAt` mais recente.
+ */
+export function mesclarLicao(local: LessonProgress, outro: LessonProgress): LessonProgress {
+  const vence = outro.updatedAt > local.updatedAt ? outro : local;
+  const resultado: LessonProgress = {
+    lessonId: local.lessonId,
+    viewedAt: Math.max(local.viewedAt, outro.viewedAt),
+    updatedAt: vence.updatedAt,
+  };
+  if (vence.completedAt !== undefined) resultado.completedAt = vence.completedAt;
+  return resultado;
+}
+
+/** Conquista: fica a data em que foi desbloqueada primeiro, em qualquer aparelho. */
+export function mesclarConquista(local: Achievement, outro: Achievement): Achievement {
+  return outro.unlockedAt < local.unlockedAt ? outro : local;
+}
+
+/** Entrada do diário: vence a edição mais recente. */
+export function mesclarDiario(local: JournalEntry, outro: JournalEntry): JournalEntry {
+  return outro.updatedAt > local.updatedAt ? outro : local;
 }
 
 /** Comparação de registros sem depender da ordem das chaves — evita regravar o que não mudou. */

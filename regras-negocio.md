@@ -455,9 +455,17 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   (kakitori)**: nenhum dos dois cobre o caso — `Token` não tem leitura de
   kanji nem significado por palavra; `ItemKakitoriFonte` é por item isolado,
   não uma sequência de palavras formando um texto corrido.
-- **Níveis**: 1 (bem iniciante, só hiragana/katakana — mesma regra de "sem
-  kanji em frase corrida" das lições, aqui estendida ao texto inteiro) e 2
-  (kanji comuns já com furigana em cada palavra que os contém). Sem
+- **Níveis** (`NIVEIS_LEITURA` em `textos.ts`): 0 — "Primeiros passos"
+  (`textos-nivel0.ts`: 4 ou 5 frases curtíssimas, só kana, quase só です/
+  ます no presente, para quem acabou de aprender o alfabeto); 1 (bem
+  iniciante, só hiragana/katakana — mesma regra de "sem kanji em frase
+  corrida" das lições, aqui estendida ao texto inteiro); 2 (kanji comuns já
+  com furigana em cada palavra que os contém); 3 (`textos-nivel3.ts`: textos
+  mais longos, mais kanji com furigana e gramática da fronteira N5/N4 —
+  〜ながら, 〜たり, 〜てくれる, ので/から). 20 + 20 + 10 + 10 = 60 textos.
+  `src/data/leitura/textos.test.ts` confere ids únicos, furigana em toda
+  palavra com kanji, níveis 0 e 1 sem kanji e `lemmaReading` em todo lemma
+  com kanji. Sem
   restrição a só os kanji do módulo de Kanji (seção 3) — a furigana cobre
   qualquer kanji, é conteúdo de leitura, não de memorização de um dataset
   fechado.
@@ -528,7 +536,16 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
     de ouvido. O modo não muda durante a reprodução.
   - **Escutar primeiro**: borra o texto (palavras e botão PT ficam
     inclicáveis; o áudio por linha continua) até o usuário tocar "Mostrar
-    texto". Estado só da tela, não persistido.
+    texto". Se ele tocou "Ouvir o texto" com o texto escondido, antes de
+    mostrar o app pergunta **quanto entendeu só de ouvido** — Quase tudo
+    (1) / Uma parte (0,5) / Pouco (0) ou Pular — e grava a nota em
+    `exerciseResults` (`kind: 'escuta'`, item = id do texto) + 1 em
+    `praticas`. Desligar "Escutar primeiro" na barra passa pela mesma
+    pergunta. O estado de escondido é só da tela.
+  - **Shadowing até o fim**: quando o modo Shadowing chega à última linha
+    sem ser pausado/parado, grava `exerciseResults` (`kind: 'shadowing'`,
+    item = id do texto, sem nota) + 1 em `praticas` e mostra "Shadowing do
+    texto inteiro registrado".
   - **Velocidade** (Normal 0,9 / Lenta 0,65): global — vale pra todo áudio
     do app (AudioButton, kakitori, leitura). `db.meta`, chave
     `speechSpeed`, entra no backup; `speech.ts` mantém em cache pra não
@@ -563,8 +580,8 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   exibição na listagem.
 
 ### Conteúdo
-- Lições são **estáticas** — não há persistência nem estado no banco de dados.
-  O usuário lê, mas não há progresso rastreado por lição (por ora).
+- O conteúdo das lições é **estático**; o que fica no banco é só o
+  progresso de cada uma (abaixo).
 - Cada lição usa os componentes de `src/components/Licao.tsx`:
   - `Section` — seção com título e separador.
   - `Ex` — exemplo com campos `jp`, `romaji?`, `pt` e `notes?`.
@@ -579,9 +596,27 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   Lições com `quiz.frases` ou `diga` terminam com o atalho "Pratique esta lição" →
   "Diga em japonês" só daquela lição.
 - `/licoes/quiz` → `src/routes/Quiz.tsx` (Revisar › Testar lições),
-  `/licoes/kakitori` → `src/routes/Kakitori.tsx` (Praticar › Ouvir e
-  Escrever) e `/licoes/diga` → `src/routes/Diga.tsx` (Praticar › Falar) —
-  ver as seções abaixo.
+  `/licoes/gramatica` → `src/routes/Gramatica.tsx` (Revisar ›
+  Gramática), `/licoes/kakitori` → `src/routes/Kakitori.tsx` (Praticar ›
+  Ouvir e Escrever), `/licoes/diga` → `src/routes/Diga.tsx` (Praticar ›
+  Falar) e `/licoes/diario` → `src/routes/Diario.tsx` (Praticar ›
+  Escrever) — ver as seções abaixo.
+
+### Progresso por lição
+`src/features/licoes/progresso.ts`, tabela `lessonProgress` (schemaVersion
+7, chave = id da lição): `viewedAt` (última abertura), `completedAt`
+(concluída; ausente = não) e `updatedAt` (último marcar/desmarcar — abrir
+não conta).
+- Abrir a lição grava `viewedAt`. No fim dela, **"Concluí esta lição"**
+  grava `completedAt` (e "Desmarcar" apaga). A primeira conclusão soma 1
+  em `novos` (meta do dia e passo "Aprender" do Plano do dia); desmarcar
+  não subtrai.
+- **Trilha** (`TrilhaLicoes`, no topo de `/licoes` e do hub Aprender):
+  "N de 12 lições concluídas", barra e a próxima — a primeira de `LICOES`
+  sem `completedAt` ("Continuar" se já foi aberta, senão "Próxima"). Na
+  grade, selo **Concluída** ou **Em andamento** (aberta, não concluída).
+- O fim da lição também tem os atalhos "Diga em japonês" (se a lição tem
+  frases) e "Diário guiado" (se tem propostas).
 
 ### Quiz ("Testar lições")
 Lógica em `src/data/quiz/` (`types.ts`, `gerador.ts`) e
@@ -596,8 +631,10 @@ autoradas.
 - **Configuração**: lições, tipos e quantidade (padrão 10, limitada ao que
   a combinação consegue gerar). Perguntas sorteadas do conjunto.
 - **Correção** automática, com feedback e explicação; avança sozinho.
-- **Nada é gravado** além da atividade do dia (`praticas` += nº de
-  respostas, §5c) — sem histórico por pergunta (ver roadmap).
+- **Histórico**: ao terminar, cada resposta vai para `exerciseResults`
+  (`kind: 'quiz'`, item = id da pergunta/frase, lição, nota 1 ou 0) — ver
+  "Histórico dos exercícios" abaixo — e `praticas` += nº de respostas
+  (§5c). Desistir no meio não grava nada.
 
 ### Kakitori (ditado)
 Lógica em `src/data/kakitori/` e `src/features/kakitori/`. Só entram as
@@ -608,7 +645,8 @@ Números") — as `frases` do quiz são longas demais pra ditado.
   Praticar › Escrever) e revela a resposta (kana, kanji quando difere,
   romaji, tradução).
 - **Sem correção automática**: o usuário se marca como acerto ou erro, como
-  no flip-card. Nada é gravado além da atividade do dia (`praticas`).
+  no flip-card. Ao terminar, grava cada item em `exerciseResults`
+  (`kind: 'kakitori'`) e soma em `praticas`.
 
 ### Diga em japonês (produção de frases)
 Lógica em `src/features/diga/` (`gerador.ts`, `DigaSession.tsx`,
@@ -640,7 +678,57 @@ Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
   leitura = romaji, categoria **"Frases"**, tags `frase` + id da lição) já
   com `production` — entram direto no estágio **Sei dizer**, porque o
   objetivo é dizer a frase. Pula frases que já têm card (mesma frente).
-- Nada é gravado além disso: sem histórico de sessões, como o Quiz.
+- Ao terminar, cada frase vai para `exerciseResults` (`kind: 'diga'`, com
+  a lição e a autoavaliação como nota) e soma em `praticas`.
+
+### Gramática em contexto
+`src/data/gramatica/` (`frases.ts`, `gerador.ts`) + `src/routes/Gramatica.tsx`.
+Frases **novas** (não são os exemplos nem o quiz das lições), cada uma com
+uma lacuna, agrupadas por **ponto gramatical** (`PONTOS_GRAMATICA`, cada um
+ligado a uma lição): です/じゃないです/でした, adjetivos -い, sufixos,
+こそあど, família, は/が, を/に/で, の/と/や/も, から/まで/へ/ごろ,
+か/ね/よ, verbos em 〜ます, rotina e saudações. Treina reconhecer a regra
+numa frase que o aluno nunca viu.
+- **Formato**: `frase` com blocos `kana|romaji` separados por espaço e a
+  lacuna entre colchetes (`[です|desu]`; romaji pode ter espaço — pedaço
+  sem `|` continua o bloco anterior); `distratoras` (nunca também
+  corretas na frase — ex.: に e へ com verbo de movimento não aparecem
+  juntas), `pt` e `explicacao`. Só kana + romaji e só gramática já
+  ensinada (regras de `docs/padrao-licoes.md`). `frases.test.ts` confere o
+  formato.
+- **Configuração**: pontos (chips agrupados por lição, "Todos"/"Nenhum";
+  `?licao=<id>` pré-seleciona os daquela lição) e quantidade (padrão 10).
+- **Sessão e resultado**: os do Quiz, com o tipo de pergunta `completar`
+  (alternativas em lista quando são longas; a explicação aparece em toda
+  resposta). Ao terminar: `exerciseResults` (`kind: 'gramatica'`) e
+  `praticas`.
+
+### Diário guiado
+`src/data/diario/prompts.ts` + `src/features/diario/diario.ts` +
+`src/routes/Diario.tsx`, tabela `journal` (schemaVersion 7).
+- **Propostas** (`PROMPTS_DIARIO`): uma ou duas por lição — título,
+  instrução, exemplo (kana + romaji + tradução, escondido até "Ver um
+  exemplo") e **checklist** de autoavaliação ("usei でした para algo de
+  ontem", "não pus さん no meu nome"…).
+- O usuário escreve livremente (kana, romaji, como conseguir) e marca o
+  checklist. **Sem correção automática** — texto livre exigiria IA externa
+  (ver roadmap §4).
+- Salvar cria a entrada (`text`, `checked` = índices marcados, datas) e
+  soma 1 em `praticas`; editar só atualiza (`updatedAt`); apagar usa
+  `apagar('journal', id)` (lápide, §6). A lista mostra as entradas, da mais
+  recente, com a proposta, a data e "checklist N/M". `?licao=<id>` põe as
+  propostas daquela lição primeiro.
+
+### Histórico dos exercícios
+`src/features/exercicios/historico.ts`, tabela `exerciseResults`
+(schemaVersion 7): uma linha por resposta (`kind`, `itemId`, `lessonId`,
+`score` 0..1, `doneAt`) — histórico imutável, como `reviews`. Tipos: `quiz`,
+`diga`, `kakitori`, `gramatica` (nota 1/0), `escuta` (1/0,5/0) e
+`shadowing` (sem nota). Usado por: Pontos fracos (§5b), o "Próximo passo"
+de Falar e o "Seu nível" de Ouvir/Falar (§5d) e as conquistas (§5e).
+`src/features/exercicios/conteudo.ts` recupera o conteúdo de um item (frase
+em kana + romaji, pergunta, item de ditado, frase da gramática) a partir do
+id guardado.
 
 ### Como adicionar uma lição
 1. Crie `src/licoes/<id>.tsx` exportando `meta` e o componente default.
@@ -652,7 +740,7 @@ Quiz (reconhecimento/reordenação) e os flash cards (palavras) não cobrem.
 `/pontos-fracos` (`src/routes/PontosFracos.tsx`, lógica em
 `src/features/pontos-fracos/pontosFracos.ts`), em Revisar › Pontos fracos. Junta o
 que o usuário mais erra em cada módulo, **só lendo dados que já existem**
-— nenhuma tabela nova, nada gravado.
+— nada é gravado.
 
 | Origem | Entra quando | Ordem (mais fraco primeiro) |
 |---|---|---|
@@ -660,8 +748,7 @@ que o usuário mais erra em cada módulo, **só lendo dados que já existem**
 | Kana | errou ≥ 1× e acerto < 85% (somando "digitar romaji" e "múltipla escolha") | menor taxa de acerto, depois mais erros |
 | Kanji | `lapses` > 0 no `kanjiProgress` | lapsos, desempate pela `difficulty` |
 | Leitura | `wordKnowledge.status === 'consultada'` (consultou na leitura mais recente) | mais consultas |
-
-Quiz e "Diga em japonês" não guardam histórico, então não entram.
+| Lições | item de Quiz, ditado, gramática ou "Diga em japonês" (`exerciseResults`) com erro e: a **última tentativa errada** ou acerto < 70% no histórico | menor acerto, mais erros, última errada primeiro |
 
 - Cada origem lista os 8 mais fracos (com "Mostrar todos") e o desempenho
   ("esqueceu 3×", "acerto 40% · errou 5×", "consultou em 2 de 3
@@ -671,7 +758,10 @@ Quiz e "Diga em japonês" não guardam histórico, então não entram.
   mistura até 20 itens alternando as origens (um de cada por vez, pra não
   virar só kana); "Treinar só estes" usa até 20 de uma origem. Kana, kanji
   e palavras da leitura entram como cards transitórios (não gravados):
-  kana → romaji; kanji → significado + leituras; palavra → significado.
+  kana → romaji; kanji → significado + leituras; palavra → significado;
+  frase do Quiz/Diga → na direção "dizer em japonês" (vê o português);
+  pergunta do Quiz → pergunta e resposta certa; ditado → kana e tradução;
+  frase da gramática → frase completa, tradução e o porquê.
   Cards cuja maior parte dos lapsos é na produção são treinados na direção
   "dizer em japonês".
 
@@ -684,8 +774,8 @@ contadores, somados por `registrarAtividade(tipo, n)`:
 | Contador | Quando soma |
 |---|---|
 | `revisoes` | cada nota em revisão FSRS — flash cards (as duas direções) e kanji |
-| `novos` | primeira revisão de reconhecimento de um card (estado New) e cada kanji "aprendido" |
-| `praticas` | cada resposta em treino que não mexe no FSRS: kana (romaji, múltipla escolha, desenho), caligrafia de kanji, prática livre de cards/pontos fracos (ao avançar), e no fim de Quiz, Kakitori e "Diga em japonês" (nº de itens) |
+| `novos` | primeira revisão de reconhecimento de um card (estado New), cada kanji "aprendido" e a primeira conclusão de cada lição |
+| `praticas` | cada resposta em treino que não mexe no FSRS: kana (romaji, múltipla escolha, desenho), caligrafia de kanji, prática livre de cards/pontos fracos (ao avançar), no fim de Quiz, gramática em contexto, Kakitori e "Diga em japonês" (nº de itens), e 1 por escuta avaliada, shadowing até o fim e entrada nova no diário |
 | `leituras` | cada "Terminei a leitura" |
 
 O desfazer das revisões/prática subtrai o que tinha somado (nunca abaixo
@@ -706,10 +796,10 @@ de 0).
   destaque escuro) e selo da sequência (`useResumoDia().semana`). É a única
   sequência do app — a página Progresso mostra a mesma ("Sequência de
   estudo").
-- **Mesclagem de backup**: o mesmo dia pode ter sido estudado em dois
-  aparelhos; somar contaria duas vezes ao reimportar o mesmo arquivo, então
-  fica o **maior valor de cada contador** — subestima um pouco, mas é
-  idempotente.
+- **Mesclagem de backup**: o mesmo dia estudado em dois aparelhos soma os
+  dois — cada aparelho guarda a própria parte dos contadores
+  (`porAparelho`) e a mesclagem soma as partes, então reimportar o mesmo
+  arquivo não conta duas vezes (§6).
 
 ## 5d. Home (Hoje), navegação e hubs do método
 
@@ -759,13 +849,13 @@ pré-escolhidos" abaixo). Ferramenta nova: decidir em
   lateral do desktop (que também lista os atalhos de cada seção: Aprender ›
   Lições, Palavras novas, Kanji novos, Alfabetos; Praticar › Ler, Ouvir,
   Falar, Escrever; Revisar › Revisão do dia, Pontos fracos, Testar lições,
-  Meus cards). Configurações fica na engrenagem (topo no celular, rodapé da
+  Gramática, Meus cards). Configurações fica na engrenagem (topo no celular, rodapé da
   lateral no desktop).
   - A **seção ativa vem da rota** (`secaoDaRota`), não do clique: dentro de
     uma ferramenta, o menu mostra onde ela mora no método (ex.: `/leitura/…`
     → Praticar; `/flashcards?tab=vocabulario` → Aprender; `/flashcards` →
-    Revisar; `/licoes/quiz` → Revisar; Kakitori e Diga em japonês →
-    Praticar). Ferramentas que aparecem em mais de uma seção ficam marcadas
+    Revisar; `/licoes/quiz` e `/licoes/gramatica` → Revisar; Kakitori,
+    Diga em japonês e Diário guiado → Praticar). Ferramentas que aparecem em mais de uma seção ficam marcadas
     na principal.
   - Item ativo com pílula e texto **na cor da seção** (Hoje índigo, Aprender
     `fuji`, Praticar `matcha`, Revisar `sora`, Progresso `kin`); Revisar
@@ -798,38 +888,76 @@ pré-escolhidos" abaixo). Ferramenta nova: decidir em
   (`secaoDaRota` olha a query também).
 - **Próximo passo** (topo dos hubs Aprender, Praticar e de cada
   habilidade; `src/features/metodo/proximoPasso.ts`): uma ação
-  recomendada, calculada só com dados já gravados (nada novo é
-  registrado). Em ordem de prioridade, a primeira regra que se aplica:
+  recomendada, calculada só com dados já gravados (o passo em si não grava
+  nada). Em ordem de prioridade, a primeira regra que se aplica:
 
   | Hub | Regras |
   |---|---|
-  | Aprender | N palavras novas (até 10) do mapa, citando a próxima mais útil → kanji novos (se o vocabulário sem kanji acabou) → revisitar uma lição |
+  | Aprender | sem abrir/concluir lição há mais de 3 dias → a próxima lição da trilha ("Estudar"/"Continuar a lição …") → N palavras novas (até 10) do mapa, citando a próxima mais útil → kanji novos (se o vocabulário sem kanji acabou) → a próxima lição da trilha → revisitar uma lição (trilha completa) |
   | Ler | texto de `recomendarTexto` (maior "% conhecido", −50 se lido nos últimos 3 dias, −5 por releitura) |
   | Ouvir | escutar sem ler o melhor texto **já lido** (`?modo=ouvir`) → sem texto lido, ditado (Kakitori) |
-  | Falar | cards vencidos na direção "dizer em japonês" (→ Revisão do dia) → shadowing de um texto já lido → Diga em japonês |
+  | Falar | cards vencidos na direção "dizer em japonês" (→ Revisão do dia) → lição com mais frases erradas no "Diga em japonês" nos últimos 14 dias (`?licao=`) → shadowing de um texto já lido → Diga em japonês |
   | Escrever | família de hiragana com pior nota de desenho (< 85%) → kanji aprendidos ainda não desenhados (caligrafia) → começar a desenhar o hiragana (se nunca desenhou) → ditado à mão |
   | Praticar | sem leitura concluída nos últimos 2 dias → o passo de Ler; senão, o de Ouvir (input primeiro) |
 
   O Plano do dia da Home usa os passos de Aprender e Praticar daqui.
 - **Lições** (`/licoes`) não tem mais a seção "Praticar": no lugar, uma
   linha com o próximo passo do ciclo (Praticar falando, Praticar ouvindo,
-  Testar o que ficou). Quiz, Kakitori e Diga em japonês moram nos hubs.
+  Testar o que ficou). Quiz, gramática em contexto, Kakitori, Diga em
+  japonês e o diário moram nos hubs.
 - **Hubs** (uma página por seção, mesmo esqueleto: cabeçalho com o porquê +
   cartões de atividade com "pra que serve"): `/aprender`, `/praticar` (as 4
   habilidades), `/praticar/:habilidade` (ler, ouvir, falar, escrever),
   `/revisar` (atividades com contagem de vencidos) e `/progresso`
-  (contadores de vocabulário/escrita + as estatísticas de revisão). As
+  (contadores de vocabulário/escrita, as estatísticas de revisão e as
+  conquistas, §5e). O hub Aprender também mostra a trilha de lições. As
   atividades apontam pras telas de sempre — as rotas antigas continuam
   valendo. Uma mesma ferramenta aparece em mais de um hub quando serve a
   mais de uma habilidade (Kakitori em Ouvir e Escrever; textos de leitura em
   Ler, Ouvir e Falar).
+- **Seu nível nesta habilidade** (fim de cada habilidade;
+  `src/features/metodo/nivel.ts`), só com dados gravados:
+
+  | Habilidade | Indicadores |
+  |---|---|
+  | Ler | textos lidos · palavras compreendidas · kana reconhecidos |
+  | Ouvir | acerto no ditado (média dos últimos 30 itens) · entendimento só de ouvido (média das escutas avaliadas) · textos prontos para escutar (já lidos) |
+  | Falar | palavras que sei dizer · acerto no "Diga em japonês" (últimas 30 frases) · textos em shadowing (até o fim) · frases salvas como card |
+  | Escrever | kana desenhados · nota média do desenho · entradas no diário · kanji desenhados |
+
+  Ouvir e Falar são autoavaliados (sem reconhecimento de voz) — a tela diz
+  isso numa linha abaixo dos indicadores.
+
+## 5e. Conquistas
+
+`src/features/conquistas/`, tabela `achievements` (schemaVersion 7, chave =
+id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
+- Cada conquista (`CONQUISTAS`) é um número calculado dos dados já
+  gravados (`carregarNumeros`) com uma meta: palavras compreendidas
+  (50/200/500), sei dizer (25/100), deck N5 inteiro reconhecido, todo o
+  hiragana / todo o katakana acertado pelo menos uma vez, kanji
+  aprendidos (10/50/todos do N5), textos lidos (1/10/todos), sequência de
+  dias (7/30/100), revisões (100/1000), lições concluídas (1/todas),
+  acertos em quiz/ditado/gramática/Diga (100), escutas avaliadas (10),
+  shadowings (10), entradas no diário (7).
+- **Quando confere** (`avaliarConquistas`, montado no Layout como
+  `AvisoConquista`): ao abrir o app, a cada troca de tela e quando a
+  atividade do dia muda — 1,5 s depois da última mudança, pra conferir uma
+  vez só no fim de uma sequência de respostas. O que bateu a meta e ainda
+  não estava gravado ganha `unlockedAt` = agora e aparece num aviso no
+  rodapé ("Conquista desbloqueada: … e mais N", some em 7 s, "Ver" leva ao
+  Progresso). Desbloqueada, fica — mesmo que o número caia depois (ex.:
+  sequência quebrada).
+- **Progresso**: seção "Conquistas" (N de M), por grupo; desbloqueadas com
+  a data, as outras apagadas com a barra até a meta.
 
 ## 6. Dados e sincronização
 
 - **Sem backend.** Cada dispositivo guarda seus próprios dados no IndexedDB.
 - **Exportar**: gera um JSON versionado com `cards`, `reviews`, `kanaProgress`,
-  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta` e
-  `deleted` (lápides). Serve de sincronização e de backup. A tabela `local`
+  `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta`,
+  `deleted` (lápides), `exerciseResults`, `lessonProgress`, `achievements`
+  e `journal` (as quatro últimas desde a schemaVersion 7). Serve de sincronização e de backup. A tabela `local`
   (id do aparelho, estado da sincronização) **nunca** entra no backup.
 - **Importar**, dois modos:
   - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e
@@ -839,7 +967,7 @@ pré-escolhidos" abaixo). Ferramenta nova: decidir em
     (mesclar o mesmo arquivo de novo não muda nada) e **não depende da
     ordem** (A em B = B em A), pra dois aparelhos convergirem. Empate de
     data mantém o local.
-- **Regras da mesclagem por tabela** (schemaVersion 6):
+- **Regras da mesclagem por tabela** (schemaVersion 7):
   - `cards`: três grupos de campos, cada um com seu carimbo — conteúdo
     (`contentUpdatedAt`: frente, verso, leitura, categoria, tags, exemplo,
     origem, nota), reconhecimento (`srsUpdatedAt`: estado FSRS) e produção
@@ -869,8 +997,16 @@ pré-escolhidos" abaixo). Ferramenta nova: decidir em
     `wordKnowledge.status` pelo `updatedAt` mais recente.
   - `meta`: por chave, vence o `updatedAt` mais recente (ausente = 0). Gravar
     sempre via `setMeta` (`src/db/local.ts`).
+  - `exerciseResults`: histórico imutável, sem exclusão — só entra
+    (idempotente pelo `id`).
+  - `lessonProgress`: `viewedAt` pelo maior; `completedAt` (concluída ou
+    não) pelo `updatedAt` mais recente — desmarcar depois de concluir vence.
+  - `achievements`: fica a data de desbloqueio mais antiga.
+  - `journal`: a entrada editada por último (`updatedAt`); apagar deixa
+    lápide.
 - **Exclusões (lápides)**: apagar um card, desfazer uma nota (apaga o
-  review) e desmarcar "Já sei" (`wordKnowledge`) gravam uma lápide em
+  review), desmarcar "Já sei" (`wordKnowledge`) e apagar uma entrada do
+  diário (`journal`) gravam uma lápide em
   `deleted` (`{ table, key, deletedAt }`) via `apagar()` em
   `src/db/local.ts` — nunca `.delete()` direto nessas tabelas. Na mesclagem,
   a exclusão vence se `deletedAt` for igual ou mais recente que a última

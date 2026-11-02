@@ -43,7 +43,7 @@ function SeuNivel({ id }: { id: HabilidadeId }) {
   return (
     <section className="space-y-3">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-sage">Seu nível nesta habilidade</h2>
-      <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+      <div className={`grid grid-cols-2 gap-3 sm:gap-5 ${nivel.indicadores.length > 3 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
         {nivel.indicadores.map((ind) => (
           <StatCard
             key={ind.label}

@@ -43,60 +43,26 @@ Ordenadas por impacto. Todas viáveis offline.
 ### 2.1 Simulados estilo JLPT
 **O quê:** provas cronometradas por seção (vocabulário, gramática, leitura,
 listening), sorteadas do conteúdo do app (deck N5, `quiz` e `diga` das
-lições, textos de leitura com áudio por `SpeechSynthesis`).
+lições, gramática em contexto, textos de leitura com áudio por
+`SpeechSynthesis`).
 **Por quê:** dá um objetivo mensurável e junta leitura e escuta num formato
-só. Com 40 textos, ~700 palavras e 12 lições já há conteúdo para sortear.
+só. Com 60 textos, ~700 palavras, 12 lições e o banco de gramática já há
+conteúdo para sortear.
 **Onde entra:** Revisar (ao lado de "Testar lições") e um indicador no
-Progresso. Guardar o resultado (tabela nova, mesclável) também alimentaria
-Pontos fracos.
+Progresso. O resultado pode ir para `exerciseResults` (novo `kind`), o que
+já o leva a Pontos fracos e às conquistas.
 **Esforço:** médio.
 
-### 2.2 Histórico do Quiz e do "Diga em japonês"
-**O quê:** guardar o resultado de cada pergunta/frase (hoje nada é salvo).
-**Por quê:** é o dado que falta para três coisas: Pontos fracos incluírem
-gramática e frases, o "Próximo passo" de *Falar* apontar a lição com mais
-erros, e o nível de *Falar* (2.3).
-**Esforço:** baixo-médio (tabela nova + mesclagem + uso nos lugares acima).
-
-### 2.3 Nível por habilidade em Ouvir e Falar
-**O quê:** medir essas habilidades como Ler e Escrever já são medidas
-(`src/features/metodo/nivel.ts`) — hoje o "Seu nível" delas mostra só o
-material disponível.
-**Como:** registrar ditados (Kakitori), "escutar primeiro" concluídos,
-shadowing e o histórico de 2.2.
-**Esforço:** baixo-médio, depende de 2.2 para Falar.
-
-### 2.4 Progresso por lição
-**O quê:** marcar lição estudada/concluída ("lição 3 de 12").
-**Por quê:** daria uma trilha em *Aprender* e um critério melhor para o
-passo "Aprender" do Plano do dia (hoje ele cai em "revisitar uma lição"
-sem saber quais já foram vistas).
-**Esforço:** baixo.
-
-### 2.5 Conquistas locais
-**O quê:** marcos como "100 kanji", "N5 completo", "30 dias seguidos",
-derivados dos dados que já existem; só uma tabela pequena de conquistas
-desbloqueadas (com data). Sem ranking nem comparação — app de um usuário.
-**Por quê:** fecha a gamificação alinhada ao SRS (sequência, meta diária e
-heatmap já existem).
-**Esforço:** baixo.
-
-### 2.6 Novos exercícios de gramática e escrita
-- **Gramática em contexto:** sortear de um banco maior de frases (não só os
-  exemplos fixos da lição) para reconhecer o padrão gramatical, reduzindo o
-  risco de decorar a frase em vez da regra.
-- **Diário guiado:** prompts curtos ("escreva 3 frases com こそあど") com
-  autoavaliação por checklist. Correção de texto livre fica fora (§4).
-
-### 2.7 Conteúdo
+### 2.2 Conteúdo
 Extensões de conteúdo, sem mudança de arquitetura:
 - **Decks N4/N3** no padrão de `src/data/seed/n5.ts` + `n5.json` (e a
   "escada" de nível em Aprender › Palavras novas).
 - **Kanji N4+** em `src/data/kanji.ts`, com os traços regenerados por
   `npm run build:kanji-strokes`.
-- **Mais textos de leitura** (hoje 20 no Nível 1, só kana, e 20 no Nível 2,
-  kanji com furigana) e um terceiro nível; textos ainda mais curtos para
-  quem acabou de aprender o kana.
+- **Mais textos de leitura**, principalmente nos níveis 0 e 3 (hoje 10
+  cada; os níveis 1 e 2 têm 20).
+- **Mais frases na gramática em contexto** e propostas no diário para as
+  lições novas.
 - **Lições novas** e expansão das atuais pelo `docs/padrao-licoes.md`.
 - **Referência de kanji em mais lições** (hoje em família, pronomes,
   sufixos, seikatsu e kanji), só onde o kanji é comum no uso real (ex.:
@@ -119,6 +85,12 @@ Extensões de conteúdo, sem mudança de arquitetura:
 | Reorganização pelo método (Hoje · Aprender · Praticar · Revisar · Progresso, Plano do dia, Próximo passo) | v2.6.0, out/2026 | `regras-negocio.md` §5d |
 | Manual do usuário (PDF, também dentro do app) | v2.6.x, out/2026 | `docs/manual/README.md` |
 | Sincronização automática pelo Google Drive + mesclagem com lápides e contadores por aparelho; política de privacidade | v2.7.x, nov/2026 | `regras-negocio.md` §6, `docs/proposta-sincronizacao.md` |
+| Histórico dos exercícios (Quiz, Diga, ditado, gramática, escuta, shadowing) alimentando Pontos fracos e o "Próximo passo" de Falar | v2.8.0, nov/2026 | `regras-negocio.md` §5, §5b |
+| Nível por habilidade em Ouvir e Falar (escuta autoavaliada, ditado, Diga, shadowing) | v2.8.0, nov/2026 | `regras-negocio.md` §5d |
+| Progresso por lição e trilha (concluir lição, próxima lição no passo "Aprender") | v2.8.0, nov/2026 | `regras-negocio.md` §5 |
+| Conquistas locais | v2.8.0, nov/2026 | `regras-negocio.md` §5e |
+| Gramática em contexto (frases novas com lacuna) e diário guiado (escrita com checklist) | v2.8.0, nov/2026 | `regras-negocio.md` §5 |
+| Leitura: nível "Primeiros passos" (curtíssimos, só kana) e nível 3 (textos longos, N4) — 60 textos | v2.8.0, nov/2026 | `regras-negocio.md` §4 |
 
 ---
 

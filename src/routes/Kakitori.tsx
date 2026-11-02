@@ -8,6 +8,7 @@ import { isSpeechSupported } from '../features/audio/speech';
 import KakitoriSession from '../features/kakitori/KakitoriSession';
 import KakitoriResultado from '../features/kakitori/KakitoriResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
+import { registrarResultados } from '../features/exercicios/historico';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -49,6 +50,9 @@ export default function Kakitori() {
 
   function finalizar(r: RegistroKakitori[]) {
     void registrarAtividade('praticas', r.length);
+    void registrarResultados(
+      r.map(({ item, acertou }) => ({ kind: 'kakitori', itemId: item.id, lessonId: item.licaoId, score: acertou ? 1 : 0 }))
+    );
     setRegistros(r);
     setItens(null);
   }

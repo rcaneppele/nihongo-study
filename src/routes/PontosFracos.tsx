@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { BookOpenText, Copy, Dumbbell, PartyPopper, Target } from 'lucide-react';
+import { BookOpen, BookOpenText, Copy, Dumbbell, PartyPopper, Target } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { TILE, type Cor } from '../lib/cores';
 import { HERO_BOTAO, HERO_TEXTO } from '../lib/hero';
@@ -16,7 +16,7 @@ import {
   type PontoFraco,
 } from '../features/pontos-fracos/pontosFracos';
 
-const ORIGENS: Origem[] = ['cards', 'kana', 'kanji', 'leitura'];
+const ORIGENS: Origem[] = ['cards', 'kana', 'kanji', 'leitura', 'licoes'];
 
 // Cada origem na cor e com o ícone do seu módulo (mesmos da navegação).
 const ORIGEM_ESTILO: Record<Origem, { cor: Cor; icon: ReactNode }> = {
@@ -24,6 +24,7 @@ const ORIGEM_ESTILO: Record<Origem, { cor: Cor; icon: ReactNode }> = {
   kana: { cor: 'kin', icon: <span className="font-jp text-sm">あ</span> },
   kanji: { cor: 'hanko', icon: <span className="font-jp text-sm">字</span> },
   leitura: { cor: 'matcha', icon: <BookOpenText className="h-4 w-4" /> },
+  licoes: { cor: 'fuji', icon: <BookOpen className="h-4 w-4" /> },
 };
 const TREINO_MISTO = 20;
 const VISIVEIS_POR_ORIGEM = 8;
@@ -73,8 +74,8 @@ export default function PontosFracos() {
           <div>
             <p className="font-medium">Nenhum ponto fraco por enquanto</p>
             <p className="mx-auto max-w-md text-sm text-sage">
-              Eles aparecem aqui quando você esquece um flash card ou kanji, erra kana no treino ou consulta palavras
-              na leitura.
+              Eles aparecem aqui quando você esquece um flash card ou kanji, erra kana no treino, consulta palavras
+              na leitura ou erra frases e perguntas das lições (quiz, ditado, gramática, Diga em japonês).
             </p>
           </div>
         </div>

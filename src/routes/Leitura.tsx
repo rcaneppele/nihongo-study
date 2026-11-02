@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { LEITURA_TEXTOS } from '../data/leitura/textos';
+import { LEITURA_TEXTOS, NIVEIS_LEITURA } from '../data/leitura/textos';
 import type { ReadingText } from '../data/leitura/types';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type ReadingProgress } from '../db/schema';
@@ -34,10 +34,6 @@ const MODOS: Record<string, { titulo: string; desc: string; icone: Icone; cor: C
   },
 };
 
-const NIVEIS = [
-  { level: 1 as const, label: 'Nível 1', desc: 'Bem iniciante — só hiragana/katakana' },
-  { level: 2 as const, label: 'Nível 2', desc: 'Kanji comuns, com furigana' },
-];
 
 export default function Leitura() {
   const known = useKnownWords();
@@ -78,7 +74,7 @@ export default function Leitura() {
         </div>
       )}
 
-      {NIVEIS.map(({ level, label, desc }) => {
+      {NIVEIS_LEITURA.map(({ level, label, desc }) => {
         const textos = LEITURA_TEXTOS.filter((t) => t.level === level);
         if (textos.length === 0) return null;
         return (

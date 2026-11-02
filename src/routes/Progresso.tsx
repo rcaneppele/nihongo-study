@@ -7,6 +7,7 @@ import PageHeader from '../components/PageHeader';
 import StatCard from '../components/StatCard';
 import ProgressStats from '../features/flashcards/ProgressStats';
 import { useKnownWords } from '../features/leitura/knowledge';
+import ConquistasLista from '../features/conquistas/ConquistasLista';
 
 /**
  * "Progresso" (etapa de acompanhar do ciclo): vocabulário passivo/ativo,
@@ -64,6 +65,8 @@ export default function Progresso() {
         <h2 className="text-sm font-semibold uppercase tracking-wider text-sage">Revisão e vocabulário</h2>
         <ProgressStats />
       </section>
+
+      <ConquistasLista />
     </div>
   );
 }

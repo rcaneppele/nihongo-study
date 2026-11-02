@@ -68,9 +68,25 @@ export interface PerguntaParticula {
   pt: string;
 }
 
+/** Lacuna com alternativas e explicação — usada pela "Gramática em contexto" (src/data/gramatica/). */
+export interface PerguntaCompletar {
+  id: string;
+  tipo: 'completar';
+  licaoId: string;
+  /** Ponto gramatical, mostrado acima da frase. */
+  ponto: string;
+  antes: Token[];
+  depois: Token[];
+  alternativas: string[];
+  correta: string;
+  pt: string;
+  explicacao: string;
+}
+
 export type PerguntaGerada =
   | PerguntaReordenar
   | PerguntaParticula
+  | PerguntaCompletar
   | (PerguntaSignificado & { licaoId: string })
   | (PerguntaVerdadeiroFalso & { licaoId: string });
 

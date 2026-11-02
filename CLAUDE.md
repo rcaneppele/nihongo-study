@@ -35,8 +35,9 @@ escrever) · Revisar · Progresso —, não por módulo (ver
 
 - Vite + React + TypeScript + Tailwind + Dexie + vite-plugin-pwa.
 - `npm run dev` (desenvolvimento), `npm run build` (produção), `npm run lint`,
-  `npm test` (Vitest — a mesclagem de backup em `src/db/` e o parser de
-  CSV da importação de cards).
+  `npm test` (Vitest — a mesclagem de backup em `src/db/`, o parser de CSV
+  da importação de cards e a consistência dos dados de leitura e de
+  gramática em contexto).
 
 ## Versionamento
 
@@ -67,14 +68,16 @@ toda mudança pede bump; julgue pelo impacto:
 
 - `src/db/schema.ts` — tabelas Dexie: `cards`, `reviews`, `kanaProgress`,
   `kanjiProgress`, `wordKnowledge`, `readingProgress`, `activity`, `meta`,
-  `deleted` (lápides) e `local` (só do aparelho, fora do backup).
+  `deleted` (lápides), `exerciseResults` (histórico dos exercícios),
+  `lessonProgress`, `achievements` (conquistas), `journal` (diário) e
+  `local` (só do aparelho, fora do backup).
 - `src/db/backup.ts` — exportar/importar; modos `replace` e `merge`;
   migrações incrementais por versão em `migrateBackup`.
 - `src/db/merge.ts` — regras de mesclagem por tabela (funções puras,
   testadas em `merge.test.ts`; `npm test`); `src/db/contadores.ts` —
   contadores por aparelho (`porAparelho`); `src/db/local.ts` — id do
   aparelho, `setMeta()` (toda gravação em `db.meta`) e `apagar()` (toda
-  exclusão de card/review/`wordKnowledge`, com lápide). Ver
+  exclusão de card/review/`wordKnowledge`/`journal`, com lápide). Ver
   `regras-negocio.md` §6.
 - `src/features/sync/` — sincronização automática com o Google Drive:
   `googleAuth.ts` (login por redirecionamento, token de ~1h; Client ID em
@@ -138,10 +141,12 @@ toda mudança pede bump; julgue pelo impacto:
   `FuriganaWord`, nas tabelas de referência das lições.
 - `src/data/leitura/types.ts` — tipos da leitura extensiva (`ReadingWord`,
   `ReadingLine`, `ReadingText`); `src/data/leitura/textos.ts`
-  (`LEITURA_TEXTOS`) — textos originais por nível (1: só kana; 2: kanji com
-  furigana), pré-segmentados palavra a palavra (leitura+significado por
-  palavra, `lemma` quando a forma não é a de dicionário), sem tokenizador
-  em runtime.
+  (`LEITURA_TEXTOS`, `NIVEIS_LEITURA`) — textos originais por nível (0:
+  primeiros passos, em `textos-nivel0.ts`; 1: só kana; 2: kanji com
+  furigana; 3: textos longos/N4, em `textos-nivel3.ts`), pré-segmentados
+  palavra a palavra (leitura+significado por palavra, `lemma` quando a
+  forma não é a de dicionário), sem tokenizador em runtime;
+  `textos.test.ts` confere furigana e lemas.
 - `src/routes/Leitura.tsx` / `LeituraTexto.tsx` — listagem por nível e tela
   de leitura (`/leitura`, `/leitura/:id`): toggle de furigana, cartão de
   palavra selecionada, `AudioButton` por linha.
@@ -178,7 +183,22 @@ toda mudança pede bump; julgue pelo impacto:
   das lições ("Testar lições", `/licoes/quiz`), gerado do `quiz` de cada
   lição; `src/data/kakitori/` + `src/features/kakitori/` +
   `src/routes/Kakitori.tsx` — ditado (`/licoes/kakitori`), dos grupos
-  `kakitori` das lições. Nenhum dos dois guarda histórico.
+  `kakitori` das lições.
+- `src/data/gramatica/` + `src/routes/Gramatica.tsx` — "Gramática em
+  contexto" (`/licoes/gramatica`): frases novas com lacuna por ponto
+  gramatical, na sessão do Quiz (tipo de pergunta `completar`).
+- `src/data/diario/prompts.ts` + `src/features/diario/` +
+  `src/routes/Diario.tsx` — diário guiado (`/licoes/diario`): propostas de
+  escrita por lição com checklist de autoavaliação.
+- `src/features/exercicios/` — histórico dos exercícios (`historico.ts`:
+  `registrarResultados`, desempenho por item, acerto recente) e o conteúdo
+  de cada item a partir do id (`conteudo.ts`). Quiz, Diga, ditado,
+  gramática, escuta e shadowing gravam aqui.
+- `src/features/licoes/` — progresso por lição (`progresso.ts`: aberta,
+  concluída, trilha) e `TrilhaLicoes.tsx` (Lições e hub Aprender).
+- `src/features/conquistas/` — conquistas (`conquistas.ts`: metas sobre os
+  dados gravados), aviso de desbloqueio no Layout (`AvisoConquista.tsx`) e
+  a lista do Progresso (`ConquistasLista.tsx`).
 - `src/features/atividade/atividade.ts` — atividade por dia
   (`registrarAtividade`, chamado por cada módulo), meta diária e sequência
   de dias exibidas na Home e no Progresso.

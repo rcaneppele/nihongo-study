@@ -6,6 +6,7 @@ import { contarDisponiveis, gerarDiga, licoesComFrases, type ItemDiga, type Regi
 import DigaSession from '../features/diga/DigaSession';
 import DigaResultado from '../features/diga/DigaResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
+import { registrarResultados } from '../features/exercicios/historico';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -50,6 +51,9 @@ export default function Diga() {
           itens={itens}
           onFinalizar={(r) => {
             void registrarAtividade('praticas', r.length);
+            void registrarResultados(
+              r.map(({ item, acertou }) => ({ kind: 'diga', itemId: item.id, lessonId: item.licaoId, score: acertou ? 1 : 0 }))
+            );
             setRegistros(r);
             setItens(null);
           }}

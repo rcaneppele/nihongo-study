@@ -12,6 +12,8 @@ import Licao from './routes/Licao';
 import Quiz from './routes/Quiz';
 import Kakitori from './routes/Kakitori';
 import Diga from './routes/Diga';
+import Gramatica from './routes/Gramatica';
+import Diario from './routes/Diario';
 import PontosFracos from './routes/PontosFracos';
 import Aprender from './routes/Aprender';
 import PalavrasNovas from './routes/PalavrasNovas';
@@ -36,6 +38,8 @@ export default function App() {
         <Route path="/licoes/quiz" element={<Quiz />} />
         <Route path="/licoes/kakitori" element={<Kakitori />} />
         <Route path="/licoes/diga" element={<Diga />} />
+        <Route path="/licoes/gramatica" element={<Gramatica />} />
+        <Route path="/licoes/diario" element={<Diario />} />
         <Route path="/licoes/:id" element={<Licao />} />
         <Route path="/pontos-fracos" element={<PontosFracos />} />
         <Route path="/aprender" element={<Aprender />} />

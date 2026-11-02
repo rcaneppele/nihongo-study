@@ -6,6 +6,7 @@ import { SECOES, secaoDaRota, type Secao } from '../features/metodo/estrutura';
 import { usePendencias } from '../features/metodo/pendencias';
 import { aoMudarDeTela, useEstadoSync } from '../features/sync/motor';
 import { PRIVACIDADE_URL } from '../lib/privacidade';
+import AvisoConquista from '../features/conquistas/AvisoConquista';
 
 // Navegação pelo método (Hoje · Aprender · Praticar · Revisar · Progresso),
 // definida em src/features/metodo/estrutura.ts. A seção ativa vem da rota
@@ -44,6 +45,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       </div>
 
       <BottomNav pendencias={pendencias} ativa={ativa} />
+      <AvisoConquista />
     </div>
   );
 }

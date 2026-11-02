@@ -1,18 +1,36 @@
-import type { ReadingText } from './types';
+import type { NivelLeitura, ReadingText } from './types';
+import { TEXTOS_NIVEL_0 } from './textos-nivel0';
+import { TEXTOS_NIVEL_3 } from './textos-nivel3';
 
 /**
  * Textos de leitura extensiva — conteúdo original, nunca copiado/traduzido
  * de terceiros (Tadoku, Satori Reader ou qualquer outra fonte), mesmo
  * princípio de originalidade das lições (ver docs/padrao-licoes.md).
  *
+ * Nível 0 (textos-nivel0.ts): primeiros passos — 4 ou 5 frases curtíssimas,
+ * só kana, para quem acabou de aprender o alfabeto.
  * Nível 1: bem iniciante, só hiragana/katakana (sem kanji) — mesma regra de
  * "sem kanji em frase corrida" que as lições seguem, aqui estendida ao
  * próprio texto (não só aos exemplos).
  * Nível 2: kanji comuns já com furigana (`reading`) em cada palavra que o
  * contém — o objetivo aqui é treinar a leitura de kanji em contexto, não
  * evitá-lo.
+ * Nível 3 (textos-nivel3.ts): textos mais longos, mais kanji (com furigana)
+ * e gramática do N4 (〜ながら, 〜たり, 〜てくれる…).
  */
+export const NIVEIS_LEITURA: { level: NivelLeitura; label: string; desc: string }[] = [
+  { level: 0, label: 'Primeiros passos', desc: 'Textos curtíssimos, só kana — para quem acabou de aprender o alfabeto' },
+  { level: 1, label: 'Nível 1', desc: 'Bem iniciante — só hiragana/katakana' },
+  { level: 2, label: 'Nível 2', desc: 'Kanji comuns, com furigana' },
+  { level: 3, label: 'Nível 3', desc: 'Textos mais longos, mais kanji (com furigana) e gramática do N4' },
+];
+
+export function rotuloNivel(level: NivelLeitura): string {
+  return NIVEIS_LEITURA.find((n) => n.level === level)?.label ?? `Nível ${level}`;
+}
+
 export const LEITURA_TEXTOS: ReadingText[] = [
+  ...TEXTOS_NIVEL_0,
   // ---------------------------------------------------------------------
   // Nível 1
   // ---------------------------------------------------------------------
@@ -4233,6 +4251,7 @@ export const LEITURA_TEXTOS: ReadingText[] = [
       },
     ],
   },
+  ...TEXTOS_NIVEL_3,
 ];
 
 export function getTextoById(id: string): ReadingText | undefined {

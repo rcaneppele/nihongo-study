@@ -1,6 +1,17 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { BookOpen, BookOpenText, Ear, Headphones, MessageCircle, Mic, PenLine, Sparkles } from 'lucide-react';
-import { db, type Card, type KanaProgress, type KanjiProgress, type ReadingProgress, type WordKnowledge } from '../../db/schema';
+import {
+  db,
+  type Card,
+  type ExerciseResult,
+  type KanaProgress,
+  type KanjiProgress,
+  type LessonProgress,
+  type ReadingProgress,
+  type WordKnowledge,
+} from '../../db/schema';
+import { LICOES } from '../../licoes';
+import { trilhaDeLicoes } from '../licoes/progresso';
 import { KANJI_N5 } from '../../data/kanji';
 import { familyPreview } from '../../data/kana';
 import { buildReviewQueue } from '../flashcards/stages';
@@ -14,8 +25,7 @@ import type { HabilidadeId, Icone } from './estrutura';
 
 /**
  * "Próximo passo" de cada hub do método: uma ação recomendada, calculada só
- * com dados que o app já guarda (nenhum registro novo) — a mesma ideia da
- * "Sugestão para agora" da Home, aplicada a cada objetivo. Regras em
+ * com dados que o app já guarda (nenhum registro novo). Regras em
  * regras-negocio.md §5d.
  */
 export interface Passo {
@@ -34,12 +44,41 @@ interface Dados {
   leituras: ReadingProgress[];
   kana: KanaProgress[];
   kanji: KanjiProgress[];
+  licoes: LessonProgress[];
+  /** Resultados do "Diga em japonês". */
+  diga: ExerciseResult[];
 }
 
 const DIA_MS = 24 * 60 * 60 * 1000;
 const LOTE_PALAVRAS = 10;
+/** Sem estudar lição há mais que isso, a próxima lição da trilha passa na frente das palavras. */
+const INTERVALO_LICAO_MS = 3 * DIA_MS;
+/** Janela dos erros do "Diga em japonês" que o próximo passo de Falar considera. */
+const JANELA_ERROS_DIGA_MS = 14 * DIA_MS;
 
-function passoAprender({ cards, knowledge, kanji }: Dados): Passo {
+function passoLicao(licoes: LessonProgress[], porqueExtra: string): Passo | null {
+  const progresso = new Map(licoes.map((l) => [l.lessonId, l]));
+  const { concluidas, total, proxima } = trilhaDeLicoes(progresso);
+  if (!proxima) return null;
+  const continuar = progresso.has(proxima.meta.id);
+  return {
+    titulo: `${continuar ? 'Continuar' : 'Estudar'} a lição "${proxima.meta.title}"`,
+    porque: `É a próxima da sua trilha (${concluidas} de ${total} concluídas). ${porqueExtra}`,
+    to: `/licoes/${proxima.meta.id}`,
+    icone: BookOpen,
+    cor: 'fuji',
+  };
+}
+
+function passoAprender({ cards, knowledge, kanji, licoes }: Dados): Passo {
+  const { ultimoEstudo } = trilhaDeLicoes(new Map(licoes.map((l) => [l.lessonId, l])));
+  if (Date.now() - ultimoEstudo > INTERVALO_LICAO_MS) {
+    const licao = passoLicao(
+      licoes,
+      'As lições explicam a gramática que as palavras e os textos usam — vale alternar com as palavras novas.'
+    );
+    if (licao) return licao;
+  }
   const novas = buildVocabulary(cards, knowledge)
     .filter((w) => w.state === 'nova')
     .sort(byUsefulness);
@@ -66,6 +105,8 @@ function passoAprender({ cards, knowledge, kanji }: Dados): Passo {
       cor: 'hanko',
     };
   }
+  const licao = passoLicao(licoes, 'Você já viu todo o vocabulário e os kanji do N5 — siga com a gramática.');
+  if (licao) return licao;
   return {
     titulo: 'Revisitar uma lição',
     porque: 'Você já viu todo o vocabulário e os kanji do N5. Releia as lições para aprofundar a gramática.',
@@ -107,7 +148,20 @@ function passoOuvir({ leituras }: Dados, known: KnownWords): Passo {
   };
 }
 
-function passoFalar({ cards, leituras }: Dados, known: KnownWords): Passo {
+/** Lição com mais frases erradas no "Diga em japonês" nos últimos dias. */
+function licaoComMaisErros(diga: ExerciseResult[]): { id: string; erros: number } | null {
+  const desde = Date.now() - JANELA_ERROS_DIGA_MS;
+  const erros = new Map<string, number>();
+  for (const r of diga) {
+    if (r.doneAt < desde || r.score === undefined || r.score >= 1 || !r.lessonId) continue;
+    erros.set(r.lessonId, (erros.get(r.lessonId) ?? 0) + 1);
+  }
+  let pior: { id: string; erros: number } | null = null;
+  for (const [id, n] of erros) if (!pior || n > pior.erros) pior = { id, erros: n };
+  return pior;
+}
+
+function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords): Passo {
   const producao = buildReviewQueue(cards).filter((i) => i.direction === 'production').length;
   if (producao > 0) {
     return {
@@ -116,6 +170,17 @@ function passoFalar({ cards, leituras }: Dados, known: KnownWords): Passo {
       to: '/revisar',
       icone: MessageCircle,
       cor: 'sakura',
+    };
+  }
+  const pior = licaoComMaisErros(diga);
+  const licao = pior && LICOES.find((l) => l.meta.id === pior.id);
+  if (pior && licao) {
+    return {
+      titulo: `Diga em japonês: ${licao.meta.title}`,
+      porque: `Você errou ${pior.erros} frase(s) dessa lição nos últimos dias — treine de novo enquanto está fresco.`,
+      to: `/licoes/diga?licao=${licao.meta.id}`,
+      icone: MessageCircle,
+      cor: 'fuji',
     };
   }
   const t = recomendarTexto(known, leituras, { soLidos: true });
@@ -209,14 +274,16 @@ export function calcularPasso(alvo: AlvoPasso, dados: Dados, known: KnownWords):
 export function useProximoPasso(alvo: AlvoPasso): Passo | undefined {
   const known = useKnownWords();
   const dados = useLiveQuery(async () => {
-    const [cards, knowledge, leituras, kana, kanji] = await Promise.all([
+    const [cards, knowledge, leituras, kana, kanji, licoes, diga] = await Promise.all([
       db.cards.toArray(),
       db.wordKnowledge.toArray(),
       db.readingProgress.toArray(),
       db.kanaProgress.toArray(),
       db.kanjiProgress.toArray(),
+      db.lessonProgress.toArray(),
+      db.exerciseResults.where('kind').equals('diga').toArray(),
     ]);
-    return { cards, knowledge, leituras, kana, kanji };
+    return { cards, knowledge, leituras, kana, kanji, licoes, diga };
   }, []);
   if (!dados || !known) return undefined;
   return calcularPasso(alvo, dados, known);

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { getTextoById } from '../data/leitura/textos';
+import { getTextoById, rotuloNivel } from '../data/leitura/textos';
 import type { ReadingLine, ReadingText, ReadingWord } from '../data/leitura/types';
 import Furigana from '../components/Furigana';
 import AudioButton from '../components/AudioButton';
@@ -8,7 +8,16 @@ import SaveWordForm from '../features/flashcards/SaveWordForm';
 import ReadAloudBar from '../features/leitura/ReadAloudBar';
 import { useReadAloud, type ReadAloudMode } from '../features/leitura/useReadAloud';
 import { finishReading, knownPercent, textWords, useKnownWords, wordKey } from '../features/leitura/knowledge';
-import { CheckCircle2, ChevronLeft, X } from 'lucide-react';
+import { registrarResultados } from '../features/exercicios/historico';
+import { registrarAtividade } from '../features/atividade/atividade';
+import { CheckCircle2, ChevronLeft, Mic, X } from 'lucide-react';
+
+/** Autoavaliação depois de escutar com o texto escondido (nota da escuta). */
+const NOTAS_ESCUTA = [
+  { score: 1, label: 'Quase tudo' },
+  { score: 0.5, label: 'Uma parte' },
+  { score: 0, label: 'Pouco' },
+] as const;
 
 // Na palavra, guarda a linha e a posição também — pra salvar o card com a
 // frase de contexto e a palavra destacada nela.
@@ -28,8 +37,17 @@ export default function LeituraTexto() {
   const modoDaUrl = params.get('modo');
   const [readMode, setReadMode] = useState<ReadAloudMode>(modoDaUrl === 'shadowing' ? 'shadowing' : 'normal');
   const [hideText, setHideText] = useState(modoDaUrl === 'ouvir');
+  // Escutou com o texto escondido: ao mostrar o texto, pergunta quanto entendeu.
+  const [ouviuEscondido, setOuviuEscondido] = useState(false);
+  const [avaliandoEscuta, setAvaliandoEscuta] = useState(false);
+  const [shadowingFeito, setShadowingFeito] = useState(false);
   const lineTexts = (texto?.lines ?? []).map((line) => line.words.map((w) => w.text).join(''));
-  const readAloud = useReadAloud(lineTexts, readMode);
+  const readAloud = useReadAloud(lineTexts, readMode, (modo) => {
+    if (modo !== 'shadowing' || !texto) return;
+    void registrarResultados([{ kind: 'shadowing', itemId: texto.id }]);
+    void registrarAtividade('praticas', 1);
+    setShadowingFeito(true);
+  });
   const lineRefs = useRef<(HTMLDivElement | null)[]>([]);
   const activeLine = readAloud.state.status === 'idle' ? null : readAloud.state.line;
   // Palavras tocadas nesta leitura (chave = wordKey) — ao concluir, contam
@@ -43,6 +61,26 @@ export default function LeituraTexto() {
     if (readAloud.state.status !== 'playing') return;
     lineRefs.current[readAloud.state.line]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, [readAloud.state.status, readAloud.state.line]);
+
+  function ouvir() {
+    if (hideText) setOuviuEscondido(true);
+    readAloud.play();
+  }
+
+  function mostrarTexto() {
+    if (ouviuEscondido) setAvaliandoEscuta(true);
+    else setHideText(false);
+  }
+
+  function avaliarEscuta(score: number | null) {
+    if (score !== null && texto) {
+      void registrarResultados([{ kind: 'escuta', itemId: texto.id, score }]);
+      void registrarAtividade('praticas', 1);
+    }
+    setOuviuEscondido(false);
+    setAvaliandoEscuta(false);
+    setHideText(false);
+  }
 
   function select(next: Selection) {
     if (next.kind === 'word') {
@@ -79,7 +117,7 @@ export default function LeituraTexto() {
         <div className="space-y-1.5">
           <h1 className="font-jp text-2xl font-medium">{texto.title}</h1>
           <div className="flex flex-wrap gap-1.5">
-            <span className="badge bg-matcha/12 text-matcha">Nível {texto.level}</span>
+            <span className="badge bg-matcha/12 text-matcha">{rotuloNivel(texto.level)}</span>
             {known && <span className="badge bg-line/70 text-sage">conhece ~{knownPercent(texto, known)}%</span>}
           </div>
         </div>
@@ -99,8 +137,8 @@ export default function LeituraTexto() {
         mode={readMode}
         onModeChange={setReadMode}
         hideText={hideText}
-        onHideTextChange={setHideText}
-        onPlay={readAloud.play}
+        onHideTextChange={(hide) => (hide ? setHideText(true) : mostrarTexto())}
+        onPlay={ouvir}
         onPause={readAloud.pause}
         onRestart={readAloud.restart}
       />
@@ -172,10 +210,31 @@ export default function LeituraTexto() {
       </div>
 
       <div className="card-surface space-y-5">
-        {hideText && (
+        {shadowingFeito && (
+          <p className="flex items-center gap-1.5 rounded-xl bg-sakura/8 px-3 py-2 text-sm text-sakura">
+            <Mic className="h-4 w-4" />
+            Shadowing do texto inteiro registrado — conta no seu nível de Falar.
+          </p>
+        )}
+        {hideText && avaliandoEscuta && (
+          <div className="space-y-2 rounded-xl bg-sora/8 px-3 py-2 text-sm">
+            <p className="font-medium text-ink">Quanto você entendeu só de ouvido?</p>
+            <div className="flex flex-wrap gap-2">
+              {NOTAS_ESCUTA.map((n) => (
+                <button key={n.label} className="btn-ghost px-3 py-1 text-xs" onClick={() => avaliarEscuta(n.score)}>
+                  {n.label}
+                </button>
+              ))}
+              <button className="px-2 py-1 text-xs text-sage hover:text-ink" onClick={() => avaliarEscuta(null)}>
+                Pular
+              </button>
+            </div>
+          </div>
+        )}
+        {hideText && !avaliandoEscuta && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-matcha/8 px-3 py-2 text-sm">
             <span className="text-sage">Texto escondido — ouça e tente entender antes de ler.</span>
-            <button className="btn-ghost px-3 py-1 text-xs" onClick={() => setHideText(false)}>
+            <button className="btn-ghost px-3 py-1 text-xs" onClick={mostrarTexto}>
               Mostrar texto
             </button>
           </div>

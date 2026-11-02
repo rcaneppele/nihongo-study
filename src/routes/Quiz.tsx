@@ -8,6 +8,7 @@ import { TIPOS_QUIZ, type PerguntaGerada, type RegistroResposta, type TipoQuiz }
 import QuizSession from '../features/quiz/QuizSession';
 import QuizResultado from '../features/quiz/QuizResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
+import { registrarResultados } from '../features/exercicios/historico';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -63,6 +64,9 @@ export default function Quiz() {
 
   function finalizar(respostas: RegistroResposta[]) {
     void registrarAtividade('praticas', respostas.length);
+    void registrarResultados(
+      respostas.map((r) => ({ kind: 'quiz', itemId: r.pergunta.id, lessonId: r.pergunta.licaoId, score: r.acertou ? 1 : 0 }))
+    );
     setResultado(respostas);
     setPerguntas(null);
   }

@@ -223,6 +223,10 @@ function DadosTab() {
       db.activity.clear(),
       db.meta.clear(),
       db.deleted.clear(),
+      db.exerciseResults.clear(),
+      db.lessonProgress.clear(),
+      db.achievements.clear(),
+      db.journal.clear(),
     ]);
     await novaEpoca();
     setMsg('Todos os dados foram apagados.');

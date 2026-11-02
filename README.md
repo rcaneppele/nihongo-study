@@ -5,17 +5,21 @@ vez de por ferramenta:
 
 - **Hoje** — plano do dia (Revisar → Aprender → Praticar), meta diária e
   sequência de dias.
-- **Aprender** — lições de gramática/vocabulário, palavras novas do deck N5,
-  kanji novos (radical + mnemônico) e alfabetos (hiragana/katakana).
-- **Praticar** — as quatro habilidades: **ler** (textos graduados com
-  furigana e significado por palavra), **ouvir** (escutar antes de ler,
-  ditado), **falar** (shadowing, "Diga em japonês", cards na direção
-  português → japonês) e **escrever** (desenho de kana/kanji com
-  reconhecimento e pontuação de caligrafia).
+- **Aprender** — lições de gramática/vocabulário (com trilha de lições
+  concluídas), palavras novas do deck N5, kanji novos (radical + mnemônico)
+  e alfabetos (hiragana/katakana).
+- **Praticar** — as quatro habilidades: **ler** (60 textos graduados em
+  quatro níveis, com furigana e significado por palavra), **ouvir** (escutar
+  antes de ler, com autoavaliação, e ditado), **falar** (shadowing, "Diga em
+  japonês", cards na direção português → japonês) e **escrever** (desenho
+  de kana/kanji com reconhecimento e pontuação de caligrafia, diário
+  guiado). Cada habilidade mostra o seu nível, medido pelo histórico dos
+  exercícios.
 - **Revisar** — Revisão do dia (flash cards + kanji com repetição espaçada
-  FSRS), pontos fracos, quiz das lições e "Meus cards".
+  FSRS), pontos fracos, quiz das lições, gramática em contexto e "Meus
+  cards".
 - **Progresso** — vocabulário compreendido / que sei dizer, estágios das
-  palavras, kana/kanji e estatísticas de revisão.
+  palavras, kana/kanji, estatísticas de revisão e conquistas.
 
 Princípios:
 
@@ -80,10 +84,12 @@ src/
 │   ├── srs/       algoritmo FSRS e botões de nota
 │   ├── flashcards/ sessão de revisão, estágios, mapa de vocabulário, importação
 │   ├── handwriting/ captura de traços e scoreDrawing() (reconhecimento + pontuação)
-│   └── …          kana, kanji, leitura, diga, quiz, kakitori, pontos-fracos, atividade
+│   └── …          kana, kanji, leitura, diga, quiz, kakitori, diario, exercicios,
+│                  licoes, conquistas, pontos-fracos, atividade
 ├── licoes/        uma lição por arquivo + registro central
 ├── db/            schema (Dexie), backup (export/import, migrações) e mesclagem
-└── data/          kana, kanji N5, textos de leitura, traços do KanjiVG, deck N5
+└── data/          kana, kanji N5, textos de leitura, traços do KanjiVG, deck N5,
+                   gramática em contexto, propostas do diário
 ```
 
 ## Documentação

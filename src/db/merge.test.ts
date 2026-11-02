@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { incrementar, mesclarContadores } from './contadores';
-import { carimbosCard, mesclarCard } from './merge';
+import { carimbosCard, mesclarCard, mesclarConquista, mesclarLicao } from './merge';
 import { db, type Card } from './schema';
 import { exportData, importData, mesmoConteudo, SCHEMA_VERSION, type BackupFile } from './backup';
 import { freshSrs } from '../features/srs/fsrs';
@@ -27,6 +27,10 @@ function backup(parcial: Partial<BackupFile>): BackupFile {
     activity: [],
     meta: [],
     deleted: [],
+    exerciseResults: [],
+    lessonProgress: [],
+    achievements: [],
+    journal: [],
     ...parcial,
   };
 }
@@ -69,6 +73,28 @@ describe('mesclarCard', () => {
       expect(r.note).toBe('gato');
       expect(r.updatedAt).toBe(300);
     }
+  });
+});
+
+describe('mesclarLicao e mesclarConquista', () => {
+  it('lição: concluir num aparelho e abrir no outro — fica concluída e com a última abertura', () => {
+    const concluida = { lessonId: 'desu', viewedAt: 100, completedAt: 150, updatedAt: 150 };
+    const aberta = { lessonId: 'desu', viewedAt: 300, updatedAt: 0 };
+    for (const r of [mesclarLicao(concluida, aberta), mesclarLicao(aberta, concluida)]) {
+      expect(r).toEqual({ lessonId: 'desu', viewedAt: 300, completedAt: 150, updatedAt: 150 });
+    }
+  });
+
+  it('lição: desmarcar depois de concluir vence', () => {
+    const concluida = { lessonId: 'desu', viewedAt: 100, completedAt: 150, updatedAt: 150 };
+    const desmarcada = { lessonId: 'desu', viewedAt: 100, updatedAt: 200 };
+    expect(mesclarLicao(concluida, desmarcada).completedAt).toBeUndefined();
+    expect(mesclarLicao(desmarcada, concluida).completedAt).toBeUndefined();
+  });
+
+  it('conquista: fica a primeira data', () => {
+    expect(mesclarConquista({ id: 'x', unlockedAt: 200 }, { id: 'x', unlockedAt: 100 }).unlockedAt).toBe(100);
+    expect(mesclarConquista({ id: 'x', unlockedAt: 100 }, { id: 'x', unlockedAt: 200 }).unlockedAt).toBe(100);
   });
 });
 
@@ -140,8 +166,21 @@ describe('importData (mesclar)', () => {
     expect(r?.drawBest).toBe(90);
   });
 
+  it('diário: exclusão propaga e resultados de exercício se juntam sem duplicar', async () => {
+    const entrada = { id: 'j1', promptId: 'p', text: 'わたしは がくせいです', checked: [], createdAt: 100, updatedAt: 100 };
+    await db.journal.put(entrada);
+    const resultado = { id: 'e1', kind: 'quiz' as const, itemId: 'desu-f1', score: 1, doneAt: 100 };
+    const outro = backup({ deleted: [{ table: 'journal', key: 'j1', deletedAt: 200 }], exerciseResults: [resultado] });
+    await importData(outro, 'merge');
+    await importData(outro, 'merge');
+    expect(await db.journal.count()).toBe(0);
+    expect(await db.exerciseResults.count()).toBe(1);
+  });
+
   it('exportar e mesclar no mesmo aparelho não muda nada', async () => {
     await db.cards.put(card('c1', 'いぬ', 100));
+    await db.lessonProgress.put({ lessonId: 'desu', viewedAt: 100, completedAt: 100, updatedAt: 100 });
+    await db.achievements.put({ id: 'licao-1', unlockedAt: 100 });
     const antes = await exportData();
     await importData(antes, 'merge');
     const depois = await exportData();

@@ -14,10 +14,11 @@ function pickN<T>(arr: T[], n: number): T[] {
   return shuffle(arr).slice(0, n);
 }
 
-function itemDeFonte(item: ItemKakitoriFonte, origemLabel: string): ItemKakitori {
+function itemDeFonte(item: ItemKakitoriFonte, origemLabel: string, licaoId: string): ItemKakitori {
   return {
     id: item.id,
     origemLabel,
+    licaoId,
     audioText: item.jp,
     kana: item.kana,
     // Só mostra "kanji" separado quando o texto falado diferir da leitura em kana — ex.: nas
@@ -39,10 +40,10 @@ export function listarFontes(): FonteKakitori[] {
 }
 
 function itensDaFonte(fonteId: string): ItemKakitori[] {
-  for (const { kakitori } of LICOES) {
+  for (const { meta, kakitori } of LICOES) {
     const grupo = kakitori?.find((g) => g.id === fonteId);
     if (grupo) {
-      return grupo.itens.map((item) => itemDeFonte(item, grupo.label));
+      return grupo.itens.map((item) => itemDeFonte(item, grupo.label, meta.id));
     }
   }
   return [];

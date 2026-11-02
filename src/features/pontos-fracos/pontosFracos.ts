@@ -6,16 +6,17 @@ import type { ReadingWord } from '../../data/leitura/types';
 import { textWords } from '../leitura/knowledge';
 import { freshSrs } from '../srs/fsrs';
 import type { StudyItem } from '../flashcards/stages';
+import { desempenhoPorItem } from '../exercicios/historico';
+import { conteudoDoItem } from '../exercicios/conteudo';
 
 /**
  * "Pontos fracos": o que o usuário mais erra, juntando todos os módulos que
  * guardam desempenho. Não grava nada novo — é leitura do que já existe. O
  * treino é prática livre (StudySession em modo "practice"), então kana,
- * kanji e palavras da leitura entram como cards transitórios, não gravados.
- *
- * Quiz e "Diga em japonês" não guardam histórico, então não entram.
+ * kanji, palavras da leitura e frases das lições entram como cards
+ * transitórios, não gravados.
  */
-export type Origem = 'cards' | 'kana' | 'kanji' | 'leitura';
+export type Origem = 'cards' | 'kana' | 'kanji' | 'leitura' | 'licoes';
 
 export interface PontoFraco {
   id: string;
@@ -35,7 +36,19 @@ export const ORIGEM_LABELS: Record<Origem, string> = {
   kana: 'Kana',
   kanji: 'Kanji',
   leitura: 'Palavras que você ainda consulta na leitura',
+  licoes: 'Frases e perguntas das lições',
 };
+
+/** Nome de cada exercício no detalhe do ponto fraco. */
+const EXERCICIO_LABEL: Record<string, string> = {
+  quiz: 'quiz',
+  diga: 'diga em japonês',
+  kakitori: 'ditado',
+  gramatica: 'gramática',
+};
+
+/** Abaixo disso de acerto num item de exercício, ele conta como ponto fraco (mesmo que o último tenha acertado). */
+const EXERCICIO_ACERTO_MINIMO = 0.7;
 
 /** Abaixo disso de acerto, o kana conta como ponto fraco. */
 const KANA_ACERTO_MINIMO = 0.85;
@@ -51,11 +64,12 @@ const PALAVRA_POR_CHAVE: Map<string, ReadingWord> = new Map(
 );
 
 export async function carregarPontosFracos(): Promise<Record<Origem, PontoFraco[]>> {
-  const [cards, kana, kanji, palavras] = await Promise.all([
+  const [cards, kana, kanji, palavras, exercicios] = await Promise.all([
     db.cards.toArray(),
     db.kanaProgress.toArray(),
     db.kanjiProgress.toArray(),
     db.wordKnowledge.toArray(),
+    db.exerciseResults.where('kind').anyOf(['quiz', 'diga', 'kakitori', 'gramatica']).toArray(),
   ]);
 
   // Flash cards: lapsos (vezes que esqueceu depois de já ter acertado) nas
@@ -146,12 +160,35 @@ export async function carregarPontosFracos(): Promise<Record<Origem, PontoFraco[
       ];
     });
 
+  // Lições: itens de Quiz, "Diga em japonês", ditado e gramática errados na
+  // última tentativa ou com acerto baixo no histórico.
+  const fracosLicoes: PontoFraco[] = [...desempenhoPorItem(exercicios).values()]
+    .filter((d) => d.erros > 0 && (d.ultimaErrada || d.taxa < EXERCICIO_ACERTO_MINIMO))
+    .flatMap((d) => {
+      const c = conteudoDoItem(d.kind, d.itemId);
+      if (!c) return [];
+      const id = `${d.kind}-${d.itemId}`;
+      return [
+        {
+          id,
+          origem: 'licoes' as const,
+          jp: c.jp,
+          pt: c.pt,
+          reading: c.reading,
+          detalhe: `${EXERCICIO_LABEL[d.kind] ?? d.kind} · errou ${d.erros} de ${d.tentativas}`,
+          peso: (1 - d.taxa) * 100 + d.erros + (d.ultimaErrada ? 20 : 0),
+          item: { card: cardTransitorio(id, c.jp, c.pt, c.reading), direction: c.direcao },
+        },
+      ];
+    });
+
   const porPeso = (a: PontoFraco, b: PontoFraco) => b.peso - a.peso;
   return {
     cards: fracosCards.sort(porPeso),
     kana: fracosKana.sort(porPeso),
     kanji: fracosKanji.sort(porPeso),
     leitura: fracosLeitura.sort(porPeso),
+    licoes: fracosLicoes.sort(porPeso),
   };
 }
 

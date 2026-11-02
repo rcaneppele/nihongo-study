@@ -62,6 +62,7 @@ function QuestionCard({ pergunta, ultima, onResponder, onAvancar }: CardProps<Pe
     case 'reordenar-frase':
       return <ReordenarFrase pergunta={pergunta} ultima={ultima} onResponder={onResponder} onAvancar={onAvancar} />;
     case 'escolher-particula':
+    case 'completar':
       return <EscolherParticula pergunta={pergunta} ultima={ultima} onResponder={onResponder} onAvancar={onAvancar} />;
     case 'verdadeiro-falso':
       return <VerdadeiroFalso pergunta={pergunta} ultima={ultima} onResponder={onResponder} onAvancar={onAvancar} />;
@@ -223,7 +224,13 @@ function ReordenarFrase({ pergunta, ultima, onResponder, onAvancar }: CardProps<
   );
 }
 
-function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardProps<Extract<PerguntaGerada, { tipo: 'escolher-particula' }>>) {
+/** Lacuna com alternativas: a partícula do Quiz ou a frase da Gramática em contexto (`completar`, com explicação). */
+function EscolherParticula({
+  pergunta,
+  ultima,
+  onResponder,
+  onAvancar,
+}: CardProps<Extract<PerguntaGerada, { tipo: 'escolher-particula' | 'completar' }>>) {
   const [escolhida, setEscolhida] = useState<string | null>(null);
 
   function escolher(alt: string) {
@@ -239,10 +246,21 @@ function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardPro
   }
 
   const acertou = escolhida === pergunta.correta;
+  const completar = pergunta.tipo === 'completar';
+  const explicacao = completar ? pergunta.explicacao : undefined;
+  // Alternativas longas (formas de verbo, expressões) não cabem em 4 colunas.
+  const longas = pergunta.alternativas.some((a) => a.length > 3);
 
   return (
     <div className="card-hero space-y-4">
-      <p className="text-sm text-sage">Escolha a partícula correta:</p>
+      {completar ? (
+        <p className="text-sm text-sage">
+          <span className="badge mr-2 bg-fuji/12 text-fuji">{pergunta.ponto}</span>
+          Complete a frase:
+        </p>
+      ) : (
+        <p className="text-sm text-sage">Escolha a partícula correta:</p>
+      )}
 
       <div className="flex flex-wrap items-end gap-1.5">
         {pergunta.antes.map((t, i) => (
@@ -263,7 +281,7 @@ function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardPro
 
       <p className="text-sm text-ink/80">{pergunta.pt}</p>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className={`grid gap-2 ${longas ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-4'}`}>
         {pergunta.alternativas.map((alt) => {
           const estado = !escolhida
             ? ''
@@ -285,10 +303,14 @@ function EscolherParticula({ pergunta, ultima, onResponder, onAvancar }: CardPro
         })}
       </div>
 
-      {escolhida && !acertou && <p className="text-sm text-ink/70">Partícula correta: <span className="font-jp text-sage">{pergunta.correta}</span></p>}
-      {escolhida && <Feedback acertou={acertou} />}
+      {escolhida && !acertou && (
+        <p className="text-sm text-ink/70">
+          {completar ? 'Resposta correta' : 'Partícula correta'}: <span className="font-jp text-sage">{pergunta.correta}</span>
+        </p>
+      )}
+      {escolhida && <Feedback acertou={acertou} explicacao={explicacao} />}
 
-      {escolhida && <AvancarAuto acertou={acertou} extra={!acertou} ultima={ultima} onAvancar={onAvancar} />}
+      {escolhida && <AvancarAuto acertou={acertou} extra={!acertou || !!explicacao} ultima={ultima} onAvancar={onAvancar} />}
     </div>
   );
 }
