@@ -13,7 +13,7 @@
     --color-hanko: 215 71 47;
     --color-sage: 124 138 126;
     --color-line: 228 223 212;
-    /* Cores de apoio, uma por módulo (ver docs/proposta-visual.md §3.3): só em
+    /* Cores de apoio, uma por módulo (ver docs/guia-visual.md §1): só em
        pequenas áreas — ícones, tiles de ícone (fundo a ~12%), badges, barras finas. */
     --color-sora: 61 111 168; /* céu — flash cards, revisões */
     --color-matcha: 79 122 90; /* leitura, "compreendida", meta batida */
@@ -82,7 +82,7 @@
   .card-surface {
     @apply rounded-2xl border border-line/70 bg-surface p-5 shadow-card;
   }
-  /* Bloco de destaque (ex.: "Hoje" e "Sugestão" na Home). */
+  /* Bloco de destaque (ex.: "Hoje" e o Plano do dia na Home). */
   .card-hero {
     @apply rounded-3xl border border-line/70 bg-surface p-5 shadow-card sm:p-6;
   }

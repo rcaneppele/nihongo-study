@@ -95,12 +95,16 @@ src/
 - `CLAUDE.md` — contexto, mapa do código e convenções para desenvolver com o
   Claude Code.
 - `regras-negocio.md` — regras de domínio (SRS e estágios, kana, kanji,
-  leitura, lições, navegação, import/export).
-- `docs/roadmap.md` — próximas features e o porquê de cada uma.
+  leitura, lições, quiz/ditado, navegação pelo método, dados e
+  sincronização).
+- `docs/roadmap.md` — o que está em aberto (e o porquê) e o que já foi
+  entregue.
 - `docs/padrao-licoes.md` — padrão de conteúdo das lições.
-- `docs/proposta-*.md`, `docs/melhorias-aprendizado.md` — registros das
-  propostas já implementadas (visual, reorganização, melhorias e a
-  sincronização via Google Drive, `proposta-sincronizacao.md`).
+- `docs/guia-visual.md` — tokens, cores por módulo, classes e regras do
+  visual.
+- `docs/proposta-sincronizacao.md` — análise da sincronização via Google
+  Drive (alternativas, riscos e decisões); as regras vigentes ficam no
+  `regras-negocio.md`.
 
 ## Licença
 

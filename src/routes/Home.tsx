@@ -17,8 +17,8 @@ import { TILE, type Cor } from '../lib/cores';
 /**
  * "Hoje" (Início): saudação, bloco da meta diária (semana + sequência), o
  * plano do dia (Revisar → Aprender → Praticar, ver PlanoDoDia) e atalhos
- * para os hubs do método. Estrutura em docs/proposta-reorganizacao.md;
- * visual em docs/proposta-visual.md.
+ * para os hubs do método. Regras em regras-negocio.md §5d; visual em
+ * docs/guia-visual.md.
  */
 export default function Home() {
   const known = useKnownWords();

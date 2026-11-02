@@ -8,6 +8,22 @@ export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(version),
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Separa o que muda pouco (bibliotecas; dados de traço, vocabulário,
+        // textos e lições) do código do app: num deploy que só mexe no código,
+        // o service worker baixa de novo só o chunk do app.
+        manualChunks(id) {
+          if (id.includes('/node_modules/')) return 'vendor';
+          if (id.includes('/src/data/kanjivg/kana-')) return 'tracos-kana';
+          if (id.includes('/src/data/kanjivg/kanji-')) return 'tracos-kanji';
+          if (id.includes('/src/data/')) return 'dados';
+          if (id.includes('/src/licoes/')) return 'licoes';
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({

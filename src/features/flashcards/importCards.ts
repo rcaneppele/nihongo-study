@@ -2,26 +2,63 @@ import { type Card, newId } from '../../db/schema';
 import { freshSrs } from '../srs/fsrs';
 
 /**
- * Importação simples de cards via CSV.
+ * Quebra um CSV em linhas e colunas (RFC 4180): campo entre aspas pode ter
+ * vírgula, quebra de linha e aspas escapadas como `""`. Linhas em branco
+ * são descartadas.
+ */
+export function parseCsvRows(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = '';
+  let quoted = false;
+
+  const endRow = () => {
+    row.push(field);
+    if (row.some((c) => c.trim().length > 0)) rows.push(row);
+    row = [];
+    field = '';
+  };
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (quoted) {
+      if (ch === '"' && text[i + 1] === '"') {
+        field += '"';
+        i++;
+      } else if (ch === '"') quoted = false;
+      else field += ch;
+    } else if (ch === '"') quoted = true;
+    else if (ch === ',') {
+      row.push(field);
+      field = '';
+    } else if (ch === '\n') endRow();
+    else if (ch !== '\r') field += ch;
+  }
+  endRow();
+  return rows;
+}
+
+/**
+ * Importação de cards via CSV.
  * Formato esperado (com ou sem cabeçalho):
  *
  *   front,back,reading,category,tags
  *   猫,gato,ねこ,Animais,n5;substantivo
  *
- * Tags são separadas por ';'. Este parser é propositalmente simples e NÃO
- * trata todos os casos de CSV (ex.: vírgulas dentro de aspas).
- * TODO: trocar por um parser robusto (ex.: papaparse) se necessário.
+ * Tags são separadas por ';'. Campos com vírgula vão entre aspas
+ * (`"comer, beber"`).
  */
 export function parseCardsCsv(text: string): Card[] {
-  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  const lines = parseCsvRows(text);
   if (lines.length === 0) return [];
 
-  const hasHeader = /front/i.test(lines[0]) && /back/i.test(lines[0]);
+  const header = lines[0].join(',');
+  const hasHeader = /front/i.test(header) && /back/i.test(header);
   const rows = hasHeader ? lines.slice(1) : lines;
   const now = Date.now();
 
   return rows.map((line) => {
-    const cols = line.split(',').map((c) => c.trim());
+    const cols = line.map((c) => c.trim());
     const [front = '', back = '', reading = '', category = '', tags = ''] = cols;
     return {
       id: newId(),

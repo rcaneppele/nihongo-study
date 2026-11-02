@@ -35,7 +35,8 @@ escrever) · Revisar · Progresso —, não por módulo (ver
 
 - Vite + React + TypeScript + Tailwind + Dexie + vite-plugin-pwa.
 - `npm run dev` (desenvolvimento), `npm run build` (produção), `npm run lint`,
-  `npm test` (Vitest — por ora, a mesclagem de backup em `src/db/`).
+  `npm test` (Vitest — a mesclagem de backup em `src/db/` e o parser de
+  CSV da importação de cards).
 
 ## Versionamento
 
@@ -90,7 +91,8 @@ toda mudança pede bump; julgue pelo impacto:
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
   `regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo
   módulo de Kanji.
-- `src/features/flashcards/importCards.ts` — importação de cards via CSV,
+- `src/features/flashcards/importCards.ts` — importação de cards via CSV
+  (com aspas, testado em `importCards.test.ts`),
   JSON ou texto exportado do Anki ("Notas em Texto Simples"/"Cartões em
   Texto Simples"); `parseCardsFile()` detecta o formato pelo nome do
   arquivo/conteúdo.
@@ -172,6 +174,11 @@ toda mudança pede bump; julgue pelo impacto:
   (`/licoes/diga`): português → dizer a frase em japonês → conferir,
   usando o `diga` de cada lição + as `quiz.frases`; frases erradas podem
   virar cards.
+- `src/data/quiz/` + `src/features/quiz/` + `src/routes/Quiz.tsx` — Quiz
+  das lições ("Testar lições", `/licoes/quiz`), gerado do `quiz` de cada
+  lição; `src/data/kakitori/` + `src/features/kakitori/` +
+  `src/routes/Kakitori.tsx` — ditado (`/licoes/kakitori`), dos grupos
+  `kakitori` das lições. Nenhum dos dois guarda histórico.
 - `src/features/atividade/atividade.ts` — atividade por dia
   (`registrarAtividade`, chamado por cada módulo), meta diária e sequência
   de dias exibidas na Home e no Progresso.
@@ -225,7 +232,7 @@ toda mudança pede bump; julgue pelo impacto:
   Cores de apoio **por módulo** (`sora` flash cards, `matcha` leitura, `fuji`
   lições, `kin` kana, `sakura` pontos fracos; kanji usa `hanko`) só em
   pequenas áreas: ícones, `icon-tile` (fundo `/12`), `badge`, barras finas —
-  nunca em fundos grandes. Visão completa em `docs/proposta-visual.md`.
+  nunca em fundos grandes. Visão completa em `docs/guia-visual.md`.
 - Componentes visuais compartilhados: `PageHeader` (cabeçalho de página com
   ícone na cor do módulo, título, subtítulo e ações), `StatCard` (contador com ícone,
   selo de crescimento ou barra), `ProgressRing` (anel 0–1), `StudyCard`

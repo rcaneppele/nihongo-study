@@ -1,292 +1,128 @@
 # Roadmap de features
 
-Documento de referência para as próximas features do app. Reúne o resultado de
-uma pesquisa (setembro/2026) sobre apps de estudo de japonês concorrentes
-(WaniKani, Bunpro, Renshuu, Satori Reader, Migaku, LingoDeer, Anki, entre
-outros) e recomendações de professores/comunidades de ensino (Tofugu, Tadoku,
+Mapa das próximas features e do porquê de cada uma. Nasceu de uma pesquisa
+(setembro/2026) sobre apps de estudo de japonês concorrentes (WaniKani,
+Bunpro, Renshuu, Satori Reader, Migaku, LingoDeer, Anki, entre outros) e
+recomendações de professores/comunidades de ensino (Tofugu, Tadoku,
 AJATT/Tatsumoto, Migaku, pesquisa em aquisição de segunda língua), filtrado
 pelo que é **viável dentro da arquitetura deste projeto**.
 
-Este documento é vivo: conforme uma feature é implementada, decidida ou
-descartada, atualize a seção correspondente (mova para "Concluído", ajuste
-prioridade, ou anote a decisão em "Fora de escopo"). Não é uma spec de
-implementação — é o mapa de prioridades e o porquê de cada uma; o desenho
-técnico detalhado de cada feature deve virar issue/plano próprio na hora de
-implementar.
+Este documento é vivo: quando uma feature for implementada, decidida ou
+descartada, atualize a seção correspondente (mova para "Concluído", ajuste a
+prioridade ou anote a decisão em "Fora de escopo"). Não é uma spec — o
+desenho técnico de cada feature vira plano próprio na hora de implementar,
+e as regras finais vão para o `regras-negocio.md`.
 
 ---
 
 ## 1. Restrições que toda feature deste roadmap respeita
 
-Herdadas de `CLAUDE.md` — nenhuma proposta abaixo as viola:
+Herdadas de `CLAUDE.md`:
 
-- **Sem backend.** Nenhuma feature depende de servidor, API remota ou conta de
-  usuário. Única exceção, combinada: a sincronização **opcional** com o Google
-  Drive do próprio usuário (ver "Dados e sincronização" abaixo).
+- **Sem backend.** Nenhuma feature depende de servidor nosso, API remota ou
+  conta de usuário. Única exceção, combinada: a sincronização **opcional**
+  com o Google Drive do próprio usuário.
 - **Offline-first.** Tudo precisa funcionar instalado, sem internet.
-- **Dados locais por dispositivo** (IndexedDB/Dexie); sincronização manual via
-  export/import de JSON, ou automática (opcional) pelo Google Drive.
-- Reaproveitar infraestrutura existente sempre que possível (FSRS, dados
-  KanjiVG, padrão de lição/kakitori) em vez de introduzir tecnologia nova sem
-  necessidade.
-
-Duas capacidades ficam **fora de escopo por padrão** porque exigem servidor
-externo — ver seção 6 para o motivo técnico:
-
-- Reconhecimento de fala do usuário (avaliar pronúncia).
-- Conversação ou correção de texto livre com feedback de IA.
-
----
-
-## 2. Onde o app estava na pesquisa (baseline de set/2026)
-
-Retrato da época da pesquisa, mantido como contexto das prioridades — o
-estado atual está no `README.md` e nas seções "Concluído" abaixo:
-
-| Funcionalidade | Cobre | Não cobre |
-|---|---|---|
-| Flash cards (FSRS) | Repetição espaçada de vocabulário/frases | Kanji como trilha própria; áudio |
-| Treino de Kana | Digitar romaji; desenhar hiragana/katakana com feedback de caligrafia (KanjiVG) | Kanji (só kana); listening |
-| Lições | Gramática e vocabulário estático, com quiz e kakitori (escrita) | Leitura extensiva; listening; produção livre |
-| Progresso | Estatísticas de `cards`/`reviews` | Gamificação (streaks, conquistas) |
-
-As lacunas mais evidentes — e por isso as mais representadas no roadmap — são
-**kanji como módulo próprio**, **qualquer forma de listening** e **leitura
-extensiva**.
+- **Dados locais por dispositivo** (IndexedDB/Dexie, chaves UUID), com
+  sincronização manual por arquivo JSON ou automática pelo Google Drive.
+  Tabela nova ou campo novo precisa entrar no backup, na mesclagem
+  (`src/db/merge.ts`) e, se for exclusão, nas lápides.
+- **Encaixe no método.** Toda ferramenta nova é decidida em
+  `src/features/metodo/estrutura.ts`: em que objetivo(s) entra (Aprender,
+  Praticar › ler/ouvir/falar/escrever, Revisar, Progresso) e se alimenta o
+  Plano do dia ou o "Próximo passo" de algum hub.
+- Reaproveitar a infraestrutura existente (FSRS, dados KanjiVG, padrão de
+  lição, `activity`) em vez de introduzir tecnologia nova sem necessidade.
 
 ---
 
-## 3. Top 7 prioritárias
+## 2. Em aberto
 
-Ordenadas por impacto: cobrem lacunas que nenhuma feature atual toca e são
-100% viáveis offline reaproveitando infraestrutura que o app já tem.
+Ordenadas por impacto. Todas viáveis offline.
 
-### 3.1 Módulo de Kanji com SRS dedicado — ✅ implementado (2026-09)
-**O quê:** trilha própria (separada das lições de gramática) no formato
-radical → kanji → vocabulário, com mnemônicos e progressão por SRS, usando o
-FSRS que o app já tem em `src/features/srs/fsrs.ts`.
-**Por quê:** hoje kanji só aparece como coluna de referência opcional dentro
-das lições (ver convenção "kanji nunca dentro de `<Ex />`" no CLAUDE.md). É a
-maior lacuna do app e o recurso mais citado como diferencial nos concorrentes
-(WaniKani é a referência do setor).
-**Reaproveita:** engine FSRS, tabela `cards`/`reviews`, dados de traço
-KanjiVG (`src/data/kanjivg/`) para a caligrafia (ver 3.5).
-**Esforço:** alto — é uma trilha de conteúdo nova (radicais, mnemônicos,
-ordenação pedagógica), mas de baixo risco técnico.
-**Status:** feito — `/kanji`, ~110 kanji do N5 (`src/data/kanji.ts`),
-tabela `kanjiProgress` (schemaVersion 3), fluxo aprender/revisar reaproveitando
-o FSRS. Furigana (`src/components/Furigana.tsx`) saiu como componente novo
-junto — ver seção 6 sobre aplicá-lo nas lições. N4/N3 seguem como extensão
-futura, mesma estrutura.
-
-### 3.2 Leitura extensiva com textos graduados — ✅ implementado (2026-09), nível inicial
-**O quê:** biblioteca de textos curtos em hiragana/katakana (kanji com
-furigana opcional), organizados por nível de dificuldade (inspirado nos
-níveis 0–5 do Tadoku: de ~20-50 palavras únicas a textos de milhares de
-palavras), com dicionário pop-up ao tocar numa palavra.
-**Por quê:** leitura extensiva de material fácil ("input compreensível",
-Krashen) é um dos insumos mais citados por professores e comunidades de
-imersão como eficaz para aquisição — e o app hoje não tem nenhum material de
-leitura livre, só exemplos pontuais dentro das lições.
-**Reaproveita:** padrão de conteúdo estático das lições; vocabulário N5 já
-importado para o dicionário pop-up.
-**Esforço:** médio para a primeira leva de textos (nível inicial); cresce
-conforme os níveis avançam.
-**Status:** feito — `/leitura`, 2 níveis × 15 textos (30 no total,
-`src/data/leitura/`),
-furigana (`Furigana.tsx`) com toggle, cartão de palavra tocada em vez de
-dicionário pop-up flutuante (mais simples e robusto no mobile — não puxa do
-vocabulário N5 importado, cada palavra já vem com significado embutido no
-próprio texto, pré-segmentada à mão em vez de tokenizada em runtime). Mais
-níveis/textos e um toggle de nível 0 (zero kanji, ainda mais básico que o
-Nível 1 atual) ficam como extensão futura, mesma estrutura de dados.
-
-### 3.3 Listening via Web Speech API (SpeechSynthesis) — ✅ já existia
-**Correção (2026-09):** essa pesquisa listou isso como pendência, mas o app
-**já tinha** TTS via `SpeechSynthesis` (`src/features/audio/speech.ts` +
-`AudioButton`, usado em `Kana.tsx` e nas lições) antes desta pesquisa —
-descoberto ao explorar o código durante a implementação de 3.1. Reaproveitado
-diretamente no módulo de Kanji para pronúncia de exemplos.
-**O quê:** sintetizar em áudio os exemplos japoneses das lições (`<Ex jp=
-"...">`) e dos futuros textos de leitura, usando `SpeechSynthesis` do
-navegador — síntese **local, offline, sem custo e sem servidor**.
-**Por quê:** listening é uma das quatro habilidades e ainda tem espaço pra
-crescer além do botão de áudio pontual — o app já tem ditado guiado por
-áudio em `/licoes/kakitori` (descoberto durante a implementação de 3.1,
-não fazia parte desta pesquisa original).
-**Viabilidade técnica:** suportado nativamente em Chrome/Edge/Firefox/
-Safari. Ressalva: qualidade de voz varia por sistema operacional, e
-utterances muito longas (200+ caracteres) podem cortar — mitigar quebrando o
-texto em sentenças.
-**Esforço:** já pago — reaproveitado no módulo de Kanji e na leitura
-extensiva.
-
-### 3.4 Simulados estilo JLPT
+### 2.1 Simulados estilo JLPT
 **O quê:** provas cronometradas por seção (vocabulário, gramática, leitura,
-listening), geradas a partir do próprio banco de conteúdo do app (lições,
-vocabulário, textos de leitura).
-**Por quê:** dá um objetivo mensurável e concreto, e integra as features de
-leitura (3.2) e listening (3.3) num formato só.
-**Reaproveita:** banco de vocabulário/gramática existente.
-**Esforço:** médio, e cresce em valor conforme 3.2/3.3 avançam (mais
-conteúdo para sortear).
+listening), sorteadas do conteúdo do app (deck N5, `quiz` e `diga` das
+lições, textos de leitura com áudio por `SpeechSynthesis`).
+**Por quê:** dá um objetivo mensurável e junta leitura e escuta num formato
+só. Com 40 textos, ~700 palavras e 12 lições já há conteúdo para sortear.
+**Onde entra:** Revisar (ao lado de "Testar lições") e um indicador no
+Progresso. Guardar o resultado (tabela nova, mesclável) também alimentaria
+Pontos fracos.
+**Esforço:** médio.
 
-### 3.5 Stroke order expandido para kanji — ✅ implementado (2026-09), junto com 3.1
-**O quê:** estender o `KanaCanvas`/`scoreDrawing()` (hoje usado só para kana)
-para os kanji do módulo de 3.1, usando o KanjiVG (que já cobre os ~2.136
-kanji jōyō, não só kana).
-**Por quê:** é extensão direta de tecnologia que já existe e já funciona —
-não introduz nada novo, só amplia o dado de entrada.
-**Reaproveita:** `src/features/kana/strokes.ts`, `src/components/
-KanaCanvas.tsx`, `scripts/build-kana-strokes.mjs` (adaptar para gerar dados
-de kanji além de kana).
-**Esforço:** baixo-médio — a engine já existe, o trabalho é de dados e
-geração de traços.
-**Status:** feito — a pasta virou `src/features/handwriting/` (nome
-"kana" não fazia mais sentido com kanji reaproveitando o mesmo motor);
-`scoreDrawing()`/`getReferenceStrokes()` agora leem um `REFERENCE_DATA`
-mesclado de `kana-strokes.json` + `kanji-strokes.json`; a lógica de
-busca/parse do KanjiVG foi extraída para `scripts/lib/kanjivg.mjs`,
-compartilhada pelos dois scripts geradores. Escopo inicial: só os ~110
-kanji do N5 (mesmo escopo do módulo) — cobertura de N4/N3/jōyō completo
-é a mesma extensão futura de 3.1.
+### 2.2 Histórico do Quiz e do "Diga em japonês"
+**O quê:** guardar o resultado de cada pergunta/frase (hoje nada é salvo).
+**Por quê:** é o dado que falta para três coisas: Pontos fracos incluírem
+gramática e frases, o "Próximo passo" de *Falar* apontar a lição com mais
+erros, e o nível de *Falar* (2.3).
+**Esforço:** baixo-médio (tabela nova + mesclagem + uso nos lugares acima).
 
-### 3.6 Sentence mining / vocabulário com contexto — ✅ implementado (2026-10, branch `experimento/melhorias-aprendizado`)
-**Status:** palavra tocada na leitura vira card com a frase de contexto e
-a origem (`src/features/flashcards/mining.ts`); frases erradas do "Diga em
-japonês" também viram cards. Detalhes em `docs/melhorias-aprendizado.md`
-§3.2 e `regras-negocio.md` §1/§4.
+### 2.3 Nível por habilidade em Ouvir e Falar
+**O quê:** medir essas habilidades como Ler e Escrever já são medidas
+(`src/features/metodo/nivel.ts`) — hoje o "Seu nível" delas mostra só o
+material disponível.
+**Como:** registrar ditados (Kakitori), "escutar primeiro" concluídos,
+shadowing e o histórico de 2.2.
+**Esforço:** baixo-médio, depende de 2.2 para Falar.
 
-**O quê:** permitir criar um flashcard a partir de uma frase das lições ou
-da leitura extensiva, marcando a palavra-alvo desconhecida na frase (em vez
-de só importar decks prontos).
-**Por quê:** é a prática mais recomendada em comunidades de imersão para
-fixar vocabulário com contexto real, seguindo o princípio de "input
-compreensível +1" (uma palavra nova por vez, resto conhecido).
-**Reaproveita:** `src/features/flashcards/importCards.ts`/schema de cards
-existente — é essencialmente um novo fluxo de criação de card, não uma
-tabela nova.
-**Esforço:** baixo-médio, é CRUD local sobre o schema já existente.
+### 2.4 Progresso por lição
+**O quê:** marcar lição estudada/concluída ("lição 3 de 12").
+**Por quê:** daria uma trilha em *Aprender* e um critério melhor para o
+passo "Aprender" do Plano do dia (hoje ele cai em "revisitar uma lição"
+sem saber quais já foram vistas).
+**Esforço:** baixo.
 
-### 3.7 Gamificação alinhada ao SRS — 🟡 parcial (2026-10)
-**Status:** feitos a sequência de estudo (qualquer atividade), a meta
-diária e a faixa da semana na Home, e o heatmap de revisões no Progresso
-(`src/features/atividade/atividade.ts`). **Pendente:** conquistas locais
-("100 kanji", "N5 completo").
+### 2.5 Conquistas locais
+**O quê:** marcos como "100 kanji", "N5 completo", "30 dias seguidos",
+derivados dos dados que já existem; só uma tabela pequena de conquistas
+desbloqueadas (com data). Sem ranking nem comparação — app de um usuário.
+**Por quê:** fecha a gamificação alinhada ao SRS (sequência, meta diária e
+heatmap já existem).
+**Esforço:** baixo.
 
-**O quê:** streaks de estudo, heatmap de revisões (estilo "contribution
-graph"), conquistas locais (ex.: "100 kanji dominados", "7 dias seguidos",
-"N5 completo").
-**Por quê:** pesquisa em gamificação de SRS mostra ganho de retenção quando
-o reforço acompanha o próprio ciclo de repetição espaçada (não compete com
-ele, como ranking competitivo faria).
-**Reaproveita:** dados já existentes em `db.reviews`/`db.cards` — é
-visualização e regras sobre dado que já é coletado, sem tabela nova além de,
-possivelmente, uma tabela pequena de conquistas desbloqueadas.
-**Esforço:** baixo — sem infraestrutura nova, sem servidor, sem conta (não
-há leaderboard nem comparação entre usuários, coerente com "app de um único
-usuário").
+### 2.6 Novos exercícios de gramática e escrita
+- **Gramática em contexto:** sortear de um banco maior de frases (não só os
+  exemplos fixos da lição) para reconhecer o padrão gramatical, reduzindo o
+  risco de decorar a frase em vez da regra.
+- **Diário guiado:** prompts curtos ("escreva 3 frases com こそあど") com
+  autoavaliação por checklist. Correção de texto livre fica fora (§4).
+
+### 2.7 Conteúdo
+Extensões de conteúdo, sem mudança de arquitetura:
+- **Decks N4/N3** no padrão de `src/data/seed/n5.ts` + `n5.json` (e a
+  "escada" de nível em Aprender › Palavras novas).
+- **Kanji N4+** em `src/data/kanji.ts`, com os traços regenerados por
+  `npm run build:kanji-strokes`.
+- **Mais textos de leitura** (hoje 20 no Nível 1, só kana, e 20 no Nível 2,
+  kanji com furigana) e um terceiro nível; textos ainda mais curtos para
+  quem acabou de aprender o kana.
+- **Lições novas** e expansão das atuais pelo `docs/padrao-licoes.md`.
+- **Referência de kanji em mais lições** (hoje em família, pronomes,
+  sufixos, seikatsu e kanji), só onde o kanji é comum no uso real (ex.:
+  verbos básicos) — trabalho de conteúdo, lição por lição.
 
 ---
 
-## 4. Outras features por categoria
+## 3. Concluído
 
-Features de prioridade menor que as do Top 7, mas que valem constar no
-roadmap.
-
-### Leitura
-- **Dicionário pop-up ao tocar numa palavra** — ✅ feito na implementação de
-  3.2, mas de forma diferente do que estava planejado aqui: em vez de puxar
-  do vocabulário N5 já importado (que não cobre todo o vocabulário que um
-  texto pode usar, e exigiria lookup difuso), cada palavra do texto já vem
-  pré-anotada com sua própria leitura+significado no dado
-  (`ReadingWord.meaning`, `src/data/leitura/types.ts`) — mais simples e sem
-  depender de tokenização em runtime. Puxar do vocabulário N5 continua
-  válido como ideia pra outra feature (ex.: sentence mining, seção
-  "Vocabulário e gramática" abaixo).
-- **Toggle de furigana nos textos de leitura** — ✅ feito (3.2),
-  `src/routes/LeituraTexto.tsx`, ligado por padrão.
-- **Furigana nas tabelas de kanji das lições** — ✅ feito (2026-09). A
-  coluna "Kanji" simples de `familia.tsx`, `pronomes.tsx` e `sufixos.tsx`
-  virou uma única coluna "Kanji (furigana)", usando o novo
-  `FuriganaWord` (`src/components/Furigana.tsx`) — atalho de `Furigana`
-  para o caso de uma palavra inteira com uma leitura só. Não é um toggle
-  interativo (mostrar/ocultar) como na leitura extensiva — é a mesma coluna
-  de referência opcional de sempre, só que renderizada como furigana em vez
-  de kanji+hiragana em colunas separadas. Continua pendente: considerar
-  adicionar referência de kanji nas lições que ainda não têm nenhuma (só
-  onde o kanji é realmente comum no uso real, ex.: verbos básicos) —
-  trabalho de conteúdo, lição por lição, não mecânico.
-
-### Vocabulário e gramática
-- **Exercício de gramática em contexto**: sortear de um banco maior de
-  frases (não só os exemplos fixos da lição) para reconhecimento do padrão
-  gramatical, reduzindo o risco de o usuário decorar a frase em vez da
-  regra.
-- **Decks adicionais N4/N3**, seguindo o padrão de `src/data/seed/n5.ts` +
-  `n5.json` já existente — extensão de conteúdo, não de arquitetura.
-
-### Produção escrita
-- **Diário guiado com prompts** (ex.: "escreva 3 frases usando os kosoado
-  desta lição"), com autoavaliação por checklist do próprio usuário —
-  correção automática de texto livre ficaria fora de escopo (ver seção 6).
-- **Reescrita de frases por blocos**: dado um significado em português,
-  montar a frase em japonês escolhendo blocos de palavras/partículas na
-  ordem certa — treina produção sem exigir avaliação de texto livre.
-
-### Progresso
-- **Modo "revisão de erros"** — ✅ feito como **Pontos fracos**
-  (`/pontos-fracos`, 2026-10): cards, kana, kanji e palavras consultadas na
-  leitura, com treino em prática livre.
-
-### Depois da reorganização pelo método (2026-10)
-O app foi reorganizado em Hoje · Aprender · Praticar (ler/ouvir/falar/
-escrever) · Revisar · Progresso, **sem criar funcionalidade** — ver
-`docs/proposta-reorganizacao.md`. Ideias que ficaram de fora por exigirem
-funcionalidade nova, e que completariam o método:
-- **Progresso por lição** ("lição 3 de 12 concluída"): registrar lição
-  estudada/concluída. Daria uma trilha em *Aprender* e um critério melhor
-  para o passo "Aprender" do plano do dia.
-- **Nível por habilidade em Ouvir e Falar**: hoje essas habilidades não
-  têm medição própria (o "Seu nível" delas mostra só o material
-  disponível). Exigiria guardar resultado de ditado, "escutar primeiro" e
-  shadowing.
-- **Histórico do Quiz e do Diga em japonês**: hoje não guardam
-  resultado; alimentaria Pontos fracos e o próximo passo de *Falar*.
-
-### Dados e sincronização
-- **Sincronização automática entre aparelhos via Google Drive** — ✅
-  implementada (2026-11, v2.7.0): os dados são sincronizados sozinhos
-  por um arquivo na pasta oculta do app no Drive do próprio usuário, sem
-  servidor nosso e sem custo. Opcional e dispensável (o app segue 100%
-  offline sem ela), mas é uma exceção explícita ao "sem API remota" da §1.
-  Antes dela, corrigir a mesclagem (registro de exclusões e data nas
-  preferências), o que já melhora o modo Mesclar manual. Detalhes, riscos,
-  alternativas e fases em `docs/proposta-sincronizacao.md`.
+| Entrega | Quando | Onde ler mais |
+|---|---|---|
+| FSRS no lugar do SM-2 | v2.0.0, ago/2026 | `regras-negocio.md` §1 |
+| Quiz das lições (reordenar frase, escolher partícula, significado, V/F) e Kakitori (ditado) | até v2.1.0, ago/2026 | `regras-negocio.md` §5 |
+| Módulo de Kanji com SRS (~110 kanji N5, radical + mnemônico) e caligrafia de kanji (KanjiVG) | set/2026 | `regras-negocio.md` §3 |
+| Leitura extensiva graduada (40 textos, furigana, significado por palavra) | set/2026 | `regras-negocio.md` §4 |
+| Áudio por `SpeechSynthesis`: botões de áudio, ouvir o texto, escutar primeiro, shadowing, velocidade global | set–out/2026 | `regras-negocio.md` §4 |
+| Furigana nas tabelas de kanji das lições (`FuriganaWord`) | set/2026 | `regras-negocio.md` §3 |
+| Melhorias de aprendizado: revisão com 2/4 botões e desfazer; card com frase de contexto e "salvar palavra" da leitura (sentence mining); estágios Reconheço → Sei dizer → Domino; vocabulário passivo e "% conhecido"; mapa de vocabulário N5; Diga em japonês; Pontos fracos; meta diária, sequência e heatmap; notas nos cards | v2.5.0, out/2026 | `regras-negocio.md` §1, §4, §5, §5b, §5c |
+| Novo visual (tokens por módulo, fontes empacotadas, componentes) | out/2026 | `docs/guia-visual.md` |
+| Reorganização pelo método (Hoje · Aprender · Praticar · Revisar · Progresso, Plano do dia, Próximo passo) | v2.6.0, out/2026 | `regras-negocio.md` §5d |
+| Manual do usuário (PDF, também dentro do app) | v2.6.x, out/2026 | `docs/manual/README.md` |
+| Sincronização automática pelo Google Drive + mesclagem com lápides e contadores por aparelho; política de privacidade | v2.7.x, nov/2026 | `regras-negocio.md` §6, `docs/proposta-sincronizacao.md` |
 
 ---
 
-## 5. Fases sugeridas
-
-Agrupamento por dependência técnica e esforço, não por obrigação — a ordem
-real depende do que o usuário quiser estudar primeiro.
-
-**Fase 1 — maior impacto, menor dependência entre si**
-1. Módulo de Kanji com SRS (3.1)
-2. Web Speech API / TTS (3.3)
-3. Leitura extensiva, nível inicial (3.2)
-
-**Fase 2 — depende da Fase 1**
-4. Stroke order de kanji (3.5) — depende de 3.1
-5. Sentence mining (3.6) — mais valioso com leitura (3.2) disponível
-
-**Fase 3 — consolidação**
-6. Simulados JLPT (3.4) — mais valioso com 3.2/3.3 maduros
-7. Gamificação (3.7) — pode entrar a qualquer momento, é independente
-
----
-
-## 6. Fora de escopo (por ora) e por quê
+## 4. Fora de escopo (por ora) e por quê
 
 - **Reconhecimento de fala do usuário** (avaliar pronúncia): a API
   `SpeechRecognition` do navegador, no Chrome, depende de um servidor do
@@ -301,7 +137,7 @@ real depende do que o usuário quiser estudar primeiro.
 
 ---
 
-## 7. Fontes da pesquisa
+## 5. Fontes da pesquisa
 
 - [Best app for learning Japanese in 2026 — immit.co](https://immit.co/blog/best-app-for-learning-japanese-in-2026-an-honest-comparison)
 - [Best Japanese Learning Resources in 2026 — Kaiwa Blog](https://trykaiwa.com/blog/best-japanese-learning-resources-2026)

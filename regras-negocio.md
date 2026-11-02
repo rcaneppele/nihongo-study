@@ -211,7 +211,7 @@ com `cards` (pela `front`) e `wordKnowledge` (pela chave).
 `parseCardsFile()` (`src/features/flashcards/importCards.ts`) detecta o
 formato pelo nome do arquivo/conteúdo e chama o parser certo:
 - CSV: `front,back,reading,category,tags` (com ou sem cabeçalho; tags separadas
-  por `;`). Parser simples — não cobre vírgulas dentro de aspas.
+  por `;`). Campo entre aspas pode ter vírgula, quebra de linha e `""`.
 - JSON: array de objetos de card.
 - Texto do Anki ("Notas em Texto Simples" ou "Cartões em Texto Simples"):
   lê cabeçalho `#separator`/`#html`/`#notetype column`/`#deck column`/
@@ -434,10 +434,10 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   módulo e na leitura extensiva (seção 4). `FuriganaWord` (mesmo arquivo) é
   o atalho para o caso comum de uma palavra inteira com uma leitura só —
   usado nas tabelas de vocabulário das lições (`familia.tsx`, `pronomes.tsx`,
-  `sufixos.tsx`) no lugar da antiga coluna "Kanji" separada da coluna
-  "Hiragana": agora é uma única coluna "Kanji (furigana)", com a leitura em
-  cima do kanji. Palavras sem kanji continuam como string simples na mesma
-  coluna (ex.: あたし, おまえ), sem `FuriganaWord`.
+  `sufixos.tsx`, `seikatsu.tsx`, `kanji.tsx`), numa única coluna "Kanji
+  (furigana)", com a leitura em cima do kanji. Palavras sem kanji continuam
+  como string simples na mesma coluna (ex.: あたし, おまえ), sem
+  `FuriganaWord`.
 
 ## 4. Leitura extensiva
 
@@ -567,7 +567,8 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   O usuário lê, mas não há progresso rastreado por lição (por ora).
 - Cada lição usa os componentes de `src/components/Licao.tsx`:
   - `Section` — seção com título e separador.
-  - `Ex` — exemplo com campos `jp`, `reading?`, `pt` e `notes?`.
+  - `Ex` — exemplo com campos `jp`, `romaji?`, `pt` e `notes?`.
+  - `ReadingKey` — legenda "kana ← descrição" da seção "Como ler esta lição".
   - `Note` — destaque informativo (fundo indigo suave).
   - `GrammarTable` — tabela com suporte a colunas em fonte japonesa (`jpCols`).
 
@@ -577,7 +578,37 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   correspondente ao `id`; exibe mensagem de "não encontrada" se o id não existir.
   Lições com `quiz.frases` ou `diga` terminam com o atalho "Pratique esta lição" →
   "Diga em japonês" só daquela lição.
-- `/licoes/diga` → `src/routes/Diga.tsx` — ver "Diga em japonês" abaixo.
+- `/licoes/quiz` → `src/routes/Quiz.tsx` (Revisar › Testar lições),
+  `/licoes/kakitori` → `src/routes/Kakitori.tsx` (Praticar › Ouvir e
+  Escrever) e `/licoes/diga` → `src/routes/Diga.tsx` (Praticar › Falar) —
+  ver as seções abaixo.
+
+### Quiz ("Testar lições")
+Lógica em `src/data/quiz/` (`types.ts`, `gerador.ts`) e
+`src/features/quiz/`. Cada lição pode exportar um `quiz` com `frases`
+(`FraseEstruturada`: tokens, com as partículas marcadas) e `perguntas`
+autoradas.
+- **Tipos**: *Reordenar frase* (tocar os blocos na ordem certa, a partir do
+  português) e *Escolher partícula* (completar a primeira partícula da
+  frase entre a correta e 3 distratoras comuns) são gerados das `frases`;
+  *Significado* (múltipla escolha) e *Verdadeiro ou falso* vêm das
+  `perguntas`.
+- **Configuração**: lições, tipos e quantidade (padrão 10, limitada ao que
+  a combinação consegue gerar). Perguntas sorteadas do conjunto.
+- **Correção** automática, com feedback e explicação; avança sozinho.
+- **Nada é gravado** além da atividade do dia (`praticas` += nº de
+  respostas, §5c) — sem histórico por pergunta (ver roadmap).
+
+### Kakitori (ditado)
+Lógica em `src/data/kakitori/` e `src/features/kakitori/`. Só entram as
+lições que exportam `kakitori` (grupos nomeados de itens, ex.: "Kanji -
+Números") — as `frases` do quiz são longas demais pra ditado.
+- O app fala o item (`speakJapanese`, botão para repetir); o usuário
+  escreve o que ouviu **digitando** ou **desenhando** (`?modo=desenhar`, de
+  Praticar › Escrever) e revela a resposta (kana, kanji quando difere,
+  romaji, tradução).
+- **Sem correção automática**: o usuário se marca como acerto ou erro, como
+  no flip-card. Nada é gravado além da atividade do dia (`praticas`).
 
 ### Diga em japonês (produção de frases)
 Lógica em `src/features/diga/` (`gerador.ts`, `DigaSession.tsx`,
@@ -682,11 +713,27 @@ de 0).
 
 ## 5d. Home (Hoje), navegação e hubs do método
 
+O app é organizado por **objetivo de aprendizado**, não por ferramenta. O
+ciclo que a navegação apresenta:
+
+```
+   APRENDER  ──►  PRATICAR (usar)  ──►  REVISAR (fixar)
+   conteúdo       ler · ouvir ·          memória espaçada,
+   novo           falar · escrever       pontos fracos
+        ▲                                     │
+        └──────────  PROGRESSO  ◄─────────────┘
+```
+
+e **Hoje** costura o ciclo num plano do dia. Uma mesma ferramenta pode
+aparecer em mais de um hub, cada vez já no modo da habilidade (ver "Modos
+pré-escolhidos" abaixo). Ferramenta nova: decidir em
+`src/features/metodo/estrutura.ts` em que objetivo(s) ela entra.
+
 - **Saudação** pela hora do aparelho, em japonês com romaji e tradução
   pequenos: おはようございます (antes das 11h), こんにちは (até 18h),
   こんばんは (depois) — o app não sabe o nome do usuário, e assim a saudação
   também ensina. Acima, a data por extenso.
-- **Layout** (visual em `docs/proposta-visual.md`): saudação → "Hoje"
+- **Layout** (visual em `docs/guia-visual.md`): saudação → "Hoje"
   (§5c) ao lado do **Plano do dia** → "Seu método" (um atalho por hub:
   Aprender, Praticar, Revisar — com as pendências —, Progresso, cada um
   com uma linha e um número do momento). Os contadores de vocabulário e
@@ -707,9 +754,7 @@ de 0).
   botão escuro "Começar". Os outros não feitos mostram só o título e
   "Fazer agora"; os feitos, um check e o resumo do dia ("2 item(ns)
   novo(s) aprendido(s) hoje"). Com os 3 feitos: "Plano do dia completo!".
-  Substitui a antiga "Sugestão para agora" (sugestão única + alternativa).
-- **Navegação pelo método** (`src/features/metodo/estrutura.ts`, ver
-  `docs/proposta-reorganizacao.md`): **Hoje · Aprender · Praticar · Revisar
+- **Navegação pelo método** (`src/features/metodo/estrutura.ts`): **Hoje · Aprender · Praticar · Revisar
   · Progresso** — os mesmos 5 itens na barra inferior do celular e na
   lateral do desktop (que também lista os atalhos de cada seção: Aprender ›
   Lições, Palavras novas, Kanji novos, Alfabetos; Praticar › Ler, Ouvir,

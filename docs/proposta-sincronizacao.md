@@ -1,6 +1,6 @@
 # Proposta — sincronização automática entre aparelhos (Google Drive)
 
-> **Status: implementada** (v2.7.0, nov/2026; ajustes na v2.7.1). Fases 1
+> **Status: implementada** (v2.7.0, nov/2026; ajustes até a v2.7.4). Fases 1
 > (base de dados), 2 (sincronização manual melhorada), 4 (Google Drive) e 5
 > (manual do usuário, capítulos 2 e 9) feitas — regras em
 > `regras-negocio.md` §6. Projeto no Google Cloud configurado (Client ID na
@@ -30,7 +30,7 @@ usuário**, sem servidor nosso e sem custo de manutenção.
 
 ---
 
-## 1. Situação atual
+## 1. Situação antes da proposta
 
 - Os dados ficam só no IndexedDB de cada aparelho (`src/db/schema.ts`).
 - A sincronização é manual: Exportar backup num aparelho, Importar no modo
@@ -53,9 +53,6 @@ projeto, a sincronização deve ser:
 - **do usuário** — os dados ficam no Drive da pessoa, numa pasta que só o
   app enxerga; nenhum dado passa por servidor nosso;
 - **gratuita** — sem servidor, sem banco, sem plano pago.
-
-Ao implementar, atualizar os princípios do `CLAUDE.md` e a §1 do
-`docs/roadmap.md` com essa exceção.
 
 ---
 
@@ -178,11 +175,11 @@ token — inviável para leigos).
 
 | Fase | O quê | Esforço |
 |---|---|---|
-| **1. Base de dados** | Tombstones + `updatedAt` em `meta` + revisão do merge de `kanaProgress`; schemaVersion 6 | Médio |
-| **2. Manual melhorada (opção A)** | Botão "Sincronizar com arquivo" (mesclar + exportar), compartilhar no celular, aviso do último backup | Baixo |
-| **3. Prova de conceito** | Login Google + upload/download de um arquivo no `appDataFolder`, testado no notebook, Android e iPhone instalado | Baixo |
-| **4. Sincronização com o Drive** | Fluxo da §4.3, gatilhos da §4.4, interface da §4.5 | Médio |
-| **5. Documentação** | `CLAUDE.md` (princípios + mapa do código), `regras-negocio.md` (regras de sync e exclusão), roadmap, manual do usuário (capítulo 9) | Baixo |
+| **1. Base de dados** ✅ | Tombstones + `updatedAt` em `meta` + revisão do merge de `kanaProgress`; schemaVersion 6 | Médio |
+| **2. Manual melhorada (opção A)** ✅ | Botão "Sincronizar com arquivo" (mesclar + exportar), compartilhar no celular, aviso do último backup | Baixo |
+| **3. Prova de conceito** (dispensada) | Login Google + upload/download de um arquivo no `appDataFolder`, testado no notebook, Android e iPhone instalado | Baixo |
+| **4. Sincronização com o Drive** ✅ | Fluxo da §4.3, gatilhos da §4.4, interface da §4.5 | Médio |
+| **5. Documentação** ✅ | `CLAUDE.md` (princípios + mapa do código), `regras-negocio.md` (regras de sync e exclusão), roadmap, manual do usuário (capítulo 9) | Baixo |
 
 As fases 1 e 2 valem por si mesmas, mesmo que a 4 nunca seja feita.
 Versão: cada fase com funcionalidade nova é **minor** (as migrações são
