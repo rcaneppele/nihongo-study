@@ -186,7 +186,7 @@ com `cards` (pela `front`) e `wordKnowledge` (pela chave).
   do vocabulário passivo — frequência no próprio corpus do app); desempate
   pela categoria em ordem "iniciante primeiro" (Saudações, Pronomes,
   Números/tempo, Verbos, Adjetivos, Advérbios, Partículas, Substantivos) e
-  depois a ordem do deck. Hoje só ~25 das 155 palavras aparecem nos
+  depois a ordem do deck. Hoje só ~70 das 194 palavras aparecem nos
   textos, então o desempate pesa.
 - **"Aprender as próximas 10"**: cria cards (estado FSRS novo, mesmo formato
   do import do N5) das 10 palavras Novas mais úteis do filtro; elas entram
@@ -234,12 +234,18 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   arquivo filtrando fora, por enquanto, as entradas com kanji na frente
   (`N5_DECK`) — mesmo motivo da regra de kanji nas lições (usuário ainda
   aprendendo kana). É só remover o filtro quando fizer sentido reintroduzir
-  kanji; o dado completo continua em `n5.json`. Para essas ~155 entradas
+  kanji; o dado completo continua em `n5.json`. Para essas ~195 entradas
   sem kanji, o campo `reading` em `n5.json` já vem em **romaji** (não
   hiragana/katakana), já que a frente do card é a própria palavra em kana —
   repetir em kana no verso não ajudaria; nas ~555 entradas com kanji
   (hoje filtradas), `reading` continua em hiragana, já que ali serve de
   furigana pro kanji.
+- **Verbos em kana**: como quase todo verbo do N5 tem kanji na frente, o
+  filtro deixava só 10 dos 117 visíveis. Os 39 verbos da lista de referência
+  da lição (`src/data/verbos/lista.ts`) ganharam entrada própria em kana,
+  logo depois da irmã com kanji (`たべる` depois de `食べる`; `ころす` fica
+  de fora, por não ser N5). Ao remover o filtro de kanji no futuro, essas
+  entradas passam a duplicar as irmãs e precisam ser tratadas.
 - **Notas do deck** (`note` em `n5.json`): ~40 entradas sem kanji têm nota
   — empréstimos do português (パン, ボタン, たばこ), falsos amigos
   (ストーブ, ノート, アパート), abreviações e homônimos (デパート, コート,

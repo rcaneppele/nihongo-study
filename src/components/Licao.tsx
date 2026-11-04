@@ -70,10 +70,13 @@ export function GrammarTable({
   headers,
   rows,
   jpCols = [],
+  semQuebra = false,
 }: {
   headers: string[];
   rows: (string | ReactNode)[][];
   jpCols?: number[];
+  /** Tabela de formas curtas e muitas colunas: rola na horizontal em vez de quebrar o kana letra por letra. */
+  semQuebra?: boolean;
 }) {
   return (
     // Focável: no celular a tabela rola na horizontal, e pelo teclado também precisa dar.
@@ -83,7 +86,7 @@ export function GrammarTable({
       aria-label={`Tabela: ${headers.join(', ')}`}
       className="overflow-x-auto rounded-2xl border border-line/70 bg-surface shadow-card"
     >
-      <table className="w-full text-sm">
+      <table className={`w-full text-sm ${semQuebra ? 'whitespace-nowrap' : ''}`}>
         <thead>
           <tr className="border-b border-line bg-fuji/8">
             {headers.map((h, i) => (

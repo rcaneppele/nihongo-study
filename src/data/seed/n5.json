@@ -20,6 +20,16 @@
   ]
  },
  {
+  "front": "あう",
+  "reading": "au",
+  "back": "encontrar (alguém)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "青",
   "reading": "あお",
   "back": "azul",
@@ -92,6 +102,16 @@
  {
   "front": "開ける",
   "reading": "あける",
+  "back": "abrir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "あける",
+  "reading": "akeru",
   "back": "abrir",
   "category": "Verbos",
   "tags": [
@@ -173,6 +193,16 @@
   "front": "遊ぶ",
   "reading": "あそぶ",
   "back": "brincar/se divertir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "あそぶ",
+  "reading": "asobu",
+  "back": "brincar, divertir-se",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -332,6 +362,17 @@
   ]
  },
  {
+  "front": "あびる",
+  "reading": "abiru",
+  "back": "tomar (banho de chuveiro)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Usado com シャワー: シャワーをあびます."
+ },
+ {
   "front": "危ない",
   "reading": "あぶない",
   "back": "perigoso",
@@ -402,6 +443,17 @@
   ]
  },
  {
+  "front": "ある",
+  "reading": "aru",
+  "back": "existir, haver (coisas)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Para pessoas e animais, いる. A negativa casual é ない, não あらない."
+ },
+ {
   "front": "有る",
   "reading": "ある",
   "back": "existir/haver",
@@ -463,6 +515,16 @@
   ]
  },
  {
+  "front": "いう",
+  "reading": "iu",
+  "back": "dizer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "家",
   "reading": "いえ",
   "back": "casa",
@@ -491,6 +553,17 @@
    "n5",
    "verbo"
   ]
+ },
+ {
+  "front": "いく",
+  "reading": "iku",
+  "back": "ir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Exceção na forma て: いって, não いいて."
  },
  {
   "front": "いくつ",
@@ -715,6 +788,17 @@
   ]
  },
  {
+  "front": "いる",
+  "reading": "iru",
+  "back": "existir, estar (pessoas e animais)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Para coisas, ある. Há outro いる, \"precisar\", que é Grupo 1 (いらない)."
+ },
+ {
   "front": "要る",
   "reading": "いる",
   "back": "precisar",
@@ -728,6 +812,16 @@
   "front": "入れる",
   "reading": "いれる",
   "back": "colocar (dentro)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "いれる",
+  "reading": "ireru",
+  "back": "colocar (dentro de algo)",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -1056,6 +1150,16 @@
   ]
  },
  {
+  "front": "おきる",
+  "reading": "okiru",
+  "back": "acordar, levantar-se",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "置く",
   "reading": "おく",
   "back": "colocar",
@@ -1119,6 +1223,16 @@
   "front": "教える",
   "reading": "おしえる",
   "back": "ensinar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "おしえる",
+  "reading": "oshieru",
+  "back": "ensinar, informar",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -1367,6 +1481,16 @@
   ]
  },
  {
+  "front": "およぐ",
+  "reading": "oyogu",
+  "back": "nadar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "降りる",
   "reading": "おりる",
   "back": "descer (de veículo)",
@@ -1377,8 +1501,29 @@
   ]
  },
  {
+  "front": "おりる",
+  "reading": "oriru",
+  "back": "descer, desembarcar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "O veículo leva を: でんしゃをおります."
+ },
+ {
   "front": "終る",
   "reading": "おわる",
+  "back": "terminar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "おわる",
+  "reading": "owaru",
   "back": "terminar",
   "category": "Verbos",
   "tags": [
@@ -1497,6 +1642,16 @@
   ]
  },
  {
+  "front": "かう",
+  "reading": "kau",
+  "back": "comprar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "返す",
   "reading": "かえす",
   "back": "devolver",
@@ -1515,6 +1670,17 @@
    "n5",
    "verbo"
   ]
+ },
+ {
+  "front": "かえる",
+  "reading": "kaeru",
+  "back": "voltar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Grupo 1, apesar de terminar em -eru: かえります."
  },
  {
   "front": "顔",
@@ -1549,6 +1715,16 @@
  {
   "front": "書く",
   "reading": "かく",
+  "back": "escrever",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "かく",
+  "reading": "kaku",
   "back": "escrever",
   "category": "Verbos",
   "tags": [
@@ -1931,9 +2107,30 @@
   ]
  },
  {
+  "front": "きえる",
+  "reading": "kieru",
+  "back": "apagar-se, desaparecer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "A luz se apaga sozinha: でんきがきえます. Para \"apagar a luz\", use けす."
+ },
+ {
   "front": "聞く",
   "reading": "きく",
   "back": "ouvir/perguntar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "きく",
+  "reading": "kiku",
+  "back": "ouvir; perguntar",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -3045,6 +3242,17 @@
   ]
  },
  {
+  "front": "しぬ",
+  "reading": "shinu",
+  "back": "morrer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Falando de alguém, o mais educado é なくなる (falecer)."
+ },
+ {
   "front": "字引",
   "reading": "じびき",
   "back": "dicionário",
@@ -3077,6 +3285,16 @@
  {
   "front": "閉める",
   "reading": "しめる",
+  "back": "fechar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "しめる",
+  "reading": "shimeru",
   "back": "fechar",
   "category": "Verbos",
   "tags": [
@@ -3938,6 +4156,16 @@
   ]
  },
  {
+  "front": "たべる",
+  "reading": "taberu",
+  "back": "comer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "卵",
   "reading": "たまご",
   "back": "ovo",
@@ -4129,6 +4357,17 @@
   ]
  },
  {
+  "front": "つかれる",
+  "reading": "tsukareru",
+  "back": "cansar-se",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "\"Estou cansado\" costuma ser つかれました, no passado."
+ },
+ {
   "front": "次",
   "reading": "つぎ",
   "back": "próximo, seguinte",
@@ -4162,6 +4401,16 @@
   "front": "作る",
   "reading": "つくる",
   "back": "fazer, criar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "つくる",
+  "reading": "tsukuru",
+  "back": "preparar, produzir",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -4349,6 +4598,17 @@
    "n5",
    "verbo"
   ]
+ },
+ {
+  "front": "でる",
+  "reading": "deru",
+  "back": "sair",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "O lugar de onde se sai leva を: いえをでます."
  },
  {
   "front": "テレビ",
@@ -4696,6 +4956,16 @@
   "front": "取る",
   "reading": "とる",
   "back": "pegar, tirar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "とる",
+  "reading": "toru",
+  "back": "pegar; tirar; tomar",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -5063,6 +5333,16 @@
   ]
  },
  {
+  "front": "ねる",
+  "reading": "neru",
+  "back": "dormir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "～年",
   "reading": "～ねん",
   "back": "~ ano(s)",
@@ -5114,6 +5394,16 @@
   ]
  },
  {
+  "front": "のむ",
+  "reading": "nomu",
+  "back": "beber",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "乗る",
   "reading": "のる",
   "back": "embarcar, pegar (transporte)",
@@ -5122,6 +5412,17 @@
    "n5",
    "verbo"
   ]
+ },
+ {
+  "front": "のる",
+  "reading": "noru",
+  "back": "subir, embarcar (em veículo)",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "O veículo leva に: でんしゃにのります."
  },
  {
   "front": "歯",
@@ -5183,6 +5484,17 @@
    "n5",
    "verbo"
   ]
+ },
+ {
+  "front": "はいる",
+  "reading": "hairu",
+  "back": "entrar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Grupo 1, apesar de terminar em -iru: はいります. O lugar leva に."
  },
  {
   "front": "葉書",
@@ -5274,6 +5586,17 @@
    "n5",
    "verbo"
   ]
+ },
+ {
+  "front": "はしる",
+  "reading": "hashiru",
+  "back": "correr",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "Grupo 1, apesar de terminar em -iru: はしります."
  },
  {
   "front": "バス",
@@ -5370,6 +5693,16 @@
   "front": "話す",
   "reading": "はなす",
   "back": "falar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "はなす",
+  "reading": "hanasu",
+  "back": "falar, conversar",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -6244,6 +6577,16 @@
   ]
  },
  {
+  "front": "まつ",
+  "reading": "matsu",
+  "back": "esperar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "まっすぐ",
   "reading": "massugu",
   "back": "reto; direto",
@@ -6445,6 +6788,16 @@
   ]
  },
  {
+  "front": "みる",
+  "reading": "miru",
+  "back": "ver, assistir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "みんな",
   "reading": "minna",
   "back": "todo mundo",
@@ -6576,6 +6929,16 @@
   ]
  },
  {
+  "front": "もつ",
+  "reading": "motsu",
+  "back": "segurar; possuir",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
   "front": "もっと",
   "reading": "motto",
   "back": "mais",
@@ -6679,6 +7042,16 @@
   "front": "休む",
   "reading": "やすむ",
   "back": "descansar",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "やすむ",
+  "reading": "yasumu",
+  "back": "descansar; faltar (à aula, ao trabalho)",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -6859,6 +7232,16 @@
  {
   "front": "読む",
   "reading": "よむ",
+  "back": "ler",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "よむ",
+  "reading": "yomu",
   "back": "ler",
   "category": "Verbos",
   "tags": [
@@ -7089,8 +7472,29 @@
   ]
  },
  {
+  "front": "わかる",
+  "reading": "wakaru",
+  "back": "entender",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ],
+  "note": "O que se entende leva が: にほんごがわかります."
+ },
+ {
   "front": "忘れる",
   "reading": "わすれる",
+  "back": "esquecer",
+  "category": "Verbos",
+  "tags": [
+   "n5",
+   "verbo"
+  ]
+ },
+ {
+  "front": "わすれる",
+  "reading": "wasureru",
   "back": "esquecer",
   "category": "Verbos",
   "tags": [

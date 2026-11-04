@@ -1,5 +1,15 @@
 import { Section, Ex, Note, GrammarTable, ReadingKey } from '../components/Licao';
 import type { FraseEstruturada, QuizLicao } from '../data/quiz/types';
+import { conjugar } from '../data/verbos/conjugacao';
+import { VERBOS_GRUPO_1, VERBOS_GRUPO_2, type VerboReferencia } from '../data/verbos/lista';
+
+/** Linhas da lista de referência: as formas saem de `conjugar`, testada à parte. */
+function linhasDaLista(verbos: VerboReferencia[]) {
+  return verbos.map((v) => {
+    const f = conjugar(v.dicionario, v.grupo);
+    return [v.dicionario, v.romaji, v.disfarcado ? `${v.pt} (parece Grupo 2)` : v.pt, f.masu, f.te, f.nai];
+  });
+}
 
 export const meta = {
   id: 'verbos',
@@ -186,6 +196,54 @@ export const quiz: QuizLicao = {
       explicacao: 'Parte da forma ない (のまない) e troca い por かった: のまなかった.',
     },
     {
+      id: 'verbos-lista1',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma ます de はしる (correr)?',
+      alternativas: ['はしります', 'はします', 'はしいます', 'はしるます'],
+      correta: 0,
+      explicacao: 'はしる termina em -iru, mas é Grupo 1 disfarçado: る vira り.',
+    },
+    {
+      id: 'verbos-lista2',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma て de もつ (segurar)?',
+      alternativas: ['もって', 'もちて', 'もんで', 'もいて'],
+      correta: 0,
+      explicacao: 'Verbos em つ, como os em う e る, fazem って.',
+    },
+    {
+      id: 'verbos-lista3',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma て de およぐ (nadar)?',
+      alternativas: ['およいで', 'およいて', 'およんで', 'およって'],
+      correta: 0,
+      explicacao: 'Verbos em ぐ fazem いで. É o par vozeado de く → いて.',
+    },
+    {
+      id: 'verbos-lista4',
+      tipo: 'significado',
+      pergunta: 'Qual é a forma ない de いう (dizer)?',
+      alternativas: ['いわない', 'いあない', 'いない', 'いうない'],
+      correta: 0,
+      explicacao: 'Verbos em う usam わ na forma ない. いない é a negativa de いる (estar).',
+    },
+    {
+      id: 'verbos-lista5',
+      tipo: 'significado',
+      pergunta: 'Você apertou o interruptor e apagou a luz da sala. Qual frase diz isso?',
+      alternativas: ['でんきをけしました', 'でんきをきえました', 'でんきをつけました', 'でんきをしめました'],
+      correta: 0,
+      explicacao: 'きえる é a luz se apagar sozinha (でんきがきえました). Quem apaga usa けす.',
+    },
+    {
+      id: 'verbos-lista6',
+      tipo: 'significado',
+      pergunta: 'Qual partícula completa "Desço do trem": でんしゃ__おります?',
+      alternativas: ['を', 'に', 'で', 'が'],
+      correta: 0,
+      explicacao: 'O veículo de onde se desce leva を; aquele em que se embarca, com のる, leva に.',
+    },
+    {
       id: 'verbos-conj7',
       tipo: 'significado',
       pergunta: 'いる (no sentido de "precisar") é um verbo Grupo 1 disfarçado. Qual é a sua forma negativa casual (ない)?',
@@ -193,6 +251,20 @@ export const quiz: QuizLicao = {
       correta: 0,
       explicacao:
         'いる (precisar) é Grupo 1: vira いらない. Já いる (existir/estar) é Grupo 2 e vira いない — mesma grafia, verbos diferentes.',
+    },
+    {
+      id: 'verbos-vf8',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'わかる, とる e おわる são Grupo 1: verbos em -aru, -uru e -oru nunca são Grupo 2.',
+      correta: true,
+      explicacao: 'O Grupo 2 só tem verbos em -iru e -eru. O contrário não vale: かえる termina em -eru e é Grupo 1.',
+    },
+    {
+      id: 'verbos-vf9',
+      tipo: 'verdadeiro-falso',
+      afirmacao: 'あびる é um verbo Grupo 1 disfarçado, então a forma ます é あびります.',
+      correta: false,
+      explicacao: 'あびる é Grupo 2 comum: あびます.',
     },
     {
       id: 'verbos-vf1',
@@ -523,6 +595,10 @@ export default function Verbos() {
           <span className="font-jp">かえります</span>, e não{' '}
           <span className="font-jp">かえます</span>.
         </Note>
+        <p className="text-sm leading-relaxed text-ink">
+          Os verbos mais usados de cada grupo, já conjugados, estão na lista de referência, perto
+          do fim da lição.
+        </p>
       </Section>
 
       <Section title="Grupo 2 em detalhe — いちだんどうし">
@@ -1145,6 +1221,7 @@ export default function Verbos() {
         <GrammarTable
           headers={['Dicionário', 'Grupo', 'ます', 'ない', 'なかった', 'て', 'た']}
           jpCols={[0, 2, 3, 4, 5, 6]}
+          semQuebra
           rows={[
             ['かう (comprar)', '1', 'かいます', 'かわない', 'かわなかった', 'かって', 'かった'],
             ['のむ (beber)', '1', 'のみます', 'のまない', 'のまなかった', 'のんで', 'のんだ'],
@@ -1162,6 +1239,88 @@ export default function Verbos() {
         />
       </Section>
 
+      <Section title="Lista de referência — 42 verbos de uso diário">
+        <p className="text-sm leading-relaxed text-ink">
+          Volte aqui sempre que precisar conferir um verbo. Não tente decorar tudo de uma vez: o
+          que importa é reconhecer o grupo e, no Grupo 1, a terminação, porque é ela que decide a
+          forma て. Para transformar a lista em estudo, os verbos também estão em Aprender › Palavras
+          novas.
+        </p>
+        <p className="text-sm leading-relaxed text-ink">
+          <strong>Grupo 1</strong>, organizado pela terminação. Atalho: verbo em{' '}
+          <em>-aru</em>, <em>-uru</em> ou <em>-oru</em> é sempre deste grupo, como{' '}
+          <span className="font-jp">わかる</span>, <span className="font-jp">つくる</span> e{' '}
+          <span className="font-jp">とる</span>. Só os em <em>-iru</em> e <em>-eru</em> exigem
+          atenção.
+        </p>
+        <GrammarTable
+          headers={['Verbo', 'Romaji', 'Significado', 'ます', 'て', 'ない']}
+          jpCols={[0, 3, 4, 5]}
+          semQuebra
+          rows={linhasDaLista(VERBOS_GRUPO_1)}
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          <strong>Grupo 2</strong>: é sempre a mesma operação, tirar o <span className="font-jp">る</span>.
+        </p>
+        <GrammarTable
+          headers={['Verbo', 'Romaji', 'Significado', 'ます', 'て', 'ない']}
+          jpCols={[0, 3, 4, 5]}
+          semQuebra
+          rows={linhasDaLista(VERBOS_GRUPO_2)}
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          Vários destes verbos pedem uma partícula que o português não faria prever. Vale aprender
+          o verbo junto com ela (detalhes na lição de partículas):
+        </p>
+        <GrammarTable
+          headers={['Verbo', 'Exemplo', 'Tradução', 'Atenção']}
+          jpCols={[1]}
+          rows={[
+            ['あう', 'ともだちにあいます。', 'Encontro um amigo.', 'a pessoa leva に, não を'],
+            ['のる', 'でんしゃにのります。', 'Embarco no trem.', 'o veículo leva に'],
+            ['おりる', 'でんしゃをおります。', 'Desço do trem.', 'o veículo leva を'],
+            ['はいる', 'へやにはいります。', 'Entro no quarto.', 'o lugar de entrada leva に'],
+            ['でる', 'いえをでます。', 'Saio de casa.', 'o lugar de saída leva を'],
+            ['わかる', 'にほんごがわかります。', 'Entendo japonês.', 'o que se entende leva が'],
+            ['できる', 'にほんごができます。', 'Sei falar japonês.', 'o que se consegue fazer leva が'],
+          ]}
+        />
+        <Ex
+          jp="でんしゃをおりて、えきをでました。"
+          romaji="densha o orite, eki o demashita."
+          pt="Desci do trem e saí da estação."
+          notes="na estação: dois verbos da lista com を, ligados pela forma て"
+        />
+        <Ex
+          jp="シャワーをあびて、ねます。"
+          romaji="shawaa o abite, nemasu."
+          pt="Tomo um banho e vou dormir."
+          notes="あびる é o verbo do chuveiro; a banheira é おふろにはいります"
+        />
+        <Ex
+          jp="つかれました。"
+          romaji="tsukaremashita."
+          pt="Estou cansado(a)."
+          notes="o japonês relata que o cansaço chegou: é passado, embora o português diga 'estou'"
+        />
+        <Note>
+          <strong>Três pares que confundem.</strong>{' '}
+          <span className="font-jp">ある</span> é para coisas e{' '}
+          <span className="font-jp">いる</span>, para pessoas e animais.{' '}
+          <span className="font-jp">きえる</span> é a luz se apagar sozinha (
+          <span className="font-jp">でんきがきえました</span>); quando é você quem apaga, o verbo é{' '}
+          <span className="font-jp">けす</span> (<span className="font-jp">でんきをけします</span>).
+          E <span className="font-jp">つける</span> é ligar; o oposto dele é{' '}
+          <span className="font-jp">けす</span>, não <span className="font-jp">きえる</span>.
+        </Note>
+        <Note>
+          <span className="font-jp">しぬ</span> e <span className="font-jp">ころす</span> estão na
+          lista porque são verbos básicos e mostram bem as terminações, mas evite-os na conversa
+          sobre pessoas reais: ao falar da morte de alguém, o educado é{' '}
+          <span className="font-jp">なくなる</span> (<em>nakunaru</em>, "falecer").
+        </Note>
+      </Section>
+
       <Section title="Erros comuns">
         <GrammarTable
           headers={['Erro', 'Incorreto', 'Correto', 'Por quê']}
@@ -1170,6 +1329,8 @@ export default function Verbos() {
             ['Tratar かえる como Grupo 2', 'かえます', 'かえります', 'かえる termina em -eru mas é Grupo 1: a base é かえり (る → り), não かえ.'],
             ['いく na forma て/た', 'いいて / いいた', 'いって / いった', 'いく é a única exceção da regra く → いて.'],
             ['Negativa de ある', 'あらない', 'ない', 'ある tem negativa irregular.'],
+            ['"Apagar a luz" com きえる', 'でんきをきえます', 'でんきをけします', 'きえる é algo se apagar sozinho e não aceita objeto; quem apaga usa けす.'],
+            ['ある para pessoas e animais', 'ねこがあります', 'ねこがいます', 'ある é para coisas; o que tem vida própria usa いる.'],
             ['う → あ nos verbos em -う', 'かあない', 'かわない', 'Verbos em う usam わ na forma ない, não あ.'],
             [
               'Presente para ação em andamento',

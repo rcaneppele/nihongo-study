@@ -634,6 +634,46 @@ export const FRASES_GRAMATICA: FraseGramatica[] = [
     pt: 'Ontem à noite fiz a lição de casa.',
     explicacao: 'する → しました no passado.',
   },
+  {
+    id: 'g-v-08',
+    ponto: 'verbos',
+    frase: 'うち|uchi に|ni [かえります|kaerimasu]',
+    distratoras: ['かえるます', 'かえいます'],
+    pt: 'Volto para casa.',
+    explicacao: 'かえる termina em -eru, mas é Grupo 1: る vira り.',
+  },
+  {
+    id: 'g-v-09',
+    ponto: 'verbos',
+    frase: 'でんしゃ|densha を|o [おります|orimasu]',
+    distratoras: ['おりります', 'のります'],
+    pt: 'Desço do trem.',
+    explicacao: 'おりる é Grupo 2 (tira o る), e pede を. のる, com を, estaria errado: ele pede に.',
+  },
+  {
+    id: 'g-v-10',
+    ponto: 'verbos',
+    frase: 'ひるごはん|hirugohan を|o [つくりました|tsukurimashita]',
+    distratoras: ['つくました', 'つくいました'],
+    pt: 'Preparei o almoço.',
+    explicacao: 'Verbo em -uru é sempre Grupo 1: つくる → つくり + ました.',
+  },
+  {
+    id: 'g-v-11',
+    ponto: 'verbos',
+    frase: 'でんき|denki を|o [けしました|keshimashita]',
+    distratoras: ['きえました', 'あけました'],
+    pt: 'Apaguei a luz.',
+    explicacao: 'Quem apaga usa けす. きえる é a luz se apagar sozinha: でんきがきえました.',
+  },
+  {
+    id: 'g-v-12',
+    ponto: 'verbos',
+    frase: 'へや|heya に|ni ねこ|neko が|ga [います|imasu]',
+    distratoras: ['あります', 'いきます'],
+    pt: 'Há um gato no quarto.',
+    explicacao: 'Animal usa いる; ある é para coisas.',
+  },
 
   // --- rotina (せいかつ) -----------------------------------------------------
   {
