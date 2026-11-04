@@ -46,7 +46,7 @@ listening), sorteadas do conteúdo do app (deck N5, `quiz` e `diga` das
 lições, gramática em contexto, textos de leitura com áudio por
 `SpeechSynthesis`).
 **Por quê:** dá um objetivo mensurável e junta leitura e escuta num formato
-só. Com 60 textos, ~700 palavras, 12 lições e o banco de gramática já há
+só. Com 61 textos, ~700 palavras, 13 lições e o banco de gramática já há
 conteúdo para sortear.
 **Onde entra:** Revisar (ao lado de "Testar lições") e um indicador no
 Progresso. O resultado pode ir para `exerciseResults` (novo `kind`), o que
@@ -91,6 +91,7 @@ Extensões de conteúdo, sem mudança de arquitetura:
 | Conquistas locais | v2.8.0, nov/2026 | `regras-negocio.md` §5e |
 | Gramática em contexto (frases novas com lacuna) e diário guiado (escrita com checklist) | v2.8.0, nov/2026 | `regras-negocio.md` §5 |
 | Leitura: nível "Primeiros passos" (curtíssimos, só kana) e nível 3 (textos longos, N4) — 60 textos | v2.8.0, nov/2026 | `regras-negocio.md` §4 |
+| Lição de Onomatopeias, com quiz, Diga, ditado, gramática em contexto, diário e texto de leitura | v2.9.0, nov/2026 | `regras-negocio.md` §5 |
 
 ---
 

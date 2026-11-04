@@ -224,6 +224,39 @@ export const PROMPTS_DIARIO: PromptDiario[] = [
     ],
   },
   {
+    id: 'onomatope-sentimentos',
+    licaoId: 'onomatopeias',
+    titulo: 'Como me senti hoje',
+    instrucao:
+      'Conte três momentos do seu dia e como você se sentiu em cada um, usando onomatopeia + する. Diga também o que causou o sentimento.',
+    exemplo: [
+      { jp: 'バスが きませんでした。いらいらしました。', romaji: 'basu ga kimasen deshita. iraira shimashita.', pt: 'O ônibus não veio. Fiquei irritado(a).' },
+      { jp: 'しごとが おわって、ほっとしました。', romaji: 'shigoto ga owatte, hotto shimashita.', pt: 'O trabalho acabou e fiquei aliviado(a).' },
+    ],
+    checklist: [
+      'Usei pelo menos três onomatopeias de sentimento diferentes',
+      'Usei 〜しました para o que já aconteceu',
+      'Usei 〜しています para o que sinto agora',
+      'Disse a causa com に, で ou a forma て',
+    ],
+  },
+  {
+    id: 'onomatope-consulta',
+    licaoId: 'onomatopeias',
+    titulo: 'No consultório',
+    instrucao:
+      'Imagine uma ida ao médico. Escreva o que você diria sobre duas dores ou incômodos, e como responderia a どんな いたみですか.',
+    exemplo: [
+      { jp: 'あたまが ずきずきします。', romaji: 'atama ga zukizuki shimasu.', pt: 'Minha cabeça está latejando.' },
+      { jp: 'のどが ひりひりします。', romaji: 'nodo ga hirihiri shimasu.', pt: 'Minha garganta está ardendo.' },
+    ],
+    checklist: [
+      'Disse a parte do corpo com が',
+      'Usei uma onomatopeia de dor em cada frase',
+      'Terminei com します',
+    ],
+  },
+  {
     id: 'kanji-numeros',
     licaoId: 'kanji',
     titulo: 'Números do meu dia',

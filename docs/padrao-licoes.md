@@ -106,7 +106,7 @@ define quais seções fazem sentido e onde está o peso do conteúdo.
 | Arquétipo | Exemplos atuais | Peso do conteúdo | Cuidado principal |
 | --- | --- | --- | --- |
 | **Gramatical** | `desu`, `particulas`, `verbos` | Regra + conjugação + contraste entre formas | Cobrir registros (educado/casual) e as exceções, não só o padrão |
-| **Vocabulário temático** | `familia`, `aisatsu`, `sufixos` | Blocos de palavras + quando usar cada uma | O que diferencia palavras próximas; regra social de uso |
+| **Vocabulário temático** | `familia`, `aisatsu`, `sufixos`, `onomatopeias` | Blocos de palavras + quando usar cada uma | O que diferencia palavras próximas; regra social de uso |
 | **Sistema de escrita** | `kana` | Tabelas + ordem de aprendizado + confusões visuais | Não virar só tabela: precisa de estratégia de memorização e leitura |
 | **Referência de uso** | `kosoado`, `pronomes` | Sistema fechado + mapa mental | Mostrar o sistema como sistema, não como lista de itens soltos |
 
@@ -270,6 +270,7 @@ a manter:
 | adjetivo -い / adjetivo -な | as duas classes de adjetivo |
 | partícula | は, が, を, に, で… |
 | Grupo 1 / Grupo 2 / Irregulares | classes de conjugação verbal |
+| onomatopeia; grupos "sons", "jeitos e estados" e "sentimentos" | オノマトペ e seus três grupos (ぎおんご, ぎたいご, ぎじょうご) |
 
 Ao introduzir um termo novo, acrescente-o a esta tabela na mesma alteração.
 

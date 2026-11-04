@@ -39,6 +39,7 @@ export const PONTOS_GRAMATICA: PontoGramatica[] = [
   { id: 'ka-ne-yo', licaoId: 'particulas', titulo: 'か, ね, よ no fim da frase' },
   { id: 'verbos', licaoId: 'verbos', titulo: 'ます, ません, ました, ませんでした' },
   { id: 'rotina', licaoId: 'seikatsu', titulo: 'Rotina: horas e frequência' },
+  { id: 'onomatopeias', licaoId: 'onomatopeias', titulo: 'Onomatopeias: qual sentimento e qual forma' },
 ];
 
 export const FRASES_GRAMATICA: FraseGramatica[] = [
@@ -682,5 +683,79 @@ export const FRASES_GRAMATICA: FraseGramatica[] = [
     distratoras: ['ふん', 'ごろ'],
     pt: 'Acordo às sete e meia.',
     explicacao: 'はん = meia (hora): しちじはん.',
+  },
+
+  // --- onomatopeias (オノマトペ) ---------------------------------------------
+  {
+    id: 'g-ono-01',
+    ponto: 'onomatopeias',
+    frase: 'あしたから|ashita kara りょこうです。|ryokou desu. [わくわくしています|wakuwaku shite imasu]',
+    distratoras: ['いらいらしています', 'がっかりしています'],
+    pt: 'A viagem começa amanhã. Estou animado(a).',
+    explicacao: 'わくわく é a expectativa alegre.',
+  },
+  {
+    id: 'g-ono-02',
+    ponto: 'onomatopeias',
+    frase: 'バスが|basu ga ぜんぜん|zenzen きません。|kimasen. [いらいらします|iraira shimasu]',
+    distratoras: ['わくわくします', 'のんびりします'],
+    pt: 'O ônibus não vem de jeito nenhum. Fico irritado(a).',
+    explicacao: 'いらいら é a impaciência de quem espera.',
+  },
+  {
+    id: 'g-ono-03',
+    ponto: 'onomatopeias',
+    frase: 'テストが|tesuto ga おわって、|owatte, [ほっとしました|hotto shimashita]',
+    distratoras: ['そわそわしました', 'いらいらしました'],
+    pt: 'A prova acabou e fiquei aliviado(a).',
+    explicacao: 'ほっと é o alívio de quando a tensão acaba.',
+  },
+  {
+    id: 'g-ono-04',
+    ponto: 'onomatopeias',
+    frase: 'いま、|ima, [どきどきしています|dokidoki shite imasu]',
+    distratoras: ['どきどきしました', 'どきどきしませんでした'],
+    pt: 'Agora estou nervoso(a).',
+    explicacao: 'O que está acontecendo agora pede 〜しています.',
+  },
+  {
+    id: 'g-ono-05',
+    ponto: 'onomatopeias',
+    frase: 'ああ、|aa, [びっくりしました|bikkuri shimashita]',
+    distratoras: ['びっくりします', 'びっくりとしました'],
+    pt: 'Ai, que susto! (acabou de acontecer)',
+    explicacao: 'O susto já veio, então vai no passado; する entra direto, sem と.',
+  },
+  {
+    id: 'g-ono-06',
+    ponto: 'onomatopeias',
+    frase: 'おなかが|onaka ga [ぺこぺこです|pekopeko desu]',
+    distratoras: ['ぺこぺこします', 'ぺこぺこしています'],
+    pt: 'Estou morrendo de fome.',
+    explicacao: 'Estado do corpo pede です. ぺこぺこする é curvar-se repetidamente, ou bajular.',
+  },
+  {
+    id: 'g-ono-07',
+    ponto: 'onomatopeias',
+    frase: 'おおきい|ookii おと|oto [に|ni] びっくりしました|bikkuri shimashita',
+    distratoras: ['を', 'の'],
+    pt: 'Levei um susto com o barulho alto.',
+    explicacao: 'A causa do susto leva に: não é objeto do verbo, por isso nada de を.',
+  },
+  {
+    id: 'g-ono-08',
+    ponto: 'onomatopeias',
+    frase: 'あたまが|atama ga [ずきずきします|zukizuki shimasu]',
+    distratoras: ['わくわくします', 'ぐっすりします'],
+    pt: 'Minha cabeça está latejando.',
+    explicacao: 'ずきずき é a dor que pulsa: parte do corpo + が + onomatopeia + します.',
+  },
+  {
+    id: 'g-ono-09',
+    ponto: 'onomatopeias',
+    frase: 'ゆうべは|yuube wa [ぐっすり|gussuri] ねました|nemashita',
+    distratoras: ['いらいら', 'ぺらぺら'],
+    pt: 'Ontem à noite dormi profundamente.',
+    explicacao: 'ぐっすり entra direto antes do verbo: diz como foi o sono.',
   },
 ];

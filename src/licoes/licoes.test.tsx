@@ -81,6 +81,16 @@ describe.each(LICOES.map((l) => l.meta.id))('lição %s', (id) => {
 });
 
 describe('dados de exercício das lições', () => {
+  it('Onomatopeias entra na trilha antes de Kanji, com Quiz, Diga e ditado', () => {
+    const ids = LICOES.map((l) => l.meta.id);
+    expect(ids.indexOf('onomatopeias')).toBe(ids.indexOf('kanji') - 1);
+    const licao = LICOES.find((l) => l.meta.id === 'onomatopeias')!;
+    expect(licao.quiz?.frases?.length).toBeGreaterThan(0);
+    expect(licao.quiz?.perguntas?.length).toBeGreaterThan(0);
+    expect(licao.diga?.length).toBeGreaterThan(0);
+    expect(licao.kakitori?.length).toBeGreaterThan(0);
+  });
+
   const frasesDe = (l: (typeof LICOES)[number]) => [...(l.quiz?.frases ?? []), ...(l.diga ?? [])];
 
   it('ids únicos por tipo de exercício no app inteiro (o histórico guarda kind:itemId)', () => {

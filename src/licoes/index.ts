@@ -38,6 +38,12 @@ import Pronomes, { meta as metaPronomes, quiz as quizPronomes, kakitori as kakit
 import Verbos, { meta as metaVerbos, quiz as quizVerbos, diga as digaVerbos } from './verbos';
 import Desu, { meta as metaDesu, quiz as quizDesu, diga as digaDesu } from './desu';
 import Seikatsu, { meta as metaSeikatsu, quiz as quizSeikatsu, kakitori as kakitoriSeikatsu, diga as digaSeikatsu } from './seikatsu';
+import Onomatopeias, {
+  meta as metaOnomatopeias,
+  quiz as quizOnomatopeias,
+  kakitori as kakitoriOnomatopeias,
+  diga as digaOnomatopeias,
+} from './onomatopeias';
 import Kanji, { meta as metaKanji, quiz as quizKanji, kakitori as kakitoriKanji, diga as digaKanji } from './kanji';
 
 export const LICOES: LicaoEntry[] = [
@@ -52,5 +58,6 @@ export const LICOES: LicaoEntry[] = [
   { meta: metaParticulas, Component: Particulas, quiz: quizParticulas, diga: digaParticulas },
   { meta: metaVerbos, Component: Verbos, quiz: quizVerbos, diga: digaVerbos },
   { meta: metaSeikatsu, Component: Seikatsu, quiz: quizSeikatsu, kakitori: kakitoriSeikatsu, diga: digaSeikatsu },
+  { meta: metaOnomatopeias, Component: Onomatopeias, quiz: quizOnomatopeias, kakitori: kakitoriOnomatopeias, diga: digaOnomatopeias },
   { meta: metaKanji, Component: Kanji, quiz: quizKanji, kakitori: kakitoriKanji, diga: digaKanji },
 ];

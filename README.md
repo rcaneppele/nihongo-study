@@ -8,7 +8,7 @@ vez de por ferramenta:
 - **Aprender** — lições de gramática/vocabulário (com trilha de lições
   concluídas), palavras novas do deck N5, kanji novos (radical + mnemônico)
   e alfabetos (hiragana/katakana).
-- **Praticar** — as quatro habilidades: **ler** (60 textos graduados em
+- **Praticar** — as quatro habilidades: **ler** (61 textos graduados em
   quatro níveis, com furigana e significado por palavra), **ouvir** (escutar
   antes de ler, com autoavaliação, e ditado), **falar** (shadowing, "Diga em
   japonês", cards na direção português → japonês) e **escrever** (desenho

@@ -475,7 +475,7 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
   corrida" das lições, aqui estendida ao texto inteiro); 2 (kanji comuns já
   com furigana em cada palavra que os contém); 3 (`textos-nivel3.ts`: textos
   mais longos, mais kanji com furigana e gramática da fronteira N5/N4 —
-  〜ながら, 〜たり, 〜てくれる, ので/から). 20 + 20 + 10 + 10 = 60 textos.
+  〜ながら, 〜たり, 〜てくれる, ので/から). 20 + 21 + 10 + 10 = 61 textos.
   `src/data/leitura/textos.test.ts` confere ids únicos, furigana em toda
   palavra com kanji, níveis 0 e 1 sem kanji e `lemmaReading` em todo lemma
   com kanji. Sem
@@ -625,7 +625,7 @@ não conta).
   em `novos` (meta do dia e passo "Aprender" do Plano do dia); desmarcar
   não subtrai.
 - **Trilha** (`TrilhaLicoes`, no topo de `/licoes` e do hub Aprender):
-  "N de 12 lições concluídas", barra e a próxima — a primeira de `LICOES`
+  "N de 13 lições concluídas", barra e a próxima — a primeira de `LICOES`
   sem `completedAt` ("Continuar" se já foi aberta, senão "Próxima"). Na
   grade, selo **Concluída** ou **Em andamento** (aberta, não concluída).
 - O fim da lição também tem os atalhos "Diga em japonês" (se a lição tem

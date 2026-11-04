@@ -2120,6 +2120,144 @@ export const LEITURA_TEXTOS: ReadingText[] = [
       },
     ],
   },
+  {
+    id: 'hajimete-no-happyou',
+    title: 'はじめての はっぴょう',
+    level: 1,
+    wordCount: 49,
+    summaryPt: 'Um dia de apresentação de japonês contado pelos sentimentos: do nervoso ao alívio, com onomatopeias.',
+    lines: [
+      {
+        words: [
+          { text: 'きょうは', meaning: 'hoje (+ partícula de tópico)' },
+          { text: 'にほんごの', meaning: 'de japonês', lemma: 'にほんご' },
+          { text: 'はっぴょうの', meaning: 'da apresentação', lemma: 'はっぴょう' },
+          { text: 'ひです。', meaning: 'é o dia', lemma: 'ひ' },
+        ],
+        translation: 'Hoje é o dia da apresentação de japonês.',
+      },
+      {
+        words: [
+          { text: 'あさから', meaning: 'desde a manhã', lemma: 'あさ' },
+          { text: 'どきどき', meaning: 'com o coração acelerado, nervosa' },
+          { text: 'しています。', meaning: 'estou (する + ています)', lemma: 'する' },
+        ],
+        translation: 'Desde a manhã, estou nervosa.',
+      },
+      {
+        words: [
+          { text: 'でも、', meaning: 'mas' },
+          { text: 'でんしゃが', meaning: 'o trem (+ partícula de sujeito)', lemma: 'でんしゃ' },
+          { text: 'きませんでした。', meaning: 'não veio', lemma: 'くる' },
+        ],
+        translation: 'Mas o trem não veio.',
+      },
+      {
+        words: [
+          { text: 'わたしは', meaning: 'eu (+ partícula de tópico)', lemma: 'わたし' },
+          { text: 'いらいら', meaning: 'impaciente, irritada' },
+          { text: 'しました。', meaning: 'fiquei (する no passado)', lemma: 'する' },
+        ],
+        translation: 'Fiquei irritada.',
+      },
+      {
+        words: [
+          { text: 'がっこうに', meaning: 'à escola', lemma: 'がっこう' },
+          { text: 'つきました。', meaning: 'cheguei', lemma: 'つく' },
+        ],
+        translation: 'Cheguei à escola.',
+      },
+      {
+        words: [
+          { text: 'まだ', meaning: 'ainda' },
+          { text: 'じかんが', meaning: 'tempo (+ partícula de sujeito)', lemma: 'じかん' },
+          { text: 'ありました。', meaning: 'havia', lemma: 'ある' },
+        ],
+        translation: 'Ainda havia tempo.',
+      },
+      {
+        words: [
+          { text: 'ほっと', meaning: 'aliviada (っと: um instante)' },
+          { text: 'しました。', meaning: 'fiquei (する no passado)', lemma: 'する' },
+        ],
+        translation: 'Fiquei aliviada.',
+      },
+      {
+        words: [
+          { text: 'はっぴょうの', meaning: 'da apresentação', lemma: 'はっぴょう' },
+          { text: 'まえは', meaning: 'antes (+ partícula de tópico)', lemma: 'まえ' },
+          { text: 'むねが', meaning: 'o peito (+ partícula de sujeito)', lemma: 'むね' },
+          { text: 'どきどき', meaning: 'batendo forte' },
+          { text: 'しました。', meaning: 'ficou (する no passado)', lemma: 'する' },
+        ],
+        translation: 'Antes da apresentação, meu peito batia forte.',
+      },
+      {
+        words: [
+          { text: 'でも、', meaning: 'mas' },
+          { text: 'みんな', meaning: 'todos' },
+          { text: 'にこにこ', meaning: 'sorrindo' },
+          { text: 'していました。', meaning: 'estavam (する + ていました)', lemma: 'する' },
+        ],
+        translation: 'Mas todos estavam sorrindo.',
+      },
+      {
+        words: [
+          { text: 'はっぴょうが', meaning: 'a apresentação (+ partícula de sujeito)', lemma: 'はっぴょう' },
+          { text: 'おわりました。', meaning: 'terminou', lemma: 'おわる' },
+        ],
+        translation: 'A apresentação terminou.',
+      },
+      {
+        words: [
+          { text: 'せんせいが', meaning: 'a professora (+ partícula de sujeito)', lemma: 'せんせい' },
+          { text: '「ぺらぺらですね」と', meaning: '"é fluente, hein" (+ と, de citação)', lemma: 'ぺらぺら' },
+          { text: 'いいました。', meaning: 'disse', lemma: 'いう' },
+        ],
+        translation: 'A professora disse: "Você é fluente, hein!"',
+      },
+      {
+        words: [
+          { text: 'びっくり', meaning: 'surpresa' },
+          { text: 'しました。', meaning: 'fiquei (する no passado)', lemma: 'する' },
+        ],
+        translation: 'Fiquei surpresa.',
+      },
+      {
+        words: [
+          { text: 'わたしは', meaning: 'eu (+ partícula de tópico)', lemma: 'わたし' },
+          { text: '「いいえ、', meaning: '"não,' },
+          { text: 'まだまだです」と', meaning: 'ainda tenho muito a aprender" (+ と, de citação)', lemma: 'まだまだ' },
+          { text: 'いいました。', meaning: 'disse', lemma: 'いう' },
+        ],
+        translation: 'Eu disse: "Que nada, ainda tenho muito a aprender."',
+      },
+      {
+        words: [
+          { text: 'そのあと、', meaning: 'depois disso' },
+          { text: 'おなかが', meaning: 'a barriga (+ partícula de sujeito)', lemma: 'おなか' },
+          { text: 'ぺこぺこでした。', meaning: 'estava morrendo de fome', lemma: 'ぺこぺこ' },
+        ],
+        translation: 'Depois disso, eu estava morrendo de fome.',
+      },
+      {
+        words: [
+          { text: 'ともだちと', meaning: 'com uma amiga', lemma: 'ともだち' },
+          { text: 'ラーメンを', meaning: 'lámen (+ partícula de objeto)', lemma: 'ラーメン' },
+          { text: 'たべました。', meaning: 'comi', lemma: 'たべる' },
+        ],
+        translation: 'Comi lámen com uma amiga.',
+      },
+      {
+        words: [
+          { text: 'よるは', meaning: 'à noite (+ partícula de tópico)', lemma: 'よる' },
+          { text: 'ぐっすり', meaning: 'profundamente' },
+          { text: 'ねました。', meaning: 'dormi', lemma: 'ねる' },
+        ],
+        translation: 'À noite, dormi profundamente.',
+      },
+    ],
+  },
 
   // ---------------------------------------------------------------------
   // Nível 2 — kanji comuns com furigana
