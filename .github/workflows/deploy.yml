@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy (GitHub Pages e Cloudflare Pages)
 
 on:
   push:
@@ -49,3 +49,48 @@ jobs:
     steps:
       - uses: actions/deploy-pages@v5
         id: deployment
+
+  # Domínio próprio (nihongostudy.app). Só roda com a variável de repositório
+  # CLOUDFLARE_PAGES_ATIVO=true; precisa dos segredos CLOUDFLARE_API_TOKEN (permissão
+  # Account › Cloudflare Pages › Edit) e CLOUDFLARE_ACCOUNT_ID. É independente do GitHub
+  # Pages, que continua no ar porque os dados de quem ainda não migrou estão naquele endereço.
+  cloudflare:
+    needs: ci
+    if: vars.CLOUDFLARE_PAGES_ATIVO == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    env:
+      APP_BASE: /
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # O CI testa o build do GitHub Pages; aqui, o que vai para a raiz do domínio.
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --project=chromium --project=pwa
+
+      - run: npm run build
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+
+      # Cria o projeto na primeira vez; se já existe, o erro é ignorado (e um
+      # problema de verdade, como o token, aparece no passo seguinte).
+      - run: npx --yes wrangler pages project create nihongo-study --production-branch=main || true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=nihongo-study --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

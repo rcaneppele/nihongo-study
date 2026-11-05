@@ -46,7 +46,7 @@ test('manual: link fixo, sempre da rede quando online e disponível offline depo
 
   const baixarManual = () =>
     page.evaluate(async () => {
-      const r = await fetch('/nihongo-study/manual-do-usuario.pdf');
+      const r = await fetch('manual-do-usuario.pdf');
       return { ok: r.ok, tipo: r.headers.get('content-type'), inicio: new TextDecoder().decode((await r.arrayBuffer()).slice(0, 5)) };
     });
   const esperado = { ok: true, tipo: expect.stringContaining('pdf'), inicio: '%PDF-' };
@@ -55,10 +55,28 @@ test('manual: link fixo, sempre da rede quando online e disponível offline depo
   expect(await baixarManual()).toEqual(esperado);
 });
 
+// Na Cloudflare, /privacidade.html redireciona para /privacidade: sem internet ou com o
+// service worker ativo, esse endereço não pode cair no fallback do app.
+test('política de privacidade abre com e sem .html, inclusive offline', async ({ app, page, context }) => {
+  await app.abrir('/');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+  await expect.poll(() => page.evaluate(() => !!navigator.serviceWorker.controller), { timeout: 20_000 }).toBe(true);
+
+  await context.setOffline(true);
+  for (const caminho of ['privacidade.html', 'privacidade']) {
+    await page.goto(caminho);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Política de privacidade');
+    await expect(page.locator('#root')).toHaveCount(0);
+  }
+});
+
 test('manifesto do app instalável', async ({ page, baseURL }) => {
   const resposta = await page.request.get(`${baseURL}manifest.webmanifest`);
   expect(resposta.ok()).toBe(true);
   const manifesto = await resposta.json();
-  expect(manifesto).toMatchObject({ name: 'Nihongo Study', display: 'standalone', lang: 'pt-BR', start_url: '/nihongo-study/' });
+  expect(manifesto).toMatchObject({ name: 'Nihongo Study', display: 'standalone', lang: 'pt-BR', start_url: new URL(baseURL!).pathname });
   expect(manifesto.icons.length).toBeGreaterThan(0);
 });

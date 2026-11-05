@@ -207,9 +207,9 @@ test.describe('Aviso para instalar', () => {
 });
 
 test.describe('Sobre o App', () => {
-  test('credita os dados de terceiros, oferece como reportar erro e diz que não é oficial do CIL', async ({ app, page }) => {
+  test('credita os dados de terceiros, oferece como reportar erro e diz que não é oficial do CIL', async ({ app, page, baseURL }) => {
     await app.abrir('/config?tab=sobre');
-    await expect(page.getByRole('link', { name: 'Abrir o manual' })).toHaveAttribute('href', '/nihongo-study/manual-do-usuario.pdf');
+    await expect(page.getByRole('link', { name: 'Abrir o manual' })).toHaveAttribute('href', `${new URL(baseURL!).pathname}manual-do-usuario.pdf`);
     await expect(page.getByRole('link', { name: 'KanjiVG' })).toHaveAttribute('href', 'https://kanjivg.tagaini.net/');
     await expect(page.getByRole('link', { name: 'CC BY-SA 3.0' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'open-anki-jlpt-decks' })).toBeVisible();

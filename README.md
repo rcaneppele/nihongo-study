@@ -57,10 +57,13 @@ O app é estático: qualquer host gratuito serve. Você sobe **uma vez** e depoi
 só abrir o link no celular e "Adicionar à Tela de Início".
 
 - Build: `npm run build`, pasta `dist`.
-- **GitHub Pages**: o `base` em `vite.config.ts` já é `'/nihongo-study/'`
+- **GitHub Pages**: o caminho padrão do build já é `/nihongo-study/`
   (site em `usuario.github.io/nihongo-study/`) e há workflow em
   `.github/workflows/`.
-- **Netlify / Vercel / domínio próprio na raiz**: troque `base` para `'/'`.
+- **Domínio próprio na raiz** (Cloudflare Pages, Netlify, Vercel): gere com
+  `APP_BASE=/ npm run build`. O `deploy.yml` já publica na Cloudflare quando a
+  variável de repositório `CLOUDFLARE_PAGES_ATIVO` é `true`, com os segredos
+  `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
 - **Sincronização com o Google Drive** (opcional): precisa de um OAuth Client
   ID do Google (aplicativo da Web, escopo `drive.appdata`). Localmente, em
   `.env.local` (ver `.env.example`); no deploy, na variável de repositório
