@@ -206,6 +206,31 @@ test.describe('Aviso para instalar', () => {
   });
 });
 
+test.describe('Mudança de endereço', () => {
+  test('no endereço antigo, a Home avisa e leva ao novo endereço e ao backup', async ({ page, context, baseURL }) => {
+    // O build de teste, servido como se estivesse no GitHub Pages.
+    const base = new URL(baseURL!);
+    await context.route('https://rcaneppele.github.io/**', async (route) => {
+      const { pathname, search } = new URL(route.request().url());
+      // O Firefox repassa o Host do endereço simulado, e o servidor local recusaria.
+      const headers = { ...route.request().headers(), host: base.host };
+      await route.fulfill({ response: await route.fetch({ url: `${base.origin}${pathname}${search}`, headers }) });
+    });
+    await page.goto(`https://rcaneppele.github.io${base.pathname}`);
+
+    await expect(page.getByRole('heading', { name: 'O Nihongo Study mudou de endereço' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Abrir o novo endereço' })).toHaveAttribute('href', 'https://nihongostudy.app/');
+    await page.getByRole('link', { name: 'Exportar backup' }).click();
+    await expect(page.getByRole('button', { name: 'Exportar backup' })).toBeVisible();
+  });
+
+  test('fora do endereço antigo, o aviso não aparece', async ({ app, page }) => {
+    await app.abrir('/');
+    await expect(page.getByRole('heading', { name: 'Seu método' })).toBeVisible();
+    await expect(page.getByText('O Nihongo Study mudou de endereço')).toHaveCount(0);
+  });
+});
+
 test.describe('Sobre o App', () => {
   test('credita os dados de terceiros, oferece como reportar erro e diz que não é oficial do CIL', async ({ app, page, baseURL }) => {
     await app.abrir('/config?tab=sobre');

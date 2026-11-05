@@ -29,7 +29,7 @@ Princípios:
   próprio usuário (pasta oculta do app, sem servidor nosso), ou manual via
   **arquivo JSON** (que também é backup).
 
-App publicado: <https://rcaneppele.github.io/nihongo-study/> — passo a passo
+App publicado: <https://nihongostudy.app/> — passo a passo
 para instalar no Android e no iPhone no manual do usuário (capítulo 2).
 - Pensado para rodar no PC e instalar no celular/tablet (Android e iPhone/iPad).
 

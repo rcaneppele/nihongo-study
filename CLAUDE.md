@@ -23,6 +23,9 @@ escrever) · Revisar · Progresso —, não por módulo (ver
   o Google Drive do próprio usuário (`src/features/sync/`) — desligada por
   padrão, sem servidor nosso, e o app funciona 100% sem ela.
 - **Offline-first / PWA.** Deve funcionar instalado e sem internet.
+- **Endereço:** oficial em `nihongostudy.app` (Cloudflare Pages, build com
+  `APP_BASE=/`); o antigo no GitHub Pages continua no ar, sem redirecionar, porque
+  os dados de quem não migrou estão nele (`regras-negocio.md` §6).
 - **Dados locais por dispositivo** no IndexedDB (via Dexie). Cada aparelho é
   independente.
 - **Sincronização**: manual, via exportar/importar JSON (`src/db/backup.ts`),
@@ -104,7 +107,8 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/lib/contato.ts` — e-mail do projeto, repositório e link pronto para reportar erro.
 - `src/features/backup/` — lembrete de backup da Home (`LembreteBackup`,
   `useEstadoBackup`), aviso para instalar no Safari do iOS (`instalacao.ts`,
-  `AvisoInstalacao`) e pedido de armazenamento persistente (`persistencia.ts`);
+  `AvisoInstalacao`), aviso de mudança de endereço (`mudancaEndereco.ts`,
+  `AvisoMudancaEndereco`) e pedido de armazenamento persistente (`persistencia.ts`);
   o "Sincronizar com arquivo" e o compartilhar ficam em
   `src/routes/Config.tsx` (aba Dados) + `shareBackup()` em `backup.ts`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote

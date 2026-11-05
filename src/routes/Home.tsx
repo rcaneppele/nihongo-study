@@ -11,6 +11,7 @@ import { usePendencias } from '../features/metodo/pendencias';
 import PlanoDoDia from '../features/metodo/PlanoDoDia';
 import LembreteBackup from '../features/backup/LembreteBackup';
 import AvisoInstalacao from '../features/backup/AvisoInstalacao';
+import AvisoMudancaEndereco from '../features/backup/AvisoMudancaEndereco';
 import AvisoSync from '../features/sync/AvisoSync';
 import ProgressRing from '../components/ProgressRing';
 import { TILE, type Cor } from '../lib/cores';
@@ -39,6 +40,7 @@ export default function Home() {
   return (
     <div className="space-y-5">
       <Saudacao />
+      <AvisoMudancaEndereco />
 
       {resumo && (
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
