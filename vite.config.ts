@@ -44,11 +44,11 @@ export default defineConfig({
         navigateFallbackDenylist: [/\.pdf$/],
         runtimeCaching: [
           // Manual do usuário (PDF de alguns MB): fora do pré-cache, guardado na
-          // primeira abertura. O nome tem hash, então cada versão nova é outra
-          // entrada e a antiga sai pelo limite de 1.
+          // primeira abertura. O nome é fixo (para o link poder ser compartilhado),
+          // então a rede vem primeiro: online entrega a versão nova, offline a guardada.
           {
             urlPattern: /\.pdf$/,
-            handler: 'CacheFirst',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'manual',
               expiration: { maxEntries: 1 },

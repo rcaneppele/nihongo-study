@@ -94,9 +94,10 @@ src/
 
 ## Documentação
 
-- `docs/manual-do-usuario.pdf` — manual do usuário (guia ilustrado para quem
+- `public/manual-do-usuario.pdf` — manual do usuário (guia ilustrado para quem
   vai usar o app). O app oferece este mesmo arquivo em Configurações › Sobre
-  o App; para atualizá-lo lá, basta substituir o PDF. A fonte (HTML/CSS,
+  o App, e o link é fixo: pode ser compartilhado. Para atualizá-lo, basta
+  substituir o PDF. A fonte (HTML/CSS,
   prints e o script que gera o PDF) fica em `docs/manual/`.
 - `CLAUDE.md` — contexto, mapa do código e convenções para desenvolver com o
   Claude Code.
@@ -114,5 +115,8 @@ src/
 
 ## Licença
 
-Distribuído sob a licença MIT — veja [`LICENSE`](./LICENSE). Contribuições são
+O código é distribuído sob a licença MIT — veja [`LICENSE`](./LICENSE). Dados
+e fontes de terceiros seguem as licenças deles: os dados de traços do KanjiVG,
+por exemplo, estão sob CC BY-SA 3.0. Detalhes em
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). Contribuições são
 bem-vindas via pull request.

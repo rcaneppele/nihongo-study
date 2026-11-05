@@ -33,6 +33,28 @@ test('instalado, funciona offline: abrir, navegar, entrar direto numa rota e gra
   expect(await app.lerTabela('readingProgress')).toHaveLength(1);
 });
 
+test('manual: link fixo, sempre da rede quando online e disponível offline depois de aberto', async ({ app, page, context, baseURL }) => {
+  const sw = await (await page.request.get(`${baseURL}sw.js`)).text();
+  expect(sw).toMatch(/\/\\\.pdf\$\/,\s*new \w+\.NetworkFirst\(/);
+
+  await app.abrir('/');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.reload();
+  await expect.poll(() => page.evaluate(() => !!navigator.serviceWorker.controller), { timeout: 20_000 }).toBe(true);
+
+  const baixarManual = () =>
+    page.evaluate(async () => {
+      const r = await fetch('/nihongo-study/manual-do-usuario.pdf');
+      return { ok: r.ok, tipo: r.headers.get('content-type'), inicio: new TextDecoder().decode((await r.arrayBuffer()).slice(0, 5)) };
+    });
+  const esperado = { ok: true, tipo: expect.stringContaining('pdf'), inicio: '%PDF-' };
+  expect(await baixarManual()).toEqual(esperado);
+  await context.setOffline(true);
+  expect(await baixarManual()).toEqual(esperado);
+});
+
 test('manifesto do app instalável', async ({ page, baseURL }) => {
   const resposta = await page.request.get(`${baseURL}manifest.webmanifest`);
   expect(resposta.ok()).toBe(true);

@@ -130,6 +130,7 @@ test.describe('Meus cards', () => {
     await page.getByLabel('Verso (significado)').fill('cerejeira');
     await page.getByLabel('Categoria (opcional)').fill('Natureza');
     await page.getByRole('button', { name: 'Adicionar card' }).click();
+    await expect(page.getByLabel('Frente (japonês)')).toHaveValue(''); // o formulário limpa depois de gravar
     await page.getByLabel('Frente (japonês)').fill('うみ');
     await page.getByLabel('Verso (significado)').fill('mar');
     await page.getByRole('button', { name: 'Adicionar card' }).click();

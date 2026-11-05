@@ -13,21 +13,56 @@ const NOME = 'nihongo-study-sync.json.gz';
 const API = 'https://www.googleapis.com/drive/v3';
 const UPLOAD = 'https://www.googleapis.com/upload/drive/v3';
 const FILE_ID_KEY = 'driveFileId';
+const MAX_RETENTATIVAS = 3;
+const MOTIVOS_DE_LIMITE = new Set(['rateLimitExceeded', 'userRateLimitExceeded']);
 
 interface Metadados {
   id: string;
   version: string;
 }
 
-export function googleDrive(token: string): DestinoSync {
+/** Espera antes da nova tentativa (0, 1, 2…): dobra a cada vez, com até 1 s de acaso pra aparelhos não voltarem juntos. */
+export function esperaDaTentativa(tentativa: number, rng: () => number = Math.random): number {
+  return 2 ** tentativa * 1000 + rng() * 1000;
+}
+
+/**
+ * O Google pede que limite de taxa seja tentado de novo com espera crescente.
+ * 403 também é usado para falta de permissão ou Drive cheio — esses não
+ * passam com o tempo, por isso o motivo do erro é conferido.
+ */
+async function ehLimiteDeTaxa(res: Response): Promise<boolean> {
+  if (res.status === 429) return true;
+  if (res.status !== 403) return false;
+  const corpo = (await res
+    .clone()
+    .json()
+    .catch(() => null)) as { error?: { errors?: { reason?: string }[] } } | null;
+  return corpo?.error?.errors?.some((e) => MOTIVOS_DE_LIMITE.has(e.reason ?? '')) ?? false;
+}
+
+export interface OpcoesDrive {
+  esperar?: (ms: number) => Promise<void>;
+  rng?: () => number;
+}
+
+const esperarDeVerdade = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+export function googleDrive(token: string, { esperar = esperarDeVerdade, rng = Math.random }: OpcoesDrive = {}): DestinoSync {
   async function chamar(url: string, init: RequestInit = {}): Promise<Response> {
     // `no-store`: o cache HTTP do navegador pode devolver o arquivo (ou a versão) de antes da última
     // gravação de outro aparelho — e o ciclo mesclaria dados velhos achando que está em dia.
-    const res = await fetch(url, {
-      ...init,
-      cache: 'no-store',
-      headers: { ...init.headers, Authorization: `Bearer ${token}` },
-    });
+    const pedir = () =>
+      fetch(url, {
+        ...init,
+        cache: 'no-store',
+        headers: { ...init.headers, Authorization: `Bearer ${token}` },
+      });
+    let res = await pedir();
+    for (let tentativa = 0; tentativa < MAX_RETENTATIVAS && (await ehLimiteDeTaxa(res)); tentativa++) {
+      await esperar(esperaDaTentativa(tentativa, rng));
+      res = await pedir();
+    }
     if (res.status === 401) throw new ErroAutorizacao();
     if (!res.ok) throw new Error(`Google Drive respondeu ${res.status}.`);
     return res;

@@ -78,6 +78,10 @@ toda mudança pede bump; julgue pelo impacto:
   (fixtures congeladas por versão em `src/db/__fixtures__/`); mesclagem no
   banco em `mesclarNoBanco.ts`; baixar/compartilhar o arquivo em
   `src/features/backup/arquivo.ts`.
+- `src/db/copiaMigracao.ts` — cópia automática de antes de cada migração do
+  banco (banco separado, 30 dias), restaurável em Config › Dados
+  (`CopiaMigracaoCard`, `restaurarCopiaDeMigracao`). **Ao subir a versão do
+  Dexie, suba `SCHEMA_VERSION` junto.**
 - `src/db/merge.ts` — regras de mesclagem por tabela (funções puras,
   testadas em `merge.test.ts`; `npm test`); `src/db/contadores.ts` —
   contadores por aparelho (`porAparelho`); `src/db/local.ts` — id do
@@ -94,8 +98,14 @@ toda mudança pede bump; julgue pelo impacto:
   testes usam com um Drive em memória),
   `SyncCard.tsx` (Config › Dados) e `AvisoSync.tsx` (Home). Ver
   `regras-negocio.md` §6.
+- `THIRD_PARTY_NOTICES.md` — licenças e créditos de terceiros (KanjiVG em CC
+  BY-SA 3.0, deck N5, fontes, bibliotecas), com resumo em Config › Sobre o App.
+  Dado ou biblioteca de terceiros nova entra nos dois.
+- `src/lib/contato.ts` — e-mail do projeto, repositório e link pronto para reportar erro.
 - `src/features/backup/` — lembrete de backup da Home (`LembreteBackup`,
-  `useEstadoBackup`); o "Sincronizar com arquivo" e o compartilhar ficam em
+  `useEstadoBackup`), aviso para instalar no Safari do iOS (`instalacao.ts`,
+  `AvisoInstalacao`) e pedido de armazenamento persistente (`persistencia.ts`);
+  o "Sincronizar com arquivo" e o compartilhar ficam em
   `src/routes/Config.tsx` (aba Dados) + `shareBackup()` em `backup.ts`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
@@ -253,11 +263,11 @@ toda mudança pede bump; julgue pelo impacto:
   rodapé, em Config › Sobre o App e no cartão do Google Drive. Se a
   sincronização passar a usar outro escopo ou dado do Google, atualize a
   página.
-- `docs/manual-do-usuario.pdf` — manual do usuário, também oferecido no app
-  (Configurações › Sobre o App), importado em `src/routes/Config.tsx` com
-  `?url`: o build publica o PDF com hash no nome, então basta substituir o
-  arquivo em `docs/` para o app entregar a versão nova (fora do pré-cache do
-  PWA; guardado no cache `manual` na primeira abertura). A fonte fica em
+- `public/manual-do-usuario.pdf` — manual do usuário, também oferecido no app
+  (Configurações › Sobre o App; URL em `src/lib/manual.ts`). O nome é fixo, sem
+  hash, para o link poder ser compartilhado: não renomeie. Fica fora do pré-cache
+  do PWA, no cache `manual`, com a rede primeiro (online entrega a versão nova,
+  offline a guardada na última abertura). A fonte fica em
   `docs/manual/` (HTML/CSS + prints; `node docs/manual/gerar.cjs` gera o
   PDF — ver `docs/manual/README.md`). Ao mudar uma tela ou um fluxo que o
   manual descreve, atualize o capítulo correspondente.

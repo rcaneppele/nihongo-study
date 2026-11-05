@@ -10,6 +10,7 @@ import { SECOES, type Secao, type SecaoId } from '../features/metodo/estrutura';
 import { usePendencias } from '../features/metodo/pendencias';
 import PlanoDoDia from '../features/metodo/PlanoDoDia';
 import LembreteBackup from '../features/backup/LembreteBackup';
+import AvisoInstalacao from '../features/backup/AvisoInstalacao';
 import AvisoSync from '../features/sync/AvisoSync';
 import ProgressRing from '../components/ProgressRing';
 import { TILE, type Cor } from '../lib/cores';
@@ -47,6 +48,7 @@ export default function Home() {
       )}
 
       <AvisoSync />
+      <AvisoInstalacao />
       <LembreteBackup />
 
       <section className="pt-3">

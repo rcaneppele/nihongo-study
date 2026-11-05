@@ -39,6 +39,9 @@ test.describe('Treino de kana', () => {
     await soAFamiliaA(page);
     await page.getByRole('button', { name: 'Iniciar teste' }).click();
     for (let i = 0; i < 5; i++) {
+      // Só lê o kana depois que a pergunta certa está na tela.
+      await expect(page.getByText(`${i + 1} de 5`, { exact: true })).toBeVisible();
+      await expect(page.getByPlaceholder('romaji')).toHaveValue('');
       const kana = (await page.locator('main p.font-jp').first().innerText()).trim();
       await page.getByPlaceholder('romaji').fill(VOGAIS[kana]);
       await page.keyboard.press('Enter');

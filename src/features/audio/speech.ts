@@ -52,10 +52,17 @@ const RATES: Record<SpeechSpeed, number> = { slow: 0.65, normal: 0.9 };
 const SPEED_META_KEY = 'speechSpeed';
 let currentSpeed: SpeechSpeed = 'normal';
 
-// Assinatura (não leitura única) pra também pegar a mudança vinda de outro aparelho na sincronização.
-liveQuery(() => db.meta.get(SPEED_META_KEY)).subscribe((entry) => {
-  if (entry?.value === 'slow' || entry?.value === 'normal') currentSpeed = entry.value;
-});
+/**
+ * Chamar uma vez ao abrir o app, depois da cópia de antes de migrar: consultar
+ * o banco o abre e dispara a migração, então isto não pode rodar no import.
+ * Assinatura (não leitura única) pra também pegar a mudança vinda de outro
+ * aparelho na sincronização.
+ */
+export function acompanharVelocidadeDaFala(): void {
+  liveQuery(() => db.meta.get(SPEED_META_KEY)).subscribe((entry) => {
+    if (entry?.value === 'slow' || entry?.value === 'normal') currentSpeed = entry.value;
+  });
+}
 
 export function useSpeechSpeed(): SpeechSpeed {
   const entry = useLiveQuery(() => db.meta.get(SPEED_META_KEY), []);

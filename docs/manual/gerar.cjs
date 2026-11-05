@@ -30,6 +30,6 @@ const rodape = `<div style="width:100%;font-family:sans-serif;font-size:7.5pt;co
   await render('corpo-final.html', D + '/corpo.pdf', true);
   await render('capa.html', D + '/capa.pdf', false);
   await b.close();
-  execFileSync('pdfunite', [D + '/capa.pdf', D + '/corpo.pdf', path.join(D, '..', 'manual-do-usuario.pdf')]);
-  console.log('docs/manual-do-usuario.pdf gerado');
+  execFileSync('pdfunite', [D + '/capa.pdf', D + '/corpo.pdf', path.join(D, '..', '..', 'public', 'manual-do-usuario.pdf')]);
+  console.log('public/manual-do-usuario.pdf gerado');
 })();

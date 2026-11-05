@@ -1,7 +1,7 @@
 # Manual do usuário — fonte
 
-Fonte de `docs/manual-do-usuario.pdf` (o PDF que o app oferece em
-Configurações › Sobre o App). O manual é HTML + CSS impresso em PDF pelo
+Fonte de `public/manual-do-usuario.pdf` (o PDF que o app oferece em
+Configurações › Sobre o App, com link fixo que pode ser compartilhado). O manual é HTML + CSS impresso em PDF pelo
 Chrome headless.
 
 - `capa.html` — capa (versão do app e mês: atualizar a cada edição).
@@ -19,7 +19,7 @@ Precisa do Google Chrome em `/usr/bin/google-chrome`, do `pdfunite`
 
 ```sh
 npm i --no-save playwright-core   # ou aponte PLAYWRIGHT_CORE para uma instalação existente
-node docs/manual/gerar.cjs        # escreve docs/manual-do-usuario.pdf
+node docs/manual/gerar.cjs        # escreve public/manual-do-usuario.pdf
 ```
 
 ## Refazer os prints

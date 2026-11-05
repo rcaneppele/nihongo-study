@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../../db/schema';
-import { googleDrive } from './googleDrive';
+import { esperaDaTentativa, googleDrive } from './googleDrive';
 import { ErroAutorizacao } from './destino';
 import { limparBanco } from '../../test/banco';
 import { umBackup, umCard } from '../../test/fabricas';
@@ -114,6 +114,70 @@ describe('googleDrive', () => {
     await expect(googleDrive('velho').versao()).rejects.toBeInstanceOf(ErroAutorizacao);
     vi.stubGlobal('fetch', async () => new Response('', { status: 503 }));
     await expect(googleDrive('tok').conta()).rejects.toThrow('Google Drive respondeu 503.');
+  });
+
+  describe('limite de taxa', () => {
+    const erro403 = (reason: string) => Response.json({ error: { errors: [{ reason }] } }, { status: 403 });
+    const sucesso = () => Response.json({ user: { emailAddress: 'pessoa@exemplo.com' } });
+
+    /** `fetch` que responde a sequência dada e conta as chamadas. */
+    function respostas(...fila: (() => Response)[]) {
+      const chamadas = vi.fn(async () => fila.shift()!());
+      vi.stubGlobal('fetch', chamadas);
+      return chamadas;
+    }
+
+    it.each([
+      ['429', () => new Response('', { status: 429 })],
+      ['403 rateLimitExceeded', () => erro403('rateLimitExceeded')],
+      ['403 userRateLimitExceeded', () => erro403('userRateLimitExceeded')],
+    ])('%s: espera e tenta de novo, com espera crescente', async (_nome, limite) => {
+      const chamadas = respostas(limite, limite, sucesso);
+      const esperas: number[] = [];
+      const d = googleDrive('tok', { esperar: async (ms) => void esperas.push(ms), rng: () => 0 });
+      expect(await d.conta()).toBe('pessoa@exemplo.com');
+      expect(chamadas).toHaveBeenCalledTimes(3);
+      expect(esperas).toEqual([1000, 2000]);
+    });
+
+    it('desiste depois de 3 novas tentativas e mostra o status', async () => {
+      const limite = () => new Response('', { status: 429 });
+      const chamadas = respostas(limite, limite, limite, limite, limite);
+      const d = googleDrive('tok', { esperar: async () => {} });
+      await expect(d.conta()).rejects.toThrow('Google Drive respondeu 429.');
+      expect(chamadas).toHaveBeenCalledTimes(4);
+    });
+
+    it.each([
+      ['Drive cheio', () => erro403('storageQuotaExceeded')],
+      ['falta de permissão', () => erro403('insufficientFilePermissions')],
+      ['403 sem corpo JSON', () => new Response('proibido', { status: 403 })],
+    ])('403 por %s não é tentado de novo', async (_nome, resposta) => {
+      const chamadas = respostas(resposta, sucesso);
+      await expect(googleDrive('tok', { esperar: async () => {} }).conta()).rejects.toThrow('Google Drive respondeu 403.');
+      expect(chamadas).toHaveBeenCalledOnce();
+    });
+
+    it('a nova tentativa manda o arquivo inteiro de novo', async () => {
+      const d = googleDrive('tok', { esperar: async () => {} });
+      await d.subir(umBackup());
+      const responder = drive.responder.bind(drive);
+      let limitou = false;
+      vi.stubGlobal('fetch', (url: string, init?: RequestInit) => {
+        if (init?.method === 'PATCH' && !limitou) {
+          limitou = true;
+          return Promise.resolve(new Response('', { status: 429 }));
+        }
+        return responder(url, init);
+      });
+      expect(await d.subir(umBackup({ cards: [umCard({ front: 'ねこ' })] }))).toBe('2');
+      expect((await d.baixar())?.backup.cards[0].front).toBe('ねこ');
+    });
+
+    it('a espera dobra a cada tentativa e soma até 1 s de acaso', () => {
+      expect(esperaDaTentativa(0, () => 0)).toBe(1000);
+      expect(esperaDaTentativa(2, () => 0.5)).toBe(4500);
+    });
   });
 
   it('apagar remove o arquivo e o id guardado; conta devolve o e-mail', async () => {

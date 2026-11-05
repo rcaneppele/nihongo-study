@@ -1101,6 +1101,35 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
   um aviso discreto depois de 7 dias sem backup (contando do primeiro dia
   com atividade, se nunca houve backup); Config › Dados mostra a data do
   último.
+- **Cópia antes de migrar** (`src/db/copiaMigracao.ts`): ao abrir, antes de
+  qualquer uso de `db` (nenhum módulo pode consultar o banco só de ser
+  importado, porque isso dispararia a migração antes da cópia), se o banco existente tem versão menor que
+  `SCHEMA_VERSION` e tem dados, copia tudo menos `local` para um banco
+  separado (`nihongo-study-copia`), no formato de backup e na versão de
+  origem. Protege de migração que termina "com sucesso" deixando dados errados
+  (se ela lança erro, o próprio IndexedDB desfaz). Regras: uma cópia só (a
+  mais nova substitui); vence em 30 dias, apagada na abertura; falha ou demora
+  de mais de 5 s nunca impedem o app de abrir; fica fora do backup e da
+  sincronização; "Apagar todos os dados" leva a cópia junto.
+  **Restaurar** (Config › Dados, só com cópia presente e confirmação) passa
+  por `migrateBackup` e pelo Substituir com época nova, então também substitui
+  o Drive, e apaga a cópia. Toda nova versão do Dexie precisa subir
+  `SCHEMA_VERSION` junto (`copiaMigracao.test.ts` confere) e manter
+  `migrateBackup` em dia — é ele que sustenta a restauração.
+- **Proteção contra limpeza do navegador**: a cada abertura, se os dados ainda
+  não estão protegidos e já há cards ou atividade, chama
+  `navigator.storage.persist()` (`features/backup/persistencia.ts`) — só depois
+  de haver o que proteger porque o Firefox mostra um diálogo. É pedido, não
+  garantia: backup e sincronização continuam sendo a proteção real.
+- **Aviso para instalar** (`features/backup/instalacao.ts`): na Home, só no
+  Safari de iPhone/iPad e fora do app instalado, porque nesse caso o sistema
+  pode apagar os dados depois de dias sem uso. Dispensar vale para o aparelho
+  (`local.avisoInstalacaoDispensado`). Chrome/Firefox no iOS e navegadores
+  internos de outros apps não recebem o aviso, porque as instruções são do Safari.
+- **Limite de taxa do Google** (`features/sync/googleDrive.ts`): 429 e 403 com
+  motivo `rateLimitExceeded`/`userRateLimitExceeded` são tentados de novo até 3
+  vezes, com espera de 1, 2 e 4 s + até 1 s de acaso. Outros 403 (Drive cheio,
+  falta de permissão) falham na hora: não passam com o tempo.
 - **UUID como chave** é obrigatório para a mesclagem funcionar sem colisão.
 - `schemaVersion` no backup permite migração futura na importação —
   migrações são incrementais por versão em `migrateBackup`

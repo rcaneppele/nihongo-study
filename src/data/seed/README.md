@@ -6,7 +6,10 @@
   importar categorias inteiras, Config > Dados > "Vocabulário N5" >
   Avançado (`src/routes/Config.tsx`). Fonte: lista pública de
   vocabulário JLPT N5 ([jamsinclair/open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks),
-  originalmente de tanos.co.uk), traduzida do inglês.
+  via [chyyran/jlpt-anki-decks](https://github.com/chyyran/jlpt-anki-decks),
+  originalmente de tanos.co.uk), traduzida do inglês. O repositório de origem
+  não declara licença; crédito em Configurações › Sobre o App e em
+  [`THIRD_PARTY_NOTICES.md`](../../../THIRD_PARTY_NOTICES.md).
 - Conjunto completo de kana já disponível em `src/data/kana.ts` (não depende
   deste diretório).
 

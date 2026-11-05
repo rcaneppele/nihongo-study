@@ -2,8 +2,11 @@
 
 `kana-strokes.json` contém os dados de **ordem e direção de traço** dos kana
 usados em `src/data/kana.ts`, derivados do projeto
-[KanjiVG](https://kanjivg.tagaini.net/) (licença CC BY-SA — ao redistribuir,
-credite o KanjiVG; para uso pessoal este aviso já basta).
+[KanjiVG](https://kanjivg.tagaini.net/), © 2009–2026 Ulrich Apel. Estes arquivos
+JSON são dados adaptados e continuam sob a licença
+[CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), não sob a MIT do
+restante do projeto. O crédito aparece em Configurações › Sobre o App e em
+[`THIRD_PARTY_NOTICES.md`](../../../THIRD_PARTY_NOTICES.md).
 
 ## Formato
 

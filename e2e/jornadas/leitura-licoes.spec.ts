@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { backup } from '../dados';
 import { test, expect } from '../fixtures';
 
 /** Leitura extensiva e lições (conteúdo, conclusão, Quiz, Diga em japonês, Kakitori, Gramática, Diário). */
@@ -46,6 +47,16 @@ test.describe('Leitura extensiva', () => {
     await page.getByRole('button', { name: 'Ouvir o texto' }).click();
     await expect.poll(async () => (await app.falas()).length, { timeout: 20_000 }).toBe(12);
     expect((await app.falas())[0]).toContain('はじめまして');
+  });
+
+  test('a velocidade da fala salva vale ao abrir o app de novo', async ({ app, page }) => {
+    await app.prepararDados(backup({ meta: [{ key: 'speechSpeed', value: 'slow' }] }));
+    await app.abrir('/leitura/apresentacao');
+    await expect(page.getByRole('button', { name: 'Ouvir o texto' })).toBeVisible();
+    await expect(async () => {
+      await page.getByRole('button', { name: /^Ouvir pronúncia de / }).first().click();
+      expect((await app.ritmosDasFalas()).at(-1)).toBe(0.65);
+    }).toPass();
   });
 
   test('escutar sem ler: texto escondido, autoavaliação gravada no histórico', async ({ app, page }) => {

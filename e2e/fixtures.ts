@@ -15,7 +15,8 @@ const ERROS_IGNORADOS = [/Failed to load resource/i];
 
 function instalarFalaFalsa() {
   const falas: string[] = [];
-  (window as unknown as { __falas: string[] }).__falas = falas;
+  const ritmos: number[] = [];
+  Object.assign(window, { __falas: falas, __ritmos: ritmos });
   class Fala {
     text: string;
     lang = '';
@@ -44,6 +45,7 @@ function instalarFalaFalsa() {
     getVoices: () => [{ lang: 'ja-JP', name: 'Japonês (teste)', localService: true, default: true, voiceURI: 'teste' }],
     speak(u: Fala) {
       falas.push(u.text);
+      ritmos.push(u.rate);
       u.disparar('start');
       setTimeout(() => u.disparar('end'), 20);
     },
@@ -80,6 +82,11 @@ export class App {
 
   falas(): Promise<string[]> {
     return this.page.evaluate(() => (window as unknown as { __falas: string[] }).__falas ?? []);
+  }
+
+  /** Velocidade (`rate`) de cada fala, na ordem. */
+  ritmosDasFalas(): Promise<number[]> {
+    return this.page.evaluate(() => (window as unknown as { __ritmos: number[] }).__ritmos ?? []);
   }
 
   /** Conteúdo atual do banco (IndexedDB) — para conferir o que foi gravado, sem depender só da tela. */

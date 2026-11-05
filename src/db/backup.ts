@@ -19,6 +19,7 @@ import { iguais } from './merge';
 import { migrateBackup } from './migracoes';
 import { mesclarNoBanco } from './mesclarNoBanco';
 import { novaEpoca } from './local';
+import { apagarCopia, lerCopia } from './copiaMigracao';
 
 /**
  * Backup / sincronização manual entre dispositivos.
@@ -136,9 +137,22 @@ export async function importarBackup(backup: BackupFile, mode: ImportMode): Prom
   if (mode === 'replace') await novaEpoca();
 }
 
-/** "Apagar todos os dados": esvazia as tabelas sincronizadas e marca época nova (ver `novaEpoca`). */
+/**
+ * Volta os dados para a cópia guardada antes da última migração. Substitui
+ * com época nova, como qualquer Substituir: dados errados que já tenham
+ * chegado ao Drive não voltam na mesclagem.
+ */
+export async function restaurarCopiaDeMigracao(): Promise<void> {
+  const copia = await lerCopia();
+  if (!copia) throw new Error('A cópia de segurança não está mais disponível.');
+  await importarBackup(migrateBackup(copia.backup), 'replace');
+  await apagarCopia();
+}
+
+/** "Apagar todos os dados": esvazia as tabelas sincronizadas e marca época nova (ver `novaEpoca`). A cópia de segurança sai junto. */
 export async function apagarTudo(): Promise<void> {
   const tabelas = TABELAS_SINCRONIZADAS.map(tabelaDexie);
   await db.transaction('rw', tabelas, () => Promise.all(tabelas.map((t) => t.clear())));
   await novaEpoca();
+  await apagarCopia();
 }

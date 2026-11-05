@@ -12,6 +12,7 @@ import { estadoSync } from '../sync/motor';
 import { importarArquivoDeCards } from '../flashcards/importCards';
 import { N5_DECK, n5CategoryCounts } from '../../data/seed/n5';
 import { HelpButton, HelpModal, SectionTitle } from './ui';
+import CopiaMigracaoCard from './CopiaMigracaoCard';
 import Segmentado from '../../components/Segmentado';
 
 /** O backup compartilhado pode ter virado .txt (ver `shareBackup`) — o conteúdo é o mesmo. */
@@ -333,6 +334,8 @@ export default function DadosTab() {
           </div>
         </details>
       </section>
+
+      <CopiaMigracaoCard />
 
       <section className="card-surface space-y-3">
         <SectionTitle icon={<TriangleAlert className="h-4 w-4" />} cor="hanko">

@@ -1,12 +1,18 @@
-import { BookOpen, Code, Download, Info, ShieldCheck, User } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Award, BookOpen, Bug, Code, Download, Info, Mail, ShieldCheck, User } from 'lucide-react';
 import { useTheme } from '../../lib/useTheme';
-// O manual vive em docs/ (fonte única); o `?url` faz o build publicá-lo com hash no nome,
-// então trocar o PDF e publicar o app já entrega a versão nova, sem cache velho.
-import manualUrl from '../../../docs/manual-do-usuario.pdf?url';
+import { MANUAL_URL } from '../../lib/manual';
 import { PRIVACIDADE_URL } from '../../lib/privacidade';
+import { AVISOS_TERCEIROS_URL, ISSUES_URL, linkRelatarErro, REPO_URL } from '../../lib/contato';
 import { Field, SectionTitle } from './ui';
 
-const REPO_URL = 'https://github.com/rcaneppele/nihongo-study';
+function Externo({ href, children }: { href: string; children: ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className="text-indigo underline underline-offset-2">
+      {children}
+    </a>
+  );
+}
 
 export default function SobreTab() {
   const { resolvedTheme } = useTheme();
@@ -30,11 +36,11 @@ export default function SobreTab() {
           disponível também sem internet.
         </p>
         <div className="flex flex-wrap gap-2">
-          <a href={manualUrl} target="_blank" rel="noreferrer" className="btn-primary">
+          <a href={MANUAL_URL} target="_blank" rel="noreferrer" className="btn-primary">
             <BookOpen className="h-4 w-4" />
             Abrir o manual
           </a>
-          <a href={manualUrl} download="Nihongo Study - Manual do usuario.pdf" className="btn-ghost">
+          <a href={MANUAL_URL} download="Nihongo Study - Manual do usuario.pdf" className="btn-ghost">
             <Download className="h-4 w-4" />
             Baixar PDF
           </a>
@@ -50,12 +56,33 @@ export default function SobreTab() {
           CIL (Centro Interescolar de Línguas), unidade do Gama, em Brasília. A ideia surgiu da
           minha própria necessidade de praticar flash cards com repetição espaçada e treinar
           hiragana/katakana — e acabei compartilhando gratuitamente com os colegas de turma, que
-          repassaram para outras turmas com o incentivo do professor.
+          repassaram para outras turmas.
         </p>
         <p className="text-sm text-sage">
-          É um projeto pessoal e sem fins comerciais: roda inteiramente no navegador, sem servidor,
-          e os dados ficam salvos no seu aparelho — e, se você ligar a sincronização, no seu Google Drive.
+          É um projeto pessoal, independente e sem fins comerciais: não é um produto oficial do CIL nem tem
+          vínculo com a escola. Roda inteiramente no navegador, sem servidor, e os dados ficam salvos no seu
+          aparelho — e, se você ligar a sincronização, no seu Google Drive.
         </p>
+      </section>
+
+      <section className="card-surface space-y-3">
+        <SectionTitle icon={<Bug className="h-4 w-4" />} cor="indigo">
+          Encontrou um erro?
+        </SectionTitle>
+        <p className="text-sm text-sage">
+          Um japonês errado numa lição ou algo que não funciona: conte para eu corrigir. Por e-mail não precisa de
+          nenhuma conta; no GitHub, dá para ver o que já foi relatado.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a href={linkRelatarErro(__APP_VERSION__)} className="btn-primary">
+            <Mail className="h-4 w-4" />
+            Reportar por e-mail
+          </a>
+          <a href={ISSUES_URL} target="_blank" rel="noreferrer" className="btn-ghost">
+            <Code className="h-4 w-4" />
+            Reportar no GitHub
+          </a>
+        </div>
       </section>
 
       <section className="card-surface space-y-3">
@@ -78,7 +105,8 @@ export default function SobreTab() {
         </SectionTitle>
         <p className="text-sm text-sage">
           O código-fonte é público e distribuído sob a licença MIT — você pode usar, copiar,
-          modificar e redistribuir livremente, mantendo o aviso de copyright original.
+          modificar e redistribuir livremente, mantendo o aviso de copyright original. Os dados
+          de terceiros listados em “Créditos” seguem as licenças deles.
         </p>
         <Field label="Repositório (código e contribuições)">
           <a
@@ -93,19 +121,37 @@ export default function SobreTab() {
       </section>
 
       <section className="card-surface space-y-3">
+        <SectionTitle icon={<Award className="h-4 w-4" />} cor="indigo">
+          Créditos
+        </SectionTitle>
+        <ul className="space-y-3 text-sm text-sage">
+          <li>
+            <strong className="text-ink">Ordem e forma dos traços:</strong> dados adaptados do{' '}
+            <Externo href="https://kanjivg.tagaini.net/">KanjiVG</Externo>, © 2009–2026 Ulrich Apel, sob a licença{' '}
+            <Externo href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</Externo>. Os dados adaptados são
+            distribuídos sob a mesma licença.
+          </li>
+          <li>
+            <strong className="text-ink">Vocabulário N5:</strong> lista traduzida para o português a partir de{' '}
+            <Externo href="https://github.com/jamsinclair/open-anki-jlpt-decks">open-anki-jlpt-decks</Externo>, baseada em{' '}
+            <Externo href="https://github.com/chyyran/jlpt-anki-decks">jlpt-anki-decks</Externo> e em listas do site tanos.co.uk.
+          </li>
+          <li>
+            <strong className="text-ink">Fontes:</strong> Inter e Noto Sans JP, sob a licença SIL Open Font License 1.1.
+          </li>
+          <li>
+            <strong className="text-ink">Bibliotecas:</strong> React, Dexie, ts-fsrs, Lucide e outras —{' '}
+            <Externo href={AVISOS_TERCEIROS_URL}>lista completa e licenças</Externo>.
+          </li>
+        </ul>
+      </section>
+
+      <section className="card-surface space-y-3">
         <SectionTitle icon={<User className="h-4 w-4" />} cor="indigo">
           Autor
         </SectionTitle>
         <Field label="Nome">
           <span className="text-sm text-ink">Rodrigo da Silva Ferreira Caneppele</span>
-        </Field>
-        <Field label="E-mail">
-          <a
-            href="mailto:r.caneppele@gmail.com"
-            className="text-sm text-indigo underline underline-offset-2"
-          >
-            r.caneppele@gmail.com
-          </a>
         </Field>
       </section>
     </div>
