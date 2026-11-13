@@ -12,8 +12,7 @@ import { defineConfig, devices } from '@playwright/test';
  * `visual` (screenshots) só roda com `npm run test:visual`.
  */
 const PORTA = 4173;
-// Com APP_BASE=/ os testes rodam contra o build do domínio próprio (na raiz).
-const BASE = `http://localhost:${PORTA}${process.env.APP_BASE ?? '/nihongo-study/'}`;
+const BASE = `http://localhost:${PORTA}/`;
 
 const todos = [
   { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

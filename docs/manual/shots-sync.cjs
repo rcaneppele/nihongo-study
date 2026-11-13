@@ -1,7 +1,7 @@
 // Prints novos da v2.7 (sincronização): aba Dados conectada ao Drive (Drive simulado) e Home no celular.
 const { chromium } = require(process.env.PLAYWRIGHT_CORE || 'playwright-core');
 const fs = require('fs');
-const BASE = 'http://localhost:5199/nihongo-study';
+const BASE = 'http://localhost:5199';
 const N5 = require('../../src/data/seed/n5.json');
 const JPG = __dirname + '/jpg';
 const src = fs.readFileSync(__dirname + '/shots.cjs', 'utf8');

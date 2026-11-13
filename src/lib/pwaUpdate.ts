@@ -14,8 +14,8 @@
  *
  * Este registro manual resolve isso:
  * 1. `updateViaCache: 'none'` — o navegador nunca usa cache HTTP para buscar
- *    o próprio `sw.js`, sempre confere a versão real do servidor (GitHub
- *    Pages não permite configurar `Cache-Control` por arquivo).
+ *    o próprio `sw.js`, sempre confere a versão real do servidor, seja qual
+ *    for o `Cache-Control` que a hospedagem mande.
  * 2. Checagem periódica + ao voltar o app para primeiro plano
  *    (`visibilitychange`) — não depende mais do usuário abrir/recarregar
  *    manualmente para o app notar que existe uma versão nova.

@@ -1101,14 +1101,12 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
   um aviso discreto depois de 7 dias sem backup (contando do primeiro dia
   com atividade, se nunca houve backup); Config › Dados mostra a data do
   último.
-- **Mudança de endereço** (`src/features/backup/mudancaEndereco.ts`): o
-  endereço oficial é `nihongostudy.app`. O antigo
-  (`rcaneppele.github.io/nihongo-study`) continua no ar e sem redirecionar,
-  porque o navegador guarda os dados por endereço e o progresso de quem não
-  migrou está lá; **nunca configure o domínio no GitHub Pages nem apague esse
-  site**. Só nele, a Home mostra um aviso que não pode ser dispensado, com o
-  novo endereço e as saídas: Google Drive (mesmo arquivo, mesma conta) ou
-  exportar e importar o backup.
+- **Endereço**: o app fica em `nihongostudy.app`. O endereço antigo
+  (`rcaneppele.github.io/nihongo-study`) ficou no ar durante a migração, com
+  um aviso fixo na Home levando ao novo, e foi desativado depois que todos
+  migraram. Como o navegador guarda os dados por endereço, uma nova mudança
+  de domínio exigiria o mesmo cuidado: manter o antigo no ar até todos
+  levarem os dados (Google Drive ou backup).
 - **Cópia antes de migrar** (`src/db/copiaMigracao.ts`): ao abrir, antes de
   qualquer uso de `db` (nenhum módulo pode consultar o banco só de ser
   importado, porque isso dispararia a migração antes da cópia), se o banco existente tem versão menor que
@@ -1148,12 +1146,11 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
 
 ## 7. Atualização do app (PWA)
 
-- **Deploy**: push na `main` dispara o GitHub Actions, que builda e publica
-  em dois lugares: o endereço oficial na Cloudflare (`nihongostudy.app`) e o
-  antigo no GitHub Pages (ver §6, "Mudança de endereço"). No GitHub Pages não
-  dá pra configurar
-  `Cache-Control` por arquivo — o navegador pode cachear `sw.js` por conta
-  própria, o que atrasa a detecção de uma versão nova.
+- **Deploy**: push na `main` dispara o GitHub Actions, que roda o CI e, se
+  passar, builda e publica na Cloudflare Pages (`nihongostudy.app`). O
+  registro do service worker não depende do `Cache-Control` do servidor: o
+  navegador poderia cachear `sw.js` por conta própria e atrasar a detecção
+  de uma versão nova.
 - **Registro do service worker**: manual, em `src/lib/pwaUpdate.ts` (chamado
   em `src/main.tsx`) — `injectRegister: false` em `vite.config.ts` desliga o
   script que o vite-plugin-pwa injetaria sozinho, que é só um `register()`

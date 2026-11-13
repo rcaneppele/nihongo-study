@@ -3,9 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { version } from './package.json';
 
-// Caminho do app no site: o GitHub Pages serve em /nihongo-study/ (padrão); o
-// domínio próprio, na raiz (APP_BASE=/). Ver .github/workflows/deploy.yml.
-const base = process.env.APP_BASE ?? '/nihongo-study/';
+// O app é servido na raiz do domínio (nihongostudy.app). Ver .github/workflows/deploy.yml.
+const base = '/';
 
 export default defineConfig({
   base,

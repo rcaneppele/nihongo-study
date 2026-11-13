@@ -63,7 +63,7 @@ function instalarFalaFalsa() {
 export class App {
   constructor(readonly page: Page) {}
 
-  /** Abre uma rota do app (sem a base `/nihongo-study/`). */
+  /** Abre uma rota do app. */
   async abrir(rota = '/') {
     await this.page.goto(rota.replace(/^\//, ''));
     await expect(this.page.locator('main')).toBeVisible();

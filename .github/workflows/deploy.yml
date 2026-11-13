@@ -1,5 +1,8 @@
-name: Deploy (GitHub Pages e Cloudflare Pages)
+name: Deploy (Cloudflare Pages)
 
+# Publica o app em nihongostudy.app (Cloudflare Pages) a cada push na main,
+# depois de o CI passar. Precisa dos segredos CLOUDFLARE_API_TOKEN (permissão
+# Account › Cloudflare Pages › Edit) e CLOUDFLARE_ACCOUNT_ID.
 on:
   push:
     branches: [main]
@@ -7,20 +10,21 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: deploy
   cancel-in-progress: true
 
 jobs:
   ci:
     uses: ./.github/workflows/ci.yml
 
-  build:
+  cloudflare:
     needs: ci
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - uses: actions/checkout@v7
 
@@ -34,51 +38,6 @@ jobs:
         env:
           # Client ID do Google (não é segredo) — variável do repositório, em
           # Settings › Secrets and variables › Actions › Variables.
-          VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
-
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/deploy-pages@v5
-        id: deployment
-
-  # Domínio próprio (nihongostudy.app). Só roda com a variável de repositório
-  # CLOUDFLARE_PAGES_ATIVO=true; precisa dos segredos CLOUDFLARE_API_TOKEN (permissão
-  # Account › Cloudflare Pages › Edit) e CLOUDFLARE_ACCOUNT_ID. É independente do GitHub
-  # Pages, que continua no ar porque os dados de quem ainda não migrou estão naquele endereço.
-  cloudflare:
-    needs: ci
-    if: vars.CLOUDFLARE_PAGES_ATIVO == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-    env:
-      APP_BASE: /
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: npm
-
-      - run: npm ci
-
-      # O CI testa o build do GitHub Pages; aqui, o que vai para a raiz do domínio.
-      - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --project=chromium --project=pwa
-
-      - run: npm run build
-        env:
           VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
 
       # Cria o projeto na primeira vez; se já existe, o erro é ignorado (e um

@@ -1,5 +1,5 @@
 const { chromium } = require(process.env.PLAYWRIGHT_CORE || 'playwright-core');
-const BASE = 'http://localhost:5199/nihongo-study';
+const BASE = 'http://localhost:5199';
 const IMG = __dirname + '/jpg';
 const N5 = require('../../src/data/seed/n5.json');
 

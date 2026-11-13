@@ -41,7 +41,7 @@ Vite · React · TypeScript · Tailwind CSS · Dexie (IndexedDB) · vite-plugin-
 
 ```bash
 npm install
-npm run dev      # abre em http://localhost:5173/nihongo-study/
+npm run dev      # abre em http://localhost:5173/
 ```
 
 Build de produção e pré-visualização:
@@ -57,13 +57,9 @@ O app é estático: qualquer host gratuito serve. Você sobe **uma vez** e depoi
 só abrir o link no celular e "Adicionar à Tela de Início".
 
 - Build: `npm run build`, pasta `dist`.
-- **GitHub Pages**: o caminho padrão do build já é `/nihongo-study/`
-  (site em `usuario.github.io/nihongo-study/`) e há workflow em
-  `.github/workflows/`.
-- **Domínio próprio na raiz** (Cloudflare Pages, Netlify, Vercel): gere com
-  `APP_BASE=/ npm run build`. O `deploy.yml` já publica na Cloudflare quando a
-  variável de repositório `CLOUDFLARE_PAGES_ATIVO` é `true`, com os segredos
-  `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
+- O build serve o app na raiz do domínio (Cloudflare Pages, Netlify, Vercel).
+  O `.github/workflows/deploy.yml` publica na Cloudflare Pages a cada push na
+  `main`, com os segredos `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_ACCOUNT_ID`.
 - **Sincronização com o Google Drive** (opcional): precisa de um OAuth Client
   ID do Google (aplicativo da Web, escopo `drive.appdata`). Localmente, em
   `.env.local` (ver `.env.example`); no deploy, na variável de repositório
