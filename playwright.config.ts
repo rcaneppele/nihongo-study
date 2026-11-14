@@ -48,6 +48,9 @@ export default defineConfig({
   ],
   webServer: {
     command: `npm run build && npx vite preview --port ${PORTA} --strictPort`,
+    // Com um Client ID o build inclui a sincronização com o Google Drive, que a jornada
+    // `sync-drive.spec.ts` exercita contra um Google simulado (nada sai para a internet).
+    env: { VITE_GOOGLE_CLIENT_ID: 'cliente-e2e.apps.googleusercontent.com' },
     url: BASE,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

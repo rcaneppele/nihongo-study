@@ -1,5 +1,5 @@
 import { LICOES } from '../../licoes';
-import type { FonteKakitori, ItemKakitori, ItemKakitoriFonte, KakitoriConfig } from './types';
+import type { FonteKakitori, ItemKakitori, ItemKakitoriFonte, KakitoriConfig } from '../../data/kakitori/types';
 import { sortear } from '../../lib/aleatorio';
 
 function itemDeFonte(item: ItemKakitoriFonte, origemLabel: string, licaoId: string): ItemKakitori {

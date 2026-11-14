@@ -1,6 +1,6 @@
 import { State } from 'ts-fsrs';
 import { db, newId, type Card, type Review } from '../../db/schema';
-import { apagar } from '../../db/local';
+import { apagar, getDeviceId } from '../../db/local';
 import { carimbosCard } from '../../db/merge';
 import { applyFsrs, type Grade } from '../srs/fsrs';
 import { registrarAtividade } from '../atividade/atividade';
@@ -72,22 +72,26 @@ export async function registrarRevisao(
   now: number = Date.now()
 ): Promise<RevisaoFeita> {
   const { mudancas, review } = calcularRevisao(card, direcao, nota, now);
-  await db.transaction('rw', db.cards, db.reviews, async () => {
+  // O id do aparelho mora em `db.local`, fora desta transação: precisa estar resolvido antes dela.
+  await getDeviceId();
+  // Card, revisão e atividade do dia numa transação só: ou a nota conta por inteiro, ou não conta.
+  await db.transaction('rw', db.cards, db.reviews, db.activity, async () => {
     await db.cards.update(card.id, mudancas);
     await db.reviews.add(review);
+    await registrarAtividade('revisoes');
+    if (ehPalavraNova(card, direcao)) await registrarAtividade('novos');
   });
-  await registrarAtividade('revisoes');
-  if (ehPalavraNova(card, direcao)) await registrarAtividade('novos');
   return { antes: card, direcao, reviewId: review.id };
 }
 
 export async function desfazerRevisao(feita: RevisaoFeita, now: number = Date.now()): Promise<void> {
   const { antes, direcao, reviewId } = feita;
-  await db.transaction('rw', db.cards, db.reviews, db.deleted, async () => {
+  await getDeviceId();
+  await db.transaction('rw', db.cards, db.reviews, db.deleted, db.activity, async () => {
     // O estado restaurado precisa vencer a nota desfeita na mesclagem: carimbo novo nos dois grupos de SRS.
     await db.cards.put({ ...antes, ...carimbosCard(antes, ['srsUpdatedAt', 'productionUpdatedAt'], now) });
     await apagar('reviews', reviewId);
+    await registrarAtividade('revisoes', -1);
+    if (ehPalavraNova(antes, direcao)) await registrarAtividade('novos', -1);
   });
-  await registrarAtividade('revisoes', -1);
-  if (ehPalavraNova(antes, direcao)) await registrarAtividade('novos', -1);
 }

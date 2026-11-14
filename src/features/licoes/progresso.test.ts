@@ -23,6 +23,21 @@ describe('progresso das lições', () => {
     expect((await db.lessonProgress.get(primeira))?.completedAt).toBeUndefined();
   });
 
+  it('desmarcar no mesmo dia devolve o item novo: marcar de novo não conta duas vezes', async () => {
+    await marcarConcluida(primeira, true);
+    await marcarConcluida(primeira, false);
+    expect((await db.activity.get(diaLocal()))?.novos).toBe(0);
+    await marcarConcluida(primeira, true);
+    expect((await db.activity.get(diaLocal()))?.novos).toBe(1);
+  });
+
+  it('desmarcar uma conclusão de outro dia não mexe na conta de hoje', async () => {
+    const ontem = Date.now() - 24 * 60 * 60 * 1000;
+    await db.lessonProgress.put({ lessonId: primeira, viewedAt: ontem, completedAt: ontem, updatedAt: ontem });
+    await marcarConcluida(primeira, false);
+    expect((await db.activity.get(diaLocal()))?.novos ?? 0).toBe(0);
+  });
+
   it('trilha: próxima é a primeira não concluída, na ordem de LICOES', async () => {
     expect(trilhaDeLicoes(new Map()).proxima?.meta.id).toBe(primeira);
     await marcarConcluida(primeira, true);

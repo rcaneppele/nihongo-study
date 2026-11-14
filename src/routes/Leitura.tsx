@@ -3,10 +3,11 @@ import { LEITURA_TEXTOS, NIVEIS_LEITURA } from '../data/leitura/textos';
 import type { ReadingText } from '../data/leitura/types';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type ReadingProgress } from '../db/schema';
-import { knownPercent, useKnownWords, type KnownWords } from '../features/leitura/knowledge';
+import { knownPercent, textWords, useKnownWords, type KnownWords } from '../features/leitura/knowledge';
 import { BookOpenText, CheckCircle2, ChevronRight, Ear, Headphones, Mic, X } from 'lucide-react';
 import { TILE, type Cor } from '../lib/cores';
 import type { Icone } from '../features/metodo/estrutura';
+import { plural } from '../lib/plural';
 
 /**
  * Modos com que a leitura pode ser aberta pelos hubs do método
@@ -124,7 +125,7 @@ function TextoCard({
       <div className="flex items-start justify-between gap-2">
         <p className="font-jp text-lg font-medium">{texto.title}</p>
         {progress && (
-          <span className="badge bg-matcha/12 text-matcha" title={`Lido ${progress.timesRead} vez(es)`}>
+          <span className="badge bg-matcha/12 text-matcha" title={`Lido ${plural(progress.timesRead, 'vez', 'vezes')}`}>
             <CheckCircle2 className="h-3 w-3" />
             {progress.timesRead > 1 ? `${progress.timesRead}×` : 'Lido'}
           </span>
@@ -137,7 +138,7 @@ function TextoCard({
         </div>
         <p className="flex items-center justify-between text-xs text-sage">
           <span>
-            {percent > 0 ? `conhece ~${percent}%` : 'ainda não lido'} · ~{texto.wordCount} palavras
+            {percent > 0 ? `conhece ~${percent}%` : 'ainda não lido'} · {plural(textWords(texto).length, 'palavra', 'palavras')}
           </span>
           <ChevronRight className="h-4 w-4 text-ink/30 transition-transform group-hover:translate-x-0.5" />
         </p>

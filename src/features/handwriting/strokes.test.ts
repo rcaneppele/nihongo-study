@@ -135,7 +135,7 @@ describe('scoreDrawing', () => {
     const tracos = desenharReferencia('い');
     const r = scoreDrawing([...tracos, tracos[1]], 'い', CANVAS);
     expect(r.passed).toBe(true);
-    expect(r.hints).toEqual(['O traçado oficial usa 2 traço(s) (você fez 3) — dá uma olhada na ordem certa.']);
+    expect(r.hints).toEqual(['O traçado oficial usa 2 traços (você fez 3) — dá uma olhada na ordem certa.']);
   });
 
   it('desenhar ligando os traços (sem levantar a caneta) não conta como traço faltando', () => {

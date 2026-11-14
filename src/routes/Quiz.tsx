@@ -3,7 +3,7 @@ import PageHeader from '../components/PageHeader';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LICOES } from '../licoes';
-import { contarDisponiveis, gerarQuiz } from '../data/quiz/gerador';
+import { contarDisponiveis, gerarQuiz } from '../features/quiz/gerador';
 import { TIPOS_QUIZ, type PerguntaGerada, type RegistroResposta, type TipoQuiz } from '../data/quiz/types';
 import QuizSession from '../features/quiz/QuizSession';
 import QuizResultado from '../features/quiz/QuizResultado';

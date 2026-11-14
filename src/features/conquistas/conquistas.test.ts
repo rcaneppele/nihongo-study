@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
 import { HIRAGANA_KANA } from '../../data/kana';
@@ -31,6 +31,39 @@ describe('conquistas', () => {
     expect(novas).not.toContain('sequencia-30');
     expect(await avaliarConquistas()).toEqual([]);
     expect((await db.achievements.get('hiragana'))?.unlockedAt).toBeGreaterThan(0);
+  });
+
+  it('só calcula os números das conquistas ainda não desbloqueadas', async () => {
+    const contarRevisoes = vi.spyOn(db.reviews, 'count');
+    await avaliarConquistas();
+    expect(contarRevisoes).toHaveBeenCalled();
+    // Com as duas conquistas de revisões já desbloqueadas, o histórico de revisões deixa de ser contado.
+    await db.achievements.bulkPut(CONQUISTAS.filter((c) => c.numero === 'revisoes').map((c) => ({ id: c.id, unlockedAt: 1 })));
+    contarRevisoes.mockClear();
+    await avaliarConquistas();
+    expect(contarRevisoes).not.toHaveBeenCalled();
+    contarRevisoes.mockRestore();
+  });
+
+  it('tudo desbloqueado: não lê tabela nenhuma além das conquistas', async () => {
+    await db.achievements.bulkPut(CONQUISTAS.map((c) => ({ id: c.id, unlockedAt: 1 })));
+    const lerCards = vi.spyOn(db.cards, 'toArray');
+    expect(await avaliarConquistas()).toEqual([]);
+    expect(lerCards).not.toHaveBeenCalled();
+    lerCards.mockRestore();
+  });
+
+  it('acertos das lições contam quiz, diga, ditado e gramática com nota máxima — não escuta nem shadowing', async () => {
+    await db.exerciseResults.bulkAdd([
+      { id: '1', kind: 'quiz', itemId: 'a', score: 1, doneAt: 1 },
+      { id: '2', kind: 'diga', itemId: 'a', score: 1, doneAt: 1 },
+      { id: '3', kind: 'kakitori', itemId: 'a', score: 1, doneAt: 1 },
+      { id: '4', kind: 'gramatica', itemId: 'a', score: 1, doneAt: 1 },
+      { id: '5', kind: 'gramatica', itemId: 'b', score: 0.5, doneAt: 1 },
+      { id: '6', kind: 'escuta', itemId: 't', score: 1, doneAt: 1 },
+      { id: '7', kind: 'shadowing', itemId: 't', doneAt: 1 },
+    ]);
+    expect(await carregarNumeros()).toMatchObject({ acertosLicoes: 4, escutas: 1, shadowings: 1 });
   });
 
   it('números contam o que importa', async () => {

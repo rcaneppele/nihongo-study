@@ -7,6 +7,7 @@ import { db, type JournalEntry } from '../db/schema';
 import { LICOES } from '../licoes';
 import { getPrompt, PROMPTS_DIARIO, type PromptDiario } from '../data/diario/prompts';
 import { apagarEntrada, salvarEntrada } from '../features/diario/diario';
+import { plural } from '../lib/plural';
 
 /**
  * Diário guiado (/licoes/diario): propostas curtas de escrita ligadas às
@@ -68,7 +69,7 @@ export default function Diario() {
                 <p className="text-sm text-sage">{p.instrucao}</p>
               </div>
               {(porPrompt.get(p.id) ?? 0) > 0 && (
-                <span className="badge shrink-0 bg-kin/12 text-kin">{porPrompt.get(p.id)} escrita(s)</span>
+                <span className="badge shrink-0 bg-kin/12 text-kin">{plural(porPrompt.get(p.id) ?? 0, 'escrita', 'escritas')}</span>
               )}
               <ChevronRight className="h-4 w-4 shrink-0 text-ink/30 transition-transform group-hover:translate-x-0.5" />
             </button>

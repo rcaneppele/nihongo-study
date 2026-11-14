@@ -171,12 +171,48 @@ describe('Anki: cabeçalho, HTML e colunas', () => {
   });
 });
 
+describe('Anki: entidades HTML', () => {
+  it('decodifica uma vez só: "&amp;lt;" é o texto "&lt;", não "<"', () => {
+    expect(parseAnkiText('a &amp;lt; b\tmenor &amp; maior')[0]).toMatchObject({ front: 'a &lt; b', back: 'menor & maior' });
+  });
+});
+
 describe('importarArquivoDeCards', () => {
   beforeEach(limparBanco);
 
   it('cria os cards do arquivo e devolve quantos', async () => {
-    expect(await importarArquivoDeCards('猫,gato\n犬,cachorro', 'cards.csv')).toBe(2);
+    expect(await importarArquivoDeCards('猫,gato\n犬,cachorro', 'cards.csv')).toEqual({ criados: 2, ignorados: 0 });
     expect((await db.cards.toArray()).map((c) => c.front).sort()).toEqual(['犬', '猫']);
+  });
+
+  it('importar o mesmo arquivo de novo não duplica: frente que já existe é ignorada', async () => {
+    await importarArquivoDeCards('猫,gato\n犬,cachorro', 'cards.csv');
+    expect(await importarArquivoDeCards('猫,gato\n鳥,pássaro', 'cards.csv')).toEqual({ criados: 1, ignorados: 1 });
+    expect((await db.cards.toArray()).map((c) => c.front).sort()).toEqual(['犬', '猫', '鳥']);
+  });
+
+  it('frente repetida dentro do próprio arquivo entra uma vez só', async () => {
+    expect(await importarArquivoDeCards('猫,gato\n猫,gata', 'cards.csv')).toEqual({ criados: 1, ignorados: 1 });
+    expect((await db.cards.toArray()).map((c) => c.back)).toEqual(['gato']);
+  });
+
+  it('linha sem frente não vira card', async () => {
+    expect(await importarArquivoDeCards('猫,gato\n,sem frente', 'cards.csv')).toEqual({ criados: 1, ignorados: 1 });
+    expect(await db.cards.count()).toBe(1);
+  });
+
+  it('JSON com campos de tipo errado não grava lixo: texto vira vazio, tags só as que são texto', async () => {
+    const json = JSON.stringify([{ front: '猫', back: 42, reading: {}, category: [], tags: ['n5', 7] }, { front: 9, back: 'x' }, 'solto']);
+    expect(await importarArquivoDeCards(json, 'cards.json')).toEqual({ criados: 1, ignorados: 2 });
+    const [card] = await db.cards.toArray();
+    expect(card).toMatchObject({ front: '猫', back: '', tags: ['n5'] });
+    expect(card.reading).toBeUndefined();
+    expect(card.category).toBeUndefined();
+  });
+
+  it('JSON com `tags` que não é lista: card entra sem tags', async () => {
+    await importarArquivoDeCards(JSON.stringify([{ front: '猫', back: 'gato', tags: 'n5' }]), 'cards.json');
+    expect((await db.cards.toArray())[0].tags).toEqual([]);
   });
 
   it('arquivo sem nenhum card: erro, e nada é gravado', async () => {

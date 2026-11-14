@@ -11,6 +11,7 @@ import QuizResultado from '../features/quiz/QuizResultado';
 import { registrarAtividade } from '../features/atividade/atividade';
 import { registrarResultados } from '../features/exercicios/historico';
 import { alternar } from '../lib/conjuntos';
+import { plural } from '../lib/plural';
 
 const QUANTIDADE_PADRAO = 10;
 
@@ -140,7 +141,7 @@ export default function Gramatica() {
           value={quantidade}
           onChange={(e) => setQuantidadeDesejada(Math.max(1, Number(e.target.value) || 1))}
         />
-        <p className="mt-1 text-xs text-sage">{disponiveis} frase(s) disponível(is) com essa seleção</p>
+        <p className="mt-1 text-xs text-sage">{plural(disponiveis, 'frase disponível', 'frases disponíveis')} com essa seleção</p>
       </div>
 
       <button className="btn-primary w-full" disabled={disponiveis === 0} onClick={gerar}>

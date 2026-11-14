@@ -29,7 +29,7 @@ vi.mock('../components/Licao', async (original) => {
 });
 
 const { LICOES } = await import('./index');
-const { PARTICULAS_COMUNS } = await import('../data/quiz/gerador');
+const { PARTICULAS_COMUNS } = await import('../features/quiz/gerador');
 /** Partículas que podem ser lacuna: as alternativas do Quiz e as de fim de frase/conjunção. */
 const PARTICULAS = [...PARTICULAS_COMUNS, 'か', 'ね', 'よ', 'のに', 'より'];
 

@@ -6,6 +6,7 @@ import { SECOES, secaoDaRota, type Secao } from '../features/metodo/estrutura';
 import { usePendencias } from '../features/metodo/pendencias';
 import { aoMudarDeTela, useEstadoSync } from '../features/sync/motor';
 import { PRIVACIDADE_URL } from '../lib/privacidade';
+import { aplicarAtualizacaoPendente } from '../lib/pwaUpdate';
 import AvisoConquista from '../features/conquistas/AvisoConquista';
 
 // Navegação pelo método (Hoje · Aprender · Praticar · Revisar · Progresso),
@@ -20,8 +21,10 @@ export default function Layout({ children }: { children: ReactNode }) {
   const sincronizado = useEstadoSync()?.conectado;
 
   // Acesso ao Google vencido com o app aberto: renova ao chegar numa tela sem sessão de estudo.
+  // E versão nova do app esperando para recarregar: idem (ver `pwaUpdate.ts`).
   useEffect(() => {
     void aoMudarDeTela();
+    aplicarAtualizacaoPendente();
   }, [location.pathname]);
 
   return (
@@ -112,7 +115,12 @@ function Sidebar({ pendencias, ativa }: { pendencias: Pendencias; ativa: Secao['
               >
                 <secao.icone className={`h-[18px] w-[18px] shrink-0 ${ativo ? '' : TEXTO[secao.cor]}`} />
                 <span className="flex-1">{secao.label}</span>
-                {n > 0 && <span className="badge bg-hanko text-paper">{n}</span>}
+                {n > 0 && (
+                  <span className="badge bg-hanko text-paper">
+                    {n}
+                    <span className="sr-only"> para revisar</span>
+                  </span>
+                )}
               </Link>
               {secao.filhos && (
                 <div className="mb-2 ml-[1.15rem] mt-0.5 space-y-0.5 border-l border-line pl-3">
@@ -179,6 +187,8 @@ function BottomNav({ pendencias, ativa }: { pendencias: Pendencias; ativa: Secao
               )}
             </span>
             {secao.label}
+            {/* O ponto vermelho é só visual: quem usa leitor de tela ouve o número. */}
+            {n > 0 && <span className="sr-only">, {n} para revisar</span>}
           </Link>
         );
       })}

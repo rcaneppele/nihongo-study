@@ -1,8 +1,10 @@
 import raw from './n5.json';
 
 /**
- * Deck de vocabulário N5 (JLPT), pra importação por categoria em Config >
- * Dados > "Vocabulário N5". Fonte: lista pública de vocabulário N5
+ * Deck de vocabulário N5 (JLPT): base de Aprender › Palavras novas e da
+ * importação por categoria em Config > Dados > "Vocabulário N5". O arquivo
+ * tem ~750 entradas; o app usa só as ~190 sem kanji na frente (`N5_DECK`,
+ * abaixo). Fonte: lista pública de vocabulário N5
  * (formato Anki, tanos.co.uk), traduzida/categorizada em pt-BR.
  */
 export interface N5Entry {

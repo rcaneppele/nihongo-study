@@ -11,6 +11,7 @@ import { finishReading, knownPercent, textWords, useKnownWords, wordKey } from '
 import { registrarResultados } from '../features/exercicios/historico';
 import { registrarAtividade } from '../features/atividade/atividade';
 import { CheckCircle2, ChevronLeft, Mic, X } from 'lucide-react';
+import { plural } from '../lib/plural';
 
 /** Autoavaliação depois de escutar com o texto escondido (nota da escuta). */
 const NOTAS_ESCUTA = [
@@ -304,7 +305,7 @@ export default function LeituraTexto() {
           <p className="min-w-0 flex-1 text-sm text-sage">
             {lookedUp.size === 0
               ? 'Leu até o fim? Registre a leitura — as palavras que você não precisou consultar contam como compreendidas.'
-              : `Você consultou ${lookedUp.size} palavra(s) nesta leitura. As demais contam como compreendidas.`}
+              : `Você consultou ${plural(lookedUp.size, 'palavra', 'palavras')} nesta leitura. As demais contam como compreendidas.`}
           </p>
           <button
             className="btn-primary"
@@ -351,8 +352,8 @@ function ReadingSummary({
         <div className="space-y-1">
           <p className="font-display text-lg font-semibold tracking-tight">Leitura registrada</p>
           <div className="flex flex-wrap gap-1.5">
-            <span className="badge bg-matcha/12 text-xs text-matcha">{result.understood} compreendida(s)</span>
-            <span className="badge bg-kin/12 text-xs text-kin">{result.lookedUp} consultada(s)</span>
+            <span className="badge bg-matcha/12 text-xs text-matcha">{plural(result.understood, 'compreendida', 'compreendidas')}</span>
+            <span className="badge bg-kin/12 text-xs text-kin">{plural(result.lookedUp, 'consultada', 'consultadas')}</span>
           </div>
         </div>
       </div>

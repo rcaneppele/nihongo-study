@@ -68,7 +68,7 @@ describe('Seu nível — Ouvir', () => {
     });
     expect(ouvir['Acerto no ditado'].valor).toBe('67%');
     expect(ouvir['Entendimento só de ouvido'].valor).toBe('75%');
-    expect(ouvir['Entendimento só de ouvido'].hint).toContain('Você já fez 2 escuta(s)');
+    expect(ouvir['Entendimento só de ouvido'].hint).toContain('Você já fez 2 escutas');
     expect(ouvir['Textos prontos para escutar']).toMatchObject({ valor: 4, total: LEITURA_TEXTOS.length });
   });
 

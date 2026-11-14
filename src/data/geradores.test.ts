@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import fc from 'fast-check';
 import { LICOES } from '../licoes';
-import { contarDisponiveis as contarQuiz, gerarQuiz, PARTICULAS_COMUNS } from './quiz/gerador';
+import { contarDisponiveis as contarQuiz, gerarQuiz, PARTICULAS_COMUNS } from '../features/quiz/gerador';
 import { TIPOS_QUIZ, type TipoQuiz } from './quiz/types';
-import { contarDisponiveis as contarKakitori, gerarKakitori, listarFontes } from './kakitori/gerador';
+import { contarDisponiveis as contarKakitori, gerarKakitori, listarFontes } from '../features/kakitori/gerador';
 import { contarFrases, gerarGramatica, lerFrase } from './gramatica/gerador';
 import { PONTOS_GRAMATICA } from './gramatica/frases';
 import {

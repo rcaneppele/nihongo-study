@@ -1,0 +1,18 @@
+# Atualizações de dependências por PR (o CI roda em cada um). As actions são
+# fixadas por commit nos workflows — é o Dependabot que mantém esses commits
+# em dia.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Correções e versões menores juntas num PR só; as maiores vêm separadas.
+      menores:
+        update-types: [minor, patch]

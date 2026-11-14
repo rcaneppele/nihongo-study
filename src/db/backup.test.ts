@@ -8,6 +8,7 @@ import {
   importData,
   mesmoConteudo,
   parseBackup,
+  SCHEMA_VERSION,
   TABELAS_SINCRONIZADAS,
   type BackupFile,
   type TabelaSincronizada,
@@ -143,6 +144,29 @@ describe('mesmoConteudo (decide se a sincronização precisa subir)', () => {
 describe('parseBackup', () => {
   it.each(['null', '{}', '{"app":"outro-app"}', '[]'])('%s não é um backup do app', (texto) => {
     expect(() => parseBackup(texto)).toThrow('Não parece um backup do Nihongo Study.');
+  });
+
+  it('backup de uma versão mais nova do app é recusado (este aparelho o regravaria sem as tabelas novas)', () => {
+    const texto = JSON.stringify(umBackup({ schemaVersion: SCHEMA_VERSION + 1 }));
+    expect(() => parseBackup(texto)).toThrow('versão mais nova do app');
+  });
+
+  it.each([
+    ['versão que não é número', { schemaVersion: '7' }],
+    ['tabela que não é lista', { cards: 'x' }],
+    ['registro que não é objeto', { reviews: [null] }],
+    ['registro sem chave', { activity: [{ revisoes: 1 }] }],
+    ['card sem frente', { cards: [{ ...umCard(), front: undefined }] }],
+    ['card com tags que não são lista', { cards: [{ ...umCard(), tags: 'n5' }] }],
+    ['card sem data de revisão', { cards: [{ ...umCard(), dueDate: 'amanhã' }] }],
+  ])('arquivo danificado (%s) é recusado antes de tocar no banco', (_nome, parcial) => {
+    const texto = JSON.stringify({ ...umBackup(), ...parcial });
+    expect(() => parseBackup(texto)).toThrow('danificado');
+  });
+
+  it('backup válido passa e volta migrado', () => {
+    const backup = umBackup({ cards: [umCard()] });
+    expect(parseBackup(JSON.stringify(backup))).toEqual(backup);
   });
 
   it('texto que nem é JSON: erro de leitura', () => {

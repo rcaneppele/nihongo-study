@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../../db/schema';
+import { SCHEMA_VERSION } from '../../db/backup';
 import { esperaDaTentativa, googleDrive } from './googleDrive';
 import { ErroAutorizacao } from './destino';
 import { limparBanco } from '../../test/banco';
@@ -100,6 +101,18 @@ describe('googleDrive', () => {
     drive.arquivos = [];
     expect(await d.versao()).toBeNull();
     expect(await db.local.get('driveFileId')).toBeUndefined();
+  });
+
+  it('arquivo de uma versão mais nova do app: não baixa (este aparelho o regravaria sem as tabelas novas)', async () => {
+    const d = googleDrive('tok');
+    await d.subir(umBackup({ schemaVersion: SCHEMA_VERSION + 1 }));
+    await expect(d.baixar()).rejects.toThrow('versão mais nova do app');
+  });
+
+  it('arquivo que descomprime além do limite é recusado (não enche a memória do aparelho)', async () => {
+    const d = googleDrive('tok', { maxBytes: 200 });
+    await d.subir(umBackup({ cards: [umCard({ back: 'a'.repeat(5000) })] }));
+    await expect(d.baixar()).rejects.toThrow('grande demais');
   });
 
   it('duas cópias (dois aparelhos criando juntos): vale a mais antiga', async () => {

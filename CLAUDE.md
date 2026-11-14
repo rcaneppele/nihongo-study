@@ -76,7 +76,9 @@ toda mudança pede bump; julgue pelo impacto:
   `local` (só do aparelho, fora do backup).
 - `src/db/backup.ts` — exportar/importar (modos `replace` e `merge`),
   `importarBackup`, `apagarTudo` e `TABELAS_SINCRONIZADAS` (fonte única da
-  lista de tabelas do backup); migrações por versão em `migracoes.ts`
+  lista de tabelas do backup); `parseBackup` valida tudo que vem de fora
+  (arquivo ou Drive) e recusa backup de versão mais nova do app; migrações
+  por versão em `migracoes.ts`
   (fixtures congeladas por versão em `src/db/__fixtures__/`); mesclagem no
   banco em `mesclarNoBanco.ts`; baixar/compartilhar o arquivo em
   `src/features/backup/arquivo.ts`.
@@ -100,6 +102,12 @@ toda mudança pede bump; julgue pelo impacto:
   testes usam com um Drive em memória),
   `SyncCard.tsx` (Config › Dados) e `AvisoSync.tsx` (Home). Ver
   `regras-negocio.md` §6.
+- `cabecalhos.ts` (raiz) — cabeçalhos de segurança do site, fonte única: a
+  Content-Security-Policy e os demais. O `vite.config.ts` gera o `_headers`
+  do Cloudflare Pages a partir dele e usa os mesmos no `vite preview` (o E2E
+  roda com eles; `e2e/jornadas/seguranca.spec.ts`). **Sem script inline** (o
+  do tema é `public/tema.js`) e **origem externa nova precisa ser liberada
+  ali** (`connect-src`), senão o navegador barra.
 - `THIRD_PARTY_NOTICES.md` — licenças e créditos de terceiros (KanjiVG em CC
   BY-SA 3.0, deck N5, fontes, bibliotecas), com resumo em Config › Sobre o App.
   Dado ou biblioteca de terceiros nova entra nos dois.
@@ -108,7 +116,8 @@ toda mudança pede bump; julgue pelo impacto:
   `useEstadoBackup`), aviso para instalar no Safari do iOS (`instalacao.ts`,
   `AvisoInstalacao`) e pedido de armazenamento persistente (`persistencia.ts`);
   o "Sincronizar com arquivo" e o compartilhar ficam em
-  `src/routes/Config.tsx` (aba Dados) + `shareBackup()` em `backup.ts`.
+  `src/features/config/DadosTab.tsx` (aba Dados) + `shareBackup()` em
+  `src/features/backup/arquivo.ts`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
   `regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo
@@ -184,15 +193,19 @@ toda mudança pede bump; julgue pelo impacto:
   treino de kana (barra de progresso; segurar a tela pausa a contagem).
 - `src/lib/useTheme.tsx` — `ThemeProvider`/`useTheme`: tema claro/escuro/
   sistema, persistido em `db.meta` (entra no backup) e cacheado em
-  `localStorage` só para aplicar antes do primeiro paint.
+  `localStorage` só para aplicar antes do primeiro paint (`public/tema.js`,
+  carregado pelo `index.html`).
 - `src/lib/pwaUpdate.ts` — registro manual do service worker
   (`setupPWAUpdate()`, chamado em `main.tsx`); checa atualização
   periodicamente e ao voltar o foco, e ativa/recarrega sozinho sem precisar
-  de recarregamento manual (ver `regras-negocio.md`).
+  de recarregamento manual (ver `regras-negocio.md`) — fora de sessão de
+  estudo: `src/lib/telaSemSessao.ts` diz em que telas dá para recarregar ou
+  interromper (também usado pela sincronização).
 - `src/data/kana.ts` — kana (seion, dakuten/handakuten, yōon) com romaji e
   famílias para o seletor de treino.
-- `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 completo
-  (~700 palavras, pt-BR), base de Aprender › Palavras novas; o import por
+- `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 (pt-BR):
+  o arquivo tem ~750 entradas, mas `N5_DECK` — o que o app usa — só as ~190
+  sem kanji na frente. Base de Aprender › Palavras novas; o import por
   categoria inteira fica em Config > Dados > "Vocabulário N5" > Avançado.
 - `src/data/kanjivg/kana-strokes.json` / `kanji-strokes.json` — dados de
   traço (ordem/forma) do KanjiVG, gerados por `scripts/build-kana-strokes.mjs`
@@ -203,11 +216,13 @@ toda mudança pede bump; julgue pelo impacto:
   (`/licoes/diga`): português → dizer a frase em japonês → conferir,
   usando o `diga` de cada lição + as `quiz.frases`; frases erradas podem
   virar cards.
-- `src/data/quiz/` + `src/features/quiz/` + `src/routes/Quiz.tsx` — Quiz
-  das lições ("Testar lições", `/licoes/quiz`), gerado do `quiz` de cada
-  lição; `src/data/kakitori/` + `src/features/kakitori/` +
-  `src/routes/Kakitori.tsx` — ditado (`/licoes/kakitori`), dos grupos
-  `kakitori` das lições.
+- `src/data/quiz/` (tipos) + `src/features/quiz/` (`gerador.ts` e telas) +
+  `src/routes/Quiz.tsx` — Quiz das lições ("Testar lições", `/licoes/quiz`),
+  gerado do `quiz` de cada lição; `src/data/kakitori/` (tipos) +
+  `src/features/kakitori/` (`gerador.ts` e telas) + `src/routes/Kakitori.tsx`
+  — ditado (`/licoes/kakitori`), dos grupos `kakitori` das lições. Os
+  geradores leem `LICOES`, por isso moram em `features`: `src/data` não
+  importa de `licoes` nem de `features` (`src/arquitetura.test.ts` confere).
 - `src/data/gramatica/` + `src/routes/Gramatica.tsx` — "Gramática em
   contexto" (`/licoes/gramatica`): frases novas com lacuna por ponto
   gramatical, na sessão do Quiz (tipo de pergunta `completar`).
@@ -244,7 +259,8 @@ toda mudança pede bump; julgue pelo impacto:
   `secaoDaRota()`. Fonte única da navegação e dos hubs (`Aprender.tsx`,
   `Praticar.tsx`, `Habilidade.tsx`, `Revisar.tsx`, `Progresso.tsx`). Ao criar
   uma ferramenta nova, decidir aqui em que objetivo(s) ela entra.
-  `PlanoDoDia.tsx` é o plano do dia da Home (Revisar → Aprender →
+  `revisaoDoDia.ts` monta a sessão da Revisão do dia (teto de 50 itens, os
+  mais atrasados primeiro). `PlanoDoDia.tsx` é o plano do dia da Home (Revisar → Aprender →
   Praticar). `nivel.ts` dá os indicadores de "Seu nível nesta habilidade".
   `proximoPasso.ts` calcula o "Próximo passo" de cada hub (com
   `src/features/leitura/recomendacao.ts` e `src/features/kana/desempenho.ts`,
@@ -255,8 +271,11 @@ toda mudança pede bump; julgue pelo impacto:
   `KanaConfig`/`KanaTeste`/`KanaResultado` telas). Configurações:
   `src/features/config/` (uma aba por arquivo).
 - `src/lib/aleatorio.ts` (`embaralhar`/`sortear` com `rng` injetável) e
-  `src/lib/conjuntos.ts` (`alternar` seleção) — utilitários genéricos.
+  `src/lib/conjuntos.ts` (`alternar` seleção) — utilitários genéricos;
+  `src/lib/plural.ts` (`plural`/`palavra`) — concordância de número nos
+  textos da interface (nada de "card(s)").
 - Testes: `src/test/` (fábricas, banco limpo, aparelhos simulados),
+  `e2e/driveFalso.ts` (Google de mentira para a jornada de sincronização),
   `*.test.ts(x)` em Node, `*.browser.test.tsx` no navegador, `e2e/` (Playwright).
   Ver `docs/estrategia-testes.md`.
 - `public/privacidade.html` — política de privacidade (página estática, fora

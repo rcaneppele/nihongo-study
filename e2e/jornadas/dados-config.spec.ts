@@ -45,9 +45,32 @@ test.describe('Backup entre aparelhos', () => {
   test('substituir pede confirmação; recusar não muda nada', async ({ app, page }) => {
     await app.prepararDados(backup({ cards: [card('ねこ', 'gato')] }));
     await app.abrir('/config');
-    page.once('dialog', (d) => d.dismiss());
+    // Mesclar (que não apaga nada) é o modo que vem escolhido; Substituir é uma escolha explícita.
+    const modo = page.getByRole('group', { name: 'Como importar' });
+    await expect(modo.getByRole('button', { name: 'Mesclar' })).toHaveAttribute('aria-pressed', 'true');
+    await modo.getByRole('button', { name: 'Substituir' }).click();
+    let perguntou = '';
+    page.once('dialog', (d) => {
+      perguntou = d.message();
+      void d.dismiss();
+    });
     await escolherArquivo(page, 'Importar backup', JSON.stringify(backup({ cards: [] }))).catch(() => {});
+    await expect.poll(() => perguntou).toContain('apaga todos os dados atuais');
     await expect.poll(async () => (await app.lerTabela('cards')).length).toBe(1);
+  });
+
+  test('o resultado de cada ação aparece na seção em que ela foi feita', async ({ app, page }) => {
+    await app.abrir('/config');
+    const escolher = page.waitForEvent('filechooser');
+    await page.getByRole('button', { name: 'Escolher arquivo' }).click();
+    await (await escolher).setFiles({ name: 'cards.csv', mimeType: 'text/csv', buffer: Buffer.from('猫,gato') });
+    const secaoCards = page.locator('section', { has: page.getByRole('heading', { name: 'Importar cards' }) });
+    await expect(secaoCards.getByRole('status')).toHaveText('1 card importado.');
+    // Erro numa outra seção troca o aviso de lugar (e não fica um resultado velho na tela).
+    await escolherArquivo(page, 'Importar backup', 'isto não é um backup{');
+    const secaoBackup = page.locator('section', { has: page.getByRole('heading', { name: 'Backup completo' }) });
+    await expect(secaoBackup.getByRole('status')).toContainText('Erro');
+    await expect(secaoCards.getByRole('status')).toHaveCount(0);
   });
 
   test('"Sincronizar com arquivo" mescla e oferece o arquivo juntado para levar de volta', async ({ app, page, browser }) => {
@@ -80,7 +103,47 @@ test.describe('Backup entre aparelhos', () => {
     const escolher = page.waitForEvent('filechooser');
     await page.getByRole('button', { name: 'Escolher arquivo' }).click();
     await (await escolher).setFiles({ name: 'cards.csv', mimeType: 'text/csv', buffer: Buffer.from('front,back\n猫,gato\n犬,"cão, cachorro"') });
-    await expect(page.getByText('2 card(s) importado(s).')).toBeVisible();
+    await expect(page.getByText('2 cards importados.')).toBeVisible();
+  });
+
+  test('importar cards do Anki (texto com cabeçalho, HTML e tags)', async ({ app, page }) => {
+    await app.abrir('/config');
+    const escolher = page.waitForEvent('filechooser');
+    await page.getByRole('button', { name: 'Escolher arquivo' }).click();
+    const anki = ['#separator:tab', '#html:true', '#tags column:3', 'ねこ\t<b>gato</b><br>felino\tn5 animal', 'いぬ\tcachorro\t'].join('\n');
+    await (await escolher).setFiles({ name: 'baralho.txt', mimeType: 'text/plain', buffer: Buffer.from(anki) });
+    await expect(page.getByText('2 cards importados.')).toBeVisible();
+    const cards = await app.lerTabela<{ front: string; back: string; tags: string[] }>('cards');
+    expect(cards.find((c) => c.front === 'ねこ')).toMatchObject({ back: 'gato\nfelino', tags: ['n5', 'animal'] });
+  });
+
+  test('importar cards de JSON; repetir o mesmo arquivo não duplica', async ({ app, page }) => {
+    await app.abrir('/config');
+    const arquivo = { name: 'cards.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify([{ front: 'とり', back: 'pássaro', reading: 'tori' }])) };
+    let escolher = page.waitForEvent('filechooser');
+    await page.getByRole('button', { name: 'Escolher arquivo' }).click();
+    await (await escolher).setFiles(arquivo);
+    await expect(page.getByText('1 card importado.')).toBeVisible();
+
+    escolher = page.waitForEvent('filechooser');
+    await page.getByRole('button', { name: 'Escolher arquivo' }).click();
+    await (await escolher).setFiles(arquivo);
+    await expect(page.getByText(/Nenhum card novo/)).toBeVisible();
+    expect(await app.lerTabela('cards')).toHaveLength(1);
+  });
+
+  test('backup de uma versão mais nova do app é recusado e nada muda', async ({ app, page }) => {
+    await app.prepararDados(backup({ cards: [card('ねこ', 'gato')] }));
+    await app.abrir('/config');
+    await page.getByRole('button', { name: 'Mesclar' }).click();
+    await escolherArquivo(page, 'Importar backup', JSON.stringify(backup({ schemaVersion: 99, cards: [card('いぬ', 'cachorro')] })));
+    await expect(page.getByText(/versão mais nova do app/)).toBeVisible();
+    expect(await app.lerTabela('cards')).toHaveLength(1);
+
+    // Arquivo com formato errado também é recusado inteiro.
+    await escolherArquivo(page, 'Importar backup', JSON.stringify({ ...backup(), cards: [{ id: 'x' }] }));
+    await expect(page.getByText(/incompleto ou danificado/)).toBeVisible();
+    expect(await app.lerTabela('cards')).toHaveLength(1);
   });
 
   test('apagar todos os dados, com confirmação', async ({ app, page }) => {

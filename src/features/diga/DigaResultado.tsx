@@ -2,6 +2,7 @@ import ResultadoResumo from '../../components/ResultadoResumo';
 import { Copy } from 'lucide-react';
 import { useState } from 'react';
 import { kanaExibicao, romaji, salvarFrasesComoCards, type RegistroDiga } from './gerador';
+import { palavra, plural } from '../../lib/plural';
 
 /**
  * Resultado do "Diga em japonês": acertos e a lista das frases, com a opção
@@ -18,7 +19,7 @@ export default function DigaResultado({ registros }: { registros: RegistroDiga[]
     setMsg(
       n === 0
         ? 'Essas frases já estavam nos seus flash cards.'
-        : `${n} frase(s) salva(s) em Flash cards, categoria "Frases" — elas entram na Revisão do dia, em Revisar, para você treinar dizer.`
+        : `${plural(n, 'frase salva', 'frases salvas')} em Flash cards, categoria "Frases" — ${palavra(n, 'ela entra', 'elas entram')} na Revisão do dia, em Revisar, para você treinar dizer.`
     );
   }
 

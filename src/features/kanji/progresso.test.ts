@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
 import { KANJI_N5 } from '../../data/kanji';
@@ -20,6 +20,15 @@ describe('progresso de kanji', () => {
     expect((await db.activity.get(diaLocal()))?.novos).toBe(1);
   });
 
+  it('aprender um kanji que já está no FSRS (veio de outro aparelho no meio da sessão) não zera o progresso', async () => {
+    await aprenderKanji('日', AGORA);
+    await registrarRevisaoKanji('日', Rating.Good, AGORA);
+    const antes = await db.kanjiProgress.get('日');
+    await aprenderKanji('日', AGORA + DIA);
+    expect(await db.kanjiProgress.get('日')).toEqual(antes);
+    expect((await db.activity.get(diaLocal()))?.novos).toBe(1);
+  });
+
   it('revisar e desfazer', async () => {
     await aprenderKanji('日', AGORA);
     const antes = await registrarRevisaoKanji('日', Rating.Good, AGORA + 1);
@@ -28,6 +37,15 @@ describe('progresso de kanji', () => {
     await desfazerRevisaoKanji(antes!, AGORA + 2);
     expect(await db.kanjiProgress.get('日')).toEqual({ ...antes, updatedAt: AGORA + 2 });
     expect((await db.activity.get(diaLocal()))?.revisoes).toBe(0);
+  });
+
+  it('nota é tudo ou nada: se a atividade do dia não grava, o progresso do kanji não muda', async () => {
+    await aprenderKanji('日', AGORA);
+    const antes = await db.kanjiProgress.get('日');
+    const falha = vi.spyOn(db.activity, 'put').mockRejectedValueOnce(new Error('sem espaço'));
+    await expect(registrarRevisaoKanji('日', Rating.Good, AGORA + DIA)).rejects.toThrow('sem espaço');
+    falha.mockRestore();
+    expect(await db.kanjiProgress.get('日')).toEqual(antes);
   });
 
   it('revisar kanji não aprendido não faz nada', async () => {

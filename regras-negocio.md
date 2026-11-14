@@ -176,6 +176,11 @@ Página `/aprender/palavras` (Aprender › Palavras novas; `PalavrasNovas.tsx`
 (`N5_DECK`, mesmo filtro do import). Não tem tabela própria: cruza o deck
 com `cards` (pela `front`) e `wordKnowledge` (pela chave).
 
+- **Grade recolhida**: mostra as 48 palavras mais úteis (mesma ordem do
+  "Aprender as próximas 10"); "Mostrar todas as N palavras" abre o resto.
+  Trocar de categoria recolhe de novo. No celular o painel da palavra fica
+  abaixo da grade, então tocar numa palavra rola até ele.
+
 - **Estado de cada palavra**: Nova (sem card, não marcada) · Na fila (card
   ainda não revisado) · Reconheço (card revisado, ou compreendida na
   leitura, ou "Já sei" no mapa) · Sei dizer · Domino (estágios do card).
@@ -212,7 +217,9 @@ com `cards` (pela `front`) e `wordKnowledge` (pela chave).
 formato pelo nome do arquivo/conteúdo e chama o parser certo:
 - CSV: `front,back,reading,category,tags` (com ou sem cabeçalho; tags separadas
   por `;`). Campo entre aspas pode ter vírgula, quebra de linha e `""`.
-- JSON: array de objetos de card.
+- JSON: array de objetos de card. Campo com tipo errado é descartado (texto
+  que não é texto vira vazio; `tags` só as que são texto) — o arquivo vem de
+  fora e não pode gravar registro que quebre as telas.
 - Texto do Anki ("Notas em Texto Simples" ou "Cartões em Texto Simples"):
   lê cabeçalho `#separator`/`#html`/`#notetype column`/`#deck column`/
   `#tags column`/`#columns` quando presente (senão detecta separador por
@@ -225,9 +232,14 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   UUID gerado na hora — mesmo se o JSON trouxer um `id`, ele é ignorado
   (evita colidir com um card já existente e derrubar o `bulkAdd` inteiro;
   essa importação nunca faz merge por id, isso é o backup — ver seção 4).
+- **Sem duplicar** (`importarArquivoDeCards`): card cuja frente já existe no
+  banco, ou repetida no próprio arquivo, é ignorado — o mesmo critério de
+  duplicata do resto do app (`cardPorFrente`); importar o mesmo arquivo de
+  novo não cria nada. Linha sem frente não vira card. A tela diz quantos
+  entraram e quantos foram ignorados.
 
 ### Deck de vocabulário N5
-- `n5.json` traz ~700 palavras do vocabulário N5 (JLPT), traduzidas e
+- `n5.json` traz ~750 palavras do vocabulário N5 (JLPT), traduzidas e
   categorizadas em pt-BR em 8 categorias: Substantivos, Verbos, Adjetivos,
   Advérbios, Números e tempo, Pronomes e interrogativos, Saudações e
   expressões, Partículas e gramática. `src/data/seed/n5.ts` reexporta esse
@@ -251,7 +263,7 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   (ストーブ, ノート, アパート), abreviações e homônimos (デパート, コート,
   マッチ) e palavras nativas com uso que confunde lusófonos (あなた, はい,
   いいえ, ちょっと, はく/かぶる). Notas sem kanji, mesma regra das lições.
-- Em Config > Dados > "Vocabulário N5" (`src/routes/Config.tsx`), o
+- Em Config > Dados > "Vocabulário N5" (`src/features/config/DadosTab.tsx`), o
   caminho recomendado vem primeiro — um atalho pra Aprender › Palavras
   novas (10 por vez, das mais úteis). O import por categoria inteira fica
   recolhido num bloco "Avançado" (`<details>`), com aviso de que pode
@@ -463,7 +475,7 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 - **Dados**: `src/data/leitura/types.ts` define `ReadingWord` (`{ text,
   reading?, meaning? }` — uma palavra, com furigana e significado
   individuais), `ReadingLine` (`ReadingWord[]`, uma frase) e `ReadingText`
-  (`{ id, title, level, wordCount, summaryPt, lines }`). Conteúdo em
+  (`{ id, title, level, summaryPt, lines }`). Conteúdo em
   `src/data/leitura/textos.ts` (`LEITURA_TEXTOS`), escrito à mão — **sem
   tokenizador/parser morfológico de japonês em runtime**: cada palavra do
   texto já vem pré-segmentada com sua leitura e significado no próprio
@@ -887,6 +899,12 @@ pré-escolhidos" abaixo). Ferramenta nova: decidir em
   "Desistir e voltar" no meio volta pro hub sem marcar como concluída (o que
   já foi respondido está gravado). Sem nada vencido, o bloco mostra "Tudo em
   dia" (ou "Revisão do dia concluída!" logo depois de terminar).
+  - **Teto de 50 itens por sessão** (`SESSAO_MAXIMA`,
+    `montarSessaoDoDia` em `src/features/metodo/revisaoDoDia.ts`): com mais
+    que isso vencido (depois de uns dias sem estudar), a sessão leva os mais
+    atrasados primeiro, com cards e kanji dividindo o teto na proporção do
+    que cada um tem vencido. O resto continua vencido — o bloco mostra o
+    total e o botão vira "Continuar revisão". A fila em si não muda.
 - **Modos pré-escolhidos** — as atividades dos hubs abrem a ferramenta já
   no modo da habilidade, pela URL (as telas continuam abrindo no padrão sem
   o parâmetro):
@@ -978,7 +996,21 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
   `deleted` (lápides), `exerciseResults`, `lessonProgress`, `achievements`
   e `journal` (as quatro últimas desde a schemaVersion 7). Serve de sincronização e de backup. A tabela `local`
   (id do aparelho, estado da sincronização) **nunca** entra no backup.
-- **Importar**, dois modos:
+- **Validação na entrada** (`parseBackup`, usado pelo importar e pela
+  sincronização com o Drive): nada vindo de fora entra no banco sem conferir.
+  - Backup de uma **versão mais nova** do app (`schemaVersion` maior que a
+    deste aparelho) é recusado, com a orientação de atualizar o app. Sem
+    isso, um aparelho ainda na versão antiga mesclaria e regravaria o
+    arquivo do Drive sem as tabelas que não conhece. Na sincronização, o
+    ciclo para com esse erro e nada sobe.
+  - Arquivo com formato errado (tabela que não é lista, registro sem chave,
+    card sem frente/verso/tags/data) é recusado antes de qualquer gravação.
+  - O arquivo do Drive é lido com teto de 100 MB já descomprimido.
+- **Importar**, dois modos — **Mesclar vem escolhido** (é o que não apaga
+  nada); Substituir é escolha explícita, pede confirmação e, com a
+  sincronização ligada, a confirmação avisa que o Drive e os outros
+  aparelhos também serão substituídos. O resultado de cada ação da aba
+  Dados aparece na seção em que ela foi feita.
   - **Substituir**: limpa tudo e grava o conteúdo do arquivo. Simples e
     previsível. Marca uma nova "época" dos dados (`meta.dataEpoch`, ver abaixo).
   - **Mesclar**: por `id` (UUID) ou pela chave primária da tabela, com uma
@@ -1038,7 +1070,13 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
 - **Época dos dados** (`meta.dataEpoch`): importar no modo Substituir e
   "Apagar tudo" gravam uma época nova. Reservada para a sincronização
   automática substituir (em vez de mesclar) nos outros aparelhos — senão a
-  mesclagem traria de volta tudo o que foi substituído.
+  mesclagem traria de volta tudo o que foi substituído. Quando o aparelho
+  encontra no Drive uma época mais nova que a dele, **pergunta** se deve
+  ficar igual ao outro ou juntar os dados. A pergunta é um diálogo que
+  para tudo, então **não aparece no meio de uma sessão de estudo**: o
+  ciclo não mescla nem envia nada (`perguntaAdiada`) e a pergunta vem na
+  próxima tela sem sessão (`telaSemSessao`) — ou na hora, se a pessoa tocar
+  em "Sincronizar agora".
 - **Relógio do aparelho**: as regras dependem das datas de cada aparelho;
   um relógio muito errado pode fazer uma alteração antiga vencer.
 - **Sincronizar com arquivo** (Config › Dados, "Sincronizar entre
@@ -1170,6 +1208,11 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
      aba pelos novos, sem precisar de outro recarregamento manual. Um guard
      (`hadController`) evita recarregar sozinho na primeiríssima instalação
      do PWA, quando ainda não existe nenhum controller anterior pra trocar.
+     **No meio de uma sessão de estudo o recarregamento espera**: fica
+     pendente e acontece quando a pessoa chega a uma tela sem sessão
+     (Início, hubs, Progresso, Configurações — `src/lib/telaSemSessao.ts`,
+     a mesma regra da renovação do login do Google), para não jogar fora uma
+     revisão ou um treino pela metade.
 - **Antes desta correção**: o app dependia inteiramente do comportamento
   padrão do navegador (só ativa um worker novo depois que todas as
   abas/instâncias fecham), por isso o usuário precisava puxar pra atualizar

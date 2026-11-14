@@ -16,6 +16,7 @@ import {
   type PontoFraco,
 } from '../features/pontos-fracos/pontosFracos';
 import { embaralhar } from '../lib/aleatorio';
+import { palavra, plural } from '../lib/plural';
 
 const ORIGENS: Origem[] = ['cards', 'kana', 'kanji', 'leitura', 'licoes'];
 
@@ -78,8 +79,8 @@ export default function PontosFracos() {
               <Dumbbell className="h-5 w-5" />
             </span>
             <p className="min-w-0 text-sm text-sage">
-              <span className="text-lg font-semibold text-ink">{total}</span> item(ns) para reforçar, de{' '}
-              {ORIGENS.filter((o) => dados[o].length > 0).length} parte(s) do app
+              <span className="text-lg font-semibold text-ink">{total}</span> {palavra(total, 'item', 'itens')} para reforçar, de{' '}
+              {plural(ORIGENS.filter((o) => dados[o].length > 0).length, 'parte', 'partes')} do app
             </p>
           </div>
           <button

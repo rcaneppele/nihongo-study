@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type LessonProgress } from '../../db/schema';
 import { LICOES, type LicaoEntry } from '../../licoes';
-import { registrarAtividade } from '../atividade/atividade';
+import { diaLocal, registrarAtividade } from '../atividade/atividade';
 
 /**
  * Progresso das lições: quando cada uma foi aberta e se foi marcada como
@@ -15,14 +15,20 @@ export async function marcarVista(lessonId: string): Promise<void> {
   });
 }
 
-/** Marca ou desmarca como concluída. Concluir conta como item novo do dia (meta e Plano do dia). */
-export async function marcarConcluida(lessonId: string, concluida: boolean): Promise<void> {
-  const now = Date.now();
+/**
+ * Marca ou desmarca como concluída. Concluir conta como item novo do dia
+ * (meta e Plano do dia); desmarcar no mesmo dia devolve esse item — senão
+ * marcar e desmarcar a mesma lição contaria várias vezes.
+ */
+export async function marcarConcluida(lessonId: string, concluida: boolean, now: number = Date.now()): Promise<void> {
   const atual = await db.lessonProgress.get(lessonId);
   const registro: LessonProgress = { lessonId, viewedAt: atual?.viewedAt ?? now, updatedAt: now };
   if (concluida) registro.completedAt = now;
   await db.lessonProgress.put(registro);
-  if (concluida && atual?.completedAt === undefined) await registrarAtividade('novos', 1);
+  if (concluida && atual?.completedAt === undefined) await registrarAtividade('novos', 1, now);
+  if (!concluida && atual?.completedAt !== undefined && diaLocal(atual.completedAt) === diaLocal(now)) {
+    await registrarAtividade('novos', -1, now);
+  }
 }
 
 export function useProgressoLicoes(): Map<string, LessonProgress> | undefined {

@@ -66,6 +66,21 @@ export function entrarNoGoogle(silencioso = false, conta?: string): void {
   location.assign(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
 }
 
+/** O login pendente guardado na ida, ou `null` se não há ou não dá pra confiar no que está guardado. */
+function lerPendente(salvo: string | null): LoginPendente | null {
+  if (!salvo) return null;
+  try {
+    const p: unknown = JSON.parse(salvo);
+    if (typeof p !== 'object' || p === null) return null;
+    const { state, retorno, silencioso } = p as Record<string, unknown>;
+    // `retorno` vira endereço do app: só um caminho daqui mesmo (começa com uma barra só).
+    if (typeof state !== 'string' || !state || typeof retorno !== 'string' || !/^\/(?!\/)/.test(retorno)) return null;
+    return { state, retorno, silencioso: silencioso === true };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Lê a resposta do Google no endereço (`#access_token=…` ou `#error=…`),
  * guarda o token e limpa o endereço, voltando pra página de onde saiu.
@@ -76,7 +91,7 @@ export async function processarRetornoOAuth(): Promise<RetornoOAuth> {
   if (!hash.has('access_token') && !hash.has('error')) return null;
   const salvo = sessionStorage.getItem(PENDENTE_KEY);
   sessionStorage.removeItem(PENDENTE_KEY);
-  const pendente: LoginPendente | null = salvo ? JSON.parse(salvo) : null;
+  const pendente = lerPendente(salvo);
   // Sem o `state` que saiu daqui, não foi este app que pediu — ignora.
   if (!pendente || hash.get('state') !== pendente.state) {
     history.replaceState(null, '', location.pathname + location.search);

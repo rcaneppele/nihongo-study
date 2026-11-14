@@ -25,8 +25,12 @@
  * 4. Quando o controller troca (o worker novo assumiu), recarrega a página
  *    uma única vez, trocando os arquivos estáticos (JS/CSS) já carregados
  *    na aba pelos novos — sem isso as telas que mudaram só apareceriam
- *    depois de outro recarregamento manual.
+ *    depois de outro recarregamento manual. Se há uma sessão de estudo em
+ *    andamento, o recarregamento espera a pessoa chegar a uma tela sem
+ *    sessão (`aplicarAtualizacaoPendente`).
  */
+
+import { telaSemSessao } from './telaSemSessao';
 
 const CHECK_INTERVAL_MS = 60 * 60 * 1000; // 1 hora
 
@@ -77,11 +81,24 @@ export function setupPWAUpdate(): void {
   });
 
   if (hadController) {
-    let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
+      atualizacaoPendente = true;
+      aplicarAtualizacaoPendente();
     });
   }
+}
+
+let atualizacaoPendente = false;
+let recarregando = false;
+
+/**
+ * Recarrega a página para a versão nova, se há uma esperando e a tela atual
+ * não tem sessão de estudo em andamento — recarregar no meio de uma revisão
+ * ou de um treino jogaria fora o que a pessoa estava fazendo. Chamado quando
+ * o worker novo assume e, depois, a cada troca de tela (`Layout`), até dar.
+ */
+export function aplicarAtualizacaoPendente(): void {
+  if (!atualizacaoPendente || recarregando || !telaSemSessao()) return;
+  recarregando = true;
+  window.location.reload();
 }

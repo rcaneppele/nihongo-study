@@ -11,6 +11,7 @@ import {
   entrarDeNovo,
   estadoSync,
   iniciarSync,
+  sincronizar,
   statusSync,
 } from './motor';
 import { criarCard } from '../flashcards/cards';
@@ -413,3 +414,67 @@ describe('ligar e desligar', () => {
     expect((await estadoSync()).conectado).toBe(true);
   });
 });
+
+describe('pergunta de época (dados substituídos em outro aparelho)', () => {
+  let perguntas: number;
+
+  /** Aparelho já sincronizado; depois, outro aparelho substitui os dados no Drive (época mais nova). */
+  async function outroAparelhoSubstituiu() {
+    perguntas = 0;
+    definirDependenciasSync({
+      destino: () => drive,
+      tokenAtual: async () => token,
+      entrarNoGoogle: () => {},
+      confirmar: () => {
+        perguntas++;
+        return true;
+      },
+    });
+    await abrirConectado();
+    await criarCard({ front: 'só-aqui', back: 'x' });
+    const epoca = Date.now() + 1000;
+    await drive.subir(umBackup({ cards: [umCard({ front: 'do-outro' })], meta: [{ key: 'dataEpoch', value: epoca, updatedAt: epoca }] }));
+  }
+  const frentes = async () => (await db.cards.toArray()).map((c) => c.front);
+  const noDrive = () => drive.conteudo()?.cards.map((c) => c.front);
+
+  it('no meio de uma sessão de estudo não pergunta nem mexe em nada: fica para depois', async () => {
+    await outroAparelhoSubstituiu();
+    irPara('/revisar');
+    await sincronizar('alteracao');
+    expect(perguntas).toBe(0);
+    expect(await frentes()).toEqual(['só-aqui']);
+    expect(noDrive()).toEqual(['do-outro']);
+    expect(statusSync()).toMatchObject({ fase: 'ocioso', perguntaAdiada: true, pendente: true });
+    // Outro gatilho ainda no meio da sessão continua sem perguntar.
+    await sincronizar('foco');
+    expect(perguntas).toBe(0);
+  });
+
+  it('ao chegar numa tela sem sessão, pergunta e aplica a resposta', async () => {
+    await outroAparelhoSubstituiu();
+    irPara('/revisar');
+    await sincronizar('alteracao');
+    irPara('/');
+    await aoMudarDeTela();
+    await esperar(() => perguntas === 1);
+    expect(await frentes()).toEqual(['do-outro']);
+    expect(statusSync().perguntaAdiada).toBeFalsy();
+  });
+
+  it('"Sincronizar agora" pergunta na hora, onde quer que a pessoa esteja (foi ela quem pediu)', async () => {
+    await outroAparelhoSubstituiu();
+    irPara('/revisar');
+    await sincronizar('manual');
+    expect(perguntas).toBe(1);
+    expect(await frentes()).toEqual(['do-outro']);
+  });
+
+  it('numa tela sem sessão, pergunta no próprio ciclo', async () => {
+    await outroAparelhoSubstituiu();
+    irPara('/progresso');
+    await sincronizar('foco');
+    expect(perguntas).toBe(1);
+  });
+});
+

@@ -90,12 +90,74 @@ export async function exportData(now: number = Date.now()): Promise<BackupFile> 
   return { app: 'nihongo-study', schemaVersion: SCHEMA_VERSION, exportedAt: now, ...dados } as BackupFile;
 }
 
+const ARQUIVO_DANIFICADO = 'O arquivo de backup está incompleto ou danificado';
+
+/**
+ * Lê o texto de um backup (arquivo escolhido pelo usuário ou baixado do
+ * Drive) e devolve já migrado para a versão atual. Nada vindo de fora entra
+ * no banco sem passar por aqui:
+ *
+ * - backup de uma versão **mais nova** do app é recusado — este aparelho
+ *   não conhece as tabelas novas e, na sincronização, regravaria o arquivo
+ *   do Drive sem elas;
+ * - arquivo com formato errado é recusado antes de qualquer gravação, em
+ *   vez de deixar registro quebrado no banco (que só apareceria depois,
+ *   como tela em branco).
+ */
 export function parseBackup(text: string): BackupFile {
-  const data = JSON.parse(text);
-  if (data?.app !== 'nihongo-study') {
+  const data: unknown = JSON.parse(text);
+  if (!ehObjeto(data) || data.app !== 'nihongo-study') {
     throw new Error('Não parece um backup do Nihongo Study.');
   }
-  return migrateBackup(data as BackupFile);
+  if (typeof data.schemaVersion !== 'number' || !Number.isInteger(data.schemaVersion) || data.schemaVersion < 1) {
+    throw new Error(`${ARQUIVO_DANIFICADO} (versão).`);
+  }
+  if (data.schemaVersion > SCHEMA_VERSION) {
+    throw new Error(
+      'Este arquivo foi criado por uma versão mais nova do app. Atualize o app neste aparelho (feche e abra de novo) e tente outra vez.'
+    );
+  }
+  // As tabelas que a versão de origem já tinha precisam ser listas antes de migrar (a migração percorre os cards).
+  for (const tabela of TABELAS_SINCRONIZADAS) {
+    if (data[tabela] !== undefined && !Array.isArray(data[tabela])) throw new Error(`${ARQUIVO_DANIFICADO} (${tabela}).`);
+  }
+  if (!Array.isArray(data.cards)) throw new Error(`${ARQUIVO_DANIFICADO} (cards).`);
+  return validarBackup(migrateBackup(data as unknown as BackupFile));
+}
+
+function ehObjeto(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
+/** Card com o mínimo que as telas e a fila de revisão usam sem conferir. */
+function cardValido(card: Record<string, unknown>): boolean {
+  return (
+    typeof card.front === 'string' &&
+    typeof card.back === 'string' &&
+    Array.isArray(card.tags) &&
+    card.tags.every((t) => typeof t === 'string') &&
+    typeof card.dueDate === 'number' &&
+    typeof card.updatedAt === 'number'
+  );
+}
+
+/** Confere o formato depois de migrar: toda tabela é lista de objetos com a chave do registro. */
+function validarBackup(backup: BackupFile): BackupFile {
+  for (const tabela of TABELAS_SINCRONIZADAS) {
+    const linhas: unknown = backup[tabela];
+    const chave = CHAVE_DO_REGISTRO[tabela] as unknown as (row: Record<string, unknown>) => unknown;
+    const ok =
+      Array.isArray(linhas) &&
+      linhas.every((linha) => {
+        if (!ehObjeto(linha)) return false;
+        const k = chave(linha);
+        // A chave das lápides é composta de dois campos: os dois precisam existir.
+        if (typeof k !== 'string' || k.length === 0 || k.includes('undefined')) return false;
+        return tabela !== 'cards' || cardValido(linha);
+      });
+    if (!ok) throw new Error(`${ARQUIVO_DANIFICADO} (${tabela}).`);
+  }
+  return backup;
 }
 
 /** Os dois backups têm os mesmos dados (sem depender da ordem dos registros nem da data de exportação). */

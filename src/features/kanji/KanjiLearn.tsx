@@ -15,6 +15,7 @@ import { aprenderKanji } from './progresso';
 export default function KanjiLearn({ entries, onDone }: { entries: KanjiEntry[]; onDone: () => void }) {
   const [index, setIndex] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
   const entry = entries[index];
 
   if (!entry) {
@@ -33,9 +34,15 @@ export default function KanjiLearn({ entries, onDone }: { entries: KanjiEntry[];
   async function confirm() {
     if (saving) return;
     setSaving(true);
-    await aprenderKanji(entry.char);
-    setSaving(false);
-    setIndex((i) => i + 1);
+    setErro(null);
+    try {
+      await aprenderKanji(entry.char);
+      setIndex((i) => i + 1);
+    } catch {
+      setErro('Não foi possível gravar. Tente de novo.');
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -117,6 +124,11 @@ export default function KanjiLearn({ entries, onDone }: { entries: KanjiEntry[];
           </div>
         </div>
 
+        {erro && (
+          <p role="alert" className="rounded-xl border border-hanko/30 bg-hanko/5 px-3 py-2 text-sm text-hanko">
+            {erro}
+          </p>
+        )}
         <button className="btn-primary w-full" disabled={saving} onClick={confirm}>
           Entendi, adicionar à revisão
         </button>

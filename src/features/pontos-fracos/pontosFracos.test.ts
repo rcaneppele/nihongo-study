@@ -125,7 +125,7 @@ describe('carregarPontosFracos — ordem, bordas e o que vai pro treino', () => 
     ]);
     const { leitura } = await carregarPontosFracos();
     expect(leitura.map((p) => p.jp)).toEqual(['いぬ', 'ねこ', 'わたし']);
-    expect(leitura[1]).toMatchObject({ detalhe: 'consultou em 2 de 2 leitura(s)', item: { card: { front: 'ねこ' } } });
+    expect(leitura[1]).toMatchObject({ detalhe: 'consultou em 2 de 2 leituras', item: { card: { front: 'ねこ' } } });
     expect(leitura[1].pt).toBeTruthy();
   });
 

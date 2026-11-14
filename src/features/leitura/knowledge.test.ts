@@ -5,7 +5,7 @@ import { LEITURA_TEXTOS } from '../../data/leitura/textos';
 import type { ReadingText } from '../../data/leitura/types';
 import { freshSrs } from '../srs/fsrs';
 import { diaLocal } from '../atividade/atividade';
-import { finishReading, knownPercent, palavrasConhecidas, textWords, wordKey } from './knowledge';
+import { finishReading, knownPercent, palavrasConhecidas, revisoesDaSemana, textWords, wordKey } from './knowledge';
 import { limparBanco } from '../../test/banco';
 import { AGORA, DIA, umaReview, umCard } from '../../test/fabricas';
 
@@ -69,6 +69,31 @@ describe('palavrasConhecidas', () => {
     // Semana: ねこ (1ª leitura) + いぬ (1ª revisão há 2 dias); さかな foi revisada pela 1ª vez há 30 dias.
     expect(k.understoodWeek).toBe(2);
     expect(k.canSayWeek).toBe(1);
+  });
+
+  it('revisoesDaSemana: só as da semana e as anteriores dos mesmos cards — e a conta da semana sai igual à do histórico inteiro', async () => {
+    const novoNaSemana = umCard({ front: 'いぬ', state: State.Review });
+    const antigoRevistoNaSemana = umCard({ front: 'さかな', state: State.Review, production: freshSrs(AGORA) });
+    const antigoParado = umCard({ front: 'とり', state: State.Review });
+    await db.reviews.bulkAdd([
+      umaReview(novoNaSemana.id, { id: 'a', reviewedAt: AGORA - 2 * DIA }),
+      umaReview(antigoRevistoNaSemana.id, { id: 'b', reviewedAt: AGORA - 30 * DIA }),
+      umaReview(antigoRevistoNaSemana.id, { id: 'c', reviewedAt: AGORA - DIA }),
+      umaReview(antigoRevistoNaSemana.id, { id: 'd', direction: 'production', reviewedAt: AGORA - DIA }),
+      umaReview(antigoParado.id, { id: 'e', reviewedAt: AGORA - 40 * DIA }),
+    ]);
+    const semana = await revisoesDaSemana(AGORA);
+    expect(semana.map((r) => r.id).sort()).toEqual(['a', 'b', 'c', 'd']);
+    const cards = [novoNaSemana, antigoRevistoNaSemana, antigoParado];
+    const comTudo = palavrasConhecidas([], cards, await db.reviews.toArray(), AGORA);
+    const comASemana = palavrasConhecidas([], cards, semana, AGORA);
+    expect(comASemana).toEqual(comTudo);
+    expect(comASemana).toMatchObject({ understoodWeek: 1, canSayWeek: 1 });
+  });
+
+  it('revisoesDaSemana: sem revisão na semana, não lê mais nada', async () => {
+    await db.reviews.add(umaReview('c', { reviewedAt: AGORA - 40 * DIA }));
+    expect(await revisoesDaSemana(AGORA)).toEqual([]);
   });
 
   it('knownPercent', () => {

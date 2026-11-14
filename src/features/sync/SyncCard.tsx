@@ -28,6 +28,9 @@ function textoStatus(status: StatusSync, estado: EstadoSync): string {
     case 'erro':
       return `Não deu para sincronizar: ${status.erro}${pendente}`;
     default:
+      if (status.perguntaAdiada) {
+        return 'Os dados foram substituídos em outro aparelho. Para não interromper seu estudo, a pergunta sobre o que fazer aparece na próxima tela fora de uma sessão.';
+      }
       return (estado.ultimoSync ? `Sincronizado ${tempoDesde(estado.ultimoSync)}` : 'Ainda não sincronizou') + pendente;
   }
 }

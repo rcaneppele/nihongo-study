@@ -8,6 +8,7 @@ import { novoCard } from '../flashcards/cards';
 import type { StudyItem } from '../flashcards/stages';
 import { desempenhoPorItem } from '../exercicios/historico';
 import { conteudoDoItem } from '../exercicios/conteudo';
+import { plural } from '../../lib/plural';
 
 /**
  * "Pontos fracos": o que o usuário mais erra, juntando todos os módulos que
@@ -149,7 +150,7 @@ export async function carregarPontosFracos(): Promise<Record<Origem, PontoFraco[
           origem: 'leitura' as const,
           jp: w.key,
           pt: palavra.meaning,
-          detalhe: `consultou em ${w.lookupCount} de ${w.seenCount} leitura(s)`,
+          detalhe: `consultou em ${w.lookupCount} de ${plural(w.seenCount, 'leitura', 'leituras')}`,
           peso: w.lookupCount * 10 + w.lookupCount / Math.max(1, w.seenCount),
           item: {
             card: cardTransitorio(`leitura-${w.key}`, w.key, palavra.meaning),

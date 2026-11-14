@@ -10,7 +10,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-shiki',
     title: '日本の 四季',
     level: 3,
-    wordCount: 45,
     summaryPt: 'As quatro estações do Japão — cerejeiras, calor, folhas vermelhas e neve — e a preferida de quem escreve.',
     lines: [
       {
@@ -119,7 +118,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-onsen',
     title: 'はじめての 温泉',
     level: 3,
-    wordCount: 38,
     summaryPt: 'A primeira ida a uma fonte termal: as regras do banho, a vista da montanha e a noite no ryokan.',
     lines: [
       {
@@ -214,7 +212,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-kaitenzushi',
     title: '回転寿司',
     level: 3,
-    wordCount: 37,
     summaryPt: 'Jantar num sushi de esteira: os pratos que giram, o pedido pelo tablet e a conta pela cor dos pratos.',
     lines: [
       {
@@ -309,7 +306,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-shinkansen',
     title: '新幹線で 大阪へ',
     level: 3,
-    wordCount: 38,
     summaryPt: 'Uma viagem de trem-bala de Tóquio a Osaka: o monte Fuji pela janela, takoyaki e as luzes de Dotonbori.',
     lines: [
       {
@@ -403,7 +399,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-gomi',
     title: 'ごみの 出し方',
     level: 3,
-    wordCount: 34,
     summaryPt: 'Quem chega ao Japão se surpreende com a separação do lixo: os dias de cada tipo e as regras.',
     lines: [
       {
@@ -497,7 +492,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-hanami',
     title: 'お花見',
     level: 3,
-    wordCount: 44,
     summaryPt: 'Um hanami com o pessoal da empresa: guardar lugar cedo, comer debaixo das cerejeiras e as pétalas caindo.',
     lines: [
       {
@@ -600,7 +594,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-kaisha',
     title: '会社の 一日',
     level: 3,
-    wordCount: 43,
     summaryPt: 'Um dia de trabalho em Tóquio: o trem lotado, reuniões, almoço com colegas e a frase de quem sai antes.',
     lines: [
       {
@@ -700,7 +693,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-nihongo',
     title: '日本語の 勉強',
     level: 3,
-    wordCount: 31,
     summaryPt: 'Um ano estudando japonês: do hiragana aos primeiros livros, a vergonha de errar e o conselho da professora.',
     lines: [
       {
@@ -793,7 +785,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-kissaten',
     title: '雨の 日の 喫茶店',
     level: 3,
-    wordCount: 41,
     summaryPt: 'Um dia de chuva sem guarda-chuva, um café antigo e a conversa com uma senhora que frequenta o lugar há 40 anos.',
     lines: [
       {
@@ -893,7 +884,6 @@ export const TEXTOS_NIVEL_3: ReadingText[] = [
     id: 'n3-shougatsu',
     title: 'お正月',
     level: 3,
-    wordCount: 45,
     summaryPt: 'O Ano-Novo japonês: soba no último dia do ano, a visita ao santuário, otoshidama e os cartões de ano-novo.',
     lines: [
       {

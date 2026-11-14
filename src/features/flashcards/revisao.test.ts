@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
 import { Rating, applyFsrs, freshSrs } from '../srs/fsrs';
@@ -86,5 +86,29 @@ describe('registrarRevisao / desfazerRevisao', () => {
     expect((await db.cards.get(card.id))?.production).toBeDefined();
     await desfazerRevisao(feita);
     expect((await db.cards.get(card.id))?.production).toBeUndefined();
+  });
+
+  it('nota é tudo ou nada: se a atividade do dia não grava, o card e a revisão também não', async () => {
+    const card = umCard();
+    await db.cards.add(card);
+    const falha = vi.spyOn(db.activity, 'put').mockRejectedValueOnce(new Error('sem espaço'));
+    await expect(registrarRevisao(card, 'recognition', Rating.Good, AGORA)).rejects.toThrow('sem espaço');
+    falha.mockRestore();
+    expect(await db.cards.get(card.id)).toEqual(card);
+    expect(await db.reviews.count()).toBe(0);
+    expect(await db.activity.count()).toBe(0);
+  });
+
+  it('desfazer é tudo ou nada: se a atividade do dia não grava, a nota continua dada', async () => {
+    const card = umCard();
+    await db.cards.add(card);
+    const feita = await registrarRevisao(card, 'recognition', Rating.Good, AGORA);
+    const depois = await db.cards.get(card.id);
+    const falha = vi.spyOn(db.activity, 'put').mockRejectedValueOnce(new Error('sem espaço'));
+    await expect(desfazerRevisao(feita, AGORA)).rejects.toThrow('sem espaço');
+    falha.mockRestore();
+    expect(await db.cards.get(card.id)).toEqual(depois);
+    expect(await db.reviews.count()).toBe(1);
+    expect(await db.deleted.count()).toBe(0);
   });
 });

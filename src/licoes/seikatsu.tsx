@@ -954,7 +954,7 @@ export default function Seikatsu() {
           notes="たまに: pouco frequente, mas acontece — mais raro que ときどき"
         />
         <Ex
-          jp="しゅうにかい、ジョギングをします。"
+          jp="しゅうににかい、ジョギングをします。"
           romaji="shuu ni ni-kai, jogingu o shimasu."
           pt="Corro duas vezes por semana."
           notes="frequência em número: しゅうに〜かい (lição de Partículas). Mais preciso que qualquer advérbio"
@@ -1216,7 +1216,7 @@ export default function Seikatsu() {
           notes="resposta curta: です substitui o verbo inteiro (lição de Usos do です)"
         />
         <Ex
-          jp="まいにちうんどうしますか？ — いいえ、ときどきします。しゅうにかいぐらいです。"
+          jp="まいにちうんどうしますか？ — いいえ、ときどきします。しゅうににかいぐらいです。"
           romaji="mainichi undou shimasu ka? — iie, tokidoki shimasu. shuu ni ni-kai gurai desu."
           pt="Você faz exercício todo dia? — Não, às vezes. Umas duas vezes por semana."
           notes="corrigir a frequência da pergunta: いいえ + o advérbio certo + verbo afirmativo"
@@ -1374,7 +1374,7 @@ export default function Seikatsu() {
         <Ex jp="はちじにうちをでて、くるまでかいしゃにいきます。" romaji="hachi-ji ni uchi o dete, kuruma de kaisha ni ikimasu." pt="Saio de casa às oito e vou de carro para a empresa." />
         <Ex jp="しごとは、くじからごじはんまでです。" romaji="shigoto wa, ku-ji kara go-ji han made desu." pt="O trabalho é das nove às cinco e meia." />
         <Ex jp="ひるごはんは、たいていじゅうにじごろ、かいしゃのちかくのレストランでたべます。" romaji="hirugohan wa, taitei juuni-ji goro, kaisha no chikaku no resutoran de tabemasu." pt="Almoço geralmente por volta do meio-dia, num restaurante perto da empresa." />
-        <Ex jp="しごとのあと、しゅうにかいジムにいきます。" romaji="shigoto no ato, shuu ni ni-kai jimu ni ikimasu." pt="Depois do trabalho, vou à academia duas vezes por semana." />
+        <Ex jp="しごとのあと、しゅうににかいジムにいきます。" romaji="shigoto no ato, shuu ni ni-kai jimu ni ikimasu." pt="Depois do trabalho, vou à academia duas vezes por semana." />
         <Ex jp="よるは、まいにちさんじゅっぷんぐらいにほんごをべんきょうします。" romaji="yoru wa, mainichi sanjup-pun gurai nihongo o benkyou shimasu." pt="À noite, estudo japonês uns trinta minutos todo dia." />
         <Ex jp="テレビは、あまりみません。" romaji="terebi wa, amari mimasen." pt="TV, quase não vejo." />
         <Ex jp="じゅういちじごろねます。" romaji="juuichi-ji goro nemasu." pt="Vou dormir por volta das onze." />

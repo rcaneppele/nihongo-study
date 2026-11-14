@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { userEvent } from '@vitest/browser/context';
+import { userEvent } from 'vitest/browser';
 import { MemoryRouter } from 'react-router-dom';
 import { State } from 'ts-fsrs';
 import StudySession from './StudySession';
@@ -15,7 +15,7 @@ async function itens(...frentes: string[]): Promise<StudyItem[]> {
   return cards.map((card) => ({ card, direction: 'recognition' as const }));
 }
 
-function sessao(items: StudyItem[], mode: 'review' | 'practice' = 'review', onDone = () => {}) {
+async function sessao(items: StudyItem[], mode: 'review' | 'practice' = 'review', onDone = () => {}) {
   return render(
     <MemoryRouter>
       <StudySession items={items} mode={mode} onDone={onDone} />
@@ -25,12 +25,12 @@ function sessao(items: StudyItem[], mode: 'review' | 'practice' = 'review', onDo
 
 describe('StudySession (revisão)', () => {
   it('mostra a frente, revela verso e nota, grava a revisão e avança', async () => {
-    const tela = sessao(await itens('ねこ', 'いぬ'));
+    const tela = await sessao(await itens('ねこ', 'いぬ'));
     await expect.element(tela.getByText('ねこ')).toBeVisible();
     await expect.element(tela.getByText('significado de ねこ')).not.toBeInTheDocument();
     await tela.getByRole('button', { name: /Mostrar resposta/ }).click();
     await expect.element(tela.getByText('significado de ねこ')).toBeVisible();
-    await expect.element(tela.getByText('nota de ねこ')).toBeVisible();
+    await expect.element(tela.getByText(/nota de ねこ/)).toBeVisible();
     await tela.getByRole('button', { name: /^Lembrei/ }).click();
     await expect.element(tela.getByText('2 de 2')).toBeVisible();
     expect(await db.reviews.count()).toBe(1);
@@ -38,15 +38,30 @@ describe('StudySession (revisão)', () => {
   });
 
   it('duplo clique na nota grava uma revisão só (trava durante a gravação)', async () => {
-    const tela = sessao(await itens('ねこ', 'いぬ', 'とり'));
+    const tela = await sessao(await itens('ねこ', 'いぬ', 'とり'));
     await tela.getByRole('button', { name: /Mostrar resposta/ }).click();
     await userEvent.dblClick(tela.getByRole('button', { name: /^Lembrei/ }));
     await expect.element(tela.getByText('2 de 3')).toBeVisible();
     expect(await db.reviews.count()).toBe(1);
   });
 
+  it('falha ao gravar a nota: avisa, não avança e deixa tentar de novo (não trava a sessão)', async () => {
+    const tela = await sessao(await itens('ねこ', 'いぬ'));
+    const add = vi.spyOn(db.reviews, 'add').mockRejectedValueOnce(new Error('sem espaço'));
+    await tela.getByRole('button', { name: /Mostrar resposta/ }).click();
+    await tela.getByRole('button', { name: /^Lembrei/ }).click();
+    await expect.element(tela.getByRole('alert')).toMatchTextContent(/Não foi possível gravar/);
+    await expect.element(tela.getByText('1 de 2')).toBeVisible();
+    expect(await db.reviews.count()).toBe(0);
+    await tela.getByRole('button', { name: /^Lembrei/ }).click();
+    await expect.element(tela.getByText('2 de 2')).toBeVisible();
+    await expect.element(tela.getByRole('alert')).not.toBeInTheDocument();
+    expect(await db.reviews.count()).toBe(1);
+    add.mockRestore();
+  });
+
   it('Ctrl+Z desfaz a última nota', async () => {
-    const tela = sessao(await itens('ねこ', 'いぬ'));
+    const tela = await sessao(await itens('ねこ', 'いぬ'));
     await userEvent.keyboard(' ');
     await userEvent.keyboard('1');
     await expect.element(tela.getByText('2 de 2')).toBeVisible();
@@ -57,7 +72,7 @@ describe('StudySession (revisão)', () => {
 
   it('fim da sessão chama onDone pelo botão', async () => {
     const onDone = vi.fn();
-    const tela = sessao(await itens('ねこ'), 'review', onDone);
+    const tela = await sessao(await itens('ねこ'), 'review', onDone);
     await userEvent.keyboard(' ');
     await userEvent.keyboard(' ');
     await expect.element(tela.getByText('Sessão concluída.')).toBeVisible();
@@ -72,7 +87,7 @@ describe('StudySession (revisão)', () => {
       production: freshSrs(),
       example: { segments: [{ text: 'ねこが' }, { text: 'います' }], highlight: 0, translation: 'Tem um gato.' },
     });
-    const tela = sessao([{ card, direction: 'production' }]);
+    const tela = await sessao([{ card, direction: 'production' }]);
     await expect.element(tela.getByText('Como se diz em japonês?')).toBeVisible();
     await expect.element(tela.getByText('＿＿')).toBeVisible();
     expect(tela.container.textContent).not.toContain('ねこ');
@@ -81,7 +96,7 @@ describe('StudySession (revisão)', () => {
 
 describe('StudySession (prática livre)', () => {
   it('não grava nada', async () => {
-    const tela = sessao(await itens('ねこ', 'いぬ'), 'practice');
+    const tela = await sessao(await itens('ねこ', 'いぬ'), 'practice');
     await expect.element(tela.getByText('Prática livre')).toBeVisible();
     for (let i = 0; i < 2; i++) {
       await tela.getByRole('button', { name: /Mostrar resposta/ }).click();

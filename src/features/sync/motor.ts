@@ -6,6 +6,7 @@ import { db } from '../../db/schema';
 import { ErroAutorizacao, type DestinoSync } from './destino';
 import { CLIENT_ID, entrarNoGoogle, esquecerToken, revogarAcesso, tokenAtual, type RetornoOAuth } from './googleAuth';
 import { googleDrive } from './googleDrive';
+import { telaSemSessao } from '../../lib/telaSemSessao';
 
 /**
  * Sincronização automática com o Google Drive (ver regras-negocio.md §6 e
@@ -41,6 +42,12 @@ export interface StatusSync {
   fase: FaseSync;
   /** Há alteração local ainda não enviada. */
   pendente: boolean;
+  /**
+   * O outro aparelho substituiu os dados e é preciso perguntar o que fazer,
+   * mas a pessoa estava no meio de uma sessão de estudo: a pergunta fica
+   * para a próxima tela sem sessão (ver `tentar` e `aoMudarDeTela`).
+   */
+  perguntaAdiada?: boolean;
   erro?: string;
 }
 
@@ -58,6 +65,8 @@ export interface DependenciasSync {
   tokenAtual: () => Promise<string | null>;
   entrarNoGoogle: (silencioso: boolean, conta?: string) => void;
   confirmar: (mensagem: string) => boolean;
+  /** Dá para interromper a pessoa com uma pergunta agora? (Não no meio de uma sessão de estudo.) */
+  podePerguntar: () => boolean;
 }
 
 const PADRAO: DependenciasSync = {
@@ -65,6 +74,7 @@ const PADRAO: DependenciasSync = {
   tokenAtual,
   entrarNoGoogle,
   confirmar: (mensagem) => confirm(mensagem),
+  podePerguntar: telaSemSessao,
 };
 let deps: DependenciasSync = PADRAO;
 
@@ -218,6 +228,13 @@ async function tentar(destino: DestinoSync, estado: EstadoSync, motivo: MotivoSy
   if (remoto) {
     const epocaRemota = epocaDoBackup(remoto.backup);
     const decisao = decidirEpoca(epocaRemota, await epocaLocal(), estado.versaoRemota !== undefined);
+    // A pergunta é um diálogo que para tudo: no meio de uma revisão ou de um treino ela fica para
+    // depois (nada é mesclado nem enviado até lá). Em "Sincronizar agora", foi a pessoa quem pediu.
+    if (decisao === 'perguntar' && motivo !== 'manual' && !deps.podePerguntar()) {
+      setStatus({ pendente: true, perguntaAdiada: true });
+      return true;
+    }
+    if (decisao === 'perguntar') setStatus({ perguntaAdiada: false });
     const acao =
       decisao === 'perguntar' ? (deps.confirmar(mensagemDeEpoca(epocaRemota)) ? 'substituir-local' : 'mesclar') : decisao;
     aplicandoRemoto = true;
@@ -291,18 +308,6 @@ function mensagemDeEpoca(epocaRemota: number): string {
 }
 
 /**
- * Telas sem sessão de estudo em andamento (hubs, Progresso, Config): ir ao
- * Google e voltar recarrega a página, mas ali não se perde nada. Revisar
- * fica de fora — a revisão do dia roda dentro da própria rota.
- */
-const TELA_SEM_SESSAO = /^\/(aprender|praticar(\/[^/]+)?|progresso|config|licoes)?\/?$/;
-
-function telaSemSessao(): boolean {
-  const rota = location.pathname.slice(import.meta.env.BASE_URL.length - 1);
-  return TELA_SEM_SESSAO.test(rota);
-}
-
-/**
  * Sem token válido, renovar é passar pelo Google (sai do app e volta). Só
  * faz isso sozinho onde não atrapalha: ao abrir o app, ou ao voltar pra ele
  * / mudar de tela estando numa tela sem sessão de estudo — nunca no meio de
@@ -324,7 +329,8 @@ function podeIrAoGoogleSozinho(motivo: MotivoSync): boolean {
  */
 export async function aoMudarDeTela(): Promise<void> {
   if (status.fase === 'desligado' || status.fase === 'sincronizando' || !telaSemSessao()) return;
-  if (!(await deps.tokenAtual())) void sincronizar('navegacao');
+  // Pergunta que ficou para depois (a pessoa estava numa sessão de estudo): agora dá para fazer.
+  if (status.perguntaAdiada || !(await deps.tokenAtual())) void sincronizar('navegacao');
 }
 
 // --- ligar/desligar ---------------------------------------------------------

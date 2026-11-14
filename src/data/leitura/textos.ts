@@ -38,7 +38,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'apresentacao',
     title: 'わたしの しょうかい',
     level: 1,
-    wordCount: 33,
     summaryPt: 'Uma breve apresentação pessoal: nome, nacionalidade, idade e o que estuda.',
     lines: [
       {
@@ -134,7 +133,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'seikatsu',
     title: 'まいにちの せいかつ',
     level: 1,
-    wordCount: 39,
     summaryPt: 'A rotina de um dia comum, do café da manhã até a hora de dormir.',
     lines: [
       {
@@ -245,7 +243,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'kaimono',
     title: 'スーパーで かいもの',
     level: 1,
-    wordCount: 35,
     summaryPt: 'Uma ida ao mercado para comprar frutas, verduras e leite.',
     lines: [
       {
@@ -350,7 +347,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'kazoku',
     title: 'かぞく',
     level: 1,
-    wordCount: 35,
     summaryPt: 'A família do narrador — pai, mãe, irmão mais velho — e o domingo que passam juntos.',
     lines: [
       {
@@ -459,7 +455,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'tenki',
     title: 'てんき',
     level: 1,
-    wordCount: 35,
     summaryPt: 'As quatro estações do ano e o tipo de tempo de cada uma.',
     lines: [
       {
@@ -564,7 +559,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'dokusho',
     title: 'どくしょが すき',
     level: 1,
-    wordCount: 35,
     summaryPt: 'Por que a leitura é o hobby favorito do narrador.',
     lines: [
       {
@@ -669,7 +663,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'shuumatsu-uchi',
     title: 'しゅうまつは うちで',
     level: 1,
-    wordCount: 40,
     summaryPt: 'Um fim de semana tranquilo em casa, sem sair.',
     lines: [
       {
@@ -775,7 +768,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'suki-na-tabemono',
     title: 'すきな たべもの',
     level: 1,
-    wordCount: 38,
     summaryPt: 'Por que o narrador ama sushi e como aproveita esse prato com a família.',
     lines: [
       {
@@ -882,7 +874,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'denwa',
     title: 'でんわ',
     level: 1,
-    wordCount: 44,
     summaryPt: 'Um telefonema de uma hora com um amigo, do "alô" ao "até mais".',
     lines: [
       {
@@ -990,7 +981,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'asa-no-gakkou',
     title: 'あさの がっこう',
     level: 1,
-    wordCount: 41,
     summaryPt: 'A rotina da manhã, de acordar até o início da aula.',
     lines: [
       {
@@ -1094,7 +1084,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'tanjoubi',
     title: 'たんじょうび',
     level: 1,
-    wordCount: 37,
     summaryPt: 'A expectativa para o próprio aniversário, com festa e bolo.',
     lines: [
       {
@@ -1194,7 +1183,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'watashi-no-inu',
     title: 'わたしの いぬ',
     level: 1,
-    wordCount: 40,
     summaryPt: 'O cachorro de estimação do narrador e o passeio diário no parque.',
     lines: [
       {
@@ -1299,7 +1287,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'densha-no-tabi',
     title: 'でんしゃの たび',
     level: 1,
-    wordCount: 40,
     summaryPt: 'Uma viagem de trem até o mar, com paisagem e um bentô no caminho.',
     lines: [
       {
@@ -1403,7 +1390,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'ame-no-nichiyoubi',
     title: 'あめの にちようび',
     level: 1,
-    wordCount: 39,
     summaryPt: 'Um domingo chuvoso passado em casa, assistindo filme.',
     lines: [
       {
@@ -1510,7 +1496,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'otetsudai',
     title: 'おてつだい',
     level: 1,
-    wordCount: 40,
     summaryPt: 'As tarefas domésticas que o narrador ajuda a fazer todo dia.',
     lines: [
       {
@@ -1617,7 +1602,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'watashi-no-gakkou',
     title: 'わたしの がっこう',
     level: 1,
-    wordCount: 28,
     summaryPt: 'As matérias favoritas do narrador na escola, os amigos da turma e a rotina de provas.',
     lines: [
       {
@@ -1717,7 +1701,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'supootsu-ga-suki',
     title: 'スポーツが すき',
     level: 1,
-    wordCount: 30,
     summaryPt: 'A paixão do narrador pelo futebol e os treinos com o time da escola.',
     lines: [
       {
@@ -1819,7 +1802,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'byouki-no-hi',
     title: 'びょうきの ひ',
     level: 1,
-    wordCount: 26,
     summaryPt: 'Um dia em que o narrador ficou doente, descansou e foi cuidado pela família.',
     lines: [
       {
@@ -1917,7 +1899,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'fuku-wo-kai-ni-iku',
     title: 'ふくを かいに いく',
     level: 1,
-    wordCount: 30,
     summaryPt: 'Uma tarde comprando roupas novas com uma amiga, do provador à conta final.',
     lines: [
       {
@@ -2019,7 +2000,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'ongaku-ga-suki',
     title: 'おんがくが すき',
     level: 1,
-    wordCount: 30,
     summaryPt: 'A paixão do narrador por música, tocando piano e ouvindo diferentes estilos.',
     lines: [
       {
@@ -2124,7 +2104,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'hajimete-no-happyou',
     title: 'はじめての はっぴょう',
     level: 1,
-    wordCount: 49,
     summaryPt: 'Um dia de apresentação de japonês contado pelos sentimentos: do nervoso ao alívio, com onomatopeias.',
     lines: [
       {
@@ -2266,7 +2245,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'shumatsu-sanpo',
     title: 'しゅうまつの さんぽ',
     level: 2,
-    wordCount: 61,
     summaryPt: 'Um passeio de fim de semana num parque florido, observando crianças brincarem.',
     lines: [
       {
@@ -2375,7 +2353,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'tomodachi-tegami',
     title: 'ともだちへの てがみ',
     level: 2,
-    wordCount: 63,
     summaryPt: 'Uma carta contando as novidades do trabalho e combinando um encontro.',
     lines: [
       {
@@ -2480,7 +2457,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'ame-no-hi',
     title: 'あめの ひ',
     level: 2,
-    wordCount: 64,
     summaryPt: 'Um dia chuvoso a caminho do trabalho, e por que a chuva também tem seu charme.',
     lines: [
       {
@@ -2595,7 +2571,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'kyoto-ryokou',
     title: 'きょうと りょこう',
     level: 2,
-    wordCount: 57,
     summaryPt: 'Uma viagem de trem-bala a Kyoto para visitar templos antigos e experimentar a culinária local.',
     lines: [
       {
@@ -2709,7 +2684,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'tanjoubi-party',
     title: 'たんじょうび パーティー',
     level: 2,
-    wordCount: 53,
     summaryPt: 'Uma festa de aniversário em família, com bolo, música e um presente especial.',
     lines: [
       {
@@ -2809,7 +2783,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'ryouri-narau',
     title: 'りょうりを ならう',
     level: 2,
-    wordCount: 63,
     summaryPt: 'Aprendendo com a mãe a preparar sopa de missô do zero, passo a passo.',
     lines: [
       {
@@ -2923,7 +2896,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'mensetsu',
     title: 'めんせつ',
     level: 2,
-    wordCount: 58,
     summaryPt: 'A véspera de uma entrevista de emprego: nervosismo, preparação e um pouco de esperança.',
     lines: [
       {
@@ -3029,7 +3001,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'hikkoshi',
     title: 'ひっこし',
     level: 2,
-    wordCount: 60,
     summaryPt: 'Preparativos para se mudar para um apartamento novo, mais espaçoso e perto da estação.',
     lines: [
       {
@@ -3134,7 +3105,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'natsu-matsuri',
     title: 'なつまつり',
     level: 2,
-    wordCount: 59,
     summaryPt: 'Uma noite de festival de verão: yukata, takoyaki e fogos de artifício com amigos.',
     lines: [
       {
@@ -3241,7 +3211,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'byouin',
     title: 'びょういん',
     level: 2,
-    wordCount: 56,
     summaryPt: 'Uma manhã de dor de cabeça e febre leva a uma visita ao hospital — e a um dia de descanso.',
     lines: [
       {
@@ -3345,7 +3314,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'ryokou-keikaku',
     title: 'りょこうの けいかく',
     level: 2,
-    wordCount: 57,
     summaryPt: 'Planejando com os amigos uma viagem de verão a Okinawa: passagens, hotel e praias.',
     lines: [
       {
@@ -3447,7 +3415,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'wasurerarenai-sensei',
     title: 'わすれられない せんせい',
     level: 2,
-    wordCount: 61,
     summaryPt: 'A lembrança de um professor do colégio que marcou a vida de todos os alunos.',
     lines: [
       {
@@ -3557,7 +3524,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'wasuremono',
     title: 'わすれもの',
     level: 2,
-    wordCount: 63,
     summaryPt: 'Um susto na estação de trem: a carteira perdida e o alívio de encontrá-la de volta.',
     lines: [
       {
@@ -3670,7 +3636,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'conveni-baito',
     title: 'コンビニの バイト',
     level: 2,
-    wordCount: 65,
     summaryPt: 'O começo de um trabalho de meio período numa loja de conveniência, do primeiro dia difícil à rotina.',
     lines: [
       {
@@ -3779,7 +3744,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'shizukana-yoru',
     title: 'しずかな よる',
     level: 2,
-    wordCount: 61,
     summaryPt: 'Uma noite tranquila em casa, perdida num bom livro enquanto chove lá fora.',
     lines: [
       {
@@ -3886,7 +3850,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'unten-menkyo',
     title: 'うんてん めんきょ',
     level: 2,
-    wordCount: 40,
     summaryPt: 'Os meses de aula na autoescola até finalmente conseguir a carteira de motorista.',
     lines: [
       {
@@ -3984,7 +3947,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'supootsu-kurabu',
     title: 'スポーツクラブ',
     level: 2,
-    wordCount: 40,
     summaryPt: 'A rotina de exercícios do narrador numa academia perto de casa, e os resultados aos poucos.',
     lines: [
       {
@@ -4087,7 +4049,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'purezento-wo-erabu',
     title: 'プレゼントを えらぶ',
     level: 2,
-    wordCount: 38,
     summaryPt: 'A busca por um presente de aniversário perfeito para um amigo, entre lojas e ideias.',
     lines: [
       {
@@ -4190,7 +4151,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'atarashii-petto',
     title: 'あたらしい ペット',
     level: 2,
-    wordCount: 40,
     summaryPt: 'A chegada de uma gatinha nova para casa, do primeiro dia tímido à rotina de carinho.',
     lines: [
       {
@@ -4290,7 +4250,6 @@ export const LEITURA_TEXTOS: ReadingText[] = [
     id: 'toshokan-de-benkyou',
     title: 'としょかんで べんきょう',
     level: 2,
-    wordCount: 40,
     summaryPt: 'A reta final de estudos para uma prova importante, dias inteiros na biblioteca da cidade.',
     lines: [
       {

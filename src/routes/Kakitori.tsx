@@ -2,7 +2,7 @@ import { ChevronLeft, Headphones } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { contarDisponiveis, gerarKakitori, listarFontes } from '../data/kakitori/gerador';
+import { contarDisponiveis, gerarKakitori, listarFontes } from '../features/kakitori/gerador';
 import type { ItemKakitori, ModoKakitori, RegistroKakitori } from '../data/kakitori/types';
 import { isSpeechSupported } from '../features/audio/speech';
 import KakitoriSession from '../features/kakitori/KakitoriSession';

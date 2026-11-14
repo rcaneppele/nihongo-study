@@ -82,12 +82,22 @@ export function parseCardsJson(text: string): Card[] {
   // arquivo só criaria risco de colidir com um card existente (o bulkAdd
   // falha pra tudo no lote) sem nenhum ganho — essa importação sempre insere
   // cards novos, nunca faz merge por id (isso é o backup).
-  return data.map((raw: Partial<Card>) =>
-    novoCard(
-      { front: raw.front ?? '', back: raw.back ?? '', reading: raw.reading, category: raw.category, tags: raw.tags ?? [] },
+  // O arquivo vem de fora: só entra o que tem o tipo certo (um `tags` que
+  // não é lista, por exemplo, quebraria as telas que percorrem as tags).
+  const texto = (v: unknown) => (typeof v === 'string' ? v : '');
+  return data.map((item: unknown) => {
+    const raw = (typeof item === 'object' && item !== null ? item : {}) as Record<string, unknown>;
+    return novoCard(
+      {
+        front: texto(raw.front),
+        back: texto(raw.back),
+        reading: texto(raw.reading) || undefined,
+        category: texto(raw.category) || undefined,
+        tags: Array.isArray(raw.tags) ? raw.tags.filter((t): t is string => typeof t === 'string') : [],
+      },
       now
-    )
-  );
+    );
+  });
 }
 
 const ANKI_SEPARATOR_NAMES: Record<string, string> = {
@@ -99,6 +109,8 @@ const ANKI_SEPARATOR_NAMES: Record<string, string> = {
   space: ' ',
 };
 
+const ENTIDADES: Record<string, string> = { nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" };
+
 function cleanAnkiField(raw: string | undefined, html: boolean): string {
   let value = raw ?? '';
   if (html) {
@@ -106,12 +118,8 @@ function cleanAnkiField(raw: string | undefined, html: boolean): string {
   }
   return value
     .replace(/\[sound:[^\]]*\]/gi, '')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'")
+    // Numa passada só: trocar `&amp;` antes das outras decodificaria duas vezes ("&amp;lt;" viraria "<").
+    .replace(/&(nbsp|amp|lt|gt|quot|#39);/gi, (_, nome: string) => ENTIDADES[nome.toLowerCase()])
     .trim();
 }
 
@@ -196,10 +204,25 @@ export function parseCardsFile(text: string, filename: string): Card[] {
   return looksLikeAnkiExport ? parseAnkiText(text) : parseCardsCsv(text);
 }
 
-/** Lê o arquivo de cards (CSV, JSON ou texto do Anki) e cria os cards. Devolve quantos. */
-export async function importarArquivoDeCards(texto: string, nomeDoArquivo: string): Promise<number> {
+/**
+ * Lê o arquivo de cards (CSV, JSON ou texto do Anki) e cria os que ainda não
+ * existem — mesmo critério de duplicata do resto do app (a frente, ver
+ * `cardPorFrente`): importar o mesmo arquivo de novo não duplica nada. Linha
+ * sem frente não vira card. Devolve quantos foram criados e quantos ignorados.
+ */
+export async function importarArquivoDeCards(
+  texto: string,
+  nomeDoArquivo: string
+): Promise<{ criados: number; ignorados: number }> {
   const cards = parseCardsFile(texto, nomeDoArquivo);
   if (cards.length === 0) throw new Error('Nenhum card encontrado no arquivo.');
-  await db.cards.bulkAdd(cards);
-  return cards.length;
+  const frentes = new Set((await db.cards.toArray()).map((c) => c.front));
+  const novos: Card[] = [];
+  for (const card of cards) {
+    if (!card.front || frentes.has(card.front)) continue;
+    frentes.add(card.front);
+    novos.push(card);
+  }
+  if (novos.length > 0) await db.cards.bulkAdd(novos);
+  return { criados: novos.length, ignorados: cards.length - novos.length };
 }

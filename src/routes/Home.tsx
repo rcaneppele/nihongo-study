@@ -14,6 +14,7 @@ import AvisoInstalacao from '../features/backup/AvisoInstalacao';
 import AvisoSync from '../features/sync/AvisoSync';
 import ProgressRing from '../components/ProgressRing';
 import { TILE, type Cor } from '../lib/cores';
+import { palavra, plural } from '../lib/plural';
 
 /**
  * "Hoje" (Início): saudação, bloco da meta diária (semana + sequência), o
@@ -31,9 +32,9 @@ export default function Home() {
   // Uma frase por hub, com um número do momento quando ajuda a decidir.
   const descricoes: Record<Exclude<SecaoId, 'hoje'>, string> = {
     aprender: 'Lições, palavras novas, kanji e os alfabetos',
-    praticar: `Ler · ouvir · falar · escrever — ${readingProgress?.length ?? 0} de ${LEITURA_TEXTOS.length} textos lidos`,
+    praticar: `Ler · ouvir · falar · escrever — ${readingProgress?.length ?? 0} de ${plural(LEITURA_TEXTOS.length, 'texto lido', 'textos lidos')}`,
     revisar: pendencias.revisao > 0 ? 'Revisão do dia, pontos fracos e testes' : 'Tudo em dia · pontos fracos e testes',
-    progresso: `${known?.understood.size ?? 0} palavras compreendidas · ${known?.canSay.size ?? 0} que sei dizer`,
+    progresso: `${plural(known?.understood.size ?? 0, 'palavra compreendida', 'palavras compreendidas')} · ${known?.canSay.size ?? 0} que sei dizer`,
   };
 
   return (
@@ -136,7 +137,7 @@ function Hoje({ resumo, meta }: { resumo: ResumoDia; meta: number }) {
               <span className="font-semibold text-matcha">Meta de hoje batida — bom trabalho!</span>
             ) : (
               <>
-                Faltam <span className="font-semibold text-ink">{meta - pontos} atividades</span> para a meta de hoje.
+                {palavra(meta - pontos, 'Falta', 'Faltam')} <span className="font-semibold text-ink">{plural(meta - pontos, 'atividade', 'atividades')}</span> para a meta de hoje.
               </>
             )}
           </p>

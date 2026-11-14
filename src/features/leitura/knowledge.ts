@@ -95,16 +95,37 @@ export interface KnownWords {
 
 const SEMANA_MS = 7 * 24 * 60 * 60 * 1000;
 
+/**
+ * As revisões que `palavrasConhecidas` precisa pro crescimento da semana,
+ * sem ler o histórico inteiro: as da última semana e, só dos cards que
+ * apareceram nelas, as anteriores (pra saber se a primeira revisão do card
+ * foi mesmo nesta semana).
+ */
+export async function revisoesDaSemana(now: number = Date.now()): Promise<Review[]> {
+  const desde = now - SEMANA_MS;
+  const recentes = await db.reviews.where('reviewedAt').aboveOrEqual(desde).toArray();
+  if (recentes.length === 0) return [];
+  const ids = [...new Set(recentes.map((r) => r.cardId))];
+  const anteriores = await db.reviews
+    .where('cardId')
+    .anyOf(ids)
+    .and((r) => r.reviewedAt < desde)
+    .toArray();
+  return [...recentes, ...anteriores];
+}
+
 export function useKnownWords(): KnownWords | undefined {
   return useLiveQuery(async () => {
-    const [knowledge, cards, reviews] = await Promise.all([
-      db.wordKnowledge.toArray(),
-      db.cards.toArray(),
-      db.reviews.toArray(),
-    ]);
+    const [knowledge, cards, reviews] = await Promise.all([db.wordKnowledge.toArray(), db.cards.toArray(), revisoesDaSemana()]);
     return palavrasConhecidas(knowledge, cards, reviews);
   }, []);
 }
+
+/**
+ * `reviews`: basta o que `revisoesDaSemana` devolve (o histórico inteiro
+ * também serve); só entra na conta do crescimento da semana — `understood`
+ * e `canSay` não dependem dele.
+ */
 
 export function palavrasConhecidas(
   knowledge: WordKnowledge[],

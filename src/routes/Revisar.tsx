@@ -12,7 +12,8 @@ import { getDueKanji } from '../features/kanji/kanjiQueue';
 import { ATIVIDADES_REVISAR } from '../features/metodo/estrutura';
 import { HERO_BOTAO, HERO_TEXTO } from '../lib/hero';
 import { usePendencias } from '../features/metodo/pendencias';
-import { embaralhar } from '../lib/aleatorio';
+import { montarSessaoDoDia, SESSAO_MAXIMA } from '../features/metodo/revisaoDoDia';
+import { plural } from '../lib/plural';
 
 type Etapa =
   | { tipo: 'hub' }
@@ -33,8 +34,8 @@ export default function Revisar() {
   const totalCards = useLiveQuery(() => db.cards.count(), [], 0);
 
   async function comecar() {
-    const cards = embaralhar(buildReviewQueue(await db.cards.toArray()));
-    const kanji = embaralhar(await getDueKanji());
+    // Fila longa é percorrida em sessões de até SESSAO_MAXIMA itens (ver `montarSessaoDoDia`).
+    const { cards, kanji } = montarSessaoDoDia(buildReviewQueue(await db.cards.toArray()), await getDueKanji());
     setConcluida(false);
     if (cards.length > 0) setEtapa({ tipo: 'cards', cards, kanji });
     else if (kanji.length > 0) setEtapa({ tipo: 'kanji', kanji });
@@ -69,7 +70,7 @@ export default function Revisar() {
 
   const total = pendencias.revisao;
   const partes = [
-    pendencias.cards > 0 && `${pendencias.cards} flash card(s)`,
+    pendencias.cards > 0 && plural(pendencias.cards, 'flash card', 'flash cards'),
     pendencias.kanji > 0 && `${pendencias.kanji} kanji`,
   ].filter(Boolean);
 
@@ -91,12 +92,19 @@ export default function Revisar() {
               </span>
               <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-wider text-sage">Revisão do dia</p>
-                <p className="text-xl font-semibold tracking-tight">{total} item(ns) para relembrar</p>
-                <p className="text-sm text-sage">{partes.join(' · ')} — em sequência, numa sessão só.</p>
+                <p className="text-xl font-semibold tracking-tight">{plural(total, 'item', 'itens')} para relembrar</p>
+                <p className="text-sm text-sage">
+                  {partes.join(' · ')} —{' '}
+                  {total > SESSAO_MAXIMA
+                    ? `em sessões de até ${SESSAO_MAXIMA}, os mais atrasados primeiro.`
+                    : 'em sequência, numa sessão só.'}
+                </p>
+                {concluida && <p className="text-sm font-medium text-matcha">Sessão concluída — continue quando quiser.</p>}
               </div>
             </div>
             <button className={HERO_BOTAO} onClick={comecar}>
-              Começar revisão <ArrowRight className="h-4 w-4" />
+              {concluida ? 'Continuar revisão' : 'Começar revisão'}
+              {total > SESSAO_MAXIMA && ` (${SESSAO_MAXIMA})`} <ArrowRight className="h-4 w-4" />
             </button>
           </>
         ) : (

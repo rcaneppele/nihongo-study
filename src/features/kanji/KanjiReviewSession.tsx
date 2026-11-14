@@ -11,6 +11,8 @@ import StudyCard from '../../components/StudyCard';
 import { useShortcuts } from '../../lib/useShortcuts';
 import { desfazerRevisaoKanji, registrarRevisaoKanji } from './progresso';
 
+const ERRO_GRAVACAO = 'Não foi possível gravar. Tente de novo.';
+
 /**
  * Revisão espaçada dos kanji já aprendidos — mesmo padrão auto-graded de
  * StudySession.tsx (flash cards): mostra o kanji, "Mostrar resposta" revela
@@ -34,6 +36,7 @@ export default function KanjiReviewSession({
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [grading, setGrading] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
   const [undoStack, setUndoStack] = useState<KanjiProgress[]>([]);
   const entry = entries[index];
   const progress = useLiveQuery(() => (entry ? db.kanjiProgress.get(entry.char) : undefined), [entry?.char]);
@@ -42,11 +45,18 @@ export default function KanjiReviewSession({
   async function grade(rating: Grade) {
     if (grading || !entry) return;
     setGrading(true);
-    const before = await registrarRevisaoKanji(entry.char, rating);
-    if (before) setUndoStack((s) => [...s, before]);
-    setGrading(false);
-    setShowBack(false);
-    setIndex((i) => i + 1);
+    setErro(null);
+    try {
+      const before = await registrarRevisaoKanji(entry.char, rating);
+      if (before) setUndoStack((s) => [...s, before]);
+      setShowBack(false);
+      setIndex((i) => i + 1);
+    } catch {
+      // Sem isto a trava ficaria ligada para sempre e a sessão não sairia do lugar.
+      setErro(ERRO_GRAVACAO);
+    } finally {
+      setGrading(false);
+    }
   }
 
   async function undo() {
@@ -54,9 +64,16 @@ export default function KanjiReviewSession({
     const last = undoStack[undoStack.length - 1];
     if (last) {
       setGrading(true);
-      await desfazerRevisaoKanji(last);
-      setUndoStack((s) => s.slice(0, -1));
-      setGrading(false);
+      setErro(null);
+      try {
+        await desfazerRevisaoKanji(last);
+        setUndoStack((s) => s.slice(0, -1));
+      } catch {
+        setErro(ERRO_GRAVACAO);
+        return;
+      } finally {
+        setGrading(false);
+      }
     }
     setIndex((i) => i - 1);
     setShowBack(true);
@@ -145,6 +162,11 @@ export default function KanjiReviewSession({
         </div>
       </StudyCard>
 
+      {erro && (
+        <p role="alert" className="rounded-xl border border-hanko/30 bg-hanko/5 px-3 py-2 text-sm text-hanko">
+          {erro}
+        </p>
+      )}
       {!showBack ? (
         <button className="btn-primary w-full" onClick={() => setShowBack(true)}>
           Mostrar resposta <kbd className="kbd">Espaço</kbd>

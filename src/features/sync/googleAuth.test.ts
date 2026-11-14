@@ -145,6 +145,21 @@ describe('processarRetornoOAuth', () => {
     expect(await tokenAtual()).toBeNull();
   });
 
+  it('login pendente ilegível no sessionStorage: ignora a resposta, sem erro, e limpa o endereço', async () => {
+    sessao.setItem('nihongo-study:oauth', '{nao-e-json');
+    voltarCom({ access_token: 'tok-forjado', state: 'qualquer' });
+    expect(await processarRetornoOAuth()).toBeNull();
+    expect(await tokenAtual()).toBeNull();
+    expect(enderecos).toEqual([BASE]);
+  });
+
+  it('login pendente com formato estranho (sem caminho de volta) também é ignorado', async () => {
+    sessao.setItem('nihongo-study:oauth', JSON.stringify({ state: 'abc' }));
+    voltarCom({ access_token: 'tok-forjado', state: 'abc' });
+    expect(await processarRetornoOAuth()).toBeNull();
+    expect(await tokenAtual()).toBeNull();
+  });
+
   it('a mesma resposta não vale duas vezes', async () => {
     const state = sairPara('/').get('state')!;
     voltarCom({ access_token: 'tok-1', state });

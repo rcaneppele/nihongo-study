@@ -1,5 +1,6 @@
 import kanaStrokesData from '../../data/kanjivg/kana-strokes.json';
 import kanjiStrokesData from '../../data/kanjivg/kanji-strokes.json';
+import { plural } from '../../lib/plural';
 
 /**
  * Captura de traços do modo desenho — compartilhada entre o treino de kana
@@ -189,7 +190,7 @@ export function scoreDrawing(strokes: Stroke[], char: string, canvasSize: number
   if (incompleto) {
     hints.push(`Ficou faltando traço: o traçado oficial usa ${reference.length} (você fez ${given.length}) — veja a animação.`);
   } else if (diff !== 0) {
-    hints.push(`O traçado oficial usa ${reference.length} traço(s) (você fez ${given.length}) — dá uma olhada na ordem certa.`);
+    hints.push(`O traçado oficial usa ${plural(reference.length, 'traço', 'traços')} (você fez ${given.length}) — dá uma olhada na ordem certa.`);
   } else {
     for (let i = 0; i < reference.length; i++) {
       // Forma nos dois sentidos: um traço certo feito ao contrário tem a forma

@@ -25,6 +25,7 @@ function ligarMotor() {
       perguntas.push(msg);
       return respostaConfirmar;
     },
+    podePerguntar: () => true,
   });
 }
 

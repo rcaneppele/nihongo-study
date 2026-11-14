@@ -5,6 +5,7 @@ import { cardStage, STAGE_BAR, STAGE_HINTS, STAGE_LABELS, type Stage } from './s
 import StatCard from '../../components/StatCard';
 import { useResumoDia } from '../atividade/atividade';
 import { CalendarDays, Copy, Flame, History, Route, Target } from 'lucide-react';
+import { plural } from '../../lib/plural';
 
 /**
  * Com `enable_short_term: false` no FSRS (ver src/features/srs/fsrs.ts), um
@@ -66,7 +67,7 @@ export default function ProgressStats() {
         <StatCard
           icon={<Flame className="h-[18px] w-[18px]" />}
           cor="hanko"
-          valor={sequencia > 0 ? `${sequencia} dia(s)` : '—'}
+          valor={sequencia > 0 ? plural(sequencia, 'dia', 'dias') : '—'}
           label="Sequência de estudo"
         />
       </div>

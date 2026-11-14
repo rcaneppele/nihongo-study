@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { userEvent } from '@vitest/browser/context';
+import { userEvent } from 'vitest/browser';
 import { useState } from 'react';
 import Segmentado from './Segmentado';
 import Chip from './Chip';
@@ -27,7 +27,7 @@ describe('Segmentado', () => {
   }
 
   it('grupo com nome; só a opção escolhida fica pressionada', async () => {
-    const tela = render(<Tema />);
+    const tela = await render(<Tema />);
     const grupo = tela.getByRole('group', { name: 'Tema' });
     await expect.element(grupo.getByRole('button', { name: 'Claro' })).toHaveAttribute('aria-pressed', 'true');
     await grupo.getByRole('button', { name: 'Escuro' }).click();
@@ -36,7 +36,7 @@ describe('Segmentado', () => {
   });
 
   it('funciona pelo teclado', async () => {
-    const tela = render(<Tema />);
+    const tela = await render(<Tema />);
     await userEvent.tab();
     await userEvent.tab();
     await userEvent.keyboard('{Enter}');
@@ -47,7 +47,7 @@ describe('Segmentado', () => {
 describe('Chip', () => {
   it('estado ligado via aria-pressed e classe', async () => {
     const onClick = vi.fn();
-    const tela = render(
+    const tela = await render(
       <Chip active onClick={onClick}>
         Verbos
       </Chip>
@@ -62,7 +62,7 @@ describe('Chip', () => {
 
 describe('Furigana', () => {
   it('leitura em <rt> só sobre o kanji (okurigana fica fora)', async () => {
-    const tela = render(<Furigana segments={[{ text: '食', reading: 'た' }, { text: 'べる' }]} />);
+    const tela = await render(<Furigana segments={[{ text: '食', reading: 'た' }, { text: 'べる' }]} />);
     const rubis = tela.container.querySelectorAll('ruby');
     expect(rubis).toHaveLength(1);
     expect(rubis[0].querySelector('rt')?.textContent).toBe('た');
@@ -70,7 +70,7 @@ describe('Furigana', () => {
   });
 
   it('a leitura fica em cima do kanji, na tela', async () => {
-    const tela = render(<FuriganaWord kanji="父" reading="ちち" />);
+    const tela = await render(<FuriganaWord kanji="父" reading="ちち" />);
     const rt = tela.container.querySelector('rt')!;
     const base = tela.container.querySelector('ruby')!;
     expect(rt.getBoundingClientRect().bottom).toBeLessThanOrEqual(base.getBoundingClientRect().bottom - 4);
@@ -81,7 +81,7 @@ describe('SessionHeader', () => {
   it('progresso acessível, desfazer e desistir', async () => {
     const onUndo = vi.fn();
     const onQuit = vi.fn();
-    const tela = render(<SessionHeader index={2} total={5} onUndo={onUndo} onQuit={onQuit} />);
+    const tela = await render(<SessionHeader index={2} total={5} onUndo={onUndo} onQuit={onQuit} />);
     await expect.element(tela.getByText('3 de 5')).toBeVisible();
     await expect.element(tela.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
     await tela.getByRole('button', { name: 'Desfazer' }).click();
@@ -91,10 +91,10 @@ describe('SessionHeader', () => {
   });
 
   it('sem desfazer disponível, o botão fica desabilitado; em sessão sem desfazer, some', async () => {
-    const a = render(<SessionHeader index={0} total={3} onQuit={() => {}} />);
+    const a = await render(<SessionHeader index={0} total={3} onQuit={() => {}} />);
     await expect.element(a.getByRole('button', { name: 'Desfazer' })).toBeDisabled();
-    a.unmount();
-    const b = render(<SessionHeader index={0} total={3} onQuit={() => {}} semDesfazer />);
+    await a.unmount();
+    const b = await render(<SessionHeader index={0} total={3} onQuit={() => {}} semDesfazer />);
     expect(b.container.textContent).not.toContain('Desfazer');
   });
 });
@@ -102,7 +102,7 @@ describe('SessionHeader', () => {
 describe('GrammarTable', () => {
   it('tabela larga rola na horizontal e recebe foco pelo teclado', async () => {
     const linhas = [['x'.repeat(120), 'b', 'c']];
-    const tela = render(
+    const tela = await render(
       <div style={{ width: 200 }}>
         <GrammarTable headers={['A', 'B', 'C']} rows={linhas} />
       </div>

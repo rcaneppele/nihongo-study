@@ -5,6 +5,7 @@ import type { Activity } from '../../db/schema';
 import { TEXTO, TILE, type Cor } from '../../lib/cores';
 import { usePendencias } from './pendencias';
 import { useProximoPasso, type Passo } from './proximoPasso';
+import { plural } from '../../lib/plural';
 
 interface PassoDoPlano {
   etapa: string;
@@ -44,9 +45,9 @@ export default function PlanoDoDia({ hoje }: { hoje: Activity }) {
           ? `Revisão em dia — ${hoje.revisoes} revisão(ões) hoje.`
           : 'Nada vencido hoje.',
       passo: {
-        titulo: `Revisar ${vencidos} item(ns)`,
+        titulo: `Revisar ${plural(vencidos, 'item', 'itens')}`,
         porque: [
-          pendencias.cards > 0 && `${pendencias.cards} flash card(s)`,
+          pendencias.cards > 0 && plural(pendencias.cards, 'flash card', 'flash cards'),
           pendencias.kanji > 0 && `${pendencias.kanji} kanji`,
         ]
           .filter(Boolean)
@@ -61,7 +62,7 @@ export default function PlanoDoDia({ hoje }: { hoje: Activity }) {
       etapa: 'Aprender',
       cor: 'fuji',
       feito: hoje.novos > 0,
-      resumo: `${hoje.novos} item(ns) novo(s) aprendido(s) hoje.`,
+      resumo: `${plural(hoje.novos, 'item novo aprendido', 'itens novos aprendidos')} hoje.`,
       passo: aprender,
     },
     {
@@ -69,8 +70,8 @@ export default function PlanoDoDia({ hoje }: { hoje: Activity }) {
       cor: 'matcha',
       feito: hoje.leituras > 0 || hoje.praticas > 0,
       resumo: [
-        hoje.leituras > 0 && `${hoje.leituras} texto(s) lido(s)`,
-        hoje.praticas > 0 && `${hoje.praticas} prática(s)`,
+        hoje.leituras > 0 && plural(hoje.leituras, 'texto lido', 'textos lidos'),
+        hoje.praticas > 0 && plural(hoje.praticas, 'prática', 'práticas'),
       ]
         .filter(Boolean)
         .join(' · ')

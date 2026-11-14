@@ -14,13 +14,34 @@ import { N5_DECK, n5CategoryCounts } from '../../data/seed/n5';
 import { HelpButton, HelpModal, SectionTitle } from './ui';
 import CopiaMigracaoCard from './CopiaMigracaoCard';
 import Segmentado from '../../components/Segmentado';
+import { plural } from '../../lib/plural';
 
 /** O backup compartilhado pode ter virado .txt (ver `shareBackup`) — o conteúdo é o mesmo. */
 const BACKUP_ACCEPT = 'application/json,.json,text/plain,.txt';
 
+type Secao = 'arquivo' | 'backup' | 'cards' | 'n5' | 'risco';
+
+/** Resultado da última ação, mostrado dentro da seção em que ela aconteceu. */
+function Aviso({ aviso, secao }: { aviso: { secao: Secao; texto: string } | null; secao: Secao }) {
+  if (aviso?.secao !== secao) return null;
+  const falhou = aviso.texto.startsWith('Erro');
+  return (
+    <p
+      role="status"
+      className={`rounded-xl px-3 py-2 text-sm ${falhou ? 'bg-hanko/8 text-hanko' : 'bg-indigo/8 text-indigo'}`}
+    >
+      {aviso.texto}
+    </p>
+  );
+}
+
 export default function DadosTab() {
-  const [mode, setMode] = useState<ImportMode>('replace');
-  const [msg, setMsg] = useState<string | null>(null);
+  // Mesclar vem escolhido: é o modo que não apaga nada. Substituir é uma escolha consciente (e pede confirmação).
+  const [mode, setMode] = useState<ImportMode>('merge');
+  // O resultado de cada ação aparece na própria seção (a página é longa: no fim dela ninguém veria).
+  const [aviso, setAviso] = useState<{ secao: Secao; texto: string } | null>(null);
+  const avisar = (secao: Secao, texto: string) => setAviso({ secao, texto });
+  const erro = (secao: Secao, err: unknown) => avisar(secao, `Erro: ${(err as Error).message}`);
   const [cardsHelpOpen, setCardsHelpOpen] = useState(false);
   const [backupHelpOpen, setBackupHelpOpen] = useState(false);
   const backupInput = useRef<HTMLInputElement>(null);
@@ -36,18 +57,18 @@ export default function DadosTab() {
   async function handleExport() {
     downloadBackup(await exportData());
     await marcarBackup();
-    setMsg('Backup exportado.');
+    avisar('backup', 'Backup exportado.');
   }
 
-  async function handleShare(backup?: BackupFile) {
+  async function handleShare(secao: Secao, backup?: BackupFile) {
     try {
       if (await shareBackup(backup ?? (await exportData()))) {
         await marcarBackup();
-        setMsg('Backup compartilhado.');
+        avisar(secao, 'Backup compartilhado.');
         setMesclado(null);
       }
     } catch (err) {
-      setMsg(`Erro: ${(err as Error).message}`);
+      erro(secao, err);
     }
   }
 
@@ -55,9 +76,9 @@ export default function DadosTab() {
     try {
       await importData(parseBackup(await file.text()), 'merge');
       setMesclado(await exportData());
-      setMsg(null);
+      setAviso(null);
     } catch (err) {
-      setMsg(`Erro: ${(err as Error).message}`);
+      erro('arquivo', err);
     }
   }
 
@@ -65,30 +86,39 @@ export default function DadosTab() {
     downloadBackup(backup);
     await marcarBackup();
     setMesclado(null);
-    setMsg('Arquivo sincronizado salvo. Leve-o ao outro aparelho e use "Sincronizar com arquivo" lá também.');
+    avisar('arquivo', 'Arquivo sincronizado salvo. Leve-o ao outro aparelho e use "Sincronizar com arquivo" lá também.');
   }
 
   async function handleImportBackup(file: File) {
-    if (
-      mode === 'replace' &&
-      !confirm('Isso apaga todos os dados atuais deste aparelho e coloca no lugar o conteúdo do arquivo. Continuar?')
-    ) {
-      return;
+    if (mode === 'replace') {
+      const sincronizando = (await estadoSync()).conectado;
+      const avisoSync = sincronizando
+        ? '\n\nA sincronização com o Google Drive está ligada: a cópia no Drive também é substituída, e os outros aparelhos vão perguntar se querem ficar iguais a este.'
+        : '';
+      if (!confirm(`Isso apaga todos os dados atuais deste aparelho e coloca no lugar o conteúdo do arquivo. Continuar?${avisoSync}`)) {
+        return;
+      }
     }
     try {
       await importarBackup(parseBackup(await file.text()), mode);
-      setMsg(`Backup importado (${mode === 'replace' ? 'substituiu tudo' : 'mesclado'}).`);
+      avisar('backup', `Backup importado (${mode === 'replace' ? 'substituiu tudo' : 'mesclado'}).`);
     } catch (err) {
-      setMsg(`Erro: ${(err as Error).message}`);
+      erro('backup', err);
     }
   }
 
   async function handleImportCards(file: File) {
     try {
-      const n = await importarArquivoDeCards(await file.text(), file.name);
-      setMsg(`${n} card(s) importado(s).`);
+      const { criados, ignorados } = await importarArquivoDeCards(await file.text(), file.name);
+      const ignoradosMsg = ignorados > 0 ? ` ${plural(ignorados, 'já existia ou estava sem frente e foi ignorado', 'já existiam ou estavam sem frente e foram ignorados')}.` : '';
+      avisar(
+        'cards',
+        criados === 0
+          ? 'Nenhum card novo: todos os do arquivo já existiam (ou estavam sem frente).'
+          : `${plural(criados, 'card importado', 'cards importados')}.${ignoradosMsg}`
+      );
     } catch (err) {
-      setMsg(`Erro: ${(err as Error).message}`);
+      erro('cards', err);
     }
   }
 
@@ -108,10 +138,12 @@ export default function DadosTab() {
     setN5Importing(true);
     try {
       const { criados, ignorados } = await adicionarCardsNovos(N5_DECK.filter((e) => n5Selected.has(e.category)));
-      setMsg(
+      avisar(
+        'n5',
         criados === 0
           ? 'Esses cards já tinham sido importados antes.'
-          : `${criados} card(s) do N5 importado(s).` + (ignorados > 0 ? ` ${ignorados} já existiam e foram ignorados.` : '')
+          : `${plural(criados, 'card do N5 importado', 'cards do N5 importados')}.` +
+              (ignorados > 0 ? ` ${plural(ignorados, 'já existia e foi ignorado', 'já existiam e foram ignorados')}.` : '')
       );
     } finally {
       setN5Importing(false);
@@ -125,7 +157,7 @@ export default function DadosTab() {
       : '';
     if (!confirm(`Apagar TODOS os dados deste dispositivo? Esta ação não pode ser desfeita.${aviso}`)) return;
     await apagarTudo();
-    setMsg('Todos os dados foram apagados.');
+    avisar('risco', 'Todos os dados foram apagados.');
   }
 
   return (
@@ -160,7 +192,7 @@ export default function DadosTab() {
             <p className="text-sm text-ink">Dados juntados. Agora salve o arquivo novo para levar ao outro aparelho:</p>
             <div className="flex flex-wrap gap-2">
               {podeCompartilhar && (
-                <button className="btn-primary" onClick={() => handleShare(mesclado)}>
+                <button className="btn-primary" onClick={() => handleShare('arquivo', mesclado)}>
                   <Share2 className="h-4 w-4" /> Compartilhar
                 </button>
               )}
@@ -184,6 +216,7 @@ export default function DadosTab() {
             e.target.value = '';
           }}
         />
+        <Aviso aviso={aviso} secao="arquivo" />
       </section>
 
       <section className="card-surface space-y-4">
@@ -194,8 +227,9 @@ export default function DadosTab() {
           <HelpButton label="Ajuda: como funciona o backup completo" onClick={() => setBackupHelpOpen(true)} />
         </div>
         <p className="text-sm text-sage">
-          Cards, histórico de revisões e progresso de kana e kanji num único arquivo JSON — serve
-          tanto pra sincronizar entre aparelhos quanto pra manter uma cópia de segurança.
+          Tudo o que você fez no app — cards e revisões, kana, kanji, leituras, lições, exercícios, diário,
+          conquistas e preferências — num único arquivo JSON. Serve tanto pra sincronizar entre aparelhos quanto
+          pra manter uma cópia de segurança.
         </p>
 
         <div className="grid gap-4 sm:grid-cols-2 sm:divide-x sm:divide-line">
@@ -207,7 +241,7 @@ export default function DadosTab() {
                 Exportar backup
               </button>
               {podeCompartilhar && (
-                <button className="btn-ghost" onClick={() => handleShare()}>
+                <button className="btn-ghost" onClick={() => handleShare('backup')}>
                   <Share2 className="h-4 w-4" /> Compartilhar
                 </button>
               )}
@@ -229,10 +263,15 @@ export default function DadosTab() {
               valor={mode}
               onChange={setMode}
               opcoes={[
-                { valor: 'replace', rotulo: 'Substituir' },
                 { valor: 'merge', rotulo: 'Mesclar' },
+                { valor: 'replace', rotulo: 'Substituir' },
               ]}
             />
+            <p className="text-xs text-sage">
+              {mode === 'merge'
+                ? 'Junta o arquivo com o que já está aqui — nada é apagado.'
+                : 'Apaga o que está neste aparelho e coloca o arquivo no lugar.'}
+            </p>
             <div>
               <button className="btn-ghost" onClick={() => backupInput.current?.click()}>
                 Importar backup
@@ -242,11 +281,16 @@ export default function DadosTab() {
                 type="file"
                 accept={BACKUP_ACCEPT}
                 className="hidden"
-                onChange={(e) => e.target.files?.[0] && handleImportBackup(e.target.files[0])}
+                onChange={(e) => {
+                  if (e.target.files?.[0]) void handleImportBackup(e.target.files[0]);
+                  // Sem limpar, escolher o mesmo arquivo de novo não dispara o `change`.
+                  e.target.value = '';
+                }}
               />
             </div>
           </div>
         </div>
+        <Aviso aviso={aviso} secao="backup" />
       </section>
 
       <section className="card-surface space-y-3">
@@ -272,8 +316,12 @@ export default function DadosTab() {
           type="file"
           accept=".csv,.json,.txt,text/csv,application/json,text/plain"
           className="hidden"
-          onChange={(e) => e.target.files?.[0] && handleImportCards(e.target.files[0])}
+          onChange={(e) => {
+            if (e.target.files?.[0]) void handleImportCards(e.target.files[0]);
+            e.target.value = '';
+          }}
         />
+        <Aviso aviso={aviso} secao="cards" />
       </section>
 
       <section className="card-surface space-y-3">
@@ -328,11 +376,12 @@ export default function DadosTab() {
                 {n5Importing ? 'Importando…' : 'Importar selecionados'}
               </button>
               {n5SelectedCount > 0 && (
-                <span className="text-sm text-sage">{n5SelectedCount} card(s) selecionado(s)</span>
+                <span className="text-sm text-sage">{plural(n5SelectedCount, 'card selecionado', 'cards selecionados')}</span>
               )}
             </div>
           </div>
         </details>
+        <Aviso aviso={aviso} secao="n5" />
       </section>
 
       <CopiaMigracaoCard />
@@ -347,6 +396,7 @@ export default function DadosTab() {
         <button className="btn-accent" onClick={resetAll}>
           Apagar todos os dados
         </button>
+        <Aviso aviso={aviso} secao="risco" />
       </section>
 
       {backupHelpOpen && (
@@ -354,9 +404,10 @@ export default function DadosTab() {
           <div className="space-y-1.5">
             <h3 className="text-sm font-medium">O que entra no arquivo</h3>
             <p className="text-sm text-sage">
-              Todos os cards (e o progresso de SRS de cada um), o histórico de revisões e o
-              progresso de treino de kana e do módulo de kanji. Um snapshot completo do aparelho,
-              sem nada de fora.
+              Todos os cards (e o progresso de SRS de cada um), o histórico de revisões, o progresso de
+              kana e kanji, as leituras e palavras compreendidas, o progresso das lições, as respostas dos
+              exercícios, o diário, as conquistas, a atividade por dia e as preferências (tema, meta diária).
+              Um snapshot completo do aparelho — só a conexão com o Google Drive fica de fora.
             </p>
           </div>
 
@@ -443,7 +494,6 @@ export default function DadosTab() {
         </HelpModal>
       )}
 
-      {msg && <p className="text-sm text-indigo">{msg}</p>}
     </div>
   );
 }

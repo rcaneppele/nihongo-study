@@ -14,6 +14,7 @@ import PageHeader from '../components/PageHeader';
 import { embaralhar } from '../lib/aleatorio';
 import { alternar } from '../lib/conjuntos';
 import Chip from '../components/Chip';
+import { plural } from '../lib/plural';
 
 // Abas que existiam aqui e viraram páginas do método: links antigos
 // (`/flashcards?tab=…`) redirecionam pro lugar novo.
@@ -171,7 +172,7 @@ export default function Flashcards() {
             </div>
             {query && (
               <p className="mt-1 text-xs text-sage">
-                {searched.length} de {filtered.length} card(s)
+                {searched.length} de {plural(filtered.length, 'card', 'cards')}
               </p>
             )}
           </div>

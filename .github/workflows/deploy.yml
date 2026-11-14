@@ -2,7 +2,13 @@ name: Deploy (Cloudflare Pages)
 
 # Publica o app em nihongostudy.app (Cloudflare Pages) a cada push na main,
 # depois de o CI passar. Precisa dos segredos CLOUDFLARE_API_TOKEN (permissão
-# Account › Cloudflare Pages › Edit) e CLOUDFLARE_ACCOUNT_ID.
+# Account › Cloudflare Pages › Edit — e só ela) e CLOUDFLARE_ACCOUNT_ID.
+#
+# As actions são fixadas pelo commit (o comentário diz a versão) e o wrangler
+# por versão: uma tag pode ser movida para outro código, e estes passos rodam
+# com o token do Cloudflare. O Dependabot (.github/dependabot.yml) propõe as
+# atualizações. Os cabeçalhos de segurança do site saem do build (`_headers`,
+# gerado de cabecalhos.ts).
 on:
   push:
     branches: [main]
@@ -26,9 +32,9 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22
           cache: npm
@@ -42,13 +48,15 @@ jobs:
 
       # Cria o projeto na primeira vez; se já existe, o erro é ignorado (e um
       # problema de verdade, como o token, aparece no passo seguinte).
-      - run: npx --yes wrangler pages project create nihongo-study --production-branch=main || true
+      - run: npx --yes wrangler@4.162.0 pages project create nihongo-study --production-branch=main || true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - uses: cloudflare/wrangler-action@v4
+      - uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4
         with:
+          # Versão fixa, igual à do passo acima: este passo roda com o token do Cloudflare.
+          wranglerVersion: '4.162.0'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=nihongo-study --branch=main

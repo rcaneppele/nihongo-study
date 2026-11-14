@@ -33,8 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22
           cache: npm
@@ -42,7 +42,7 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run coverage
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: cobertura
@@ -54,15 +54,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - id: playwright
         run: echo "versao=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ steps.playwright.outputs.versao }}-chromium
@@ -79,8 +79,8 @@ jobs:
         # Branch de trabalho: só Chromium. Main (deploy) e PR: os quatro.
         navegador: ${{ fromJSON(github.event_name == 'push' && github.ref != 'refs/heads/main' && '["chromium"]' || '["chromium","celular","firefox","webkit"]') }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22
           cache: npm
@@ -89,7 +89,7 @@ jobs:
         run: |
           echo "versao=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
           echo "browser=${{ matrix.navegador == 'celular' && 'chromium' || matrix.navegador }}" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ steps.playwright.outputs.versao }}-${{ steps.playwright.outputs.browser }}
@@ -100,7 +100,7 @@ jobs:
         run: npx playwright test --project=${{ matrix.navegador }} ${{ matrix.navegador == 'chromium' && '--project=pwa' || '' }}
         env:
           E2E_NAVEGADORES: ${{ matrix.navegador }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: failure()
         with:
           name: relatorio-e2e-${{ matrix.navegador }}

@@ -10,7 +10,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-neko',
     title: 'ねこ',
     level: 0,
-    wordCount: 8,
     summaryPt: 'A gata Tama: o nome, a cor e o tamanho.',
     lines: [
       {
@@ -51,7 +50,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-asagohan',
     title: 'あさごはん',
     level: 0,
-    wordCount: 7,
     summaryPt: 'O café da manhã: pão, leite e uma fruta.',
     lines: [
       {
@@ -89,7 +87,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-heya',
     title: 'わたしの へや',
     level: 0,
-    wordCount: 11,
     summaryPt: 'Um quarto pequeno: a mesa, os livros e a janela.',
     lines: [
       {
@@ -136,7 +133,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-kouen',
     title: 'こうえん',
     level: 0,
-    wordCount: 9,
     summaryPt: 'Domingo no parque: um cachorro e crianças brincando.',
     lines: [
       {
@@ -179,7 +175,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-hare',
     title: 'いい てんき',
     level: 0,
-    wordCount: 7,
     summaryPt: 'Um dia de sol, céu azul e um passeio.',
     lines: [
       {
@@ -213,7 +208,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-supaa',
     title: 'スーパー',
     level: 0,
-    wordCount: 6,
     summaryPt: 'Comprar maçãs no supermercado — e o preço.',
     lines: [
       {
@@ -247,7 +241,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-tomodachi',
     title: 'ともだち',
     level: 0,
-    wordCount: 6,
     summaryPt: 'A amiga Yuki, estudante, que gosta de tênis.',
     lines: [
       {
@@ -285,7 +278,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-yoru',
     title: 'よる',
     level: 0,
-    wordCount: 8,
     summaryPt: 'A noite: banho, um livro e cama às dez.',
     lines: [
       {
@@ -323,7 +315,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-densha',
     title: 'でんしゃ',
     level: 0,
-    wordCount: 8,
     summaryPt: 'Uma viagem curta de trem, olhando as montanhas.',
     lines: [
       {
@@ -361,7 +352,6 @@ export const TEXTOS_NIVEL_0: ReadingText[] = [
     id: 'n0-kazoku',
     title: 'わたしの かぞく',
     level: 0,
-    wordCount: 9,
     summaryPt: 'Uma família de quatro: o pai, a mãe e o irmão.',
     lines: [
       {

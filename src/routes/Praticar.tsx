@@ -4,6 +4,7 @@ import PageHeader from '../components/PageHeader';
 import ProximoPassoCard from '../components/ProximoPassoCard';
 import { TILE } from '../lib/cores';
 import { LISTA_HABILIDADES } from '../features/metodo/estrutura';
+import { plural } from '../lib/plural';
 
 /** Hub "Praticar": as quatro habilidades (etapa 2 do ciclo — usar o que aprendeu). */
 export default function Praticar() {
@@ -28,7 +29,7 @@ export default function Praticar() {
               <span className={`icon-tile h-12 w-12 rounded-2xl ${TILE[h.cor]}`}>
                 <h.icone className="h-6 w-6" />
               </span>
-              <span className="badge bg-line/70 text-sage">{h.atividades.length} atividades</span>
+              <span className="badge bg-line/70 text-sage">{plural(h.atividades.length, 'atividade', 'atividades')}</span>
             </div>
             <div>
               <p className="flex items-center gap-1 text-lg font-semibold tracking-tight">

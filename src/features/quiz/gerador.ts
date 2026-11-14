@@ -7,7 +7,7 @@ import type {
   QuizConfig,
   TipoQuiz,
   Token,
-} from './types';
+} from '../../data/quiz/types';
 import { embaralhar, sortear } from '../../lib/aleatorio';
 
 export const PARTICULAS_COMUNS = [

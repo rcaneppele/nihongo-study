@@ -138,8 +138,10 @@ teste dependente da máquina travar a publicação.
   romaji, "Como ler esta lição"), kanji, N5, kana, quiz/diga/kakitori,
   diário, estrutura do método.
 - [x] **Fase 4 — E2E**: fumaça de todas as rotas, jornadas de cada módulo,
-  backup entre dois contextos, sync com Drive falso, PWA offline, visual e
-  acessibilidade, em Chromium/Firefox/WebKit + celular.
+  backup entre dois contextos, sync com Drive falso (`e2e/driveFalso.ts`:
+  conectar, dois aparelhos, acesso vencido, apagar do Drive), pontos fracos,
+  conquistas, cabeçalhos de segurança, PWA offline, visual e acessibilidade,
+  em Chromium/Firefox/WebKit + celular.
 - [x] **Fase 5 — componentes no Browser Mode**: `KanaCanvas`,
   `GradeButtons`, `Furigana`, `StudyCard`, `ReadAloudBar`, `SyncCard`,
   `SaveWordForm`, `VocabularyMap`.

@@ -1,6 +1,6 @@
 # Deck inicial (seed)
 
-- `n5.json` / `n5.ts` — vocabulário N5 completo (~700 palavras), traduzido e
+- `n5.json` / `n5.ts` — vocabulário N5 completo (~750 entradas; o app usa as ~190 sem kanji na frente), traduzido e
   categorizado em pt-BR. Base de Aprender › Palavras novas
   (`src/features/flashcards/vocabulary.ts`, 10 palavras por vez) e, para
   importar categorias inteiras, Config > Dados > "Vocabulário N5" >

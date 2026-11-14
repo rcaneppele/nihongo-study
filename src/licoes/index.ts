@@ -16,7 +16,7 @@ export interface LicaoEntry {
   Component: ComponentType;
   quiz?: QuizLicao;
   /** Grupos nomeados de ditado, selecionáveis separadamente no Kakitori — ver `GrupoKakitori`.
-   * Lições sem `kakitori` simplesmente não aparecem no Kakitori (ver `data/kakitori/gerador.ts`). */
+   * Lições sem `kakitori` simplesmente não aparecem no Kakitori (ver `features/kakitori/gerador.ts`). */
   kakitori?: GrupoKakitori[];
   /** Frases extras do "Diga em japonês" (além das `quiz.frases`) — ver `src/features/diga/`. */
   diga?: FraseEstruturada[];

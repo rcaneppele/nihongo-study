@@ -1,15 +1,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import { version } from './package.json';
+import pacote from './package.json' with { type: 'json' };
+import { CABECALHOS, arquivoHeaders } from './cabecalhos.ts';
 
 // O app é servido na raiz do domínio (nihongostudy.app). Ver .github/workflows/deploy.yml.
 const base = '/';
 
 export default defineConfig({
   base,
+  // O E2E roda contra o `vite preview`: com os mesmos cabeçalhos da produção, a CSP é testada de verdade.
+  preview: { headers: CABECALHOS },
   define: {
-    __APP_VERSION__: JSON.stringify(version),
+    __APP_VERSION__: JSON.stringify(pacote.version),
   },
   build: {
     rollupOptions: {
@@ -29,6 +32,14 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      // Cabeçalhos de segurança no Cloudflare Pages (ver cabecalhos.ts).
+      name: 'cabecalhos-de-seguranca',
+      apply: 'build',
+      generateBundle() {
+        this.emitFile({ type: 'asset', fileName: '_headers', source: arquivoHeaders() });
+      },
+    },
     VitePWA({
       registerType: 'autoUpdate',
       // Registro manual em src/lib/pwaUpdate.ts — precisa de `updateViaCache: 'none'` e checagem

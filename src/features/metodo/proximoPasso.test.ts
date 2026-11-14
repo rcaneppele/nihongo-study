@@ -35,7 +35,7 @@ describe('Próximo passo — Aprender', () => {
 
   it('com lição recente: palavras novas, até 10', () => {
     expect(passo('aprender', { licoes: [licaoAberta(LICOES[0].meta.id, DIA)] })).toMatchObject({
-      titulo: 'Aprender 10 palavra(s) nova(s)',
+      titulo: 'Aprender 10 palavras novas',
       to: '/aprender/palavras',
     });
   });
@@ -70,7 +70,7 @@ describe('Próximo passo — Ler, Ouvir e Praticar', () => {
 describe('Próximo passo — Falar', () => {
   it('produções vencidas primeiro (→ Revisão do dia)', () => {
     const card = { ...novoCard({ front: 'ねこ', back: 'gato' }, AGORA - 10 * DIA), state: State.Review, dueDate: AGORA + DIA, production: freshSrs(AGORA - DIA) };
-    expect(passo('falar', { cards: [card] })).toMatchObject({ titulo: 'Dizer 1 palavra(s) em japonês', to: '/revisar' });
+    expect(passo('falar', { cards: [card] })).toMatchObject({ titulo: 'Dizer 1 palavra em japonês', to: '/revisar' });
   });
 
   it('depois, a lição com mais frases erradas no Diga dos últimos 14 dias', () => {

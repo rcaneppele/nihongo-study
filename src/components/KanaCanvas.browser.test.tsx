@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import KanaCanvas from './KanaCanvas';
 import { ThemeProvider } from '../lib/useTheme';
 import type { Stroke } from '../features/handwriting/strokes';
@@ -18,7 +18,7 @@ function tracar(canvas: HTMLCanvasElement, pontos: [number, number][]) {
 describe('KanaCanvas', () => {
   it('cada traço vira uma lista de pontos em coordenadas do canvas', async () => {
     const onStrokes = vi.fn<(s: Stroke[]) => void>();
-    const tela = render(
+    const tela = await render(
       <ThemeProvider>
         <KanaCanvas size={200} onStrokesChange={onStrokes} />
       </ThemeProvider>
@@ -35,7 +35,7 @@ describe('KanaCanvas', () => {
   });
 
   it('desenha pixels no canvas (o traço aparece)', async () => {
-    const tela = render(
+    const tela = await render(
       <ThemeProvider>
         <KanaCanvas size={200} />
       </ThemeProvider>
@@ -53,7 +53,7 @@ describe('KanaCanvas', () => {
 
   it('tem botão de limpar que apaga os traços', async () => {
     const onStrokes = vi.fn<(s: Stroke[]) => void>();
-    const tela = render(
+    const tela = await render(
       <ThemeProvider>
         <KanaCanvas size={200} onStrokesChange={onStrokes} />
       </ThemeProvider>

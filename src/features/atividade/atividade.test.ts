@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../../db/schema';
 import {
+  carregarDiasEstudados,
   diaLocal,
   diasEstudados,
   META_PADRAO,
@@ -79,6 +80,39 @@ describe('resumoDoDia', () => {
 
   it('sem nada gravado: dia vazio', () => {
     expect(resumoDoDia([], [], AGORA)).toMatchObject({ pontos: 0, sequencia: 0, estudouHoje: false });
+  });
+});
+
+describe('carregarDiasEstudados', () => {
+  it('das revisões, só lê as anteriores ao primeiro dia de atividade (as outras já contaram na atividade)', async () => {
+    await db.activity.bulkAdd([umaAtividade(dia(-1), { revisoes: 2 }), umaAtividade(dia(0), { revisoes: 1 })]);
+    await db.reviews.bulkAdd([
+      umaReview('c', { id: 'antiga', reviewedAt: AGORA - 10 * DIA }),
+      umaReview('c', { id: 'ontem', reviewedAt: AGORA - DIA }),
+      umaReview('c', { id: 'hoje', reviewedAt: AGORA }),
+    ]);
+    const { atividades, reviews } = await carregarDiasEstudados();
+    expect(atividades).toHaveLength(2);
+    expect(reviews.map((r) => r.id)).toEqual(['antiga']);
+  });
+
+  it('sem nenhuma atividade gravada (histórico só de revisões): lê todas', async () => {
+    await db.reviews.bulkAdd([umaReview('c', { reviewedAt: AGORA - DIA }), umaReview('c', { reviewedAt: AGORA })]);
+    expect((await carregarDiasEstudados()).reviews).toHaveLength(2);
+  });
+
+  it('dá o mesmo resumo que ler o histórico inteiro', async () => {
+    // Revisões antigas (antes da tabela de atividade) emendando com os dias de atividade.
+    await db.activity.bulkAdd([umaAtividade(dia(-1), { revisoes: 1 }), umaAtividade(dia(0), { praticas: 3 })]);
+    await db.reviews.bulkAdd([
+      umaReview('c', { reviewedAt: AGORA - 3 * DIA }),
+      umaReview('c', { reviewedAt: AGORA - 2 * DIA }),
+      umaReview('c', { reviewedAt: AGORA - DIA }),
+    ]);
+    const { atividades, reviews } = await carregarDiasEstudados();
+    const completo = resumoDoDia(await db.activity.toArray(), await db.reviews.toArray(), AGORA);
+    expect(resumoDoDia(atividades, reviews, AGORA)).toEqual(completo);
+    expect(completo.sequencia).toBe(4);
   });
 });
 

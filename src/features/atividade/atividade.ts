@@ -103,9 +103,32 @@ export function resumoDoDia(atividades: Activity[], reviews: Review[], now: numb
   return { hoje, pontos: pontos(hoje), sequencia: sequenciaDeDias(dias, now), estudouHoje: dias.has(hojeKey), semana };
 }
 
+/** Início (00:00 local) de um dia "AAAA-MM-DD". */
+function inicioDoDia(day: string): number {
+  const [ano, mes, dia] = day.split('-').map(Number);
+  return new Date(ano, mes - 1, dia).getTime();
+}
+
+/**
+ * O que `diasEstudados` precisa, sem ler o histórico inteiro de revisões:
+ * toda revisão feita desde que a tabela `activity` existe também contou na
+ * atividade do dia, então as revisões só acrescentam dias **anteriores ao
+ * primeiro dia de atividade** — um trecho do histórico que não cresce mais.
+ * (`activity` tem uma linha por dia; `reviews`, uma por resposta.)
+ */
+export async function carregarDiasEstudados(): Promise<{ atividades: Activity[]; reviews: Review[] }> {
+  const atividades = await db.activity.toArray();
+  const primeiroDia = atividades.reduce<string | undefined>((min, a) => (min === undefined || a.day < min ? a.day : min), undefined);
+  const reviews =
+    primeiroDia === undefined
+      ? await db.reviews.toArray()
+      : await db.reviews.where('reviewedAt').below(inicioDoDia(primeiroDia)).toArray();
+  return { atividades, reviews };
+}
+
 export function useResumoDia(): ResumoDia | undefined {
   return useLiveQuery(async () => {
-    const [atividades, reviews] = await Promise.all([db.activity.toArray(), db.reviews.toArray()]);
+    const { atividades, reviews } = await carregarDiasEstudados();
     return resumoDoDia(atividades, reviews);
   }, []);
 }

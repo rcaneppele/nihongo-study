@@ -1,5 +1,6 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
-import viteConfig from './vite.config';
+import { playwright } from '@vitest/browser-playwright';
+import viteConfig from './vite.config.ts';
 
 /**
  * Dois projetos de teste (docs/estrategia-testes.md):
@@ -30,7 +31,7 @@ export default mergeConfig(
             setupFiles: ['src/test/setup.browser.ts'],
             browser: {
               enabled: true,
-              provider: 'playwright',
+              provider: playwright(),
               headless: true,
               screenshotFailures: false,
               instances: [{ browser: 'chromium' }],
@@ -46,9 +47,14 @@ export default mergeConfig(
         // Limites mínimos (só sobem, nunca descem): ao ganhar cobertura,
         // suba o número. A lógica (.ts) é coberta em Node; as telas (.tsx),
         // pelos testes de componente e pelo E2E.
+        // Recalibrados em novembro/2026, na ida para o Vitest 5: a cobertura passou a contar
+        // instruções e ramos de verdade (antes, linhas), então os mesmos testes dão números
+        // menores — sobretudo em ramos. Os valores abaixo são o piso dessa medição nova.
         thresholds: {
-          'src/db/**/*.ts': { lines: 97, branches: 96, functions: 99, statements: 97 },
-          'src/features/**/*.ts': { lines: 89, branches: 94, functions: 83, statements: 89 },
+          'src/db/**/*.ts': { lines: 98, branches: 96, functions: 98, statements: 98 },
+          'src/features/**/*.ts': { lines: 93, branches: 89, functions: 87, statements: 91 },
+          // Os hooks de tela (`use*.ts`) são cobertos pelos testes de componente e pelo E2E, não em Node.
+          'src/lib/**/*.ts': { lines: 60, branches: 50, functions: 64, statements: 59 },
         },
       },
     },

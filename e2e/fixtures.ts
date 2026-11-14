@@ -11,7 +11,12 @@ import type { BackupE2E } from './dados';
  */
 
 /** Erros conhecidos e inofensivos (ex.: recurso externo bloqueado no ambiente de teste). */
-const ERROS_IGNORADOS = [/Failed to load resource/i];
+const ERROS_IGNORADOS = [
+  /Failed to load resource/i,
+  // Firefox: fonte ainda baixando quando a página sai para outro endereço (ida ao login do Google).
+  // 2152398850 = NS_BINDING_ABORTED, download cancelado pela navegação — não é falha do app.
+  /downloadable font: download failed.*status=2152398850/,
+];
 
 function instalarFalaFalsa() {
   const falas: string[] = [];

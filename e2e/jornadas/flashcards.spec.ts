@@ -7,10 +7,10 @@ test.describe('Aprender palavras e revisar', () => {
   test('aprender as próximas 10, revisar todas e ver o dia contado na Home', async ({ app, page }) => {
     await app.abrir('/aprender/palavras');
     await page.getByRole('button', { name: 'Aprender as próximas 10' }).click();
-    await expect(page.getByText(/10 card\(s\) criado\(s\) — já estão na Revisão do dia/)).toBeVisible();
+    await expect(page.getByText(/10 cards criados — já estão na Revisão do dia/)).toBeVisible();
 
     await app.abrir('/revisar');
-    await expect(page.getByText('10 item(ns) para relembrar')).toBeVisible();
+    await expect(page.getByText('10 itens para relembrar')).toBeVisible();
     await page.getByRole('button', { name: /Começar revisão/ }).click();
 
     for (let i = 1; i <= 10; i++) {
@@ -67,7 +67,7 @@ test.describe('Aprender palavras e revisar', () => {
     await page.getByRole('button', { name: /Mostrar resposta/ }).click();
     await page.getByRole('button', { name: /^Lembrei/ }).click();
     await page.getByRole('button', { name: 'Desistir e voltar' }).click();
-    await expect(page.getByText('1 item(ns) para relembrar')).toBeVisible();
+    await expect(page.getByText('1 item para relembrar')).toBeVisible();
   });
 });
 
@@ -118,7 +118,7 @@ test.describe('Agenda no tempo', () => {
 
     await page.clock.setFixedTime(inicio + (dias + 1) * DIA);
     await app.abrir('/revisar');
-    await expect(page.getByText('1 item(ns) para relembrar')).toBeVisible();
+    await expect(page.getByText('1 item para relembrar')).toBeVisible();
   });
 });
 
@@ -138,7 +138,7 @@ test.describe('Meus cards', () => {
     await expect(page.getByText('2 cards · 2 para revisar')).toBeVisible();
 
     await page.getByRole('searchbox', { name: 'Buscar cards' }).fill('cerej');
-    await expect(page.getByText('1 de 2 card(s)')).toBeVisible();
+    await expect(page.getByText('1 de 2 cards')).toBeVisible();
     await expect(page.getByText('うみ')).toBeHidden();
     await page.getByRole('searchbox', { name: 'Buscar cards' }).fill('');
 

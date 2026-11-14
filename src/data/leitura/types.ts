@@ -35,8 +35,6 @@ export interface ReadingText {
   id: string;
   title: string;
   level: NivelLeitura;
-  /** Nº aproximado de palavras únicas — indicador de dificuldade na listagem. */
-  wordCount: number;
   /** Resumo em português, exibido na listagem. */
   summaryPt: string;
   lines: ReadingLine[];

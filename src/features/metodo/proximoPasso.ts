@@ -22,6 +22,7 @@ import { desempenhoPorFamilia } from '../kana/desempenho';
 import { IconKana, IconKanji } from '../../components/IconesJp';
 import type { Cor } from '../../lib/cores';
 import type { HabilidadeId, Icone } from './estrutura';
+import { plural } from '../../lib/plural';
 
 /**
  * "Próximo passo" de cada hub do método: uma ação recomendada, calculada só
@@ -86,9 +87,9 @@ function passoAprender({ cards, knowledge, kanji, licoes }: Dados, now: number):
     const n = Math.min(LOTE_PALAVRAS, novas.length);
     const primeira = novas[0];
     return {
-      titulo: `Aprender ${n} palavra(s) nova(s)`,
+      titulo: `Aprender ${plural(n, 'palavra nova', 'palavras novas')}`,
       porque: `A próxima mais útil é ${primeira.entry.front} (${primeira.entry.back})${
-        primeira.texts.length > 0 ? ` — aparece em ${primeira.texts.length} texto(s) de leitura` : ''
+        primeira.texts.length > 0 ? ` — aparece em ${plural(primeira.texts.length, 'texto', 'textos')} de leitura` : ''
       }.`,
       to: '/aprender/palavras',
       icone: Sparkles,
@@ -165,7 +166,7 @@ function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords, now: nu
   const producao = buildReviewQueue(cards, now).filter((i) => i.direction === 'production').length;
   if (producao > 0) {
     return {
-      titulo: `Dizer ${producao} palavra(s) em japonês`,
+      titulo: `Dizer ${plural(producao, 'palavra', 'palavras')} em japonês`,
       porque: 'Estão vencidas na direção "dizer em japonês" — entram na Revisão do dia, junto com o resto.',
       to: '/revisar',
       icone: MessageCircle,
@@ -177,7 +178,7 @@ function passoFalar({ cards, leituras, diga }: Dados, known: KnownWords, now: nu
   if (pior && licao) {
     return {
       titulo: `Diga em japonês: ${licao.meta.title}`,
-      porque: `Você errou ${pior.erros} frase(s) dessa lição nos últimos dias — treine de novo enquanto está fresco.`,
+      porque: `Você errou ${plural(pior.erros, 'frase', 'frases')} dessa lição nos últimos dias — treine de novo enquanto está fresco.`,
       to: `/licoes/diga?licao=${licao.meta.id}`,
       icone: MessageCircle,
       cor: 'fuji',

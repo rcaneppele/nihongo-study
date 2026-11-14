@@ -28,6 +28,8 @@ import { desfazerRevisao, registrarRevisao, type RevisaoFeita } from './revisao'
  */
 export type StudyMode = 'review' | 'practice';
 
+const ERRO_GRAVACAO = 'Não foi possível gravar. Tente de novo.';
+
 export default function StudySession({
   items,
   mode,
@@ -47,6 +49,7 @@ export default function StudySession({
   const [index, setIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [grading, setGrading] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
   // Pilha de notas dadas nesta sessão (só no modo review). Os objetos em
   // `items` são a foto de antes da sessão, então servem de "estado anterior"
   // pra restaurar no desfazer.
@@ -74,10 +77,17 @@ export default function StudySession({
     // o próximo card sem revisar (advance() chamado duas vezes).
     if (grading || !card) return;
     setGrading(true);
-    const feita = await registrarRevisao(card, item.direction, rating);
-    setUndoStack((st) => [...st, feita]);
-    setGrading(false);
-    advance();
+    setErro(null);
+    try {
+      const feita = await registrarRevisao(card, item.direction, rating);
+      setUndoStack((st) => [...st, feita]);
+      advance();
+    } catch {
+      // Sem isto a trava ficaria ligada para sempre e a sessão não sairia do lugar.
+      setErro(ERRO_GRAVACAO);
+    } finally {
+      setGrading(false);
+    }
   }
 
   // Volta um card e mostra a resposta de novo, pronto pra ser reavaliado.
@@ -90,9 +100,16 @@ export default function StudySession({
       const last = undoStack[undoStack.length - 1];
       if (!last) return;
       setGrading(true);
-      await desfazerRevisao(last);
-      setUndoStack((st) => st.slice(0, -1));
-      setGrading(false);
+      setErro(null);
+      try {
+        await desfazerRevisao(last);
+        setUndoStack((st) => st.slice(0, -1));
+      } catch {
+        setErro(ERRO_GRAVACAO);
+        return;
+      } finally {
+        setGrading(false);
+      }
     } else {
       void registrarAtividade('praticas', -1);
     }
@@ -186,6 +203,11 @@ export default function StudySession({
         )}
       </StudyCard>
 
+      {erro && (
+        <p role="alert" className="rounded-xl border border-hanko/30 bg-hanko/5 px-3 py-2 text-sm text-hanko">
+          {erro}
+        </p>
+      )}
       {!showBack ? (
         <button className="btn-primary w-full" onClick={() => setShowBack(true)}>
           Mostrar resposta <kbd className="kbd">Espaço</kbd>

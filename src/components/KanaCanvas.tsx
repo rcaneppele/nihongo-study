@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Point, Stroke } from '../features/handwriting/strokes';
 import { useTheme } from '../lib/useTheme';
+import { plural } from '../lib/plural';
 
 /**
  * Canvas de desenho de kana. Captura traços via pointer events (funciona com
@@ -75,7 +76,7 @@ export default function KanaCanvas({
         onPointerLeave={end}
       />
       <div className="flex items-center gap-3 text-sm text-sage">
-        <span>{strokes.length} traço(s)</span>
+        <span>{plural(strokes.length, 'traço', 'traços')}</span>
         <button className="btn-ghost" onClick={clear}>
           Limpar
         </button>

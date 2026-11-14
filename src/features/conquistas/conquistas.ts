@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../../db/schema';
+import { db, type ExerciseKind } from '../../db/schema';
 import { HIRAGANA_KANA, KATAKANA_KANA } from '../../data/kana';
 import { KANJI_N5 } from '../../data/kanji';
 import { LEITURA_TEXTOS } from '../../data/leitura/textos';
@@ -8,7 +8,7 @@ import { LICOES } from '../../licoes';
 import type { Cor } from '../../lib/cores';
 import { buildVocabulary } from '../flashcards/vocabulary';
 import { palavrasConhecidas } from '../leitura/knowledge';
-import { diasEstudados, sequenciaDeDias } from '../atividade/atividade';
+import { carregarDiasEstudados, diasEstudados, sequenciaDeDias } from '../atividade/atividade';
 
 /**
  * Conquistas locais: marcos calculados só com o que o app já guarda (sem
@@ -73,51 +73,106 @@ export const CONQUISTAS: Conquista[] = [
   { id: 'diario-7', titulo: 'Diário em dia', descricao: '7 entradas no diário guiado.', grupo: 'Prática', cor: 'kin', meta: 7, numero: 'diario' },
 ];
 
-export async function carregarNumeros(): Promise<Numeros> {
-  const [cards, knowledge, kana, kanji, leituras, atividades, reviews, licoes, exercicios, diario] = await Promise.all([
-    db.cards.toArray(),
-    db.wordKnowledge.toArray(),
-    db.kanaProgress.toArray(),
-    db.kanjiProgress.count(),
-    db.readingProgress.toArray(),
-    db.activity.toArray(),
-    db.reviews.toArray(),
-    db.lessonProgress.toArray(),
-    db.exerciseResults.toArray(),
-    db.journal.count(),
-  ]);
+const EXERCICIOS_DE_LICAO: ExerciseKind[] = ['quiz', 'diga', 'kakitori', 'gramatica'];
 
-  const { understood, canSay } = palavrasConhecidas(knowledge, cards, reviews);
-  const reconhecidos = new Set(kana.filter((k) => k.romajiCorrect > 0 || (k.choiceCorrect ?? 0) > 0).map((k) => k.char));
-  const textos = new Set(LEITURA_TEXTOS.map((t) => t.id));
-  const idsLicoes = new Set(LICOES.map((l) => l.meta.id));
+/** Guarda o resultado da primeira chamada — vários números saem da mesma leitura. */
+function umaVez<T>(f: () => Promise<T>): () => Promise<T> {
+  let p: Promise<T> | undefined;
+  return () => (p ??= f());
+}
 
-  return {
-    compreendidas: understood.size,
-    seiDizer: canSay.size,
-    n5: buildVocabulary(cards, knowledge).filter((w) => w.state !== 'nova' && w.state !== 'naFila').length,
-    hiragana: HIRAGANA_KANA.filter((k) => reconhecidos.has(k.char)).length,
-    katakana: KATAKANA_KANA.filter((k) => reconhecidos.has(k.char)).length,
-    kanji,
-    textosLidos: leituras.filter((l) => textos.has(l.textId)).length,
-    sequencia: sequenciaDeDias(diasEstudados(atividades, reviews)),
-    revisoes: reviews.length,
-    licoesConcluidas: licoes.filter((l) => l.completedAt !== undefined && idsLicoes.has(l.lessonId)).length,
-    escutas: exercicios.filter((r) => r.kind === 'escuta').length,
-    shadowings: exercicios.filter((r) => r.kind === 'shadowing').length,
-    diario,
-    acertosLicoes: exercicios.filter((r) => r.kind !== 'escuta' && r.kind !== 'shadowing' && r.score === 1).length,
+/**
+ * Como calcular cada número, com as leituras do banco compartilhadas entre
+ * eles e feitas só se pedidas. Os históricos que só crescem (`reviews`,
+ * `exerciseResults`) são contados pelo índice, sem carregar as linhas.
+ */
+function carregadores(): { [K in keyof Numeros]: () => Promise<number> } {
+  const cards = umaVez(() => db.cards.toArray());
+  const knowledge = umaVez(() => db.wordKnowledge.toArray());
+  // Sem revisões: `understood` e `canSay` não dependem delas (só o crescimento da semana).
+  const palavras = umaVez(async () => palavrasConhecidas(await knowledge(), await cards(), []));
+  const reconhecidos = umaVez(
+    async () =>
+      new Set((await db.kanaProgress.toArray()).filter((k) => k.romajiCorrect > 0 || (k.choiceCorrect ?? 0) > 0).map((k) => k.char))
+  );
+  const contarKana = (lista: typeof HIRAGANA_KANA) => async () => {
+    const r = await reconhecidos();
+    return lista.filter((k) => r.has(k.char)).length;
   };
+  return {
+    compreendidas: async () => (await palavras()).understood.size,
+    seiDizer: async () => (await palavras()).canSay.size,
+    n5: async () => buildVocabulary(await cards(), await knowledge()).filter((w) => w.state !== 'nova' && w.state !== 'naFila').length,
+    hiragana: contarKana(HIRAGANA_KANA),
+    katakana: contarKana(KATAKANA_KANA),
+    kanji: () => db.kanjiProgress.count(),
+    textosLidos: async () => {
+      const textos = new Set(LEITURA_TEXTOS.map((t) => t.id));
+      return (await db.readingProgress.toArray()).filter((l) => textos.has(l.textId)).length;
+    },
+    sequencia: async () => {
+      const { atividades, reviews } = await carregarDiasEstudados();
+      return sequenciaDeDias(diasEstudados(atividades, reviews));
+    },
+    revisoes: () => db.reviews.count(),
+    licoesConcluidas: async () => {
+      const ids = new Set(LICOES.map((l) => l.meta.id));
+      return (await db.lessonProgress.toArray()).filter((l) => l.completedAt !== undefined && ids.has(l.lessonId)).length;
+    },
+    escutas: () => db.exerciseResults.where('kind').equals('escuta').count(),
+    shadowings: () => db.exerciseResults.where('kind').equals('shadowing').count(),
+    diario: () => db.journal.count(),
+    acertosLicoes: () =>
+      db.exerciseResults
+        .where('kind')
+        .anyOf(EXERCICIOS_DE_LICAO)
+        .and((r) => r.score === 1)
+        .count(),
+  };
+}
+
+/** Só os números pedidos (os outros nem são lidos do banco). */
+async function carregar<K extends keyof Numeros>(quais: readonly K[]): Promise<Pick<Numeros, K>> {
+  const c = carregadores();
+  const valores = await Promise.all(quais.map((k) => c[k]()));
+  return Object.fromEntries(quais.map((k, i) => [k, valores[i]])) as Pick<Numeros, K>;
+}
+
+const TODOS_OS_NUMEROS = [
+  'compreendidas',
+  'seiDizer',
+  'n5',
+  'hiragana',
+  'katakana',
+  'kanji',
+  'textosLidos',
+  'sequencia',
+  'revisoes',
+  'licoesConcluidas',
+  'escutas',
+  'shadowings',
+  'diario',
+  'acertosLicoes',
+] as const satisfies readonly (keyof Numeros)[];
+
+/** Todos os números — pra página Progresso. */
+export function carregarNumeros(): Promise<Numeros> {
+  return carregar(TODOS_OS_NUMEROS);
 }
 
 /**
  * Confere as metas e grava as conquistas novas (com a data de agora).
- * Devolve as que acabaram de ser desbloqueadas.
+ * Devolve as que acabaram de ser desbloqueadas. Roda a cada troca de tela e
+ * a cada resposta (ver `AvisoConquista`), então só calcula os números das
+ * conquistas **ainda não desbloqueadas** — os mais caros (revisões,
+ * acertos) deixam de ser lidos justamente quando o histórico fica grande.
  */
 export async function avaliarConquistas(): Promise<Conquista[]> {
-  const numeros = await carregarNumeros();
   const jaTem = new Set((await db.achievements.toArray()).map((a) => a.id));
-  const novas = CONQUISTAS.filter((c) => !jaTem.has(c.id) && numeros[c.numero] >= c.meta);
+  const pendentes = CONQUISTAS.filter((c) => !jaTem.has(c.id));
+  if (pendentes.length === 0) return [];
+  const numeros = await carregar([...new Set(pendentes.map((c) => c.numero))]);
+  const novas = pendentes.filter((c) => numeros[c.numero] >= c.meta);
   if (novas.length > 0) {
     const now = Date.now();
     await db.achievements.bulkPut(novas.map((c) => ({ id: c.id, unlockedAt: now })));

@@ -7,6 +7,7 @@ import { CATEGORIA_FRASES } from '../diga/gerador';
 import { acertoRecente, JANELA_ACERTO } from '../exercicios/historico';
 import type { Cor } from '../../lib/cores';
 import type { HabilidadeId } from './estrutura';
+import { plural } from '../../lib/plural';
 
 /** Um indicador de "Seu nível nesta habilidade" (ver Habilidade.tsx). */
 export interface Indicador {
@@ -98,7 +99,7 @@ export function calcularNivel(id: HabilidadeId, dados: DadosNivel, known: KnownW
             label: 'Entendimento só de ouvido',
             valor: porcento(acertoRecente(exercicios, 'escuta')),
             cor: 'sora',
-            hint: `Média das suas últimas escutas com o texto escondido: "quase tudo" vale 100%, "uma parte" 50%, "pouco" 0%. Você já fez ${escutas.length} escuta(s) assim.`,
+            hint: `Média das suas últimas escutas com o texto escondido: "quase tudo" vale 100%, "uma parte" 50%, "pouco" 0%. Você já fez ${plural(escutas.length, 'escuta', 'escutas')} assim.`,
           },
           {
             label: 'Textos prontos para escutar',

@@ -153,7 +153,7 @@ test.describe('Kanji', () => {
 
     // Kanji novo vence na hora: entra na Revisão do dia, depois dos flash cards.
     await app.abrir('/revisar');
-    await expect(page.getByText('5 item(ns) para relembrar')).toBeVisible();
+    await expect(page.getByText('5 itens para relembrar')).toBeVisible();
     await page.getByRole('button', { name: /Começar revisão/ }).click();
     for (let i = 0; i < 5; i++) {
       await page.getByRole('button', { name: /Mostrar resposta/ }).click();

@@ -41,14 +41,44 @@ async function ehLimiteDeTaxa(res: Response): Promise<boolean> {
   return corpo?.error?.errors?.some((e) => MOTIVOS_DE_LIMITE.has(e.reason ?? '')) ?? false;
 }
 
+/**
+ * Teto do arquivo já descomprimido. Um backup de anos de estudo fica em
+ * poucos MB; isto só impede que um arquivo corrompido (ou montado para
+ * isso) descomprima até esgotar a memória do aparelho.
+ */
+const MAX_BYTES = 100 * 1024 * 1024;
+
 export interface OpcoesDrive {
   esperar?: (ms: number) => Promise<void>;
   rng?: () => number;
+  maxBytes?: number;
+}
+
+/** Lê o fluxo como texto, parando com erro se passar de `maxBytes`. */
+async function lerComLimite(fluxo: ReadableStream<Uint8Array>, maxBytes: number): Promise<string> {
+  const leitor = fluxo.getReader();
+  const decodificador = new TextDecoder();
+  let texto = '';
+  let lidos = 0;
+  for (;;) {
+    const { done, value } = await leitor.read();
+    if (done) break;
+    lidos += value.byteLength;
+    if (lidos > maxBytes) {
+      await leitor.cancel();
+      throw new Error('O arquivo de sincronização no Drive é grande demais para ser lido.');
+    }
+    texto += decodificador.decode(value, { stream: true });
+  }
+  return texto + decodificador.decode();
 }
 
 const esperarDeVerdade = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-export function googleDrive(token: string, { esperar = esperarDeVerdade, rng = Math.random }: OpcoesDrive = {}): DestinoSync {
+export function googleDrive(
+  token: string,
+  { esperar = esperarDeVerdade, rng = Math.random, maxBytes = MAX_BYTES }: OpcoesDrive = {}
+): DestinoSync {
   async function chamar(url: string, init: RequestInit = {}): Promise<Response> {
     // `no-store`: o cache HTTP do navegador pode devolver o arquivo (ou a versão) de antes da última
     // gravação de outro aparelho — e o ciclo mesclaria dados velhos achando que está em dia.
@@ -98,7 +128,11 @@ export function googleDrive(token: string, { esperar = esperarDeVerdade, rng = M
       const meta = await metadados();
       if (!meta) return null;
       const res = await chamar(`${API}/files/${meta.id}?alt=media`);
-      const texto = await new Response(res.body!.pipeThrough(new DecompressionStream('gzip'))).text();
+      if (!res.body) throw new Error('Google Drive respondeu sem conteúdo.');
+      const texto = await lerComLimite(
+        res.body.pipeThrough(new DecompressionStream('gzip')) as ReadableStream<Uint8Array>,
+        maxBytes
+      );
       return { backup: parseBackup(texto), versao: meta.version };
     },
 

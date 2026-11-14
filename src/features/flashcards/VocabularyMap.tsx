@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../db/schema';
@@ -25,8 +25,11 @@ import {
   type WordState,
 } from './vocabulary';
 import Chip from '../../components/Chip';
+import { plural } from '../../lib/plural';
 
 const BATCH = 10;
+/** Palavras na grade antes de "Mostrar todas" — o deck inteiro numa página só é rolagem demais no celular. */
+const VISIVEIS = 48;
 
 // Cores por estado — as mesmas dos estágios na lista de cards e no Progresso
 // (STAGE_BADGE/STAGE_BAR em stages.ts): neutro → azul claro → azul → verde.
@@ -66,6 +69,9 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
   const [category, setCategory] = useState<string>('todas');
   const [selectedFront, setSelectedFront] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+  // A grade começa recolhida: as palavras mais úteis primeiro, o resto a um toque.
+  const [todas, setTodas] = useState(false);
+  const painel = useRef<HTMLDivElement>(null);
   const data = useLiveQuery(async () => {
     const [cards, knowledge] = await Promise.all([db.cards.toArray(), db.wordKnowledge.toArray()]);
     return buildVocabulary(cards, knowledge);
@@ -86,11 +92,24 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
   const isSuggestion = !selectedFront || selected?.entry.front !== selectedFront;
   // Grade em ordem de utilidade, igual à ordem em que "Aprender" pega as palavras.
   const sorted = [...words].sort(byUsefulness);
+  const visiveis = todas ? sorted : sorted.slice(0, VISIVEIS);
+
+  function escolher(front: string) {
+    setSelectedFront(front);
+    // No celular o painel da palavra fica abaixo da grade: sem rolar até ele, tocar numa palavra
+    // parece não fazer nada. `nearest` não mexe na tela quando o painel já está à vista (computador).
+    requestAnimationFrame(() => painel.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+  }
+
+  function trocarCategoria(c: string) {
+    setCategory(c);
+    setTodas(false);
+  }
 
   async function learnNext() {
     const batch = nextNew.slice(0, BATCH);
     const n = await learnWords(batch);
-    setMsg(`${n} card(s) criado(s) — já estão na Revisão do dia, em Revisar.`);
+    setMsg(`${plural(n, 'card criado — já está', 'cards criados — já estão')} na Revisão do dia, em Revisar.`);
   }
 
   function testKnown() {
@@ -101,11 +120,11 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap gap-2">
-        <Chip active={category === 'todas'} onClick={() => setCategory('todas')}>
+        <Chip active={category === 'todas'} onClick={() => trocarCategoria('todas')}>
           Todas
         </Chip>
         {n5CategoryCounts().map((c) => (
-          <Chip key={c.category} active={category === c.category} onClick={() => setCategory(c.category)}>
+          <Chip key={c.category} active={category === c.category} onClick={() => trocarCategoria(c.category)}>
             {c.category}
           </Chip>
         ))}
@@ -154,10 +173,10 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
           </section>
 
           <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
-            {sorted.map((w) => (
+            {visiveis.map((w) => (
               <button
                 key={w.entry.front}
-                onClick={() => setSelectedFront(w.entry.front)}
+                onClick={() => escolher(w.entry.front)}
                 className={`rounded-xl border px-3 py-2 text-left transition-shadow hover:shadow-card ${TILE_CLASSES[w.state]} ${
                   selected?.entry.front === w.entry.front ? 'ring-2 ring-indigo ring-offset-2 ring-offset-paper' : ''
                 }`}
@@ -167,9 +186,18 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
               </button>
             ))}
           </section>
+          {sorted.length > VISIVEIS && (
+            <button className="btn-ghost w-full" onClick={() => setTodas((v) => !v)} aria-expanded={todas}>
+              {todas ? 'Mostrar só as mais úteis' : `Mostrar todas as ${sorted.length} palavras`}
+            </button>
+          )}
         </div>
 
-        {selected && <WordPanel word={selected} isSuggestion={isSuggestion} />}
+        {selected && (
+          <div ref={painel} className="scroll-mt-16">
+            <WordPanel word={selected} isSuggestion={isSuggestion} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -204,7 +232,7 @@ function WordPanel({ word, isSuggestion }: { word: VocabWord; isSuggestion: bool
           <p className="text-sage">Ainda não aparece nos textos de leitura.</p>
         ) : (
           <>
-            <p className="text-sage">Aparece em {texts.length} texto(s) de leitura:</p>
+            <p className="text-sage">Aparece em {plural(texts.length, 'texto', 'textos')} de leitura:</p>
             <ul className="mt-1 space-y-0.5">
               {texts.slice(0, 4).map((t) => (
                 <li key={t.id}>
