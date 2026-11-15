@@ -58,7 +58,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
+    "eslint-plugin-react-refresh": "^0.5.7",
     "fake-indexeddb": "^6.2.7",
     "fast-check": "^4.10.2",
     "globals": "^15.12.0",
