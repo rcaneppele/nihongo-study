@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
-import { Award, BookOpen, Bug, Code, Download, Info, Mail, ShieldCheck, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Award, BookOpen, Bug, Compass, Code, Download, Info, Mail, ShieldCheck, User } from 'lucide-react';
 import { useTheme } from '../../lib/useTheme';
 import { MANUAL_URL } from '../../lib/manual';
+import { ROTA_COMECAR } from '../comecar/rota';
 import { PRIVACIDADE_URL } from '../../lib/privacidade';
 import { AVISOS_TERCEIROS_URL, ISSUES_URL, linkRelatarErro, REPO_URL } from '../../lib/contato';
 import { Field, SectionTitle } from './ui';
@@ -45,6 +47,14 @@ export default function SobreTab() {
             Baixar PDF
           </a>
         </div>
+        <p className="text-sm text-sage">
+          Nunca estudou japonês? O guia{' '}
+          <Link to={ROTA_COMECAR} className="inline-flex items-center gap-1 text-indigo underline underline-offset-2">
+            <Compass className="h-3.5 w-3.5" />
+            Começando do zero
+          </Link>{' '}
+          explica como o idioma funciona e por onde começar no app.
+        </p>
       </section>
 
       <section className="card-surface space-y-3">

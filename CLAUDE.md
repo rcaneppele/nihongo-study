@@ -249,6 +249,11 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/features/atividade/atividade.ts` — atividade por dia
   (`registrarAtividade`, chamado por cada módulo), meta diária e sequência
   de dias exibidas na Home e no Progresso.
+- `src/routes/Comecar.tsx` + `src/features/comecar/` — guia "Começando do
+  zero" (`/aprender/comecar`) para quem nunca estudou japonês: não é lição
+  (fora de `LICOES`, trilha e conquistas). Cartão na Home só num aparelho
+  sem estudo (`aparelhoNovo.ts`, dispensável) e `LinkComecar` no fim de
+  Aprender e Lições. Ver `docs/regras-negocio.md` §5d.
 - `src/features/pontos-fracos/pontosFracos.ts` + `src/routes/PontosFracos.tsx`
   — "Pontos fracos" (`/pontos-fracos`): o que mais erra em cards, kana,
   kanji e leitura, com treino em prática livre.

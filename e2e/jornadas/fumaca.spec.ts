@@ -9,6 +9,7 @@ const ROTAS: [string, RegExp][] = [
   ['/', /こんにちは|こんばんは|おはよう/],
   ['/aprender', /^Aprender$/],
   ['/aprender/palavras', /Palavras novas/],
+  ['/aprender/comecar', /Começando do zero/],
   ['/kana', /Treino de kana/],
   ['/kanji', /Kanji/],
   ['/praticar', /^Praticar$/],

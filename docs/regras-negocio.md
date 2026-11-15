@@ -895,6 +895,26 @@ pré-escolhidos" abaixo). Ferramenta nova: decidir em
   Aprender, Praticar, Revisar — com as pendências —, Progresso, cada um
   com uma linha e um número do momento). Os contadores de vocabulário e
   escrita ficam em `/progresso`.
+- **Guia "Começando do zero"** (`/aprender/comecar`, `src/routes/Comecar.tsx`):
+  para quem instala o app sem nunca ter estudado japonês (o app foi pensado
+  como apoio a um curso). Explica o que é o idioma, as três escritas, as
+  diferenças para o português, a ordem de estudo, o "primeiro mês no app"
+  (links para lição de Kana → treino de kana → Saudações → Palavras novas →
+  Revisão do dia → leitura "Primeiros passos" → trilha) e aponta o manual.
+  **Não é uma lição** (fica fora de `LICOES`): não entra na trilha, nas
+  conquistas nem na meta diária, e não grava nada. Segue as regras de
+  conteúdo das lições (japonês com romaji, sem kanji em exemplo).
+  - **Cartão na Home** ("Novo no japonês? Comece por aqui", logo abaixo da
+    saudação; `src/features/comecar/`): só aparece num **aparelho novo** —
+    nenhum registro em `cards`, `lessonProgress`, `kanaProgress`,
+    `kanjiProgress`, `readingProgress`, `wordKnowledge`, `exerciseResults`,
+    `journal` nem `activity` (`ehAparelhoNovo`). Some sozinho quando a
+    pessoa começa a estudar (abrir uma lição já conta) ou importa um
+    backup, e de vez ao ser dispensado no ×, que vale só para o aparelho
+    (`db.local`, chave `avisoComecarDispensado`).
+  - **Acesso permanente**: uma linha discreta no fim do hub Aprender e da
+    página de Lições, e um link em Configurações › Sobre o App (junto do
+    manual).
 - **Plano do dia** (`src/features/metodo/PlanoDoDia.tsx`): o ciclo do
   método em 3 passos, na ordem **Revisar → Aprender → Praticar**. Cada passo
   mostra a recomendação do hub correspondente e é marcado como **feito**

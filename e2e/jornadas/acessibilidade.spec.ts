@@ -13,6 +13,7 @@ const ROTAS = [
   '/',
   '/aprender',
   '/aprender/palavras',
+  '/aprender/comecar',
   '/kana',
   '/kanji',
   '/praticar',

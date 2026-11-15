@@ -4,6 +4,7 @@ import { LICOES } from '../licoes';
 import { TILE, type Cor } from '../lib/cores';
 import TrilhaLicoes from '../features/licoes/TrilhaLicoes';
 import { useProgressoLicoes } from '../features/licoes/progresso';
+import LinkComecar from '../features/comecar/LinkComecar';
 
 // Cor da etiqueta pelo tipo de lição — o tipo vem na primeira tag de cada
 // lição (`meta.tags`). Etiquetas sem cor própria (nível, assunto) ficam neutras.
@@ -84,6 +85,8 @@ export default function Licoes() {
           ))}
         </div>
       </section>
+
+      <LinkComecar />
     </div>
   );
 }

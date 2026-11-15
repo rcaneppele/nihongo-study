@@ -4,6 +4,7 @@ import AtividadeCard from '../components/AtividadeCard';
 import ProximoPassoCard from '../components/ProximoPassoCard';
 import { ATIVIDADES_APRENDER } from '../features/metodo/estrutura';
 import TrilhaLicoes from '../features/licoes/TrilhaLicoes';
+import LinkComecar from '../features/comecar/LinkComecar';
 
 /** Hub "Aprender": onde entra conteúdo novo, com explicação (etapa 1 do ciclo do método). */
 export default function Aprender() {
@@ -23,6 +24,7 @@ export default function Aprender() {
           <AtividadeCard key={a.titulo} atividade={a} />
         ))}
       </div>
+      <LinkComecar />
     </div>
   );
 }

@@ -12,12 +12,14 @@ import PlanoDoDia from '../features/metodo/PlanoDoDia';
 import LembreteBackup from '../features/backup/LembreteBackup';
 import AvisoInstalacao from '../features/backup/AvisoInstalacao';
 import AvisoSync from '../features/sync/AvisoSync';
+import AvisoComecar from '../features/comecar/AvisoComecar';
 import ProgressRing from '../components/ProgressRing';
 import { TILE, type Cor } from '../lib/cores';
 import { palavra, plural } from '../lib/plural';
 
 /**
- * "Hoje" (Início): saudação, bloco da meta diária (semana + sequência), o
+ * "Hoje" (Início): saudação, o cartão do guia para iniciantes (só num
+ * aparelho novo, ver features/comecar), bloco da meta diária (semana + sequência), o
  * plano do dia (Revisar → Aprender → Praticar, ver PlanoDoDia) e atalhos
  * para os hubs do método. Regras em docs/regras-negocio.md §5d; visual em
  * docs/guia-visual.md.
@@ -40,6 +42,8 @@ export default function Home() {
   return (
     <div className="space-y-5">
       <Saudacao />
+
+      <AvisoComecar />
 
       {resumo && (
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">

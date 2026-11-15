@@ -15,6 +15,7 @@ import Diario from './routes/Diario';
 import PontosFracos from './routes/PontosFracos';
 import Aprender from './routes/Aprender';
 import PalavrasNovas from './routes/PalavrasNovas';
+import Comecar from './routes/Comecar';
 import Praticar from './routes/Praticar';
 import Habilidade from './routes/Habilidade';
 import Revisar from './routes/Revisar';
@@ -43,6 +44,7 @@ export const ROTAS: { path: string; Pagina: ComponentType }[] = [
   { path: '/pontos-fracos', Pagina: PontosFracos },
   { path: '/aprender', Pagina: Aprender },
   { path: '/aprender/palavras', Pagina: PalavrasNovas },
+  { path: '/aprender/comecar', Pagina: Comecar },
   { path: '/praticar', Pagina: Praticar },
   { path: '/praticar/:habilidade', Pagina: Habilidade },
   { path: '/revisar', Pagina: Revisar },
