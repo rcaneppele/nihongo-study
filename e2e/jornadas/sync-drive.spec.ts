@@ -61,11 +61,12 @@ test('conectar envia os dados ao Drive; um segundo aparelho recebe, e o que ele 
   await b.page.getByRole('button', { name: 'Escolher arquivo' }).click();
   await (await escolher).setFiles({ name: 'cards.csv', mimeType: 'text/csv', buffer: Buffer.from('いぬ,cachorro') });
   await expect(b.page.getByText('1 card importado.')).toBeVisible();
+  // "Sincronizado…" já estava na tela antes do clique: o que confirma o ciclo é o dado chegar.
   await sincronizarAgora(b.page);
-  expect(drive.conteudo()?.cards.map((c) => c.front).sort()).toEqual(['いぬ', 'ねこ']);
+  await expect.poll(() => drive.conteudo()?.cards.map((c) => c.front).sort()).toEqual(['いぬ', 'ねこ']);
 
   await sincronizarAgora(page);
-  expect(await frentes(app)).toEqual(['いぬ', 'ねこ']);
+  await expect.poll(() => frentes(app)).toEqual(['いぬ', 'ねこ']);
   await b.contexto.close();
 });
 

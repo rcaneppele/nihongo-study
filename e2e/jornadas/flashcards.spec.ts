@@ -83,8 +83,10 @@ test.describe('Direção de produção (Sei dizer)', () => {
     await page.getByRole('button', { name: /Mostrar resposta/ }).click();
     await expect(page.getByText('ねこ').first()).toBeVisible();
     await page.getByRole('button', { name: /^Lembrei/ }).click();
-    const [review] = await app.lerTabela<{ direction?: string }>('reviews');
-    expect(review.direction).toBe('production');
+    // A gravação é assíncrona: espera a revisão aparecer no banco.
+    await expect
+      .poll(async () => (await app.lerTabela<{ direction?: string }>('reviews')).map((r) => r.direction))
+      .toEqual(['production']);
   });
 
   test('"Treinar a dizer" na lista muda o estágio para Sei dizer', async ({ app, page }) => {
