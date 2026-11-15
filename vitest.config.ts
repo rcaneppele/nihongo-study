@@ -44,6 +44,7 @@ export default mergeConfig(
         include: ['src/**/*.{ts,tsx}'],
         exclude: ['src/**/*.test.*', 'src/test/**', 'src/licoes/**', 'src/data/**', 'src/**/*.d.ts', 'src/main.tsx'],
         reporter: ['text-summary', 'html', 'json-summary'],
+        reportsDirectory: 'relatorios/cobertura',
         // Limites mínimos (só sobem, nunca descem): ao ganhar cobertura,
         // suba o número. A lógica (.ts) é coberta em Node; as telas (.tsx),
         // pelos testes de componente e pelo E2E.

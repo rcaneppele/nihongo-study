@@ -1,6 +1,7 @@
-import { Goal, Layers, Palette } from 'lucide-react';
+import { Goal, Languages, Layers, Palette } from 'lucide-react';
 import { useTheme, type ThemeMode } from '../../lib/useTheme';
 import { setGradeMode, useGradeMode, type GradeMode } from '../srs/gradeMode';
+import { setEscritaDosCards, useEscritaDosCards, type EscritaDosCards } from '../flashcards/formas';
 import { META_OPCOES, PESO_LEITURA, setMetaDiaria, useMetaDiaria } from '../atividade/atividade';
 import { SectionTitle } from './ui';
 import Segmentado, { type OpcaoSegmentada } from '../../components/Segmentado';
@@ -9,6 +10,11 @@ const THEME_OPTIONS: OpcaoSegmentada<ThemeMode>[] = [
   { valor: 'light', rotulo: 'Claro' },
   { valor: 'dark', rotulo: 'Escuro' },
   { valor: 'system', rotulo: 'Sistema' },
+];
+
+const ESCRITA_OPTIONS: OpcaoSegmentada<EscritaDosCards>[] = [
+  { valor: 'kana', rotulo: 'Kana em destaque' },
+  { valor: 'kanji', rotulo: 'Kanji em destaque' },
 ];
 
 const GRADE_MODE_OPTIONS: OpcaoSegmentada<GradeMode>[] = [
@@ -20,6 +26,7 @@ export default function ConfiguracoesTab() {
   const { mode, setMode } = useTheme();
   const gradeMode = useGradeMode();
   const metaDiaria = useMetaDiaria();
+  const escrita = useEscritaDosCards();
 
   return (
     <div className="space-y-6"> 
@@ -58,6 +65,22 @@ export default function ConfiguracoesTab() {
           "4 botões" acrescenta Com esforço e Fácil, para quem quer ajustar o intervalo com mais precisão.
         </p>
         <Segmentado rotulo="Botões de nota" opcoes={GRADE_MODE_OPTIONS} valor={gradeMode} onChange={setGradeMode} />
+      </section>
+
+      <section className="card-surface space-y-3">
+        <SectionTitle icon={<Languages className="h-4 w-4" />} cor="hanko">
+          Palavras com kanji
+        </SectionTitle>
+        <p className="text-sm text-sage">
+          Como aparecem, nos cards e em Palavras novas, as palavras que se escrevem com kanji. "Kana em destaque"
+          mostra a palavra em kana, com o kanji pequeno ao lado só como referência — bom enquanto você ainda está
+          firmando a leitura dos kana. "Kanji em destaque" inverte: o kanji na pergunta e o kana na resposta.
+        </p>
+        <Segmentado rotulo="Escrita dos cards" opcoes={ESCRITA_OPTIONS} valor={escrita} onChange={setEscritaDosCards} />
+        <p className="font-jp text-center text-2xl">
+          {escrita === 'kana' ? 'たべもの' : '食べ物'}
+          <span className="ml-2 text-base text-sage">{escrita === 'kana' ? '食べ物' : 'たべもの'}</span>
+        </p>
       </section>
     </div>
   );

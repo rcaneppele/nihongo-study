@@ -8,7 +8,7 @@ name: Deploy (Cloudflare Pages)
 # por versão: uma tag pode ser movida para outro código, e estes passos rodam
 # com o token do Cloudflare. O Dependabot (.github/dependabot.yml) propõe as
 # atualizações. Os cabeçalhos de segurança do site saem do build (`_headers`,
-# gerado de cabecalhos.ts).
+# gerado de config/cabecalhos.ts).
 on:
   push:
     branches: [main]

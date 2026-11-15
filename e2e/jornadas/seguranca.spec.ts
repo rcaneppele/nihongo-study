@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures';
 
 /**
- * Cabeçalhos de segurança (cabecalhos.ts): o `vite preview` do E2E serve os
+ * Cabeçalhos de segurança (config/cabecalhos.ts): o `vite preview` do E2E serve os
  * mesmos que o Cloudflare Pages. As outras jornadas já falham se a CSP
  * barrar algo que o app usa (vira erro no console); aqui se confere que ela
  * está ligada e barra o que deve.

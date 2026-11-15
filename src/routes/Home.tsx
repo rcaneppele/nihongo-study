@@ -19,7 +19,7 @@ import { palavra, plural } from '../lib/plural';
 /**
  * "Hoje" (Início): saudação, bloco da meta diária (semana + sequência), o
  * plano do dia (Revisar → Aprender → Praticar, ver PlanoDoDia) e atalhos
- * para os hubs do método. Regras em regras-negocio.md §5d; visual em
+ * para os hubs do método. Regras em docs/regras-negocio.md §5d; visual em
  * docs/guia-visual.md.
  */
 export default function Home() {

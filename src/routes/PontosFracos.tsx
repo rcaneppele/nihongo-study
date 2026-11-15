@@ -17,6 +17,7 @@ import {
 } from '../features/pontos-fracos/pontosFracos';
 import { embaralhar } from '../lib/aleatorio';
 import { palavra, plural } from '../lib/plural';
+import { Palavra } from '../features/flashcards/Palavra';
 
 const ORIGENS: Origem[] = ['cards', 'kana', 'kanji', 'leitura', 'licoes'];
 
@@ -114,7 +115,11 @@ export default function PontosFracos() {
               {visiveis.map((p) => (
                 <li key={p.id} className="flex items-baseline justify-between gap-3 py-2">
                   <span className="min-w-0">
-                    <span className="font-jp text-lg">{p.jp}</span>
+                    {p.item.frenteFixa ? (
+                      <span className="font-jp text-lg">{p.jp}</span>
+                    ) : (
+                      <Palavra palavra={p.item.card} className="text-lg" apoioClassName="text-sm" emLinha />
+                    )}
                     <span className="ml-2 text-sm text-ink">{p.pt}</span>
                   </span>
                   <span className="badge shrink-0 bg-hanko/8 text-hanko">{p.detalhe}</span>

@@ -10,18 +10,9 @@
   ]
  },
  {
-  "front": "会う",
-  "reading": "あう",
-  "back": "encontrar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "あう",
   "reading": "au",
+  "kanji": "会う",
   "back": "encontrar (alguém)",
   "category": "Verbos",
   "tags": [
@@ -100,18 +91,9 @@
   ]
  },
  {
-  "front": "開ける",
-  "reading": "あける",
-  "back": "abrir",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "あける",
   "reading": "akeru",
+  "kanji": "開ける",
   "back": "abrir",
   "category": "Verbos",
   "tags": [
@@ -190,18 +172,9 @@
   ]
  },
  {
-  "front": "遊ぶ",
-  "reading": "あそぶ",
-  "back": "brincar/se divertir",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "あそぶ",
   "reading": "asobu",
+  "kanji": "遊ぶ",
   "back": "brincar, divertir-se",
   "category": "Verbos",
   "tags": [
@@ -281,7 +254,7 @@
  },
  {
   "front": "あっち",
-  "reading": "atchi",
+  "reading": "acchi",
   "back": "lá/ali",
   "category": "Pronomes e interrogativos",
   "tags": [
@@ -332,7 +305,7 @@
  },
  {
   "front": "アパート",
-  "reading": "apāto",
+  "reading": "apaato",
   "back": "apartamento",
   "category": "Substantivos",
   "tags": [
@@ -352,18 +325,9 @@
   ]
  },
  {
-  "front": "浴びる",
-  "reading": "あびる",
-  "back": "tomar banho",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "あびる",
   "reading": "abiru",
+  "kanji": "浴びる",
   "back": "tomar (banho de chuveiro)",
   "category": "Verbos",
   "tags": [
@@ -433,18 +397,9 @@
   ]
  },
  {
-  "front": "在る",
-  "reading": "ある",
-  "back": "existir/haver",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "ある",
   "reading": "aru",
+  "kanji": "有る",
   "back": "existir, haver (coisas)",
   "category": "Verbos",
   "tags": [
@@ -452,16 +407,6 @@
    "verbo"
   ],
   "note": "Para pessoas e animais, いる. A negativa casual é ない, não あらない."
- },
- {
-  "front": "有る",
-  "reading": "ある",
-  "back": "existir/haver",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
  },
  {
   "front": "歩く",
@@ -505,18 +450,9 @@
   "note": "Na prática, um \"não\" seco soa duro. Para recusar, é comum dizer ちょっと… e deixar a frase no ar."
  },
  {
-  "front": "言う",
-  "reading": "いう",
-  "back": "dizer",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "いう",
   "reading": "iu",
+  "kanji": "言う",
   "back": "dizer",
   "category": "Verbos",
   "tags": [
@@ -545,18 +481,9 @@
   ]
  },
  {
-  "front": "行く",
-  "reading": "いく",
-  "back": "ir",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "いく",
   "reading": "iku",
+  "kanji": "行く",
   "back": "ir",
   "category": "Verbos",
   "tags": [
@@ -778,18 +705,9 @@
   ]
  },
  {
-  "front": "居る",
-  "reading": "いる",
-  "back": "estar/existir",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "いる",
   "reading": "iru",
+  "kanji": "居る",
   "back": "existir, estar (pessoas e animais)",
   "category": "Verbos",
   "tags": [
@@ -809,18 +727,9 @@
   ]
  },
  {
-  "front": "入れる",
-  "reading": "いれる",
-  "back": "colocar (dentro)",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "いれる",
   "reading": "ireru",
+  "kanji": "入れる",
   "back": "colocar (dentro de algo)",
   "category": "Verbos",
   "tags": [
@@ -1021,7 +930,7 @@
  },
  {
   "front": "エレベーター",
-  "reading": "erebētā",
+  "reading": "erebeetaa",
   "back": "elevador",
   "category": "Substantivos",
   "tags": [
@@ -1140,18 +1049,9 @@
   ]
  },
  {
-  "front": "起きる",
-  "reading": "おきる",
-  "back": "acordar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "おきる",
   "reading": "okiru",
+  "kanji": "起きる",
   "back": "acordar, levantar-se",
   "category": "Verbos",
   "tags": [
@@ -1220,18 +1120,9 @@
   ]
  },
  {
-  "front": "教える",
-  "reading": "おしえる",
-  "back": "ensinar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "おしえる",
   "reading": "oshieru",
+  "kanji": "教える",
   "back": "ensinar, informar",
   "category": "Verbos",
   "tags": [
@@ -1471,29 +1362,10 @@
   ]
  },
  {
-  "front": "泳ぐ",
-  "reading": "およぐ",
-  "back": "nadar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "およぐ",
   "reading": "oyogu",
+  "kanji": "泳ぐ",
   "back": "nadar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
-  "front": "降りる",
-  "reading": "おりる",
-  "back": "descer (de veículo)",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -1503,6 +1375,7 @@
  {
   "front": "おりる",
   "reading": "oriru",
+  "kanji": "降りる",
   "back": "descer, desembarcar",
   "category": "Verbos",
   "tags": [
@@ -1512,18 +1385,9 @@
   "note": "O veículo leva を: でんしゃをおります."
  },
  {
-  "front": "終る",
-  "reading": "おわる",
-  "back": "terminar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "おわる",
   "reading": "owaru",
+  "kanji": "終る",
   "back": "terminar",
   "category": "Verbos",
   "tags": [
@@ -1632,18 +1496,9 @@
   ]
  },
  {
-  "front": "買う",
-  "reading": "かう",
-  "back": "comprar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "かう",
   "reading": "kau",
+  "kanji": "買う",
   "back": "comprar",
   "category": "Verbos",
   "tags": [
@@ -1662,18 +1517,9 @@
   ]
  },
  {
-  "front": "帰る",
-  "reading": "かえる",
-  "back": "voltar (para casa)",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "かえる",
   "reading": "kaeru",
+  "kanji": "帰る",
   "back": "voltar",
   "category": "Verbos",
   "tags": [
@@ -1713,18 +1559,9 @@
   ]
  },
  {
-  "front": "書く",
-  "reading": "かく",
-  "back": "escrever",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "かく",
   "reading": "kaku",
+  "kanji": "書く",
   "back": "escrever",
   "category": "Verbos",
   "tags": [
@@ -1753,18 +1590,9 @@
   ]
  },
  {
-  "front": "掛ける",
-  "reading": "かける",
-  "back": "pendurar/colocar (óculos)",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "かける",
   "reading": "kakeru",
+  "kanji": "掛ける",
   "back": "ligar (telefone)/sentar-se",
   "category": "Verbos",
   "tags": [
@@ -2007,7 +1835,7 @@
  },
  {
   "front": "カレー",
-  "reading": "karē",
+  "reading": "karee",
   "back": "curry",
   "category": "Substantivos",
   "tags": [
@@ -2018,7 +1846,7 @@
  },
  {
   "front": "カレンダー",
-  "reading": "karendā",
+  "reading": "karendaa",
   "back": "calendário",
   "category": "Substantivos",
   "tags": [
@@ -2097,18 +1925,9 @@
   ]
  },
  {
-  "front": "消える",
-  "reading": "きえる",
-  "back": "desaparecer",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "きえる",
   "reading": "kieru",
+  "kanji": "消える",
   "back": "apagar-se, desaparecer",
   "category": "Verbos",
   "tags": [
@@ -2118,18 +1937,9 @@
   "note": "A luz se apaga sozinha: でんきがきえます. Para \"apagar a luz\", use けす."
  },
  {
-  "front": "聞く",
-  "reading": "きく",
-  "back": "ouvir/perguntar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "きく",
   "reading": "kiku",
+  "kanji": "聞く",
   "back": "ouvir; perguntar",
   "category": "Verbos",
   "tags": [
@@ -2149,7 +1959,7 @@
  },
  {
   "front": "ギター",
-  "reading": "gitā",
+  "reading": "gitaa",
   "back": "violão",
   "category": "Substantivos",
   "tags": [
@@ -2331,7 +2141,7 @@
  },
  {
   "front": "キロメートル",
-  "reading": "kiromētoru",
+  "reading": "kiromeetoru",
   "back": "quilômetro",
   "category": "Substantivos",
   "tags": [
@@ -2691,7 +2501,7 @@
  },
  {
   "front": "コート",
-  "reading": "kōto",
+  "reading": "kooto",
   "back": "casaco",
   "category": "Substantivos",
   "tags": [
@@ -2702,7 +2512,7 @@
  },
  {
   "front": "コーヒー",
-  "reading": "kōhī",
+  "reading": "koohii",
   "back": "café",
   "category": "Substantivos",
   "tags": [
@@ -2782,7 +2592,7 @@
  },
  {
   "front": "こっち",
-  "reading": "kotchi",
+  "reading": "kocchi",
   "back": "este lado, aqui",
   "category": "Pronomes e interrogativos",
   "tags": [
@@ -2853,7 +2663,7 @@
  },
  {
   "front": "コピーする",
-  "reading": "kopī suru",
+  "reading": "kopii suru",
   "back": "copiar",
   "category": "Verbos",
   "tags": [
@@ -3083,7 +2893,7 @@
  },
  {
   "front": "散歩",
-  "reading": "さんぽ (する)",
+  "reading": "さんぽ",
   "back": "passear, caminhar",
   "category": "Verbos",
   "tags": [
@@ -3232,18 +3042,9 @@
   ]
  },
  {
-  "front": "死ぬ",
-  "reading": "しぬ",
-  "back": "morrer",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "しぬ",
   "reading": "shinu",
+  "kanji": "死ぬ",
   "back": "morrer",
   "category": "Verbos",
   "tags": [
@@ -3283,18 +3084,9 @@
   ]
  },
  {
-  "front": "閉める",
-  "reading": "しめる",
-  "back": "fechar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "しめる",
   "reading": "shimeru",
+  "kanji": "閉める",
   "back": "fechar",
   "category": "Verbos",
   "tags": [
@@ -3344,7 +3136,7 @@
  },
  {
   "front": "シャワー",
-  "reading": "shawā",
+  "reading": "shawaa",
   "back": "chuveiro",
   "category": "Substantivos",
   "tags": [
@@ -3514,7 +3306,7 @@
  },
  {
   "front": "スカート",
-  "reading": "sukāto",
+  "reading": "sukaato",
   "back": "saia",
   "category": "Substantivos",
   "tags": [
@@ -3594,7 +3386,7 @@
  },
  {
   "front": "ストーブ",
-  "reading": "sutōbu",
+  "reading": "sutoobu",
   "back": "aquecedor",
   "category": "Substantivos",
   "tags": [
@@ -3605,7 +3397,7 @@
  },
  {
   "front": "スプーン",
-  "reading": "supūn",
+  "reading": "supuun",
   "back": "colher",
   "category": "Substantivos",
   "tags": [
@@ -3615,7 +3407,7 @@
  },
  {
   "front": "スポーツ",
-  "reading": "supōtsu",
+  "reading": "supootsu",
   "back": "esporte",
   "category": "Substantivos",
   "tags": [
@@ -3686,7 +3478,7 @@
  },
  {
   "front": "セーター",
-  "reading": "sētā",
+  "reading": "seetaa",
   "back": "suéter",
   "category": "Substantivos",
   "tags": [
@@ -3796,7 +3588,7 @@
  },
  {
   "front": "そう",
-  "reading": "sō",
+  "reading": "sou",
   "back": "é isso, assim é",
   "category": "Saudações e expressões",
   "tags": [
@@ -3816,7 +3608,7 @@
  },
  {
   "front": "そうして",
-  "reading": "sōshite",
+  "reading": "soushite",
   "back": "e então/assim",
   "category": "Partículas e gramática",
   "tags": [
@@ -3846,7 +3638,7 @@
  },
  {
   "front": "そっち",
-  "reading": "sotchi",
+  "reading": "socchi",
   "back": "por aí, aquele lado",
   "category": "Pronomes e interrogativos",
   "tags": [
@@ -4036,7 +3828,7 @@
  },
  {
   "front": "タクシー",
-  "reading": "takushī",
+  "reading": "takushii",
   "back": "táxi",
   "category": "Substantivos",
   "tags": [
@@ -4146,18 +3938,9 @@
   ]
  },
  {
-  "front": "食べる",
-  "reading": "たべる",
-  "back": "comer",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "たべる",
   "reading": "taberu",
+  "kanji": "食べる",
   "back": "comer",
   "category": "Verbos",
   "tags": [
@@ -4347,18 +4130,9 @@
   ]
  },
  {
-  "front": "疲れる",
-  "reading": "つかれる",
-  "back": "cansar-se",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "つかれる",
   "reading": "tsukareru",
+  "kanji": "疲れる",
   "back": "cansar-se",
   "category": "Verbos",
   "tags": [
@@ -4398,18 +4172,9 @@
   ]
  },
  {
-  "front": "作る",
-  "reading": "つくる",
-  "back": "fazer, criar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "つくる",
   "reading": "tsukuru",
+  "kanji": "作る",
   "back": "preparar, produzir",
   "category": "Verbos",
   "tags": [
@@ -4479,7 +4244,7 @@
  },
  {
   "front": "テープ",
-  "reading": "tēpu",
+  "reading": "teepu",
   "back": "fita",
   "category": "Substantivos",
   "tags": [
@@ -4489,7 +4254,7 @@
  },
  {
   "front": "テープレコーダー",
-  "reading": "tēpurekōdā",
+  "reading": "teepurekoodaa",
   "back": "gravador de fita",
   "category": "Substantivos",
   "tags": [
@@ -4499,7 +4264,7 @@
  },
  {
   "front": "テーブル",
-  "reading": "tēburu",
+  "reading": "teeburu",
   "back": "mesa",
   "category": "Substantivos",
   "tags": [
@@ -4570,7 +4335,7 @@
  },
  {
   "front": "デパート",
-  "reading": "depāto",
+  "reading": "depaato",
   "back": "loja de departamentos",
   "category": "Substantivos",
   "tags": [
@@ -4590,18 +4355,9 @@
   ]
  },
  {
-  "front": "出る",
-  "reading": "でる",
-  "back": "sair, aparecer",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "でる",
   "reading": "deru",
+  "kanji": "出る",
   "back": "sair",
   "category": "Verbos",
   "tags": [
@@ -4704,7 +4460,7 @@
  },
  {
   "front": "どう",
-  "reading": "dō",
+  "reading": "dou",
   "back": "como",
   "category": "Pronomes e interrogativos",
   "tags": [
@@ -4714,7 +4470,7 @@
  },
  {
   "front": "どうして",
-  "reading": "dōshite",
+  "reading": "doushite",
   "back": "por quê",
   "category": "Pronomes e interrogativos",
   "tags": [
@@ -4724,7 +4480,7 @@
  },
  {
   "front": "どうぞ",
-  "reading": "dōzo",
+  "reading": "douzo",
   "back": "por favor",
   "category": "Saudações e expressões",
   "tags": [
@@ -4744,7 +4500,7 @@
  },
  {
   "front": "どうも",
-  "reading": "dōmo",
+  "reading": "doumo",
   "back": "obrigado(a), muito",
   "category": "Saudações e expressões",
   "tags": [
@@ -4844,7 +4600,7 @@
  },
  {
   "front": "どっち",
-  "reading": "dotchi",
+  "reading": "docchi",
   "back": "qual dos dois",
   "category": "Pronomes e interrogativos",
   "tags": [
@@ -4953,18 +4709,9 @@
   ]
  },
  {
-  "front": "取る",
-  "reading": "とる",
-  "back": "pegar, tirar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "とる",
   "reading": "toru",
+  "kanji": "取る",
   "back": "pegar; tirar; tomar",
   "category": "Verbos",
   "tags": [
@@ -5264,7 +5011,7 @@
  },
  {
   "front": "ニュース",
-  "reading": "nyūsu",
+  "reading": "nyuusu",
   "back": "notícia",
   "category": "Substantivos",
   "tags": [
@@ -5323,18 +5070,9 @@
   ]
  },
  {
-  "front": "寝る",
-  "reading": "ねる",
-  "back": "dormir",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "ねる",
   "reading": "neru",
+  "kanji": "寝る",
   "back": "dormir",
   "category": "Verbos",
   "tags": [
@@ -5354,7 +5092,7 @@
  },
  {
   "front": "ノート",
-  "reading": "nōto",
+  "reading": "nooto",
   "back": "caderno",
   "category": "Substantivos",
   "tags": [
@@ -5384,29 +5122,10 @@
   ]
  },
  {
-  "front": "飲む",
-  "reading": "のむ",
-  "back": "beber",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "のむ",
   "reading": "nomu",
+  "kanji": "飲む",
   "back": "beber",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
-  "front": "乗る",
-  "reading": "のる",
-  "back": "embarcar, pegar (transporte)",
   "category": "Verbos",
   "tags": [
    "n5",
@@ -5416,6 +5135,7 @@
  {
   "front": "のる",
   "reading": "noru",
+  "kanji": "乗る",
   "back": "subir, embarcar (em veículo)",
   "category": "Verbos",
   "tags": [
@@ -5436,7 +5156,7 @@
  },
  {
   "front": "パーティー",
-  "reading": "pātī",
+  "reading": "paatii",
   "back": "festa",
   "category": "Substantivos",
   "tags": [
@@ -5476,18 +5196,9 @@
   ]
  },
  {
-  "front": "入る",
-  "reading": "はいる",
-  "back": "entrar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "はいる",
   "reading": "hairu",
+  "kanji": "入る",
   "back": "entrar",
   "category": "Verbos",
   "tags": [
@@ -5578,18 +5289,9 @@
   ]
  },
  {
-  "front": "走る",
-  "reading": "はしる",
-  "back": "correr",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "はしる",
   "reading": "hashiru",
+  "kanji": "走る",
   "back": "correr",
   "category": "Verbos",
   "tags": [
@@ -5611,7 +5313,7 @@
  },
  {
   "front": "バター",
-  "reading": "batā",
+  "reading": "bataa",
   "back": "manteiga",
   "category": "Substantivos",
   "tags": [
@@ -5690,18 +5392,9 @@
   ]
  },
  {
-  "front": "話す",
-  "reading": "はなす",
-  "back": "falar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "はなす",
   "reading": "hanasu",
+  "kanji": "話す",
   "back": "falar, conversar",
   "category": "Verbos",
   "tags": [
@@ -6074,7 +5767,7 @@
  },
  {
   "front": "プール",
-  "reading": "pūru",
+  "reading": "puuru",
   "back": "piscina",
   "category": "Substantivos",
   "tags": [
@@ -6084,7 +5777,7 @@
  },
  {
   "front": "フォーク",
-  "reading": "fōku",
+  "reading": "fooku",
   "back": "garfo",
   "category": "Substantivos",
   "tags": [
@@ -6214,7 +5907,7 @@
  },
  {
   "front": "ページ",
-  "reading": "pēji",
+  "reading": "peeji",
   "back": "página",
   "category": "Substantivos",
   "tags": [
@@ -6314,7 +6007,7 @@
  },
  {
   "front": "ボールペン",
-  "reading": "bōrupen",
+  "reading": "boorupen",
   "back": "caneta esferográfica",
   "category": "Substantivos",
   "tags": [
@@ -6567,18 +6260,9 @@
   ]
  },
  {
-  "front": "待つ",
-  "reading": "まつ",
-  "back": "esperar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "まつ",
   "reading": "matsu",
+  "kanji": "待つ",
   "back": "esperar",
   "category": "Verbos",
   "tags": [
@@ -6598,7 +6282,7 @@
  },
  {
   "front": "マッチ",
-  "reading": "matchi",
+  "reading": "macchi",
   "back": "fósforo",
   "category": "Substantivos",
   "tags": [
@@ -6778,18 +6462,9 @@
   ]
  },
  {
-  "front": "見る",
-  "reading": "みる",
-  "back": "ver",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "みる",
   "reading": "miru",
+  "kanji": "見る",
   "back": "ver, assistir",
   "category": "Verbos",
   "tags": [
@@ -6869,7 +6544,7 @@
  },
  {
   "front": "メートル",
-  "reading": "mētoru",
+  "reading": "meetoru",
   "back": "metro",
   "category": "Substantivos",
   "tags": [
@@ -6889,7 +6564,7 @@
  },
  {
   "front": "もう",
-  "reading": "mō",
+  "reading": "mou",
   "back": "já",
   "category": "Advérbios",
   "tags": [
@@ -6919,18 +6594,9 @@
   "note": "É o \"alô\" do telefone — não se usa para cumprimentar pessoalmente."
  },
  {
-  "front": "持つ",
-  "reading": "もつ",
-  "back": "segurar; carregar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "もつ",
   "reading": "motsu",
+  "kanji": "持つ",
   "back": "segurar; possuir",
   "category": "Verbos",
   "tags": [
@@ -7039,18 +6705,9 @@
   ]
  },
  {
-  "front": "休む",
-  "reading": "やすむ",
-  "back": "descansar",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "やすむ",
   "reading": "yasumu",
+  "kanji": "休む",
   "back": "descansar; faltar (à aula, ao trabalho)",
   "category": "Verbos",
   "tags": [
@@ -7230,18 +6887,9 @@
   ]
  },
  {
-  "front": "読む",
-  "reading": "よむ",
-  "back": "ler",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "よむ",
   "reading": "yomu",
+  "kanji": "読む",
   "back": "ler",
   "category": "Verbos",
   "tags": [
@@ -7392,7 +7040,7 @@
  },
  {
   "front": "レコード",
-  "reading": "rekōdo",
+  "reading": "rekoodo",
   "back": "disco",
   "category": "Substantivos",
   "tags": [
@@ -7462,18 +7110,9 @@
   ]
  },
  {
-  "front": "分かる",
-  "reading": "わかる",
-  "back": "entender",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "わかる",
   "reading": "wakaru",
+  "kanji": "分かる",
   "back": "entender",
   "category": "Verbos",
   "tags": [
@@ -7483,18 +7122,9 @@
   "note": "O que se entende leva が: にほんごがわかります."
  },
  {
-  "front": "忘れる",
-  "reading": "わすれる",
-  "back": "esquecer",
-  "category": "Verbos",
-  "tags": [
-   "n5",
-   "verbo"
-  ]
- },
- {
   "front": "わすれる",
   "reading": "wasureru",
+  "kanji": "忘れる",
   "back": "esquecer",
   "category": "Verbos",
   "tags": [

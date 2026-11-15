@@ -25,11 +25,11 @@ const navegadores = escolhidos ? todos.filter((p) => escolhidos.includes(p.name)
 
 export default defineConfig({
   testDir: 'e2e',
-  outputDir: 'test-results/e2e',
+  outputDir: 'relatorios/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list']],
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never', outputFolder: 'relatorios/playwright' }]] : [['list']],
   timeout: 60_000,
   expect: { timeout: 10_000, toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled' } },
   use: {

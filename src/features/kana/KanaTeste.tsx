@@ -114,6 +114,11 @@ function RomajiQuestion({
             autoFocus
             className="field text-center"
             placeholder="romaji"
+            // Teclado de celular: sem maiúscula automática nem correção — "shi" não pode virar "Shi" ou "she".
+            autoCapitalize="none"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck={false}
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && check()}
@@ -130,6 +135,12 @@ function RomajiQuestion({
           <p className={feedback === 'right' ? 'text-matcha' : 'text-hanko'}>
             {feedback === 'right' ? 'Certo!' : `Era "${entry.romaji}"`}
           </p>
+          {/* Aceitou outra romanização ("si", "tu"…): mostra a que o app (e as lições) usa, sem tirar o acerto. */}
+          {feedback === 'right' && answer.trim().toLowerCase() !== entry.romaji && (
+            <p className="text-xs text-sage">
+              Nas lições e nos cards, este kana aparece como <span className="font-medium text-ink">"{entry.romaji}"</span>.
+            </p>
+          )}
           <ProximoComContagem
             botaoRef={nextBtnRef}
             onProximo={() => onAnswered(feedback === 'right')}

@@ -3,11 +3,13 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { usePendencias } from '../features/metodo/pendencias';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Card } from '../db/schema';
-import { apagarCard, criarCard } from '../features/flashcards/cards';
+import { apagarCard, cardPorFrente, criarCard } from '../features/flashcards/cards';
 import StudySession, { type StudyMode } from '../features/flashcards/StudySession';
 import { buildReviewQueue, type Direction, type StudyItem } from '../features/flashcards/stages';
 import { StageAction, StageChip } from '../features/flashcards/StageControls';
 import { NoteEditor } from '../features/flashcards/CardNote';
+import { Palavra } from '../features/flashcards/Palavra';
+import { formasDaPalavra } from '../features/flashcards/formas';
 import AudioButton from '../components/AudioButton';
 import { Layers, Play, Plus, Search, Shuffle, Sparkles, Trash2 } from 'lucide-react';
 import PageHeader from '../components/PageHeader';
@@ -54,7 +56,7 @@ export default function Flashcards() {
   const filtered = all.filter((c) => category === 'todas' || c.category === category);
   // due é sempre sobre TODOS os cards, não sobre `filtered` — o chip de
   // categoria é só um filtro de exibição da lista abaixo (ver
-  // regras-negocio.md), não deve reduzir silenciosamente o que a Revisão do dia
+  // docs/regras-negocio.md), não deve reduzir silenciosamente o que a Revisão do dia
   // revisa. Quem quer estudar por categoria usa "Praticar" (tem seleção de
   // categoria própria e explícita, sem afetar o SRS). Inclui as duas
   // direções (reconhecimento e produção) — ver stages.ts.
@@ -118,7 +120,7 @@ export default function Flashcards() {
         icon={<Layers className="h-5 w-5" />}
         cor="sora"
         title="Meus cards"
-        subtitle={`${all.length} cards · ${due.length} para revisar`}
+        subtitle={`${plural(all.length, 'card', 'cards')} · ${due.length} para revisar`}
       >
         <button className="btn-ghost" disabled={(cards ?? []).length === 0} onClick={() => setConfiguringPractice(true)}>
           <Shuffle className="h-4 w-4" />
@@ -183,7 +185,7 @@ export default function Flashcards() {
             <li key={card.id} className="card-surface flex flex-wrap items-center gap-x-4 gap-y-2 p-4">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="font-jp text-lg">{card.front}</span>
+                  <Palavra palavra={card} className="text-lg" apoioClassName="text-sm" emLinha />
                   <AudioButton text={card.front} size="sm" />
                   <StageChip card={card} />
                   {card.category && (
@@ -191,7 +193,7 @@ export default function Flashcards() {
                   )}
                 </div>
                 <p className="truncate text-sm text-sage">
-                  {card.reading && <span className="font-jp">{card.reading} · </span>}
+                  {formasDaPalavra(card).romaji && <span className="font-jp">{formasDaPalavra(card).romaji} · </span>}
                   <span className="text-ink">{card.back}</span>
                 </p>
               </div>
@@ -345,9 +347,19 @@ function AddCardForm({ onClose }: { onClose: () => void }) {
   const [reading, setReading] = useState('');
   const [category, setCategory] = useState('');
   const [note, setNote] = useState('');
+  const [erro, setErro] = useState<string | null>(null);
 
   async function add() {
     if (!front.trim() || !back.trim()) return;
+    // A frente identifica o card no app inteiro (importar, deck, mesclagem entre aparelhos):
+    // dois cards com a mesma frente virariam um só na próxima sincronização.
+    if (await cardPorFrente(front.trim())) {
+      setErro(
+        `Você já tem um card com "${front.trim()}". Se é outra palavra que se lê igual (homônimo), escreva a frente com o kanji e ponha o kana em Leitura — o card continua aparecendo em kana.`
+      );
+      return;
+    }
+    setErro(null);
     await criarCard({
       front: front.trim(),
       back: back.trim(),
@@ -403,6 +415,11 @@ function AddCardForm({ onClose }: { onClose: () => void }) {
           />
         </div>
       </div>
+      {erro && (
+        <p role="alert" className="rounded-xl bg-hanko/8 px-3 py-2 text-sm text-hanko">
+          {erro}
+        </p>
+      )}
       <div className="flex gap-2">
         <button className="btn-primary" onClick={add} disabled={!front.trim() || !back.trim()}>
           Adicionar card

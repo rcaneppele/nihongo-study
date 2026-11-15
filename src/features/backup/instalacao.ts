@@ -4,7 +4,7 @@ import { db } from '../../db/schema';
 /**
  * Aviso para instalar o app no iPhone/iPad: no Safari, site não instalado
  * pode ter os dados apagados depois de alguns dias sem uso; instalado na tela
- * inicial, não (ver `regras-negocio.md` §6). Dispensar vale só para este
+ * inicial, não (ver `docs/regras-negocio.md` §6). Dispensar vale só para este
  * aparelho (`db.local`).
  */
 const DISPENSADO_KEY = 'avisoInstalacaoDispensado';

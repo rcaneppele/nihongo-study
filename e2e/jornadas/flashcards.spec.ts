@@ -147,9 +147,29 @@ test.describe('Meus cards', () => {
     await page.getByRole('button', { name: 'Todas' }).click();
 
     await page.getByRole('button', { name: 'Excluir うみ' }).click();
-    await expect(page.getByText('1 cards · 1 para revisar')).toBeVisible();
+    await expect(page.getByText('1 card · 1 para revisar')).toBeVisible();
     const lapides = await app.lerTabela<{ table: string }>('deleted');
     expect(lapides.some((l) => l.table === 'cards')).toBe(true);
+  });
+
+  test('não deixa criar dois cards com a mesma frente; para um homônimo, a frente vai com o kanji', async ({ app, page }) => {
+    await app.prepararDados(backup({ cards: [card('はし', 'ponte')] }));
+    await app.abrir('/flashcards');
+    await page.getByRole('button', { name: 'Novo card' }).click();
+    await page.getByLabel('Frente (japonês)').fill('はし');
+    await page.getByLabel('Verso (significado)').fill('hashi (pauzinhos)');
+    await page.getByRole('button', { name: 'Adicionar card' }).click();
+    await expect(page.getByRole('alert')).toContainText('Você já tem um card com "はし"');
+    expect(await app.lerTabela('cards')).toHaveLength(1);
+
+    // Com o kanji na frente e o kana na leitura, são duas palavras — e as duas aparecem em kana.
+    await page.getByLabel('Frente (japonês)').fill('箸');
+    await page.getByLabel('Leitura (opcional)').fill('はし');
+    await page.getByRole('button', { name: 'Adicionar card' }).click();
+    await expect(page.getByRole('alert')).toBeHidden();
+    await page.getByRole('button', { name: 'Fechar' }).click();
+    await expect(page.getByText('2 cards · 2 para revisar')).toBeVisible();
+    await expect(page.getByTitle('kanji: 箸')).toBeVisible();
   });
 
   test('prática livre não mexe na agenda', async ({ app, page }) => {
@@ -169,3 +189,53 @@ test.describe('Meus cards', () => {
     expect(cards.every((c) => c.state === 0)).toBe(true);
   });
 });
+
+test.describe('Palavras com kanji (deck N5 completo)', () => {
+  test('o mapa traz o N5 inteiro, com a palavra em kana e o kanji só de referência', async ({ app, page }) => {
+    await app.abrir('/aprender/palavras');
+    await expect(page.getByText(/Vocabulário N5 · 7\d\d palavras/)).toBeVisible();
+    // 私 (わたし): kana em destaque, kanji pequeno ao lado.
+    const palavra = page.locator('section.grid > button', { hasText: 'わたし' }).first();
+    await expect(palavra).toBeVisible();
+    await expect(palavra.getByTitle('kanji: 私')).toBeVisible();
+    await palavra.click();
+    await expect(page.getByText('watashi')).toBeVisible();
+  });
+
+  test('na revisão: kana em destaque, kanji de apoio, romaji e o homônimo na resposta', async ({ app, page }) => {
+    await app.prepararDados(backup({ cards: [card('橋', 'ponte', { reading: 'はし' })] }));
+    await app.abrir('/revisar');
+    await page.getByRole('button', { name: /Começar revisão/ }).click();
+    await expect(page.getByText('はし', { exact: true })).toBeVisible();
+    await expect(page.getByTitle('kanji: 橋')).toBeVisible();
+    await expect(page.getByText('hashi', { exact: true })).toBeHidden();
+    await page.getByRole('button', { name: /Mostrar resposta/ }).click();
+    await expect(page.getByText('hashi', { exact: true })).toBeVisible();
+    await expect(page.getByText('ponte', { exact: true })).toBeVisible();
+    await expect(page.getByText(/Mesma leitura, outra palavra:.*箸.*hashi \(pauzinhos\)/)).toBeVisible();
+  });
+
+  test('"Kanji em destaque" inverte: o kanji na pergunta e o kana só na resposta; a escolha fica salva', async ({ app, page }) => {
+    await app.prepararDados(backup({ cards: [card('橋', 'ponte', { reading: 'はし' })] }));
+    await app.abrir('/config?tab=config');
+    await page.getByRole('button', { name: 'Kanji em destaque' }).click();
+    await page.reload();
+    await expect(page.getByRole('button', { name: 'Kanji em destaque' })).toHaveAttribute('aria-pressed', 'true');
+
+    await app.abrir('/revisar');
+    await page.getByRole('button', { name: /Começar revisão/ }).click();
+    await expect(page.getByText('橋', { exact: true })).toBeVisible();
+    // Com o kanji na pergunta, o kana ao lado entregaria a leitura.
+    await expect(page.getByText('はし', { exact: true })).toBeHidden();
+    await page.getByRole('button', { name: /Mostrar resposta/ }).click();
+    await expect(page.getByText('はし · hashi')).toBeVisible();
+  });
+
+  test('palavra do deck aprendida com kanji não é oferecida de novo ao aparecer em kana num texto', async ({ app, page }) => {
+    await app.prepararDados(backup({ cards: [card('猫', 'gato', { reading: 'ねこ' })] }));
+    await app.abrir('/leitura/n0-neko');
+    await page.getByRole('button', { name: 'ねこです。', exact: true }).first().click();
+    await expect(page.getByText('✓ Já está nos seus flash cards')).toBeVisible();
+  });
+});
+

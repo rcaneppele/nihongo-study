@@ -2,6 +2,7 @@ import { db, newId, type Card } from '../../db/schema';
 import { apagar } from '../../db/local';
 import { carimbosCard } from '../../db/merge';
 import { freshSrs } from '../srs/fsrs';
+import { n5PorLeitura } from '../../data/seed/n5';
 import { cardStage } from './stages';
 
 /**
@@ -22,6 +23,17 @@ export function novoCard(campos: CamposCard, now: number = Date.now(), id: strin
 /** Card já existente com essa frente — o critério de duplicata do app inteiro (import, N5, leitura, mesclagem). */
 export function cardPorFrente(front: string): Promise<Card | undefined> {
   return db.cards.filter((c) => c.front === front).first();
+}
+
+/**
+ * O card de uma palavra vista em kana (num texto de leitura): o de mesma
+ * frente ou, se a palavra é do deck N5 e lá ela tem kanji na frente (ねこ →
+ * 猫), o card do deck. Com homônimos no deck a leitura não identifica a
+ * palavra, então só vale a frente.
+ */
+export async function cardDaPalavra(front: string): Promise<Card | undefined> {
+  const doDeck = n5PorLeitura(front);
+  return (await cardPorFrente(front)) ?? (doDeck && doDeck.front !== front ? cardPorFrente(doDeck.front) : undefined);
 }
 
 export async function criarCard(campos: CamposCard, now: number = Date.now()): Promise<Card> {

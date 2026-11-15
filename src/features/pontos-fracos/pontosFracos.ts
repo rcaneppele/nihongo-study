@@ -109,7 +109,8 @@ export async function carregarPontosFracos(): Promise<Record<Origem, PontoFraco[
         pt: romaji,
         detalhe: `acerto ${Math.round(taxa * 100)}% · errou ${errados}×`,
         peso: (1 - taxa) * 100 + errados,
-        item: { card: cardTransitorio(`kana-${p.char}`, p.char, romaji), direction: 'recognition' as const },
+        // O que se treina é o caractere: nada de romaji gerado nem de regra de palavra.
+        item: { card: cardTransitorio(`kana-${p.char}`, p.char, romaji), direction: 'recognition' as const, frenteFixa: true },
       };
     });
 
@@ -133,6 +134,8 @@ export async function carregarPontosFracos(): Promise<Record<Origem, PontoFraco[
           item: {
             card: cardTransitorio(`kanji-${p.char}`, p.char, entry.meaning, leituras),
             direction: 'recognition' as const,
+            // Treino do kanji: ele fica em destaque, mesmo com "kana em destaque" nas palavras.
+            frenteFixa: true,
           },
         },
       ];

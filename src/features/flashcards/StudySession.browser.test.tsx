@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { State } from 'ts-fsrs';
 import StudySession from './StudySession';
 import { db } from '../../db/schema';
-import { criarCard } from './cards';
+import { criarCard, novoCard } from './cards';
 import type { StudyItem } from './stages';
 import { freshSrs } from '../srs/fsrs';
 
@@ -91,6 +91,27 @@ describe('StudySession (revisão)', () => {
     await expect.element(tela.getByText('Como se diz em japonês?')).toBeVisible();
     await expect.element(tela.getByText('＿＿')).toBeVisible();
     expect(tela.container.textContent).not.toContain('ねこ');
+  });
+});
+
+describe('StudySession: como a palavra aparece', () => {
+  const palavra = () => novoCard({ front: '橋', back: 'ponte', reading: 'はし' });
+
+  it('palavra com kanji: kana em destaque e kanji de apoio; o romaji só na resposta', async () => {
+    const tela = await sessao([{ card: palavra(), direction: 'recognition' }], 'practice');
+    await expect.element(tela.getByText('はし', { exact: true })).toBeVisible();
+    await expect.element(tela.getByTitle('kanji: 橋')).toBeVisible();
+    await expect.element(tela.getByText('hashi', { exact: true })).not.toBeInTheDocument();
+    await tela.getByRole('button', { name: /Mostrar resposta/ }).click();
+    await expect.element(tela.getByText('hashi', { exact: true })).toBeVisible();
+  });
+
+  it('item de frente fixa (kanji treinado como caractere): o kanji fica em destaque e a leitura vem como está', async () => {
+    const tela = await sessao([{ card: novoCard({ front: '日', back: 'dia, sol', reading: 'ひ' }), direction: 'recognition', frenteFixa: true }], 'practice');
+    await expect.element(tela.getByText('日', { exact: true })).toBeVisible();
+    await expect.element(tela.getByTitle('kanji: 日')).not.toBeInTheDocument();
+    await tela.getByRole('button', { name: /Mostrar resposta/ }).click();
+    await expect.element(tela.getByText('ひ', { exact: true })).toBeVisible();
   });
 });
 

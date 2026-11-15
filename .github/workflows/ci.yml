@@ -46,7 +46,7 @@ jobs:
         if: always()
         with:
           name: cobertura
-          path: coverage/
+          path: relatorios/cobertura/
           retention-days: 14
 
   componentes:
@@ -105,6 +105,6 @@ jobs:
         with:
           name: relatorio-e2e-${{ matrix.navegador }}
           path: |
-            playwright-report/
-            test-results/
+            relatorios/playwright/
+            relatorios/e2e/
           retention-days: 14

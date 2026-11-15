@@ -152,16 +152,33 @@ describe('parseBackup', () => {
   });
 
   it.each([
-    ['versão que não é número', { schemaVersion: '7' }],
-    ['tabela que não é lista', { cards: 'x' }],
-    ['registro que não é objeto', { reviews: [null] }],
-    ['registro sem chave', { activity: [{ revisoes: 1 }] }],
-    ['card sem frente', { cards: [{ ...umCard(), front: undefined }] }],
-    ['card com tags que não são lista', { cards: [{ ...umCard(), tags: 'n5' }] }],
-    ['card sem data de revisão', { cards: [{ ...umCard(), dueDate: 'amanhã' }] }],
-  ])('arquivo danificado (%s) é recusado antes de tocar no banco', (_nome, parcial) => {
+    ['versão que não é número', { schemaVersion: '7' }, 'versão'],
+    ['versão quebrada', { schemaVersion: 1.5 }, 'versão'],
+    ['versão zero', { schemaVersion: 0 }, 'versão'],
+    ['tabela que não é lista', { cards: 'x' }, 'cards'],
+    ['registro que não é objeto', { reviews: [null] }, 'reviews'],
+    ['registro sem chave', { activity: [{ revisoes: 1 }] }, 'activity'],
+    ['registro com chave vazia', { activity: [{ ...umaAtividade('2026-01-01'), day: '' }] }, 'activity'],
+    ['lápide sem a tabela', { deleted: [{ key: 'x', deletedAt: 1 }] }, 'deleted'],
+    ['card sem frente', { cards: [{ ...umCard(), front: undefined }] }, 'cards'],
+    ['card sem verso', { cards: [{ ...umCard(), back: undefined }] }, 'cards'],
+    ['card com tags que não são lista', { cards: [{ ...umCard(), tags: 'n5' }] }, 'cards'],
+    ['card com tag que não é texto', { cards: [{ ...umCard(), tags: ['n5', 7] }] }, 'cards'],
+    ['card sem data de revisão', { cards: [{ ...umCard(), dueDate: 'amanhã' }] }, 'cards'],
+    ['card sem data de alteração', { cards: [{ ...umCard(), updatedAt: undefined }] }, 'cards'],
+  ])('arquivo danificado (%s) é recusado antes de tocar no banco', (_nome, parcial, onde) => {
     const texto = JSON.stringify({ ...umBackup(), ...parcial });
-    expect(() => parseBackup(texto)).toThrow('danificado');
+    expect(() => parseBackup(texto)).toThrow(`O arquivo de backup está incompleto ou danificado (${onde}).`);
+  });
+
+  it('backup antigo sem a lista de cards é recusado antes de migrar (a migração percorre os cards)', () => {
+    const texto = JSON.stringify({ app: 'nihongo-study', schemaVersion: 1, exportedAt: 1 });
+    expect(() => parseBackup(texto)).toThrow('O arquivo de backup está incompleto ou danificado (cards).');
+  });
+
+  it.each(TABELAS_SINCRONIZADAS)('%s: registros válidos passam pela validação', (tabela) => {
+    const backup = umBackup({ [tabela]: DOIS_REGISTROS[tabela](2) });
+    expect(parseBackup(JSON.stringify(backup))).toEqual(backup);
   });
 
   it('backup válido passa e volta migrado', () => {

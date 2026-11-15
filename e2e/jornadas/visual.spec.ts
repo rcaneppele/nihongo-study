@@ -31,6 +31,9 @@ for (const tema of ['light', 'dark'] as const) {
               cardRevisado('いぬ', 'cachorro', 10, 3 * DIA, { createdAt: AGORA - 20 * DIA, updatedAt: AGORA - DIA }),
             ],
             lessonProgress: [licaoVista('kana', true)],
+            // Já desbloqueada: senão o aviso "Conquista desbloqueada" (que aparece 1,5 s depois de
+            // abrir a tela e some sozinho) entraria ou não na imagem conforme o tempo.
+            achievements: [{ id: 'licao-1', unlockedAt: AGORA - DIA }],
             activity: [{ day: '2026-03-15', revisoes: 12, praticas: 4, leituras: 1, novos: 3, updatedAt: AGORA - DIA }],
           })
         );

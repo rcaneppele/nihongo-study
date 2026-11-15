@@ -2,7 +2,7 @@
 // definitiva mora no IndexedDB (src/lib/useTheme.tsx); este localStorage é só um cache
 // rápido e síncrono pra esse primeiro instante, antes do Dexie responder.
 // Arquivo próprio (e não um <script> inline no index.html) para a
-// Content-Security-Policy poder proibir script inline — ver cabecalhos.ts.
+// Content-Security-Policy poder proibir script inline — ver config/cabecalhos.ts.
 (function () {
   try {
     var saved = localStorage.getItem('nihongo-study:theme');

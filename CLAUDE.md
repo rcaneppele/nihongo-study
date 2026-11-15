@@ -14,7 +14,7 @@ graduados por nível, com furigana e significado por palavra) e lições de
 estudo (conteúdo estático de gramática e vocabulário). Essas ferramentas são
 apresentadas **pelo método** — Hoje · Aprender · Praticar (ler/ouvir/falar/
 escrever) · Revisar · Progresso —, não por módulo (ver
-`src/features/metodo/estrutura.ts` e `regras-negocio.md` §5d).
+`src/features/metodo/estrutura.ts` e `docs/regras-negocio.md` §5d).
 
 ## Princípios de arquitetura (não quebrar sem combinar)
 
@@ -24,7 +24,7 @@ escrever) · Revisar · Progresso —, não por módulo (ver
   padrão, sem servidor nosso, e o app funciona 100% sem ela.
 - **Offline-first / PWA.** Deve funcionar instalado e sem internet.
 - **Endereço:** `nihongostudy.app` (Cloudflare Pages, app na raiz do domínio). O
-  antigo no GitHub Pages foi desativado (`regras-negocio.md` §6).
+  antigo no GitHub Pages foi desativado (`docs/regras-negocio.md` §6).
 - **Dados locais por dispositivo** no IndexedDB (via Dexie). Cada aparelho é
   independente.
 - **Sincronização**: manual, via exportar/importar JSON (`src/db/backup.ts`),
@@ -64,7 +64,7 @@ toda mudança pede bump; julgue pelo impacto:
 - **Patch** (`2.1.0` → `2.1.1`): correção de bug, ajuste de UI/UX pequeno,
   conteúdo de lição sem mudar estrutura de dados — nada que o usuário
   chamaria de "funcionalidade nova".
-- Mudança só de documentação (`CLAUDE.md`, `regras-negocio.md`,
+- Mudança só de documentação (`CLAUDE.md`, `docs/regras-negocio.md`,
   `docs/*.md`) não pede bump de versão.
 
 ## Mapa do código
@@ -91,7 +91,7 @@ toda mudança pede bump; julgue pelo impacto:
   contadores por aparelho (`porAparelho`); `src/db/local.ts` — id do
   aparelho, `setMeta()` (toda gravação em `db.meta`) e `apagar()` (toda
   exclusão de card/review/`wordKnowledge`/`journal`, com lápide). Ver
-  `regras-negocio.md` §6.
+  `docs/regras-negocio.md` §6.
 - `src/features/sync/` — sincronização automática com o Google Drive:
   `googleAuth.ts` (login por redirecionamento, token de ~1h; Client ID em
   `VITE_GOOGLE_CLIENT_ID` — `.env.example`, variável `GOOGLE_CLIENT_ID` no
@@ -101,8 +101,8 @@ toda mudança pede bump; julgue pelo impacto:
   dependências externas injetáveis via `definirDependenciasSync`, que os
   testes usam com um Drive em memória),
   `SyncCard.tsx` (Config › Dados) e `AvisoSync.tsx` (Home). Ver
-  `regras-negocio.md` §6.
-- `cabecalhos.ts` (raiz) — cabeçalhos de segurança do site, fonte única: a
+  `docs/regras-negocio.md` §6.
+- `config/cabecalhos.ts` — cabeçalhos de segurança do site, fonte única: a
   Content-Security-Policy e os demais. O `vite.config.ts` gera o `_headers`
   do Cloudflare Pages a partir dele e usa os mesmos no `vite preview` (o E2E
   roda com eles; `e2e/jornadas/seguranca.spec.ts`). **Sem script inline** (o
@@ -120,7 +120,7 @@ toda mudança pede bump; julgue pelo impacto:
   `src/features/backup/arquivo.ts`.
 - `src/features/srs/fsrs.ts` — algoritmo FSRS isolado (wrapper do pacote
   `ts-fsrs`; sucessor do SM-2, migrado em schemaVersion 2 — ver
-  `regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo
+  `docs/regras-negocio.md`), reaproveitado tanto por flash cards quanto pelo
   módulo de Kanji.
 - `src/features/flashcards/importCards.ts` — importação de cards via CSV
   (com aspas, testado em `importCards.test.ts`),
@@ -198,15 +198,23 @@ toda mudança pede bump; julgue pelo impacto:
 - `src/lib/pwaUpdate.ts` — registro manual do service worker
   (`setupPWAUpdate()`, chamado em `main.tsx`); checa atualização
   periodicamente e ao voltar o foco, e ativa/recarrega sozinho sem precisar
-  de recarregamento manual (ver `regras-negocio.md`) — fora de sessão de
+  de recarregamento manual (ver `docs/regras-negocio.md`) — fora de sessão de
   estudo: `src/lib/telaSemSessao.ts` diz em que telas dá para recarregar ou
   interromper (também usado pela sincronização).
 - `src/data/kana.ts` — kana (seion, dakuten/handakuten, yōon) com romaji e
   famílias para o seletor de treino.
-- `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 (pt-BR):
-  o arquivo tem ~750 entradas, mas `N5_DECK` — o que o app usa — só as ~190
-  sem kanji na frente. Base de Aprender › Palavras novas; o import por
+- `src/data/seed/n5.ts` (+ `n5.json`) — deck de vocabulário N5 completo
+  (~710 palavras, pt-BR), base de Aprender › Palavras novas; o import por
   categoria inteira fica em Config > Dados > "Vocabulário N5" > Avançado.
+  Entradas em kana (leitura em romaji, `kanji` opcional de referência) e
+  entradas com kanji na frente (leitura em kana) — ver `docs/regras-negocio.md`.
+- `src/features/flashcards/formas.ts` + `Palavra.tsx` — como uma palavra
+  aparece nos cards: **kana em destaque, kanji pequeno como referência**
+  (padrão; "Kanji em destaque" em Configurações inverte). Toda tela que
+  mostra a frente de um card usa `Palavra`, não `card.front` direto.
+- `src/lib/romaji.ts` — `kanaParaRomaji` (convenção das lições: sem mácron,
+  "dou", "koohii", "acchi"), `soKana`, `temKanji`; `src/test/romaji.ts` +
+  `src/data/romaji.test.ts` conferem todo par kana + romaji do conteúdo.
 - `src/data/kanjivg/kana-strokes.json` / `kanji-strokes.json` — dados de
   traço (ordem/forma) do KanjiVG, gerados por `scripts/build-kana-strokes.mjs`
   / `scripts/build-kanji-strokes.mjs` (`npm run build:kana-strokes` /
@@ -375,6 +383,6 @@ toda mudança pede bump; julgue pelo impacto:
 
 ## Regras de negócio
 
-Detalhadas em `regras-negocio.md` (SRS e estágios, kana, kanji, leitura,
+Detalhadas em `docs/regras-negocio.md` (SRS e estágios, kana, kanji, leitura,
 lições, navegação pelo método, import/export). Consulte antes de
 mexer na lógica de revisão ou de sincronização.

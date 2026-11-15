@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import type { ReadingLine, ReadingText, ReadingWord } from '../../data/leitura/types';
 import { exampleFromLine, saveMinedCard, sourceFromText, suggestCard } from './mining';
-import { cardPorFrente } from './cards';
+import { cardDaPalavra, cardPorFrente } from './cards';
 
 /**
  * "Salvar nos flash cards" no cartão da palavra tocada na leitura. Abre um
@@ -26,7 +26,7 @@ export default function SaveWordForm({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(suggestion);
   const [error, setError] = useState<string | null>(null);
-  const existing = useLiveQuery(() => cardPorFrente(suggestion.front), [suggestion.front]);
+  const existing = useLiveQuery(() => cardDaPalavra(suggestion.front), [suggestion.front]);
 
   if (existing) {
     return <p className="text-xs text-sage">✓ Já está nos seus flash cards</p>;

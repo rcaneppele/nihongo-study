@@ -1,5 +1,5 @@
 /**
- * Dataset do módulo de Kanji: os kanji do nível N5 (ver regras-negocio.md),
+ * Dataset do módulo de Kanji: os kanji do nível N5 (ver docs/regras-negocio.md),
  * cada um com leituras, radicais/mnemônico (para a tela de "aprender") e
  * exemplos de uso. `order` define a progressão pedagógica de introdução —
  * as funções de consulta abaixo respeitam essa ordem.

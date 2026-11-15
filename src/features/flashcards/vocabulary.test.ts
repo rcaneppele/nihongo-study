@@ -3,7 +3,7 @@ import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
 import { N5_DECK } from '../../data/seed/n5';
 import { freshSrs } from '../srs/fsrs';
-import { buildVocabulary, byUsefulness, learnWords, markKnown, practiceCard, unmarkKnown } from './vocabulary';
+import { buildVocabulary, byUsefulness, camposDoCard, chavesDe, learnWords, markKnown, practiceCard, unmarkKnown } from './vocabulary';
 import { novoCard } from './cards';
 import { limparBanco } from '../../test/banco';
 import { AGORA } from '../../test/fabricas';
@@ -31,6 +31,35 @@ describe('buildVocabulary', () => {
     expect(v.get(e5.front)).toBe('reconheco');
     expect(v.get(N5_DECK[10].front)).toBe('nova');
     expect(v.size).toBe(N5_DECK.length);
+  });
+
+  const doDeck = (front: string) => N5_DECK.find((e) => e.front === front)!;
+  const estado = (front: string, cards = [] as ReturnType<typeof novoCard>[], knowledge = [] as Parameters<typeof buildVocabulary>[1]) =>
+    buildVocabulary(cards, knowledge).find((w) => w.entry.front === front)!;
+
+  it('palavra com kanji na frente também é achada pela leitura em kana (card do usuário, palavra da leitura)', () => {
+    expect(chavesDe(doDeck('猫'))).toEqual(['猫', 'ねこ']);
+    const cardEmKana = { ...novoCard({ front: 'ねこ', back: 'gato' }, AGORA), state: State.Review };
+    expect(estado('猫', [cardEmKana])).toMatchObject({ state: 'reconheco', card: cardEmKana });
+    const lida = [{ key: 'ねこ', status: 'compreendida' as const, seenCount: 1, lookupCount: 0, updatedAt: AGORA }];
+    expect(estado('猫', [], lida).state).toBe('reconheco');
+  });
+
+  it('homônimos não valem pela leitura: はし em kana não diz se é 橋 ou 箸', () => {
+    expect(chavesDe(doDeck('橋'))).toEqual(['橋']);
+    expect(chavesDe(doDeck('箸'))).toEqual(['箸']);
+    const cardEmKana = { ...novoCard({ front: 'はし', back: 'ponte' }, AGORA), state: State.Review };
+    expect(estado('橋', [cardEmKana]).state).toBe('nova');
+    expect(estado('箸', [cardEmKana]).state).toBe('nova');
+  });
+
+  it('palavra em kana do deck só tem a própria frente como chave', () => {
+    expect(chavesDe(doDeck('たべる'))).toEqual(['たべる']);
+  });
+
+  it('o card criado de uma palavra do deck não leva o kanji de referência (ele vem do deck)', () => {
+    expect(camposDoCard(doDeck('たべる'))).toEqual({ front: 'たべる', back: 'comer', reading: 'taberu', category: 'Verbos', tags: ['n5', 'verbo'] });
+    expect(camposDoCard(doDeck('橋'))).toMatchObject({ front: '橋', reading: 'はし' });
   });
 
   it('ordem de utilidade é total e estável (palavras de mais textos primeiro)', () => {

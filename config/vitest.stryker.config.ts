@@ -1,5 +1,5 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
-import viteConfig from './vite.config.ts';
+import viteConfig from '../vite.config.ts';
 
 // Só os testes em Node, para o Stryker (testes de mutação não rodam no Browser Mode).
 export default mergeConfig(

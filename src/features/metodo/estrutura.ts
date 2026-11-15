@@ -23,7 +23,7 @@ import type { Cor } from '../../lib/cores';
 
 /**
  * Estrutura do app organizada pelo **método** (ciclo de aprendizado), não
- * por ferramenta — ver regras-negocio.md §5d:
+ * por ferramenta — ver docs/regras-negocio.md §5d:
  *
  *   Hoje → Aprender (conteúdo novo) → Praticar (ler · ouvir · falar ·
  *   escrever) → Revisar (fixar) → Progresso (acompanhar)

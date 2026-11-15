@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import pacote from './package.json' with { type: 'json' };
-import { CABECALHOS, arquivoHeaders } from './cabecalhos.ts';
+import { CABECALHOS, arquivoHeaders } from './config/cabecalhos.ts';
 
 // O app é servido na raiz do domínio (nihongostudy.app). Ver .github/workflows/deploy.yml.
 const base = '/';
@@ -11,6 +13,8 @@ export default defineConfig({
   base,
   // O E2E roda contra o `vite preview`: com os mesmos cabeçalhos da produção, a CSP é testada de verdade.
   preview: { headers: CABECALHOS },
+  // PostCSS aqui (e não num postcss.config.js à parte): são só estes dois plugins.
+  css: { postcss: { plugins: [tailwindcss(), autoprefixer()] } },
   define: {
     __APP_VERSION__: JSON.stringify(pacote.version),
   },
@@ -33,7 +37,7 @@ export default defineConfig({
   plugins: [
     react(),
     {
-      // Cabeçalhos de segurança no Cloudflare Pages (ver cabecalhos.ts).
+      // Cabeçalhos de segurança no Cloudflare Pages (ver config/cabecalhos.ts).
       name: 'cabecalhos-de-seguranca',
       apply: 'build',
       generateBundle() {

@@ -5,6 +5,7 @@ import { marcarBackup } from '../../db/local';
 import { apagarTudo, exportData, importData, importarBackup, parseBackup, type BackupFile, type ImportMode } from '../../db/backup';
 import { canShareBackup, downloadBackup, shareBackup } from '../backup/arquivo';
 import { adicionarCardsNovos } from '../flashcards/cards';
+import { camposDoCard } from '../flashcards/vocabulary';
 import { alternar } from '../../lib/conjuntos';
 import { haQuantoTempo, useEstadoBackup } from '../backup/lembrete';
 import SyncCard from '../sync/SyncCard';
@@ -137,7 +138,7 @@ export default function DadosTab() {
     if (n5Selected.size === 0 || n5Importing) return;
     setN5Importing(true);
     try {
-      const { criados, ignorados } = await adicionarCardsNovos(N5_DECK.filter((e) => n5Selected.has(e.category)));
+      const { criados, ignorados } = await adicionarCardsNovos(N5_DECK.filter((e) => n5Selected.has(e.category)).map(camposDoCard));
       avisar(
         'n5',
         criados === 0

@@ -150,4 +150,14 @@ describe('misturar — limite no meio de uma rodada', () => {
   it('para exatamente no limite, mesmo no meio da rodada', () => {
     expect(misturar([[p('a1'), p('a2')], [p('b1'), p('b2')]], 3).map((x) => x.id)).toEqual(['a1', 'b1', 'a2']);
   });
+
+  it('kana e kanji são treinados como caracteres (frente fixa); cards e palavras seguem a regra do kana em destaque', async () => {
+    await db.cards.add(umCard({ front: '橋', reading: 'はし', lapses: 1 }));
+    await db.kanaProgress.add({ char: 'ぬ', type: 'hiragana', romajiCorrect: 0, romajiWrong: 3 });
+    await db.kanjiProgress.add({ ...umKanjiProgress('日'), lapses: 2 });
+    const { cards, kana, kanji } = await carregarPontosFracos();
+    expect(cards[0].item.frenteFixa).toBeUndefined();
+    expect(kana[0].item.frenteFixa).toBe(true);
+    expect(kanji[0].item.frenteFixa).toBe(true);
+  });
 });

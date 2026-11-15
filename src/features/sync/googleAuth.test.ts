@@ -21,6 +21,7 @@ const MINUTO = 60 * 1000;
 
 let destinos: string[];
 let enderecos: string[];
+let titulos: string[];
 let sessao: ArmazenamentoEmMemoria;
 let local: { origin: string; pathname: string; search: string; hash: string; assign: (url: string) => void };
 
@@ -46,11 +47,17 @@ beforeEach(async () => {
   await limparBanco();
   destinos = [];
   enderecos = [];
+  titulos = [];
   sessao = new ArmazenamentoEmMemoria();
   local = { origin: ORIGEM, pathname: BASE, search: '', hash: '', assign: (url) => void destinos.push(url) };
   vi.stubGlobal('location', local);
   vi.stubGlobal('sessionStorage', sessao);
-  vi.stubGlobal('history', { replaceState: (_s: unknown, _t: string, url: string) => void enderecos.push(url) });
+  vi.stubGlobal('history', {
+    replaceState: (_s: unknown, titulo: string, url: string) => {
+      titulos.push(titulo);
+      enderecos.push(url);
+    },
+  });
 });
 
 afterEach(() => {
@@ -80,6 +87,14 @@ describe('entrarNoGoogle', () => {
     expect(params.get('login_hint')).toBe('pessoa@exemplo.com');
   });
 
+  it('sem dizer nada, a ida mostra a tela do Google (não é silenciosa)', async () => {
+    entrarNoGoogle();
+    const params = new URL(destinos[0]).searchParams;
+    expect(params.get('prompt')).toBe('select_account');
+    voltarCom({ access_token: 'tok-1', state: params.get('state')! });
+    expect(await processarRetornoOAuth()).toEqual({ ok: true, silencioso: false });
+  });
+
   it('cada ida ao Google tem um state diferente', () => {
     const a = sairPara('/').get('state');
     const b = sairPara('/').get('state');
@@ -101,6 +116,7 @@ describe('processarRetornoOAuth', () => {
     voltarCom({ access_token: 'tok-1', expires_in: '1800', state });
     expect(await processarRetornoOAuth()).toEqual({ ok: true, silencioso: false });
     expect(enderecos).toEqual([`${BASE.slice(0, -1)}/config?aba=dados`]);
+    expect(titulos).toEqual(['']);
     expect(await db.local.get('googleToken')).toEqual({
       key: 'googleToken',
       value: { accessToken: 'tok-1', expiresAt: Date.now() + 30 * MINUTO },
@@ -137,6 +153,14 @@ describe('processarRetornoOAuth', () => {
     expect(await processarRetornoOAuth()).toBeNull();
     expect(await tokenAtual()).toBeNull();
     expect(enderecos).toEqual([BASE]);
+    expect(titulos).toEqual(['']);
+  });
+
+  it('resposta sem token e sem código de erro: falha com um erro genérico', async () => {
+    const state = sairPara('/').get('state')!;
+    voltarCom({ access_token: '', state });
+    expect(await processarRetornoOAuth()).toEqual({ ok: false, silencioso: false, erro: 'erro' });
+    expect(await tokenAtual()).toBeNull();
   });
 
   it('resposta do Google sem nenhum login pendente aqui: ignora', async () => {
@@ -158,6 +182,27 @@ describe('processarRetornoOAuth', () => {
     voltarCom({ access_token: 'tok-forjado', state: 'abc' });
     expect(await processarRetornoOAuth()).toBeNull();
     expect(await tokenAtual()).toBeNull();
+  });
+
+  it.each([
+    ['state vazio', { state: '', retorno: '/config' }],
+    ['caminho de volta que não é texto', { state: 'abc', retorno: ['/config'] }],
+    ['caminho de volta para outro site', { state: 'abc', retorno: 'https://mal.exemplo/' }],
+    ['caminho de volta para outro site, sem protocolo', { state: 'abc', retorno: '//mal.exemplo/' }],
+    ['caminho de volta relativo', { state: 'abc', retorno: 'config' }],
+  ])('login pendente adulterado (%s): ignora a resposta e não navega pra onde ele manda', async (_nome, pendente) => {
+    sessao.setItem('nihongo-study:oauth', JSON.stringify(pendente));
+    voltarCom({ access_token: 'tok-forjado', state: pendente.state });
+    expect(await processarRetornoOAuth()).toBeNull();
+    expect(await tokenAtual()).toBeNull();
+    expect(enderecos).toEqual([BASE]);
+  });
+
+  it('login pendente guardado à mão, mas bem formado: vale (silencioso só se for `true`)', async () => {
+    sessao.setItem('nihongo-study:oauth', JSON.stringify({ state: 'abc', retorno: '/config', silencioso: 'sim' }));
+    voltarCom({ access_token: 'tok-1', state: 'abc' });
+    expect(await processarRetornoOAuth()).toEqual({ ok: true, silencioso: false });
+    expect(enderecos).toEqual(['/config']);
   });
 
   it('a mesma resposta não vale duas vezes', async () => {
@@ -182,6 +227,8 @@ describe('tokenAtual', () => {
   it('não usa um token que vence nos próximos 2 minutos (venceria no meio da sincronização)', async () => {
     await tokenQueVenceEm(2 * MINUTO + 1);
     expect(await tokenAtual()).toBe('tok');
+    await tokenQueVenceEm(2 * MINUTO);
+    expect(await tokenAtual()).toBe('tok');
     await tokenQueVenceEm(2 * MINUTO - 1);
     expect(await tokenAtual()).toBeNull();
   });
@@ -189,15 +236,15 @@ describe('tokenAtual', () => {
 
 describe('revogarAcesso', () => {
   it('esquece o token e pede ao Google para revogar', async () => {
-    const pedidos: { url: string; token: string | null }[] = [];
-    vi.stubGlobal('fetch', async (url: string, init: { body: URLSearchParams }) => {
-      pedidos.push({ url, token: init.body.get('token') });
+    const pedidos: { url: string; metodo: string; token: string | null }[] = [];
+    vi.stubGlobal('fetch', async (url: string, init: { method: string; body: URLSearchParams }) => {
+      pedidos.push({ url, metodo: init.method, token: init.body.get('token') });
       return new Response();
     });
     await db.local.put({ key: 'googleToken', value: { accessToken: 'tok', expiresAt: Date.now() + 60 * MINUTO } });
     await revogarAcesso();
     expect(await db.local.get('googleToken')).toBeUndefined();
-    expect(pedidos).toEqual([{ url: 'https://oauth2.googleapis.com/revoke', token: 'tok' }]);
+    expect(pedidos).toEqual([{ url: 'https://oauth2.googleapis.com/revoke', metodo: 'POST', token: 'tok' }]);
   });
 
   it('sem internet: esquece o token mesmo assim, sem erro', async () => {

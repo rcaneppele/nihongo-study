@@ -11,6 +11,7 @@ import { useShortcuts } from '../../lib/useShortcuts';
 import CardExampleView from './CardExampleView';
 import { NoteBox } from './CardNote';
 import { cardNote } from './note';
+import { Homonimos, LeituraDaPalavra, Palavra } from './Palavra';
 import type { StudyItem } from './stages';
 import { registrarAtividade } from '../atividade/atividade';
 import { desfazerRevisao, registrarRevisao, type RevisaoFeita } from './revisao';
@@ -178,10 +179,11 @@ export default function StudySession({
             {showBack && (
               <div className="mt-4 border-t border-line pt-4">
                 <div className="flex items-center justify-center gap-2">
-                  <p className="font-jp text-5xl">{card.front}</p>
+                  <Palavra palavra={card} className="text-5xl" apoioClassName="mt-1 text-lg" fixa={item.frenteFixa} />
                   <AudioButton text={card.front} />
                 </div>
-                {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
+                <LeituraDaPalavra palavra={card} className="text-lg" fixa={item.frenteFixa} />
+                <Homonimos front={card.front} />
                 <NotaEExemplo card={card} note={note} />
               </div>
             )}
@@ -189,13 +191,14 @@ export default function StudySession({
         ) : (
           <div>
             <div className="flex items-center justify-center gap-2">
-              <p className="font-jp text-5xl">{card.front}</p>
+              <Palavra palavra={card} className="text-5xl" apoioClassName="mt-1 text-lg" apoio="so-kanji" fixa={item.frenteFixa} />
               <AudioButton text={card.front} />
             </div>
             {showBack && (
               <div className="mt-4 border-t border-line pt-4">
-                {card.reading && <p className="font-jp text-lg text-sage">{card.reading}</p>}
+                <LeituraDaPalavra palavra={card} className="text-lg" fixa={item.frenteFixa} />
                 <p className="text-xl">{card.back}</p>
+                <Homonimos front={card.front} />
                 <NotaEExemplo card={card} note={note} />
               </div>
             )}

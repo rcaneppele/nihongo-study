@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { State } from 'ts-fsrs';
 import { db } from '../../db/schema';
 import { freshSrs } from '../srs/fsrs';
-import { adicionarCardsNovos, apagarCard, cardPorFrente, criarCard, editarNota, mudarEstagio, novoCard } from './cards';
+import { adicionarCardsNovos, apagarCard, cardDaPalavra, cardPorFrente, criarCard, editarNota, mudarEstagio, novoCard } from './cards';
 import { cardStage } from './stages';
 import { AGORA, umCard } from '../../test/fabricas';
 import { limparBanco } from '../../test/banco';
@@ -75,5 +75,15 @@ describe('apagarCard', () => {
     await apagarCard(card.id);
     expect(await db.cards.get(card.id)).toBeUndefined();
     expect(await db.deleted.get(['cards', card.id])).toMatchObject({ table: 'cards', key: card.id });
+  });
+
+  it('cardDaPalavra: palavra vista em kana acha o card do deck que tem kanji na frente — menos com homônimos', async () => {
+    await criarCard({ front: '猫', back: 'gato', reading: 'ねこ' });
+    await criarCard({ front: '橋', back: 'ponte', reading: 'はし' });
+    await criarCard({ front: 'パン', back: 'pão' });
+    expect((await cardDaPalavra('ねこ'))?.front).toBe('猫');
+    expect((await cardDaPalavra('パン'))?.front).toBe('パン');
+    expect(await cardDaPalavra('はし')).toBeUndefined();
+    expect(await cardDaPalavra('いぬ')).toBeUndefined();
   });
 });

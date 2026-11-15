@@ -100,7 +100,7 @@ src/
   prints e o script que gera o PDF) fica em `docs/manual/`.
 - `CLAUDE.md` — contexto, mapa do código e convenções para desenvolver com o
   Claude Code.
-- `regras-negocio.md` — regras de domínio (SRS e estágios, kana, kanji,
+- `docs/regras-negocio.md` — regras de domínio (SRS e estágios, kana, kanji,
   leitura, lições, quiz/ditado, navegação pelo método, dados e
   sincronização).
 - `docs/roadmap.md` — o que está em aberto (e o porquê) e o que já foi
@@ -110,7 +110,7 @@ src/
   visual.
 - `docs/proposta-sincronizacao.md` — análise da sincronização via Google
   Drive (alternativas, riscos e decisões); as regras vigentes ficam no
-  `regras-negocio.md`.
+  `docs/regras-negocio.md`.
 
 ## Licença
 

@@ -200,7 +200,39 @@ export function buildChoiceOptions(entry: KanaEntry, pool: KanaEntry[], rng: Rng
   return embaralhar(options, rng);
 }
 
+/**
+ * Outras romanizações do mesmo kana, além da que o app ensina (Hepburn): as
+ * de quem digita japonês num teclado ("si" para し, "tu" para つ, "nn" para
+ * ん…) e, em を, o som ("o"). Quem as usa sabe o kana — contar como erro só
+ * puniria um hábito de digitação.
+ */
+const ALTERNATIVAS: Record<string, string[]> = {
+  shi: ['si'],
+  chi: ['ti'],
+  tsu: ['tu'],
+  fu: ['hu'],
+  ji: ['zi'],
+  wo: ['o'],
+  n: ['nn'],
+  sha: ['sya'],
+  shu: ['syu'],
+  sho: ['syo'],
+  cha: ['tya'],
+  chu: ['tyu'],
+  cho: ['tyo'],
+  ja: ['zya', 'jya'],
+  ju: ['zyu', 'jyu'],
+  jo: ['zyo', 'jyo'],
+};
+/** `ぢ` e `づ` soam como `じ` e `ず` (mesmo romaji no app), mas se digitam "di" e "du". */
+const ALTERNATIVAS_DO_KANA: Record<string, string[]> = { ぢ: ['di'], ヂ: ['di'], づ: ['du'], ヅ: ['du'] };
+
+/** Todas as respostas aceitas para o kana; a primeira é a forma que o app ensina. */
+export function romajiAceitos(entry: KanaEntry): string[] {
+  return [entry.romaji, ...(ALTERNATIVAS[entry.romaji] ?? []), ...(ALTERNATIVAS_DO_KANA[entry.char] ?? [])];
+}
+
 /** Resposta digitada no modo romaji: sem diferenciar maiúsculas nem espaços nas pontas. */
 export function romajiCorreto(resposta: string, entry: KanaEntry): boolean {
-  return resposta.trim().toLowerCase() === entry.romaji;
+  return romajiAceitos(entry).includes(resposta.trim().toLowerCase());
 }

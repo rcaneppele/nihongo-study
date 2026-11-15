@@ -46,7 +46,7 @@ export const CABECALHOS: Record<string, string> = {
 export function arquivoHeaders(): string {
   const linhas = Object.entries(CABECALHOS).map(([nome, valor]) => `  ${nome}: ${valor}`);
   return [
-    '# Gerado por vite.config.ts a partir de cabecalhos.ts — não edite à mão.',
+    '# Gerado por vite.config.ts a partir de config/cabecalhos.ts — não edite à mão.',
     '/*',
     ...linhas,
     '',

@@ -34,10 +34,7 @@ pnpm-debug.log*
 dev-dist/
 
 # Testes
-coverage/
-test-results/
-playwright-report/
-reports/
+relatorios/
 .stryker-tmp/
 
 # Cache do TypeScript (tsc -b)

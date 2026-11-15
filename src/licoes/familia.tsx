@@ -18,10 +18,12 @@ export const quiz: QuizLicao = {
       tokens: [
         { texto: 'ごかぞく', romaji: 'gokazoku' },
         { texto: 'は', romaji: 'wa', particula: true },
+        { texto: 'にほん', romaji: 'nihon' },
+        { texto: 'に', romaji: 'ni' },
         { texto: 'います', romaji: 'imasu' },
         { texto: 'か', romaji: 'ka' },
       ],
-      pt: 'Você tem família?',
+      pt: 'Sua família está no Japão?',
     },
     {
       id: 'familia-f2',
@@ -602,10 +604,10 @@ export default function Familia() {
           qualquer coisa relacionada à outra pessoa, não só parentesco.
         </Note>
         <Ex
-          jp="ごかぞくはいますか？"
-          romaji="gokazoku wa imasu ka?"
-          pt="Você tem família? (cônjuge, filhos)"
-          notes="ごかぞく é a forma respeitosa de かぞく; nunca use ご para a sua própria família. Pergunta pessoal: melhor esperar o assunto surgir"
+          jp="ごかぞくはにほんにいますか？"
+          romaji="gokazoku wa nihon ni imasu ka?"
+          pt="Sua família está no Japão?"
+          notes="ごかぞく é a forma respeitosa de かぞく; nunca use ご para a sua própria família. Pergunta natural para quem mora longe de casa (estudante, estrangeiro)"
         />
         <Ex
           jp="ごきょうだいはいますか？"

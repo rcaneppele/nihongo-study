@@ -172,9 +172,14 @@ O **estágio** é derivado, nunca gravado:
 ### Mapa de vocabulário ("Palavras novas")
 Página `/aprender/palavras` (Aprender › Palavras novas; `PalavrasNovas.tsx`
 + `VocabularyMap.tsx`, lógica em
-`src/features/flashcards/vocabulary.ts`), sobre o deck N5 **sem kanji**
-(`N5_DECK`, mesmo filtro do import). Não tem tabela própria: cruza o deck
-com `cards` (pela `front`) e `wordKnowledge` (pela chave).
+`src/features/flashcards/vocabulary.ts`), sobre o deck N5 inteiro
+(`N5_DECK`). Não tem tabela própria: cruza o deck com `cards` (pela
+`front`) e `wordKnowledge` (pela chave). Uma palavra com kanji na frente
+(猫) também é achada pela leitura em kana (ねこ) — como ela aparece nos
+textos dos primeiros níveis e nos cards criados em kana —, desde que
+nenhuma outra do deck se leia igual (`chavesDe`). Pelo mesmo motivo, a
+leitura não oferece "Salvar nos flash cards" para uma palavra em kana que
+já tem o card do deck (`cardDaPalavra`).
 
 - **Grade recolhida**: mostra as 48 palavras mais úteis (mesma ordem do
   "Aprender as próximas 10"); "Mostrar todas as N palavras" abre o resto.
@@ -191,8 +196,8 @@ com `cards` (pela `front`) e `wordKnowledge` (pela chave).
   do vocabulário passivo — frequência no próprio corpus do app); desempate
   pela categoria em ordem "iniciante primeiro" (Saudações, Pronomes,
   Números/tempo, Verbos, Adjetivos, Advérbios, Partículas, Substantivos) e
-  depois a ordem do deck. Hoje só ~70 das 194 palavras aparecem nos
-  textos, então o desempate pesa.
+  depois a ordem do deck. Hoje ~300 das ~710 palavras aparecem nos
+  textos, então o desempate ainda pesa.
 - **"Aprender as próximas 10"**: cria cards (estado FSRS novo, mesmo formato
   do import do N5) das 10 palavras Novas mais úteis do filtro; elas entram
   na Revisão do dia na hora. É o caminho recomendado; o import por
@@ -239,26 +244,52 @@ formato pelo nome do arquivo/conteúdo e chama o parser certo:
   entraram e quantos foram ignorados.
 
 ### Deck de vocabulário N5
-- `n5.json` traz ~750 palavras do vocabulário N5 (JLPT), traduzidas e
+- `n5.json` traz o vocabulário N5 (JLPT), ~710 palavras traduzidas e
   categorizadas em pt-BR em 8 categorias: Substantivos, Verbos, Adjetivos,
   Advérbios, Números e tempo, Pronomes e interrogativos, Saudações e
-  expressões, Partículas e gramática. `src/data/seed/n5.ts` reexporta esse
-  arquivo filtrando fora, por enquanto, as entradas com kanji na frente
-  (`N5_DECK`) — mesmo motivo da regra de kanji nas lições (usuário ainda
-  aprendendo kana). É só remover o filtro quando fizer sentido reintroduzir
-  kanji; o dado completo continua em `n5.json`. Para essas ~195 entradas
-  sem kanji, o campo `reading` em `n5.json` já vem em **romaji** (não
-  hiragana/katakana), já que a frente do card é a própria palavra em kana —
-  repetir em kana no verso não ajudaria; nas ~555 entradas com kanji
-  (hoje filtradas), `reading` continua em hiragana, já que ali serve de
-  furigana pro kanji.
-- **Verbos em kana**: como quase todo verbo do N5 tem kanji na frente, o
-  filtro deixava só 10 dos 117 visíveis. Os 39 verbos da lista de referência
-  da lição (`src/data/verbos/lista.ts`) ganharam entrada própria em kana,
-  logo depois da irmã com kanji (`たべる` depois de `食べる`; `ころす` fica
-  de fora, por não ser N5). Ao remover o filtro de kanji no futuro, essas
-  entradas passam a duplicar as irmãs e precisam ser tratadas.
-- **Notas do deck** (`note` em `n5.json`): ~40 entradas sem kanji têm nota
+  expressões, Partículas e gramática. `src/data/seed/n5.ts` expõe o arquivo
+  inteiro como `N5_DECK` (até a v2.11 ficavam de fora as ~510 palavras com
+  kanji na frente — quase todos os números, dias, adjetivos e substantivos
+  básicos).
+- **Duas formas de entrada**, conforme a palavra se escreve:
+  - **em kana** (~195): `front` em kana e `reading` em **romaji**. São as
+    palavras que se escrevem em kana e os 39 verbos da lista de referência
+    da lição de verbos (`src/data/verbos/lista.ts`). Quando a palavra também
+    tem kanji, ele vem em `kanji` (たべる → 食べる), só como referência — a
+    entrada com o kanji na frente não existe mais, pra não duplicar.
+  - **com kanji** (~515): `front` com kanji e `reading` em **kana**. O
+    kanji fica na frente porque é ele que identifica a palavra: há
+    homônimos em kana (はし é 橋 "ponte" e 箸 "hashi"; 14 grupos no deck).
+- **Como a palavra aparece** (`formasDaPalavra`/`emDestaque` em
+  `src/features/flashcards/formas.ts`, componentes em `Palavra.tsx`): por
+  padrão, **kana em destaque, com o kanji pequeno ao lado como referência**
+  — a mesma regra das lições, porque o usuário ainda está aprendendo a ler
+  kana. O romaji aparece na resposta (gerado do kana por
+  `kanaParaRomaji`, `src/lib/romaji.ts`, quando o card não o traz). Vale
+  para a revisão, a prática, o mapa de Palavras novas e Meus cards — e para
+  qualquer card com kanji na frente e leitura em kana, inclusive os salvos
+  da leitura.
+  - **Preferência** em Configurações › "Palavras com kanji" (`cardScript`
+    em `db.meta`, entra no backup): **Kanji em destaque** inverte — o kanji
+    na pergunta e o kana só na resposta (ao lado da pergunta ele entregaria
+    a leitura).
+  - **Homônimos**: a resposta mostra a outra palavra do deck que se lê igual
+    ("Mesma leitura, outra palavra: はし（箸）— hashi"), pra quem lembrou do
+    outro sentido saber o que confundiu.
+- **A frente identifica o card** no app inteiro (criar, importar, deck,
+  leitura e mesclagem entre aparelhos): não há dois cards com a mesma
+  frente — criar um segundo à mão é recusado, e a mensagem ensina a saída
+  para **homônimos**: frente com o kanji (箸) e o kana em Leitura (はし); o
+  card continua aparecendo em kana. É por isso que o deck guarda os
+  homônimos com o kanji na frente.
+- **Itens que não são palavras** (um kana ou um kanji isolado, no treino de
+  Pontos fracos) levam `frenteFixa` no `StudyItem`: aparecem como estão,
+  sem a regra do kana em destaque — ali o que se treina é o caractere.
+- **Romaji numa convenção só**, a das lições: sem mácron, vogal longa por
+  extenso ("dou", "koohii"), `っ` dobrando a consoante ("acchi"). O deck
+  usava mácron ("dō", "kōhī") e foi normalizado; `src/data/romaji.test.ts`
+  confere o deck e todo par kana + romaji das lições e dos dados.
+- **Notas do deck** (`note` em `n5.json`): ~40 entradas em kana têm nota
   — empréstimos do português (パン, ボタン, たばこ), falsos amigos
   (ストーブ, ノート, アパート), abreviações e homônimos (デパート, コート,
   マッチ) e palavras nativas com uso que confunde lusófonos (あなた, はい,
@@ -358,8 +389,13 @@ novo persistido, sem lib de gráfico (divs + Tailwind).
 
 ### Modo "digitar romaji"
 - Mostra o kana; o usuário digita a leitura.
-- Comparação é case-insensitive e usa o romaji canônico (ex.: `shi`, `chi`,
-  `tsu`, `fu`).
+- Comparação é case-insensitive. Vale o romaji que o app ensina (`shi`,
+  `chi`, `tsu`, `fu`) e também as romanizações de quem digita japonês num
+  teclado: `si`, `ti`, `tu`, `hu`, `zi`, `nn`, `sya`/`tya`/`zya`…, `di`/`du`
+  para ぢ/づ, e `o` para を (`romajiAceitos` em
+  `src/features/kana/treino.ts`). Quem as usa sabe o kana; a tela conta o
+  acerto e mostra a forma usada nas lições e nos cards. O campo não deixa o
+  teclado do celular pôr maiúscula nem corrigir a palavra.
 - Resultado atualiza `kanaProgress` (`romajiCorrect` / `romajiWrong`,
   `lastPracticed`).
 

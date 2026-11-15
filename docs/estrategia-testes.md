@@ -37,7 +37,7 @@ em segundos e é a que se usa enquanto se programa.
 | 4 | Integração com o banco | Vitest + `fake-indexeddb` | `src/**/*.test.ts` | serviços que gravam no Dexie, migrações, sync com dois "aparelhos" |
 | 5 | Componentes | Vitest Browser Mode (Chromium real) | `src/**/*.browser.test.tsx` | componentes compartilhados com canvas, pointer events, IndexedDB real |
 | 6 | Ponta a ponta | Playwright Test sobre o build de produção | `e2e/**/*.spec.ts` | jornadas completas, PWA offline, backup entre aparelhos, sync com Drive simulado, visual, acessibilidade |
-| 7 | Qualidade dos testes | cobertura (`@vitest/coverage-v8`) + Stryker (mutação) | `stryker.config.json` | que os testes de fato pegam bugs |
+| 7 | Qualidade dos testes | cobertura (`@vitest/coverage-v8`) + Stryker (mutação) | `config/stryker.config.json` | que os testes de fato pegam bugs |
 
 ### Por que essas ferramentas
 
@@ -69,7 +69,7 @@ em segundos e é a que se usa enquanto se programa.
 | `npm run test:visual` | screenshots (projeto `visual`) | ao mexer em layout |
 | `npm run test:visual:atualizar` | regera as imagens de referência | mudança visual intencional (revise o diff das imagens) |
 | `npm run coverage` | cobertura de Node com limites mínimos | ao fechar uma funcionalidade |
-| `npm run test:mutation` | Stryker no núcleo (incremental; relatório em `reports/mutation/`) | de vez em quando / ao mexer no núcleo |
+| `npm run test:mutation` | Stryker no núcleo (incremental; relatório em `relatorios/mutacao/`) | de vez em quando / ao mexer no núcleo |
 | `npm run test:all` | lint + tipos + Node + browser + E2E | antes de push; é o que a CI roda |
 
 ### Onde cada camada roda
@@ -150,16 +150,29 @@ teste dependente da máquina travar a publicação.
 
 ## Linha de base da mutação (novembro/2026)
 
-Stryker em 19 arquivos de lógica (`mutate` em `stryker.config.json`):
-**86,0%** de mutações mortas (87,8% do código coberto), numa rodada completa
-(sem cache incremental); o mínimo configurado (`thresholds.break`) é 80 —
-suba junto quando o número subir. Por arquivo: `stages.ts` 99, `contadores.ts`
-98, `backup.ts` 98, `googleAuth.ts` 93, `fsrs.ts` 92, `cards.ts` 89,
-`merge.ts` 89, `motor.ts` 88, `importCards.ts` 87, `atividade.ts` 87,
-`treino.ts` 86, `revisao.ts` 84, `lembrete.ts` 83, `mesclarNoBanco.ts` 82,
-`migracoes.ts` 82, `knowledge.ts` 82, `historico.ts` 81, `strokes.ts` 80,
-`pontosFracos.ts` 80.
+Stryker em 19 arquivos de lógica (`mutate` em `config/stryker.config.json`):
+**87,3%** de mutações mortas (88,8% do código coberto), na rodada de
+15/11/2026 (v2.12.0, Stryker 10 + Vitest 5); o mínimo configurado
+(`thresholds.break`) é 80 — suba junto quando o número subir. Por arquivo:
+`stages.ts` 99, `contadores.ts` 98, `backup.ts` 97, `treino.ts` 95,
+`googleAuth.ts` 94, `fsrs.ts` 92, `cards.ts` 89, `merge.ts` 89,
+`importCards.ts` 88, `atividade.ts` 87, `motor.ts` 87, `knowledge.ts` 86,
+`revisao.ts` 84, `lembrete.ts` 83, `migracoes.ts` 82, `historico.ts` 81,
+`pontosFracos.ts` 81, `mesclarNoBanco.ts` 80, `strokes.ts` 80.
 
+A rodada anterior (v2.11) deu 86,0%. `backup.ts`, `googleAuth.ts` e
+`treino.ts` tinham caído (para 86, 83 e 81) ao ganhar código novo — a
+validação do arquivo importado, a leitura do login pendente e as
+romanizações alternativas — e voltaram a subir com testes para cada ramo.
+Os mutantes que sobram nos três são equivalentes (a mesma recusa acontece
+uma linha depois, ou o romaji repetido já barra a opção).
+
+- **Cache incremental e mutantes estáticos:** mutante em código que roda ao
+  carregar o módulo (tabela ou objeto no topo do arquivo) não tem cobertura
+  por teste, então o cache incremental não percebe um teste novo e repete o
+  "sobreviveu" antigo. Depois de escrever testes para um arquivo assim, rode
+  só ele sem cache: `npx stryker run config/stryker.config.json --force
+  --mutate src/db/backup.ts` (os resultados dos outros arquivos ficam).
 - **Fora da mutação, de propósito:** `conquistas.ts`, `proximoPasso.ts` e
   `nivel.ts` — a maioria dos mutantes é texto de interface (títulos,
   explicações). Têm testes unitários; entram se a lógica deles crescer.

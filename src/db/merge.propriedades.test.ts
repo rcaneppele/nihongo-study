@@ -20,7 +20,7 @@ import type { Activity, Card } from './schema';
 import { umaAtividade, umCard, umKanjiProgress } from '../test/fabricas';
 
 /**
- * Propriedades da mesclagem entre aparelhos (regras-negocio.md §6): vários
+ * Propriedades da mesclagem entre aparelhos (docs/regras-negocio.md §6): vários
  * aparelhos alteram os dados e sincronizam numa ordem qualquer; depois que
  * todos trocam tudo com todos, ficam **iguais** (convergem) e com o
  * resultado certo — a soma do que cada um fez, ou a última alteração de

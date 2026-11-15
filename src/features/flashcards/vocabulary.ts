@@ -1,15 +1,20 @@
 import { db, type Card, type WordKnowledge } from '../../db/schema';
 import { apagar } from '../../db/local';
-import { N5_DECK, type N5Entry } from '../../data/seed/n5';
+import { N5_DECK, leituraEmKana, n5PorLeitura, type N5Entry } from '../../data/seed/n5';
 import { LEITURA_TEXTOS } from '../../data/leitura/textos';
 import type { ReadingText } from '../../data/leitura/types';
 import { textWords } from '../leitura/knowledge';
-import { adicionarCardsNovos, novoCard } from './cards';
+import { adicionarCardsNovos, novoCard, type CamposCard } from './cards';
 import { cardStage } from './stages';
 
 /**
- * Mapa de vocabulário: o deck N5 (só as entradas sem kanji, mesmo filtro de
- * N5_DECK) cruzado com o que o usuário já sabe de cada palavra.
+ * Mapa de vocabulário: o deck N5 cruzado com o que o usuário já sabe de cada
+ * palavra.
+ *
+ * Uma palavra do deck que tem kanji na frente (猫) também é reconhecida
+ * pela leitura em kana (ねこ) — é assim que ela aparece nos textos de
+ * leitura dos primeiros níveis e nos cards que o usuário criou em kana —,
+ * desde que nenhuma outra palavra do deck se leia igual (ver `chavesDe`).
  *
  * Estados de uma palavra no mapa:
  * - **nova**: sem card e nunca marcada como conhecida.
@@ -57,13 +62,32 @@ const TEXTS_BY_KEY: Map<string, ReadingText[]> = (() => {
   return map;
 })();
 
+/**
+ * Por quais chaves a palavra do deck é encontrada em `cards` (frente),
+ * `wordKnowledge` e nos textos: a própria frente e, se a frente tem kanji e
+ * a leitura é só dela no deck, a leitura em kana. Com homônimos (はし: 橋 e
+ * 箸) a leitura sozinha não diz qual é, então não vale.
+ */
+export function chavesDe(entry: N5Entry): string[] {
+  const kana = leituraEmKana(entry);
+  return kana !== entry.front && n5PorLeitura(kana) === entry ? [entry.front, kana] : [entry.front];
+}
+
+/** O que vira card de uma palavra do deck (o kanji de referência não é campo do card: vem do deck). */
+export function camposDoCard(entry: N5Entry): CamposCard {
+  const { front, back, reading, category, tags, note } = entry;
+  return { front, back, reading, category, tags, ...(note !== undefined ? { note } : {}) };
+}
+
 export function buildVocabulary(cards: Card[], knowledge: WordKnowledge[]): VocabWord[] {
   const cardByFront = new Map(cards.map((c) => [c.front, c]));
   const knowledgeByKey = new Map(knowledge.map((k) => [k.key, k]));
+  const primeiro = <T,>(chaves: string[], mapa: Map<string, T>) => chaves.map((c) => mapa.get(c)).find((v) => v !== undefined);
 
   return N5_DECK.map((entry, deckIndex) => {
-    const card = cardByFront.get(entry.front);
-    const k = knowledgeByKey.get(entry.front);
+    const chaves = chavesDe(entry);
+    const card = primeiro(chaves, cardByFront);
+    const k = primeiro(chaves, knowledgeByKey);
     let state: WordState = 'nova';
     if (card) {
       const stage = cardStage(card);
@@ -71,7 +95,8 @@ export function buildVocabulary(cards: Card[], knowledge: WordKnowledge[]): Voca
     } else if (k?.status === 'compreendida') {
       state = 'reconheco';
     }
-    return { entry, deckIndex, texts: TEXTS_BY_KEY.get(entry.front) ?? [], state, card, knowledge: k };
+    const texts = [...new Set(chaves.flatMap((c) => TEXTS_BY_KEY.get(c) ?? []))];
+    return { entry, deckIndex, texts, state, card, knowledge: k };
   });
 }
 
@@ -108,7 +133,7 @@ function categoryRank(category: string): number {
 
 /** Cria cards (estado FSRS novo) para as palavras dadas — mesmo formato do import do N5. */
 export async function learnWords(words: VocabWord[]): Promise<number> {
-  const { criados } = await adicionarCardsNovos(words.filter((w) => !w.card).map((w) => w.entry));
+  const { criados } = await adicionarCardsNovos(words.filter((w) => !w.card).map((w) => camposDoCard(w.entry)));
   return criados;
 }
 
@@ -136,5 +161,5 @@ export function unmarkKnown(word: VocabWord) {
  */
 export function practiceCard(word: VocabWord): Card {
   if (word.card) return word.card;
-  return novoCard(word.entry, Date.now(), `vocab-${word.entry.front}`);
+  return novoCard(camposDoCard(word.entry), Date.now(), `vocab-${word.entry.front}`);
 }

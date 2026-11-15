@@ -9,7 +9,7 @@ import { googleDrive } from './googleDrive';
 import { telaSemSessao } from '../../lib/telaSemSessao';
 
 /**
- * Sincronização automática com o Google Drive (ver regras-negocio.md §6 e
+ * Sincronização automática com o Google Drive (ver docs/regras-negocio.md §6 e
  * docs/proposta-sincronizacao.md). Um ciclo: baixar o arquivo remoto →
  * mesclar aqui (a mesma mesclagem do importar) → subir o resultado, se
  * mudou algo. A mesclagem é idempotente e não depende da ordem, então dois

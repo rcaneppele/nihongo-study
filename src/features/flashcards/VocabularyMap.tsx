@@ -10,6 +10,7 @@ import { StageAction } from './StageControls';
 import { NoteBox } from './CardNote';
 import { sortear } from '../../lib/aleatorio';
 import { cardNote } from './note';
+import { Homonimos, LeituraDaPalavra, Palavra } from './Palavra';
 import type { StudyItem } from './stages';
 import {
   buildVocabulary,
@@ -181,7 +182,9 @@ export default function VocabularyMap({ onPractice }: { onPractice: (items: Stud
                   selected?.entry.front === w.entry.front ? 'ring-2 ring-indigo ring-offset-2 ring-offset-paper' : ''
                 }`}
               >
-                <span className="block font-jp text-base">{w.entry.front}</span>
+                <span className="block">
+                  <Palavra palavra={w.entry} className="text-base" apoioClassName="text-xs" emLinha />
+                </span>
                 <span className="block truncate text-xs opacity-75">{w.entry.back}</span>
               </button>
             ))}
@@ -216,10 +219,11 @@ function WordPanel({ word, isSuggestion }: { word: VocabWord; isSuggestion: bool
       </p>
       <div>
         <div className="flex items-center gap-2">
-          <p className="font-jp text-3xl">{entry.front}</p>
+          <Palavra palavra={entry} className="text-3xl" apoioClassName="text-base" emLinha />
           <AudioButton text={entry.front} />
         </div>
-        <p className="text-sm text-sage">{entry.reading}</p>
+        <LeituraDaPalavra palavra={entry} className="text-sm" />
+        <Homonimos front={entry.front} />
         <p className="mt-1 text-lg">{entry.back}</p>
       </div>
 

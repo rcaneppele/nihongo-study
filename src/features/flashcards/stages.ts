@@ -84,6 +84,13 @@ export type Direction = 'recognition' | 'production';
 export interface StudyItem {
   card: Card;
   direction: Direction;
+  /**
+   * Mostrar a frente exatamente como está, sem a regra "kana em destaque,
+   * kanji de apoio" (`Palavra.tsx`): itens que não são palavras — um kana
+   * ou um kanji isolado, vindos de Pontos fracos —, em que o que se treina é
+   * justamente o caractere.
+   */
+  frenteFixa?: boolean;
 }
 
 function mesmoDia(ts: number | undefined, now: number): boolean {

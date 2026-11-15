@@ -27,7 +27,7 @@ import { plural } from '../../lib/plural';
 /**
  * "Próximo passo" de cada hub do método: uma ação recomendada, calculada só
  * com dados que o app já guarda (nenhum registro novo). Regras em
- * regras-negocio.md §5d.
+ * docs/regras-negocio.md §5d.
  */
 export interface Passo {
   titulo: string;
@@ -100,7 +100,7 @@ function passoAprender({ cards, knowledge, kanji, licoes }: Dados, now: number):
   if (kanjiNovos > 0) {
     return {
       titulo: 'Aprender kanji novos',
-      porque: `Você já passou por todo o vocabulário N5 sem kanji. Ainda há ${kanjiNovos} kanji do N5 para conhecer.`,
+      porque: `Você já passou por todo o vocabulário N5. Ainda há ${kanjiNovos} kanji do N5 para conhecer.`,
       to: '/kanji',
       icone: IconKanji,
       cor: 'hanko',

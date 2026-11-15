@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { matchPath } from 'react-router-dom';
 import { KANJI_N5, getNextNewKanji } from './kanji';
-import { N5_DECK, N5_CATEGORY_ORDER, n5CategoryCounts } from './seed/n5';
+import { leituraEmKana, N5_DECK, N5_CATEGORY_ORDER, n5CategoryCounts, n5Homonimos, n5Kanji, n5PorLeitura } from './seed/n5';
 import { ALL_KANA, HIRAGANA_KANA, KANA_FAMILIES, KATAKANA_KANA, getConfusables } from './kana';
 import { PROMPTS_DIARIO } from './diario/prompts';
 import { LICOES } from '../licoes';
@@ -46,14 +46,52 @@ describe('kanji N5', () => {
 });
 
 describe('deck N5', () => {
-  it('frentes únicas, sem kanji, com leitura, significado e categoria conhecida', () => {
+  it('frentes únicas, com leitura, significado e categoria conhecida', () => {
     expect(new Set(N5_DECK.map((e) => e.front)).size).toBe(N5_DECK.length);
     for (const e of N5_DECK) {
-      expect(KANJI.test(e.front), e.front).toBe(false);
       expect(e.back.trim(), e.front).not.toBe('');
       expect(e.reading.trim(), e.front).not.toBe('');
       expect(N5_CATEGORY_ORDER, `${e.front}: ${e.category}`).toContain(e.category);
     }
+  });
+
+  const soKanaDoDeck = (t: string) => /^[\u3041-\u3096\u30a1-\u30fa\u30fc～]+$/.test(t);
+
+  it('palavra com kanji na frente tem a leitura inteira em kana (é o que o app mostra em destaque)', () => {
+    for (const e of N5_DECK.filter((x) => KANJI.test(x.front))) {
+      expect(soKanaDoDeck(e.reading), `${e.front}: ${e.reading}`).toBe(true);
+      expect(e.kanji, e.front).toBeUndefined();
+    }
+  });
+
+  it('palavra em kana tem a leitura em romaji; o kanji de referência, quando há, tem kanji e não repete outra entrada', () => {
+    const frentes = new Set(N5_DECK.map((e) => e.front));
+    for (const e of N5_DECK.filter((x) => !KANJI.test(x.front))) {
+      expect(/^[a-z～' ]+$/.test(e.reading), `${e.front}: ${e.reading}`).toBe(true);
+      if (e.kanji === undefined) continue;
+      expect(KANJI.test(e.kanji), `${e.front}: ${e.kanji}`).toBe(true);
+      expect(frentes.has(e.kanji), `${e.kanji} é entrada própria e referência de ${e.front}`).toBe(false);
+    }
+  });
+
+  it('o deck tem o vocabulário N5 inteiro, não só as palavras em kana', () => {
+    expect(N5_DECK.length).toBeGreaterThan(700);
+    for (const palavra of ['一', '月曜日', '大きい', '食べ物', '学校', '水']) {
+      expect(N5_DECK.some((e) => e.front === palavra), palavra).toBe(true);
+    }
+  });
+
+  it('homônimos são entradas separadas, cada uma com seu kanji', () => {
+    expect(n5Homonimos('橋').map((e) => e.front)).toEqual(['箸']);
+    expect(n5Homonimos('暑い').map((e) => e.front).sort()).toEqual(['厚い', '熱い'].sort());
+    expect(n5Homonimos('猫')).toEqual([]);
+    expect(n5Homonimos('não-é-do-deck')).toEqual([]);
+    expect(n5PorLeitura('ねこ')?.front).toBe('猫');
+    expect(n5PorLeitura('はし')).toBeUndefined();
+    expect(n5Kanji('たべる')).toBe('食べる');
+    expect(n5Kanji('パン')).toBeUndefined();
+    expect(leituraEmKana({ front: '橋', reading: 'はし' })).toBe('はし');
+    expect(leituraEmKana({ front: 'パン', reading: 'pan' })).toBe('パン');
   });
 
   it('contagem por categoria soma o deck', () => {
