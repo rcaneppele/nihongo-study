@@ -6,14 +6,34 @@
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#1E3A5F" />
-    <meta name="description" content="Estudo de japonês: flash cards, kana, kanji e leitura." />
-    <link rel="canonical" href="https://nihongostudy.app/" />
+    <!-- Título, descrição, prévia do link (Open Graph) e dados estruturados: injetados no build a partir de src/lib/site.ts (ver config/metadados.ts). -->
     <!-- Tema antes do primeiro paint. Arquivo à parte (sem `type=module`, pra rodar já) porque a CSP proíbe script inline. -->
     <script src="/tema.js"></script>
-    <title>Nihongo Study</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!--
+        Conteúdo estático: o app troca tudo isto ao montar. É a tela de abertura enquanto o
+        JavaScript carrega e o que leem os robôs que não rodam JavaScript (prévia de links,
+        assistentes de IA). Sem <main>: as jornadas E2E esperam o <main> do app.
+      -->
+      <div class="abertura flex min-h-full flex-col items-center justify-center gap-3 px-6 py-12 text-center">
+        <img src="/icons/icon-192.png" alt="" width="72" height="72" class="h-[72px] w-[72px] rounded-2xl shadow-sm" />
+        <h1 class="font-display text-2xl font-semibold tracking-tight">Nihongo Study</h1>
+        <p class="max-w-md text-sm text-sage">
+          Aprenda japonês do zero, em português: hiragana e katakana, kanji, vocabulário com repetição
+          espaçada, lições e leitura graduada. Grátis, sem cadastro e funciona offline — os seus dados
+          ficam no seu aparelho.
+        </p>
+        <noscript>
+          <p class="max-w-md text-sm text-sage">
+            O app precisa do JavaScript ligado no navegador.
+            <a href="/manual-do-usuario.pdf" class="underline">Manual do usuário (PDF)</a> ·
+            <a href="/privacidade.html" class="underline">Política de privacidade</a>
+          </p>
+        </noscript>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,7 +1,8 @@
 # Nihongo Study
 
-App pessoal para estudar japonês (iniciante), organizado **pelo método** em
-vez de por ferramenta:
+App gratuito e de código aberto para estudar japonês do zero, em português
+(<https://nihongostudy.app/>), organizado **pelo método** em vez de por
+ferramenta:
 
 - **Hoje** — plano do dia (Revisar → Aprender → Praticar), meta diária e
   sequência de dias.

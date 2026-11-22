@@ -147,6 +147,22 @@
   animation-play-state: paused;
 }
 
+/* Tela de abertura do index.html (conteúdo estático do #root, que o app troca ao
+   montar). Só aparece se o carregamento demorar: numa abertura rápida, o app monta
+   antes e ela nem pisca. */
+@keyframes abertura-aparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.abertura {
+  animation: abertura-aparece 0.3s ease-out 0.4s both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

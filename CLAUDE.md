@@ -108,6 +108,25 @@ toda mudança pede bump; julgue pelo impacto:
   roda com eles; `e2e/jornadas/seguranca.spec.ts`). **Sem script inline** (o
   do tema é `public/tema.js`) e **origem externa nova precisa ser liberada
   ali** (`connect-src`), senão o navegador barra.
+- `src/lib/site.ts` — dados públicos do site (nome, endereço, título,
+  descrição, imagem da prévia), fonte única do que buscadores, prévias de
+  link e assistentes de IA leem; `src/lib/recursos.ts` — o que o app
+  oferece, uma frase por recurso. O `vite.config.ts` injeta no `<head>` do
+  `index.html` (via `config/metadados.ts`) título, descrição, Open Graph e
+  dados estruturados (JSON-LD), e usa a descrição no manifesto. **Sem
+  `<link rel="canonical">`/`og:url` fixos** (toda rota recebe o mesmo HTML).
+  O `#root` do `index.html` tem um conteúdo estático (tela de abertura, lido
+  por quem não roda JavaScript) que o app troca ao montar.
+- `src/features/seo/` — título, descrição, canônico e `noindex` de cada tela
+  (`metadados.ts`, `PAGINAS`: uma entrada por rota de `src/rotas.ts`, o teste
+  confere — **rota nova entra ali**), aplicados no `<head>` por
+  `MetadadosDaPagina.tsx`; telas de dados pessoais ficam fora do índice.
+  `arquivosPublicos.ts` gera `public/sitemap.xml` e `public/llms.txt`, que
+  são versionados e conferidos pelo teste: depois de criar uma lição ou um
+  texto de leitura, `npm test -- -u` os regrava. `public/og-image.png` (a
+  prévia do link, 1200×630) é gerada por `npm run build:og-image`
+  (`scripts/gerar-og-image.mjs`, com os prints do manual); jornada em
+  `e2e/jornadas/seo.spec.ts`.
 - `THIRD_PARTY_NOTICES.md` — licenças e créditos de terceiros (KanjiVG em CC
   BY-SA 3.0, deck N5, fontes, bibliotecas), com resumo em Config › Sobre o App.
   Dado ou biblioteca de terceiros nova entra nos dois.

@@ -25,6 +25,8 @@ import Config from './routes/Config';
 /**
  * Rotas do app — fonte única: o `App` monta as rotas daqui, e os testes
  * conferem que todo link da navegação (estrutura do método) cai numa delas.
+ * Rota nova também precisa de título e indexação em
+ * `src/features/seo/metadados.ts` (o teste de lá confere).
  * Ordem importa só para leitura: o React Router escolhe a mais específica.
  */
 export const ROTAS: { path: string; Pagina: ComponentType }[] = [

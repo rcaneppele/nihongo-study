@@ -1201,6 +1201,16 @@ id da conquista, `unlockedAt`). Marcos locais, sem ranking nem comparação.
   migraram. Como o navegador guarda os dados por endereço, uma nova mudança
   de domínio exigiria o mesmo cuidado: manter o antigo no ar até todos
   levarem os dados (Google Drive ou backup).
+- **Buscadores e prévia de link** (`src/lib/site.ts`, `src/features/seo/`):
+  o HTML que o servidor entrega (igual para toda rota) traz título,
+  descrição, Open Graph com a imagem `og-image.png` e dados estruturados — é
+  o que LinkedIn, WhatsApp e robôs de IA leem, já que não rodam JavaScript.
+  O app aplica, a cada tela, título, descrição e endereço canônico
+  (`https://nihongostudy.app` + caminho, sem `?…`). Ficam **fora do índice**
+  (`noindex`) as telas que só mostram dados do próprio usuário — Revisar,
+  Meus cards, Pontos fracos, Progresso, Configurações — e endereço que não
+  existe; o `sitemap.xml` lista as demais (com cada lição, texto de leitura e
+  habilidade), a política de privacidade e o manual.
 - **Cópia antes de migrar** (`src/db/copiaMigracao.ts`): ao abrir, antes de
   qualquer uso de `db` (nenhum módulo pode consultar o banco só de ser
   importado, porque isso dispararia a migração antes da cópia), se o banco existente tem versão menor que

@@ -5,6 +5,8 @@ import autoprefixer from 'autoprefixer';
 import { VitePWA } from 'vite-plugin-pwa';
 import pacote from './package.json' with { type: 'json' };
 import { CABECALHOS, arquivoHeaders } from './config/cabecalhos.ts';
+import { tagsDoHead } from './config/metadados.ts';
+import { SITE } from './src/lib/site.ts';
 
 // O app é servido na raiz do domínio (nihongostudy.app). Ver .github/workflows/deploy.yml.
 const base = '/';
@@ -37,6 +39,11 @@ export default defineConfig({
   plugins: [
     react(),
     {
+      // Título, descrição, prévia do link (Open Graph) e dados estruturados no <head> (ver config/metadados.ts).
+      name: 'metadados-do-site',
+      transformIndexHtml: () => tagsDoHead(),
+    },
+    {
       // Cabeçalhos de segurança no Cloudflare Pages (ver config/cabecalhos.ts).
       name: 'cabecalhos-de-seguranca',
       apply: 'build',
@@ -59,7 +66,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html}', 'assets/inter-latin-*.woff2'],
         // Abrir o manual numa aba é uma navegação: sem isto, o fallback de SPA
         // responde com o index.html (app sem rota, miolo em branco) em vez do PDF.
-        navigateFallbackDenylist: [/\.pdf$/],
+        // Idem para os arquivos dos buscadores (robots.txt, sitemap.xml, llms.txt).
+        navigateFallbackDenylist: [/\.(?:pdf|txt|xml)$/],
         runtimeCaching: [
           // Manual do usuário (PDF de alguns MB): fora do pré-cache, guardado na
           // primeira abertura. O nome é fixo (para o link poder ser compartilhado),
@@ -88,9 +96,9 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'Nihongo Study',
+        name: SITE.nome,
         short_name: 'Nihongo',
-        description: 'Estudo de japonês: flash cards, kana, kanji e leitura.',
+        description: SITE.descricao,
         lang: 'pt-BR',
         theme_color: '#1E3A5F',
         background_color: '#F7F5F0',

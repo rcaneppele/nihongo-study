@@ -1,0 +1,59 @@
+# Nihongo Study
+
+> Aprenda japonês do zero, em português: hiragana, katakana, kanji, flash cards com repetição espaçada, lições e leitura. Grátis, sem cadastro e offline.
+
+Nihongo Study é um app gratuito, de código aberto e sem fins comerciais para estudar japonês, feito para quem fala português e está começando do zero (até o nível do JLPT N5/N4). Roda no navegador como um app instalável (PWA), sem servidor: não tem cadastro, anúncios nem coleta de dados, e o progresso fica salvo no próprio aparelho — com sincronização opcional pelo Google Drive do próprio usuário. As lições e os textos de leitura são originais, escritos em português.
+
+Conteúdo: 13 lições, 61 textos de leitura em 4 níveis, 110 kanji e mais de 700 palavras do vocabulário do JLPT N5.
+
+## O que o app oferece
+
+- Hiragana e katakana: treino digitando o romaji ou desenhando à mão, com correção da forma e da ordem dos traços
+- Kanji do JLPT N5 com radical, mnemônico, leituras, exemplos e treino de caligrafia
+- Vocabulário do JLPT N5 com o significado em português, em flash cards com repetição espaçada (algoritmo FSRS)
+- Lições de gramática, vocabulário e cultura escritas para quem fala português, com exemplos em kana e romaji
+- Leitura graduada em quatro níveis, com furigana, áudio e o significado de cada palavra
+- Prática das quatro habilidades: ditado (kakitori), shadowing, "Diga em japonês" e diário guiado
+- Funciona offline e pode ser instalado no celular, no tablet e no computador (PWA)
+- Grátis, sem cadastro e sem anúncios: os dados ficam no aparelho, com sincronização opcional pelo Google Drive do próprio usuário
+
+## Por onde começar
+
+- [Página inicial](https://nihongostudy.app/): o plano do dia (revisar, aprender e praticar)
+- [Começando do zero](https://nihongostudy.app/aprender/comecar): Guia para quem nunca estudou japonês: como o idioma funciona, por onde começar e como usar o app, em uns dez minutos de leitura.
+- [Hiragana e katakana](https://nihongostudy.app/kana): Treine hiragana e katakana digitando o romaji ou desenhando à mão: o app confere a forma e a ordem dos traços.
+- [Aprender](https://nihongostudy.app/aprender): Por onde aprender japonês do zero: lições em português, as palavras do JLPT N5, kanji com radical e mnemônico e os alfabetos hiragana e katakana.
+- [Praticar](https://nihongostudy.app/praticar): Pratique japonês nas quatro habilidades — ler, ouvir, falar e escrever — com textos graduados, ditado, shadowing e caligrafia.
+
+## Lições
+
+- [Kana — Hiragana e Katakana](https://nihongostudy.app/licoes/kana): Os dois alfabetos fonéticos do japonês
+- [Saudações do dia a dia](https://nihongostudy.app/licoes/aisatsu): あいさつ — aisatsu
+- [Usos do desu です](https://nihongostudy.app/licoes/desu): Presente, passado, afirmativo e negativo
+- [Auto-apresentação](https://nihongostudy.app/licoes/apresentacao): じこしょうかい — jikoshoukai
+- [Sufixos de Respeito](https://nihongostudy.app/licoes/sufixos): さん, せんせい, せんぱい e outros honoríficos
+- [Ko-So-A-Do](https://nihongostudy.app/licoes/kosoado): Os demonstrativos japoneses (este, esse, aquele, qual)
+- [Pronomes Pessoais](https://nihongostudy.app/licoes/pronomes): わたし, ぼく, あなた e a arte de omiti-los
+- [Família](https://nihongostudy.app/licoes/familia): Vocabulário de parentesco e os dois registros
+- [Partículas](https://nihongostudy.app/licoes/particulas): は, が, を, に, で e as outras
+- [Verbos](https://nihongostudy.app/licoes/verbos): Os três grupos, presente e passado (afirmativo e negativo) e a forma て
+- [Vida cotidiana](https://nihongostudy.app/licoes/seikatsu): せいかつ — rotina, horários e frequência
+- [Onomatopeias](https://nihongostudy.app/licoes/onomatopeias): オノマトペ — sons, jeitos e, principalmente, sentimentos
+- [Kanji — Primeiros Passos](https://nihongostudy.app/licoes/kanji): O terceiro sistema de escrita: como ele funciona, os kanji dos números (até 10.000), os dias da semana, as horas, preços, números de telefone, perguntas e os kanji que viram sobrenome
+
+## Prática
+
+- [Leitura graduada](https://nihongostudy.app/leitura): 61 textos curtos em japonês, em 4 níveis (do só kana ao N4), com furigana, áudio e o significado de cada palavra.
+- [Kanji do N5](https://nihongostudy.app/kanji): 110 kanji do JLPT N5 com radical, mnemônico, leituras e exemplos, revisão espaçada e treino de caligrafia com a ordem dos traços.
+- [Palavras novas do N5](https://nihongostudy.app/aprender/palavras): As mais de 700 palavras do JLPT N5 por tema, com o significado em português. Aprenda de 10 em 10 e revise com flash cards de repetição espaçada.
+- [Ler em japonês](https://nihongostudy.app/praticar/ler): Entender japonês escrito. Ler muito material fácil, no seu nível, é o que mais fixa vocabulário e gramática — e o kana precisa estar automático pra leitura fluir.
+- [Ouvir em japonês](https://nihongostudy.app/praticar/ouvir): Entender japonês falado. O ouvido precisa de treino próprio: reconhecer palavras na fala corrida, sem o apoio do texto.
+- [Falar em japonês](https://nihongostudy.app/praticar/falar): Produzir japonês. Entender não basta: dizer em voz alta é o que transforma vocabulário passivo em ativo.
+- [Escrever em japonês](https://nihongostudy.app/praticar/escrever): Escrever à mão, com a ordem de traços certa. Desenhar fixa a forma do caractere muito melhor do que só olhar.
+
+## Mais informações
+
+- [Manual do usuário (PDF)](https://nihongostudy.app/manual-do-usuario.pdf): como instalar no celular e usar cada parte do app
+- [Política de privacidade](https://nihongostudy.app/privacidade)
+- [Código-fonte no GitHub](https://github.com/rcaneppele/nihongo-study)
+- Contato: nihongostudyapp@gmail.com

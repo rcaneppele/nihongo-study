@@ -15,5 +15,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["vite.config.ts", "config/cabecalhos.ts"]
+  "include": ["vite.config.ts", "config/cabecalhos.ts", "config/metadados.ts"]
 }
