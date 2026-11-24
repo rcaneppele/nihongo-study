@@ -13,7 +13,7 @@ import { caminhosIndexaveis, maisDe, metadadosDaRota } from './metadados';
  * dos mesmos dados do app: `public/sitemap.xml` e `public/llms.txt`. Os
  * arquivos ficam versionados em `public/` e o teste `arquivosPublicos.test.ts`
  * confere que estão em dia — depois de criar uma lição ou um texto de leitura,
- * `npm test -- -u` os regrava.
+ * `npm test -u` os regrava.
  */
 
 /** Páginas fora do app React (arquivos estáticos de `public/`) que também vão para o índice. */
@@ -25,7 +25,7 @@ export function gerarSitemap(): string {
   );
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<!-- Gerado por src/features/seo/arquivosPublicos.ts — não edite à mão (npm test -- -u regrava). -->',
+    '<!-- Gerado por src/features/seo/arquivosPublicos.ts — não edite à mão (npm test -u regrava). -->',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...urls,
     '</urlset>',

@@ -7,7 +7,7 @@ import { gerarLlmsTxt, gerarSitemap } from './arquivosPublicos';
 
 /**
  * Os arquivos de `public/` estão em dia com o conteúdo do app. Se este teste
- * falhar depois de criar uma lição ou um texto de leitura, `npm test -- -u`
+ * falhar depois de criar uma lição ou um texto de leitura, `npm test -u`
  * regrava os arquivos (e o diff mostra o que mudou).
  */
 const PUBLIC = join(__dirname, '..', '..', '..', 'public');
