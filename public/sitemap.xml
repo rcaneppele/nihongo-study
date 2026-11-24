@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Gerado por src/features/seo/arquivosPublicos.ts — não edite à mão (npm test -- -u regrava). -->
+<!-- Gerado por src/features/seo/arquivosPublicos.ts — não edite à mão (npm test -u regrava). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nihongostudy.app/</loc>
